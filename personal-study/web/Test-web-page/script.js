@@ -33,3 +33,40 @@ req.onreadystatechange = function(){
 }
 
 req.send();
+
+function selectAll(btn){
+    var img = document.getElementsByClassName("image");
+    for(var i=0; i<img.length; i++){
+        if(btn.value == "Unselect All"){
+            img[i].classList.remove("image-selected");
+        }
+        else{
+            img[i].classList.add("image-selected");
+        }
+    }
+
+    if(btn.value == "UnSelect All"){
+        btn.value = "Select All";
+    }
+    else{
+        btn.value = "UnSelect All";
+    }
+}
+
+function slideShow(btn){
+    var img = document.getElementsByClassName("image");
+    var index = 0;
+    img[index].classList.add("image-magnified");
+
+    var intervalId = setInterval( function(){
+        img[index].classList.remove("image-magnified");
+        index ++;
+        if(index < img.length){
+            img[index].classList.add("image-magnified");
+        }
+        else{
+            clearInterval(intervalId);
+            alert("슬라이드가 끝낫습니다.");
+        }
+    },1000);
+}
