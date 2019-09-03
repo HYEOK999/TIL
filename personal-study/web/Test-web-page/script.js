@@ -37,7 +37,7 @@ req.send();
 function selectAll(btn){
     var img = document.getElementsByClassName("image");
     for(var i=0; i<img.length; i++){
-        if(btn.value == "Unselect All"){
+        if(btn.value == "UnSelect All"){
             img[i].classList.remove("image-selected");
         }
         else{
