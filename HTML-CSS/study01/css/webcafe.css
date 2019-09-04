@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+body{
+    margin: 0px;
+}
+
+.header, .slogun, .main-content, .footer, .visual{
+    width: 940px;
+    margin: 0px auto;
+}
+
+.header{
+    box-sizing:border-box;
+    background-color: yellow;
+    height: 10vh;
+}
+
+.visual{
+    background-color: blue;
+    height: 120px;
+}
+
+.main-content{
+    background-color: red;
+    min-height: 400px;
+}
+
+.slogun{
+    background-color: silver;
+    padding: 15px 0;
+}
+
+.footer-bg{
+    background-color: grey;
+    padding: 15px 0;
+}
+
+.footer{
+    background-color: gold;
+}
