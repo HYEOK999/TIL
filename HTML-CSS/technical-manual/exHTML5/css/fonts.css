@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'webcafeIcon';
+    font-weight:400;
+    src: url('font/webcafeIcon.eot');
+    src: url('font/webcafeIcon.eot?#iefix') format('embedded-opentype'),
+         url('font/webcafeIcon.woff') format('woff'),
+         url('font/webcafeIcon.ttf') format('truetype'),
+         url('font/webcafeIcon.svg#webcaferegular') format('svg');
+}
