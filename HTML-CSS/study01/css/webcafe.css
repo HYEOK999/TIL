@@ -1,40 +1,125 @@
-@charset "UTF-8";
+@charset "utf-8";
+@import url('https://necolas.github.io/normalize.css/latest/normalize.css');
+@import url('https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css');
+/* css의 규칙 처음에는 charset을 선언 */
+*, *::before, *::after{
+    box-sizing: border-box;
+}
+a{
+    text-decoration: none;
+    color: inherit;
+    
+}
+html{
+    font-size: 10px;
+}
 
 body{
-    margin: 0px;
+    font-size: 1.4rem;
+    margin: 0;
+    color: #181818;
+    line-height: 1.15;
+    font-family: 'Spoqa Han Sans', 'Sans-serif';
+    font-weight: 400;
 }
 
-.header, .slogun, .main-content, .footer, .visual{
+.header, .visual, .main-content, .slogan, .footer{ /*선택자의 그룹핑*/
     width: 940px;
-    margin: 0px auto;
+    margin: 0 auto; /* auto는 남은영역을 계산해서 잘 나누어줌. */
 }
-
 .header{
-    box-sizing:border-box;
-    background-color: yellow;
-    height: 10vh;
+    box-sizing: border-box;
+    background-color: pink;
+    position: relative;
+    padding: 10px 30px 50px 30px;
 }
+/* 로고 */
+.logo{
+    margin: 0px;
+    position: absolute;
+    top: 50px;
+    left: 70px;
+    /* 
+    자신보다 상위요소를 기준으로 배치하는법 
+    단, 상위요소가 position:static;이 아니여야한다.
+    만약 상위요소가 postion:static이라면 static이 아닌 상위요소를 찾을떄까지
+    올라간다.
+    : top,right,bottom,left */
 
+}
+/* 멤버링크 */
+.member{
+    /* 불릿제거 */
+    /* display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end; */
+    list-style-type: none;  /* circle : 빈 동그라미 */
+    margin: 0;
+    padding-left: 0;
+    background-color: yellow;
+    font-size: 0;
+    /* member에 font size를 적용함으로써 공백을 삭제한다. */
+    text-align: right;
+}
+.member li{
+    display: inline-block;
+    /* flex-basis: 100px; */
+
+/* inline은 block과 다르게 줄바꿈이 안되고, width와 height가 적용되지 않는다. 오로지 적용된 글자 수에 따라서 크기가 결정된다. */
+    background-color: aqua;
+    font-size: 1.4rem;
+    text-transform: uppercase; /*UpperCase 는 영어를 대문자로 변환함*/    
+/* font-size에 rem을 적용함으로써 글씨크기를 살려냄 */
+}
 .visual{
-    background-color: blue;
+    background-color: lime;
     height: 120px;
 }
-
 .main-content{
-    background-color: red;
     min-height: 400px;
-}
+    background-color: skyblue;
+    display: flex; /* main-content를 flex 컨테이너로 지정 */
+    flex-direction: row;
+    justify-content: space-between; 
+    padding: 30px;
+    /* 
+    flex-end : 오른쪽 , 
+    justify-content
+    space-around : flex-item들을 y축을 동일하게 비워줌.(abc가 있다면 a의 양옆+ b의 양옆)
+    space-between : flex-item들 y축 사이를 비워줌.
+    space-evenly : flex-item들의 y축을 동일하게 비워줌2. (abc가 있다면 a,b,c 사이를 완전 동일하게 해줌 단 익스플로러지원x)
+    */
 
-.slogun{
+}
+.group{ /* flex item 들 */
+    background-color: yellow;
+}
+.group1{
+    flex-basis: 250px;
+    /* flex-grow: 2;
+    flex-shrink: 1; */
+/*    flex: 50px 2 1;  */
+    background-color: orange;
+}
+.group2{
+    flex-basis: 380px;
+    /* flex-grow: 1; */
+    background-color: lime;
+}
+.group3{
+    flex-basis: 190px;
+    /* flex-grow: 2; */
+    background-color: white;
+}
+.slogan{
+    background-color: orange;
+    padding: 15px 0;
+}
+.footer-bg{
     background-color: silver;
     padding: 15px 0;
 }
-
-.footer-bg{
-    background-color: grey;
-    padding: 15px 0;
-}
-
 .footer{
-    background-color: gold;
+    background-color: yellow;
 }
