@@ -65,7 +65,7 @@
 
 6. display 숨김처리
 
-    ```css
+7. ```css
    .a11y-hidden {
        background-color: red;
        position: absolute;
@@ -83,36 +83,6 @@
 ### HTML5 콘텐츠 모델
 
 ![ContentsCategory](https://user-images.githubusercontent.com/31315644/64547639-ef379400-d367-11e9-96f8-b200c9981342.jpeg)
-
-**Content Models**
-
- 콘텐츠 모델이란 HTML의 각 요소가 어떠한 성격을 가지고 있으며, 어떤 역할을 하는지에 대한 그룹을 분류한 것을 말한다.
-
-**Metadata**: 표시 또는 동작을 설정합니다. 이 요소들은 **head**에서 사용된다.
-
-- 요소: <base>, <link>, <meta>, <noscript>, <script>, <style>, <title>
-
-**Embedded**: 다른 resources를 불러오는데 사용한다.
-
-- 요소: <audio>, <video>, <canvas>, <iframe>, <img>, <math>, <object>, <svg>
-
-**Interactive**: 사용자와 상호작용.
-
-- 요소: <a>, <audio>, <video>, <button>, <details>, <embed>, <iframe>, <img>, <input>, <label>, <object>, <select>, <textarea>
-
-**Heading**: 제목을 정의합니다.
-
-- 요소: <h1>, <h2>, <h3>, <h4>, <h5>, <h6>, <hgroup>
-
-**Phrasing**: 이 모델은 HTML4의 수많은 inline 요소들을 가지고 있습니다.
-
-- 요소: <img>, <span>, <strong>, <label>, <small>, <sub> , <br>
-
-**Flow content**: normal flow에 포함된 HTML5의 주된 요소를 포함합니다.
-
-**Sectioning content**: scope의 headings, content, navigation, 그리고 footers를 정의합니다.
-
-- 요소: <article>, <aside>, <nav>, <section>
 
 ### CSS 셀렉터
 
