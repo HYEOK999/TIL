@@ -65,7 +65,7 @@
 
 6. display 숨김처리
 
-7. ```css
+    ```css
    .a11y-hidden {
        background-color: red;
        position: absolute;
@@ -113,8 +113,6 @@
 **Sectioning content**: scope의 headings, content, navigation, 그리고 footers를 정의합니다.
 
 - 요소: <article>, <aside>, <nav>, <section>
-
-
 
 ### CSS 셀렉터
 
