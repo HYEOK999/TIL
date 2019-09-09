@@ -32,7 +32,7 @@
 
   float, position:absolute -> display를  block화 시킨다.
 
-***
+------
 
 ### 오늘의 팁
 
@@ -54,18 +54,18 @@
 
    - clear:both : 가장 좋은 방법. float화된 요소 마지막에 가상자식요소를 생성하여 clear:both를 선언. clear:both는 float요소 중에 높이가 제일 긴 것을 찾아서 강제로 margin을 추가하여 높이가 늘어나 잃어버린 높이를 찾아낸다.
 
-     ~~~css
+     ```css
      .menu::after{ 
          content:"";
          clear: both; 
           /* clear는 display:block 에서만 사용 가능. right, left 등도 있다. */
          display: block;
       }
-     ~~~
+     ```
 
 6. display 숨김처리
 
-7. ~~~css
+7. ```css
    .a11y-hidden {
        background-color: red;
        position: absolute;
@@ -76,9 +76,9 @@
        clip: rect(0,0,0,0);
        white-space: nowrap;
    }
-   ~~~
+   ```
 
-***
+------
 
 ### HTML5 콘텐츠 모델
 
@@ -142,19 +142,19 @@ https://code.tutsplus.com/ko/tutorials/the-30-css-selectors-you-must-memorize--n
 
 착각하면 안되는 것!! -> class가 10개 쓰인다고 해서 id보다 높을 수 없다. 체급차이가 다르다고 생각하면됨.
 
-~~~~~~~html
+```html
 <div style="padding : 20px">
   이것은 div 태그에 style이 적용된 예입니다.
 </div>
-~~~~~~~
+```
 
 ### 추가 important
 
-> ~~~~~css
+> ```css
 > .menu-act .btn-menu{
 >     color:yellow important;
 > }
-> ~~~~~
+> ```
 >
 > important는 *우선순위를 무력화시킬 수 있다.* 즉, important 는 
 >
@@ -167,9 +167,9 @@ https://code.tutsplus.com/ko/tutorials/the-30-css-selectors-you-must-memorize--n
 
   그림자를 나타내는 태그는 크게 박스와 텍스트가 있다.
 
-~~~~~~~~~~~~~~~~~~~css
+```css
 box-shadow: none | x-position y-position blur spread color | inset | initial | inherit;
-~~~~~~~~~~~~~~~~~~~
+```
 
 > - none : 그림자 효과를 없앤다..
 > - x-position : 가로 위치입니다. 양수면 오른쪽에, 음수면 왼쪽에 그림자가 만들어진다. (필수)
@@ -183,9 +183,9 @@ box-shadow: none | x-position y-position blur spread color | inset | initial | i
 
 
 
-~~~~~~~~~~css
+```css
 text-shadow: offset-x offset-y blur-radius color | none | initial | inherit
-~~~~~~~~~~
+```
 
 > - offset-x : 그림자의 수평 거리를 정한다. (필수)
 > - offset-y : 그림자의 수직 거리를 정한다. (필수)
@@ -207,9 +207,9 @@ text-shadow: offset-x offset-y blur-radius color | none | initial | inherit
 
 ### Opacity
 
-~~~~css
+```css
 opacity: number | initial | inherit
-~~~~
+```
 
 - number : 0.0부터 1.0까지의 수를 넣는다. (투명도 0 -> 불투명 / 1-> 투명)
 
@@ -227,8 +227,8 @@ opacity: number | initial | inherit
 
 1. 글씨가 왼쪽 -> 오른쪽으로 날라옴. : 이동효과 [padding, margin, position-relative, position-absolute]
 
-	2. 글자의 투명도를 추가 해야함 . [color: rgba 또는 opacity]
- 	3. 글자 크기의 번화 [font-size]
+2. 글자의 투명도를 추가 해야함 . [color: rgba 또는 opacity]
+3. 글자 크기의 번화 [font-size]
 
 
 
@@ -244,23 +244,106 @@ opacity: number | initial | inherit
 
 ### background
 
+background-color : yellow 같은 기본 코드 외에도,
+
+background는 말 그대로 배경에 대한 색 , 이미지등의 콘텐츠를 다루는 요소 css이다.
+
+```css
+/*background-image : url로 2개의 이미지를 불러낸다. */
+background-image: url('./images/ani_flower_01.png'),url('./images/ani_flower_02.png');
+/*해당 이미지들은 처음에는 일정 간격마다 반복 되어있기에 반복을 제거한다.*/
+background-repeat : no-repeat;
+/*해당 이미지들에 대한 위치값을 지정해준다.*/
+background-position: 0 -10px, 670px 0; /*x축 y축을 의미*/
+
+/*위 내용 한꺼번에 입력하기. */
+background : url('./images//ani_flower_01.png') no-repeat 0 -10px, url('./images/ani_flower_02.png') no-repeat 670px 0;
+
+```
 
 
-- background
 
-- 애니메이션( @keyframes, + 곡선도 )
+### 애니메이션
 
-- position, float 다시 정리
+[애니메이션 정리 잘된 블로그] https://brunch.co.kr/@99-life/3
 
-- float 객체에 강제로 높이 를 알려주는법(overflow, 가상요소 clear:both)
+애니 메이션을 사용하기 위해서는 먼저 2가지 조건을 충족시켜야 한다.
 
-  float, position:absolute -> display를  block화 시킨다.
+1. animation-name : 키프레임 이름         *필수
+2. animation-duration : 시간(s,ms 등등)  *필수
+3. animation-fill-mode : forwards;
+
+#### 먼저 keyframes를 선언한다
+
+```css
+@keyframes text-ani{
+    0%{
+        font-size: 12px;
+        color : rgba(0,0,0,0);
+        transform: translate(0,0);
+        /* top: 0; left: 0; *//* margin : 0; *//* padddig : 75px 0 0 400px */
+    }        /* from */
+    100%{
+        font-size : 24px;
+        color : rgba(0,0,0,1);
+        transform: translate(400px,75px)
+     /* top : 75px; left:400px; *//*padding:75px 0 0 400px*//*margin:75px 0 0 400px; */
+    }      /* to */
+}
+
+@keyframes bg-ani{
+    0%{ opacity: 1; }
+    100% { opacity: 0; }
+}
+
+```
+
+transform 은 좌표공간을 변형함으로써 일반적인 문서 흐름을 방해하지 않고 콘텐츠의 형태와 위치를 바꾼다.
+
+그 중, transform : translate는 요소의 위치를 이동 시키는 함수이다. 구버전의 browser는 사용이 안된다.
+
+### 
+
+#### animation-duration 
+
+지속성을 의미한다. 필수조건. 기본적으로 s , ms단위의 시간을 입력한다.
+
+```css
+    animation-duration: 5s;
+```
 
 
 
-cubic-bezier
+#### animation-fill-mode 속성 및 내용
 
-[https://kutar37.tistory.com/entry/CSS-cubic-bezier%EB%9E%80](https://kutar37.tistory.com/entry/CSS-cubic-bezier란)
+```css
+animation-fill-mode: none | forwards | backwards | both | inherit;
+```
 
+| none      | 애니메이션이 끝난 후 상태를 설정하지 않습니다.   |
+| :-------- | ------------------------------------------------ |
+| forwards  | 애니메이션이 끝난 후 그 지점에 그대로 있습니다.  |
+| backwards | 애니메이션이 끝난 후 시작점으로 돌아옵니다.      |
+| both      | 애니메이션이의 앞 뒤 결과를 조합하여 설정합니다. |
+| inherit   | 애니메이션의 상태를 상위 요소한테 상속받습니다.  |
 
+- 추가내용
 
+```css
+/*
+animation-name: bg-ani;
+animation-duration: 2000ms;
+animation-iteration-count: infinite;
+animation-direction: alternate;
+animation-timing-function: paused; 
+*/
+
+/* 위 내용을 짧게 줄인 short 표기법 */
+/* short표기법 : 이름 듀레이션 딜레이 반복 방향 반복곡선도 */
+
+animation: bg-ani 2000ms  1000ms infinite alternate ease-in-out;
+```
+
+animation-timing-function에 관한 내용 중 cubic-bezier 에 관한 내용 https://kutar37.tistory.com/entry/CSS-cubic-bezier%EB%9E%80
+
+cubic-bezier 설정하는 곳 https://cubic-bezier.com/#.17,.67,.83,.67
