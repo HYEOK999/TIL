@@ -1,6 +1,6 @@
 ![html-css](https://user-images.githubusercontent.com/31315644/64251759-3252cb00-cf54-11e9-88f9-922505f9789e.jpeg)
 
-## HTML Study 04
+## HTML Study 05
 
 - MarkUp 짜기
 - 로그인창 HTML ~CSS 구성해보기
@@ -8,7 +8,7 @@
 - dt dl dd 태그
 - a태그의 속성
 - 들여쓰기 방법들
-- text-indent 는 첫줄 들여쓰기를 넣어주는 속성이며, 박스에 영향을 주지않는다. 단, 개행시 유효하지 않은 속성이 된다.
+- line-height
 
 ****
 
@@ -23,6 +23,10 @@ article ->  독립된 완결된 정보, RSS , header 태그가 없으면 경고�
 margin은 겹침현상이 발생한다. box-shadow 도 인접 태그의 margin에 영향을 주지 않는다.(즉, 겹친다.)
 
 title은 id, class, style같은 대표속성이며 <a> 태그에 사용시 마우스를 올렸을 경우 글박스를 띄운다. 
+
+text-indent 는 첫줄 들여쓰기를 넣어주는 속성이며, 박스에 영향을 주지않는다. 단, 개행시 유효하지 않은 속성이 된다.
+
+반응형 이미지들은 반드시 <div> <span> 등으로 랩핑하는것이 좋다. 이유 : 이미지가 유동적으로 커짐과 줄어듬
 
 ****
 
@@ -80,11 +84,15 @@ placeholder 속성은 입력서식에 대한 예시다.
 
 
 
-
-
 ### dl dt dd 태그
 
+용어를 설명하는 정의형 목록을 만든다.
+
+dt -> 용어의 제목을 의미하며 dd는 용어를 설명하는 내용이다.
+
 **dl dt dd는 정의형 목록을 의미하며 각 태그당 한개씩만 사용하는것이 좋다.**
+
+dl 안에 <div> 태그를 삽입해도 되지만, 아래와 같은 유형만 추천한다.
 
 ~~~~html
 <dl>
@@ -98,19 +106,25 @@ placeholder 속성은 입력서식에 대한 예시다.
 
 
 
-
-
 ### a태그 
 
-a태그 target="_blank". -> 새창을 열음
+하이퍼링크를 걸어주는 태그.
 
-반응형 이미지들은 반드시 <div> <span> 등으로 랩핑하는것이 좋다.
+~~~html
+<a href="#" target="_self | _blank | _parent | _top | 프레임명" ></a>
+~~~
 
-section / article 은 문법검사시 header태그가 없으면 경고가 뜬다
+- self -> 기본값 생략가능.
 
-div는 안뜸.
+- target="_blank". -> 새창을 열음
 
+- parent -> 부모페이지로, iframe에서 사용.
 
+- top -> 최상위페이지로, iframe에서 사용.
+
+- 프레임명 : 직접 명시
+
+  
 
 ### 들여쓰기 방법들
 
