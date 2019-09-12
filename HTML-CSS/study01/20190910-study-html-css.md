@@ -148,10 +148,3 @@ line-height: normal | length | number | percentage | initial | inherit | 숫자�
 - inherit : 부모 요소의 속성값을 상속받는다.
 
  예를 들어 글자크기가 40px일 때 line-height의 값을 1.5로 하면, 줄 높이는 40의 1.5배인 60px가 된다. 줄 높이는 60px인데 글자 크기는 40px이므로, 글자 위와 아래에 각각 10px의 여백이 생긴다. 줄 높이가 글자 크기보다 작으면 세로 방향으로 글자가 겹치게 된다.
-
-
-
-
-
-
-
