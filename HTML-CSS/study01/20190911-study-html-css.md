@@ -11,6 +11,7 @@
 - 글자 수 숨기기 (... 처리하기)
 - fontello
 - aria-labelledby
+- javascript 맛보기
 
 ------
 
@@ -168,3 +169,46 @@ form - fieldset - div + legend + label + input 과 같이 <div> 태그로 1번�
 ~~~html
 <a href="#" class="tab" role="button" id="notice">공지사항</a>
 ~~~
+
+
+
+### JavaScript 맛보기
+
+[defer 및 async] https://blog.asamaru.net/2017/05/04/script-async-defer/
+
+
+
+```html
+    <script src="./js/jquery.min.js" defer></script>
+    <script src="./js/webcafe.js" defer></script>
+```
+
+
+
+```javascript
+var section = $('.board section'); //jqeury lib에서 지원하는 선택 객체
+var tab = $('.tab');
+
+// .on('이벤트명')
+// tab.on('click keyup',function(e){
+tab.on('click', function(e){
+  e.preventDefault();// 기본 이벤트를 취소함. 예를들면 a의 속성 href의 이벤트를 취소함.
+  // if((e.type === 'keyup' && e.keyCode === 13) || e.type === 'click'){
+  section.removeClass('tab-act');
+  $(this).parent().parent().addClass('tab-act');
+})//멀티 이벤트 바인딩 예-> 클릭, 마우스온 등 다양한 환경 대응
+```
+
+1. board라는 이름을 가진 클래스의 section태그의 내용을 section이라는 이름의 변수로 선언.
+
+2. tab이라는 이름을 가진 클래스의 정보를 tab이라는 이름의 변수로 선언.
+
+3. tab이  클릭 되었을 때, 다음과 같은 기능을 수행한다.
+
+   1. tab이라는 이름을 가진 클래스의 태그가 가진 기본적인 이벤트 기능을 모두 취소(제거) 한다.
+
+   2. board라는 이름을 가진 클래스의 section태그 내부에서 tab-act라고 불리는 클래스를 제거한다.
+
+   3. tab이라는 이름을 가진 클래스의 태그의 부모의 부모에게  tab-act라는 클래스네임을 붙여준다.
+
+      
