@@ -12,7 +12,7 @@
 - CSS 레이아웃
 - 박스 모델
 
-
+<br/>
 
 ## WEB은 디자인관점이 아닌 콘텐츠 관점으로 보아야 한다.
 
@@ -20,14 +20,14 @@
 
 ## 문서와 구조와 표현을 분리 해놓는 것이 중요하다.
 
-
+ <br/>
 
 ### DTD 소개 및 사용 방법
 
 > 문서타입을 정의 한다. 브라우져에게 해당 HTML이 어떤 표준에 따른 것인지를 알려주는 것을 DTD(Document Type Definition)이라고 한다.
 > DTD는 문서의 제일 위에 위치한다. <! DOCTYPE html>
 
-
+<br/>
 
 ### html 영역의 언어 선택
 
@@ -35,7 +35,7 @@
 
 2. 언어를 지정해주는 이유는 SEO관점으로서 브라우저에서 검색엔진에 따른 효율성을 높이기 위함이다.
 
-   
+    <br/>
 
 ### head 영역 안 인코딩 선언
 
@@ -59,7 +59,7 @@
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    ~~~
 
-   
+   <br/>
 
    
 
@@ -73,13 +73,13 @@
 <title>웹카페-HTML5,CSS3,웹표준,웹접근성</title>
 ```
 
-### 
+### <br/>
 
 
 
 ### HTML의 구조 설계 
 
-​	
+<br/>
 
 ## 웹페이지 분석 -> Mark Up -> Naming
 
@@ -91,7 +91,7 @@
 >
 > 꼬리말(푸터)
 
-
+<br/>
 
 #### Web. Cafe. 페이지 분석(삼단 ++)
 
@@ -105,7 +105,7 @@
 	>
 	>꼬리말(푸터)
 
-
+<br/>
 
 #### Mark Up 단계
 
@@ -121,7 +121,7 @@
 >
 > ​	footer - 꼬리말 
 
-
+<br/>
 
 #### Naming 단계 ( Naming : 컴퓨터가 이해할 수 있도록 이름을 지어준다. )
 
@@ -133,13 +133,15 @@
 >
 > id : 고유하게 정할 때 사용.
 
-
+<br/>
 
 ### CSS 레이아웃
 
 > 정통방식 : float , position, display:inline, display:inline-block
 >
 > 모던방식 : display:inline, display:inline-block, flex, glid
+
+<br/>
 
 ### 박스 모델
 
