@@ -15,6 +15,8 @@
 
 ------
 
+<br/>
+
 ### MarkUp 짤 때 고민해야하는 점.
 
 ​	MarkUp시 너무 많은 버튼에 대한 고민을 해야만 한다. 예를들어보자,
@@ -35,6 +37,8 @@
 
 문제는 이와같은 구성시 너무 많은 탭을 요구하게 된다. 비장애의 영역에서는 시각을 통해 여러가지 정보를 한번에 확인을 할 수 있지만, 장애 또는 봇의 영역에서는 눈대신 청각에 의존해야한다. 스크린 리더기가 모든 게시물 제목을 하나하나 전부 읽는다는 것은 너무 힘들고 듣는다는것도 힘들것이다.
 
+<br/>
+
 ### ! 해결법은 무엇인가?
 
 ​	해결법이야 여러가지 방법이 존재하겠지만, 그 중 대표적인 예를 들어보면 - 공지사항,자료실 같은 수많은 포커스가 되는 영역에서는 방향키 화살표를 통해 읽고 싶은 요소만 선택하게 하는것이다. 
@@ -52,7 +56,7 @@
 
 
 
-
+<br/>
 
 ### fieldset 태그의 버그
 
@@ -70,7 +74,7 @@ form - fieldset - div + legend + label + input 과 같이 <div> 태그로 1번�
 
 
 
-
+<br/>
 
 ### button 태그의 버그 (왜? button 대신 a role="button" 을 이용하는가?)
 
@@ -80,16 +84,16 @@ form - fieldset - div + legend + label + input 과 같이 <div> 태그로 1번�
 
 
 
-
+<br/><br/>
 
 ### vertical-align / text-align
 
 	- vertical-align 은 inline 요소를 수직으로 정렬해주는 기능을 담고 있다.
 	- text-align 은 block 요소를 정렬해주는 기능으로 block 요소 안에있는 inline 요소들(텍스트나 이미지)등도 같이 정렬해준다. inline 관련 태그에 직접 text-align 속성을 지정해줘도 작동하지 않는다.
 
+<br/>
 
-
-
+<br/>
 
 ### time 태그	
 
@@ -99,9 +103,9 @@ form - fieldset - div + legend + label + input 과 같이 <div> 태그로 1번�
 <time datetime="2018-05-31T13:53:45">2018.05.31</time>
 ~~~~~
 
+<br/>
 
-
-
+<br/>
 
 ### block 태그 안에서 여백을 주는 여러가지 방법들.
 
@@ -123,7 +127,7 @@ form - fieldset - div + legend + label + input 과 같이 <div> 태그로 1번�
 
    
 
-
+<br/><br/>
 
 ### 글자 수 숨기기 (... 처리하기)
 
@@ -137,7 +141,7 @@ form - fieldset - div + legend + label + input 과 같이 <div> 태그로 1번�
 
 
 
-
+<br/><br/>
 
 ### fontello
 
@@ -156,7 +160,7 @@ form - fieldset - div + legend + label + input 과 같이 <div> 태그로 1번�
 
 
 
-
+<br/><br/>
 
 ### aria-labelledby
 
@@ -170,7 +174,7 @@ form - fieldset - div + legend + label + input 과 같이 <div> 태그로 1번�
 <a href="#" class="tab" role="button" id="notice">공지사항</a>
 ~~~
 
-
+<br/><br/>
 
 ### JavaScript 맛보기
 

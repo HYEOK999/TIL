@@ -26,7 +26,8 @@
 
 - CSS 색상값 단위 {참고}
 
-  
+
+<br/>
 
 ## 가상 요소 
 
@@ -38,6 +39,10 @@
 
 - ::before -> 해당  css의 요소박스 전에 같은 형식의 태그요소를 가상으로 만든다.
 - ::after -> 해당  css의 요소박스 후에 같은 형식의 태그요소를 가상으로 만든다.
+
+
+
+<br/>
 
 ## nth:child
 
@@ -55,7 +60,7 @@ width: 1em;
 내용은 '\f142'를 입력하고 font 와 width를 적용한다.*/
 ~~~
 
-
+<br/>
 
 ## WAI-ARIA 
 
@@ -67,7 +72,7 @@ width: 1em;
 
 [W3C에서 제공하는 명세서를 보기 좋게 기술로 변화시킨 레진의 ARIA] https://tech.lezhin.com/2018/04/20/wai-aria
 
-
+<br/>
 
 ## a11y-hidden / aria-hidden : 태그 숨김처리
 
@@ -77,6 +82,8 @@ width: 1em;
 
 - 추가로 off-screen / readable-hidden 등도 있다.
 
+<br/>
+
 ### aria-hidden
 
  시각장애인, 검색봇, 스크린리더 사용자가 홈페이지에 더 쉽게 접근하기 위해서 읽을 필요없는 요소나 내용을 감춰준다. 
@@ -85,24 +92,25 @@ width: 1em;
 
 - display:none , visibilitty , hidden 은 비권장.
 
-      ~~~css
-/* a11y-hidden */
-.a11y-hidden{
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    overflow: hidden; /* 넘치는 부분을 감쳐준다 */
-    clip: rect(0,0,0,0); /* 선행조건 : position:absolute 해당 화면을 잘라내서 보여줌 */
-    white-space: nowrap; /* 줄바꿈을 하지않음. */
-    opacity: 0; /* 투명도  */
-}
+  ```css
+  /* a11y-hidden */
+    .a11y-hidden{
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      overflow: hidden; /* 넘치는 부분을 감쳐준다 */
+      clip: rect(0,0,0,0); /* 선행조건 : position:absolute 해당 화면을 잘라내서 보여줌 */
+      white-space: nowrap; /* 줄바꿈을 하지않음. */
+      opacity: 0; /* 투명도  */
+    }
+  
+  /* aria-hidden */
+  <span class="line" aria-hidden="true">내용</span>
+  ```
+  
 
-/* aria-hidden */
-<span class="line" aria-hidden="true">내용</span>
-      ~~~
-
-
+<br/>
 
 ## role
 
@@ -120,6 +128,8 @@ role = header,main,contentinfo 는 각각 <header><main><footer> 를 의미한�
 
 
 
+<br/>
+
 ## Web Font - 이미지 아이콘
 
  로컬에 있는 폰트를 쓰는게 아닌 웹에서 폰트를 받았다가 사용함. 저작권에 주의
@@ -129,6 +139,8 @@ role = header,main,contentinfo 는 각각 <header><main><footer> 를 의미한�
 [Font Awesome] https://fontawesome.com/how-to-use/on-the-web/referencing-icons/basic-use
 
 [Fontello] http://fontello.com/
+
+<br/>
 
 Fontello 적용 방법.
 
@@ -162,13 +174,15 @@ Fontello 적용 방법.
    </style>
    ~~~
 
-
+<br/>
 
 ## CSS 단위
 
 [https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-7%EA%B0%80%EC%A7%80-%EB%8B%A8%EC%9C%84.md](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-7가지-단위.md)
 
 
+
+<br/>
 
 ## float
 
@@ -210,7 +224,7 @@ Fontello 적용 방법.
 
   이는  반드시 display : block이여만 한다.
 
-
+<br/>
 
 ## 그림자
 
@@ -231,7 +245,7 @@ Fontello 적용 방법.
 /* 그림자를 각각 위 아래 오른쪽 왼쪽 을 줌으로서 글씨 주변으로 박스 쳐진것처럼 보이게 할수 있다. */
 ~~~
 
-
+<br/>
 
 ## gradient
 
@@ -251,8 +265,10 @@ background-image: linear-gradient(to bottom, #f4c730 0%,#f7aa2e 35%,#f7aa2e 70%,
 
 [++ 추가 사이트]  "https://codepen.io/FelixRilling/pen/qzfoc"
 
-
+<br/>
 
 ## CSS 색상값 단위 (참고)
 
 [CSS 색상 값단위] https://aboooks.tistory.com/279
+
+<br/>

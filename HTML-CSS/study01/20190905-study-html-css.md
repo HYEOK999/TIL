@@ -12,6 +12,8 @@
 - css 개발 방법론
 - 외부 css 적용 방법 ( reset CSS 와 normalize CSS )
 
+<br/>
+
 > ## 오늘의 중요점!
 >
 > css 문제가 생길시 홈페이지를 열어서 검사를 하고 항상 작은 단위부터 큰단위로 확인하다.( 특히 상속,겹침,우선순위 )
@@ -29,7 +31,9 @@
 > 부모가 css box 레이아웃을 결정하면 자식도 그것을 따라감.(상속 - 무조건은 아니다. margin , padding 등등)
 >
 
+<br/>
 
+<br/>
 
 ## display
 
@@ -38,8 +42,6 @@
 > inline : 줄 속에 넣는 요소. 줄바꿈이 되지 않고 글자수에 따라 크기 자체가 줄고 늘어난다. <b> <span> <a>
 >
 > block : 좀 더 넓은 범위를 지정할 때 사용하는 요소. 가로화면을 100% 다차지. 줄바꿈이 됨.                          <p> <h1> <div> <ul> <ol> 
-
-
 
 1. display : inline - block과 다르게 줄바꿈이 안되고, width와 height가 적용되지 않는다. 오로지 적용된 글자 수에 따라서 크기가 결정된다.
 
@@ -50,6 +52,8 @@
 4. display : flex - 새로 생긴 display. 따라서 특정 버전이 낮은 브라우저에서는 실행X
 
    
+
+<br/>
 
 ## Flex layout
 
@@ -63,6 +67,8 @@
 
   flex 설정된 노드의 자식도 flex item을 가지고 모두 flex display가 된다.
 
+  <br/>
+
   
 
 - ### flex-direction (부모노드)
@@ -75,9 +81,13 @@
 
   column = y축
 
+  <br/>
+
 - ### flex-basis (자식 노드)
 
   flex-item의 크기를 결정합니다. 각 축에 해당하는 (width / height) 의 값을 설정.
+
+  <br/>
 
 - ### JUSTIFY-CONTENT: 메인 축을 중심으로 정렬
 
@@ -88,15 +98,25 @@
   - space-around, flex-item들의 사이를 비워줌. 
   - space-evenly : 익스플로러 지원x
 
+  <br/>
+
 - ### ALIGN-ITEMS: 교차축을 중심으로 정렬
 
   - flex-start(default) ,기본
+
   - flex-end ,끝방향 정렬
+
   - center ,중앙 정렬
+
+    <br/>
 
 - ### order : item 간에 순서를 지정합니다.
 
+  <br/>
+
 - ### flex-grow : item들 끼리 크기에 대한 비율을 결정합니다. ex) a-1 b-2 c-1
+
+<br/>
 
 - ### flex-shrink : flex-item의 크기가 flex-container보다 클때 다른 items의 크기들을 축소시키고 그만큼 해당 item크기를 확대 시킨다.
 
@@ -110,6 +130,8 @@
 
 ![order](https://user-images.githubusercontent.com/31315644/64356786-67d3e300-d03e-11e9-8959-9f29415ef0fd.jpeg)
 
+<br/>
+
 ## a 태그
 
 	> 하이퍼링크 태그인 <a> 는 상황에 따른 css 스타일을 지정할 수 있다.
@@ -121,7 +143,7 @@ a:hover{ 		} /* 마우스 올라갔을때 글자색 변경 */
 a:active{			} /* 마우스로 클릭한 순간의 상태 */
 ~~~
 
-
+<br/>
 
 ## position
 
@@ -130,7 +152,7 @@ a:active{			} /* 마우스로 클릭한 순간의 상태 */
 - relative : 상위 요소(상위는 반드시 static)를 기준으로 위치를 설정.
 - fixed : 요소의 위치를 사용자의 브라우저 기준으로 설정. ( 광고, 상단바, 하단바 등등) 
 
-
+<br/>
 
 ## font
 
@@ -156,7 +178,7 @@ a:active{			} /* 마우스로 클릭한 순간의 상태 */
   </style>
   ~~~
 
-
+<br/>
 
 ## CSS 개발 방법론
 
@@ -173,7 +195,7 @@ a:active{			} /* 마우스로 클릭한 순간의 상태 */
 
   [ CSS 개발 방법론 ] https://gomdoreepooh.github.io/notes/smacss-bem-oocss
 
-
+<br/>
 
 ## 외부 CSS 적용 방법
 
@@ -186,6 +208,8 @@ a:active{			} /* 마우스로 클릭한 순간의 상태 */
 ​	[nomalize css] https://github.com/necolas/normalize.css/
 
 ​	[Reset css] https://meyerweb.com/eric/tools/css/reset/
+
+<br/>
 
  - 적용방법 ( 예 - nomalize )
 

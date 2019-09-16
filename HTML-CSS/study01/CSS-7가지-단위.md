@@ -21,7 +21,7 @@ CSS Unit (CSS 7가지 단위)
 
 
 
-
+<br/><br/>
 
 ### rem(root em)
 
@@ -47,13 +47,15 @@ HTML
 
 결과적으로 `16.8px`의 크기가 됩니다. 
 
-
+<br/>
 
 그런데 여기 em으로 정의한 폰트 사이즈를 각각의 자식에 선언하면 어떤 일이 생길까요? 
 
 같은 CSS를 적용한 동일한 코드를 추가해보았습니다. 
 
 각각의 div는 각 부모의 폰트 사이즈를 상속받아 점점 커지게 됩니다.
+
+<br/>
 
 HTML
 
@@ -79,6 +81,8 @@ HTML
 
 최상위 태그(요소)에 지정한 것을 기준으로 삼으며, 보통 최상위 태그는 html태그입니다.
 
+<br/>
+
 CSS
 
 ```css
@@ -92,7 +96,7 @@ div {
 
 이전 예제에서 만든 복잡한 단계의 세 div는 모두 `16.8px`의 폰트 사이즈로 표현될 것입니다.
 
-
+<br/>
 
 이 rem unit은 그리드 시스템에서도 유용하게 사용가능합니다.
 
@@ -101,6 +105,8 @@ rem은 폰트에서만 사용하진 않습니다.
 예를 들어, [그리드 시스템](http://webdesign.tutsplus.com/tutorials/a-simple-mixin-alternative-to-standard-css-grids--webdesign-16958)이나 rem을 이용한 기본 폰트 사이즈 기반으로 만든 UI 스타일, 그리고 em을 이용해 특정 위치에 특별한 사이즈를 지정할 수도 있습니다. 
 
 보다 정확한 폰트 사이즈나 크기 조정을 가능하게 해 줄 것입니다.
+
+<br/>
 
 CSS
 
@@ -112,11 +118,11 @@ CSS
 
 개념적으로 보면, 이 아이디어는 여러분의 콘텐츠 사이즈를 조절 할 수 있는 인터페이스 전략과 유사합니다. 그러나 모든 경우에 반드시 이런 방법을 따를 필요는 없습니다.
 
-
+<br/><br/>
 
 [rem (root em) 단위의 호환성](http://caniuse.com/#feat=rem)은 caniuse.com에서 확인할 수 있습니다.
 
-
+<br/><br/>
 
 ### vh & vw (vertical height & vertical width)
 
@@ -124,7 +130,7 @@ CSS
 
 하지만 CSS의 퍼센트 값이 모든 문제를 해결할 좋은 방법은 아닙니다. CSS의 너비 값은 가장 가까운 부모 요소에 상대적인 영향을 받습니다.
 
-
+<br/>
 
 만약 타켓 요소의 너비값과 높이값을 뷰포트의 너비값과 높이값에 맞게 사용할 수 있다면 어떨까요? 
 
@@ -132,11 +138,13 @@ CSS
 
 예를 들어 브라우저 높이값이 900px일때 1vh는 9px이라는 뜻이 되지요. 그와 유사하게 뷰포트의 너비값이 750px이면 1vw는 7.5px이 됩니다. 
 
-
+<br/>
 
 이 규칙에는 무궁무진한 사용방법이 있습니다. 
 
 예를 들면, 최대 높이값이나 그의 유사한 높이값의 슬라이드를 제작할때 아주 간단한 CSS만 입력하면 됩니다.
+
+<br/>
 
 CSS
 
@@ -152,15 +160,14 @@ vw로 폰트 사이즈를 지정하면 쉽게 달성할 수 있습니다.
 
 해당 사이즈는 브라우저의 너비에 맞춰 변할 것입니다. (브라우저 크기를 늘였다 줄였다 해보세요)
 
-
+<br/>
 
 <iframe name="cp_embed_1" src="https://codepen.io/jaehee/embed/NNZGPZ?height=345&amp;theme-id=dark&amp;slug-hash=NNZGPZ&amp;default-tab=result&amp;user=jaehee&amp;embed-version=2&amp;name=cp_embed_1" scrolling="no" frameborder="0" height="345" allowtransparency="true" allowfullscreen="true" allowpaymentrequest="true" title="CodePen Embed" class="cp_embed_iframe " id="cp_embed_NNZGPZ" style="box-sizing: border-box; width: 1118.94px; overflow: hidden; display: block;"></iframe>
-
 [뷰포트 vw, vh 단위의 호환성](http://caniuse.com/#feat=viewport-units)은 caniuse.com에서 확인할 수 있습니다.
 
 
 
-
+<br/><br/>
 
 ### vmin & vmax
 
@@ -170,7 +177,7 @@ vw로 폰트 사이즈를 지정하면 쉽게 달성할 수 있습니다.
 
 너비값이 다시 800px이 되고 높이값이 1080px이 되면 vmin은 8px이 되고 vmax는 10.8px이 됩니다.
 
-
+<br/>
 
 어때요, 이 값들을 사용할 수 있나요? 
 
@@ -179,6 +186,8 @@ vw로 폰트 사이즈를 지정하면 쉽게 달성할 수 있습니다.
 높이값과 너비값을 `vmin`을 사용해 100으로 지정합니다. 
 
 예를 들어 터치화면 양 변에 가득차는 정사각형 요소를 만들때는 이렇게 정의하면 됩니다.
+
+<br/>
 
 CSS
 
@@ -193,6 +202,8 @@ CSS
 
 
 만약 커버처럼 뷰포트 화면에 보여야 하는(모든 네 변이 스크린에 꽉 차 있는) 경우에는 같은 값을 vmax로 적용하면 됩니다.
+
+<br/>
 
 CSS
 
@@ -216,7 +227,7 @@ CSS
 
 `vmax` : 1/100th of the maximum value between the height and the width of the viewport.
 
-
+<br/><br/>
 
 ### Remind : vw, vh, vmin, vmax
 
@@ -237,7 +248,7 @@ vmin, vmax 값은 뷰포트의 너비, 높이 길이 중 '작은' 혹은 '큰' �
 
 즉, 화면 크기에 상대적으로 변경되는 단위가 뷰포트 단위입니다.
 
-
+<br/>
 
 참고로 IE 9-11 에서 vmax는 제대로 지원하지 못합니다.
 
@@ -247,7 +258,7 @@ IE 5.5 이상 제대로 뷰포트 단위를 지원하게 하려면 폴리필 [vm
 
 
 
-
+<br/><br/>
 
 
 
@@ -257,7 +268,7 @@ IE 5.5 이상 제대로 뷰포트 단위를 지원하게 하려면 폴리필 [vm
 
 em과 rem과 다른 점은 이 두 단위가 `font-family`에 의존한다면 다른 두 단위는 폰트의 특정 수치에 기반한다는 점입니다. 
 
-
+<br/>
 
 `ch` 단위, 또는 글꼴 단위는 제로 문자인 0의 너비값의 "고급 척도"로 정의됩니다. 
 
@@ -265,7 +276,7 @@ em과 rem과 다른 점은 이 두 단위가 `font-family`에 의존한다면 �
 
 이 특정 규칙은 점자 레이아웃에 기반하고 있지만, 이 기술의 가능성은 간단한 어플리케이션 그 이상으로 확장할 수 있습니다.
 
-
+<br/>
 
 ex 단위의 정의는 "현재 폰트의 `x-높이값` 또는 em의 절반 값"이라고 할 수 있습니다. `x-높이값`은 소문자 x의 높이값이기도 합니다. 
 
@@ -275,7 +286,7 @@ ex 단위의 정의는 "현재 폰트의 `x-높이값` 또는 em의 절반 값"�
 
 x-높이값; 소문자 x의 높이값 (자세한 것은 [웹 타](http://webdesign.tutsplus.com/articles/the-anatomy-of-web-typography--webdesign-10533)[이포그래피의 해부학](http://webdesign.tutsplus.com/articles/the-anatomy-of-web-typography--webdesign-10533) 링크를 참조하세요)
 
-
+<br/>
 
 이 단위는 타이포그래픽에서 세밀한 조정을 할 때 많이 사용합니다. 
 
@@ -284,6 +295,8 @@ x-높이값; 소문자 x의 높이값 (자세한 것은 [웹 타](http://webdesi
 아래첨자 역시 비슷한 방법으로 아래로 내릴 수 있습니다. 
 
 브라우저는 위첨자와 아래첨자의 기본값을 `vertical-align`으로 정의하고 있지만, 보다 정교한 사용법을 알고 싶다면 아래와 같이 작성할 수 있습니다.
+
+<br/>
 
 CSS
 

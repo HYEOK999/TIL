@@ -34,6 +34,8 @@
 
 ------
 
+<br/>
+
 ### 오늘의 팁
 
 1. position : absolute , float는 강제로 display:block 화시킨다.
@@ -80,6 +82,8 @@
 
 ------
 
+<br/>
+
 ### HTML5 콘텐츠 모델
 
 ![ContentsCategory](https://user-images.githubusercontent.com/31315644/64547639-ef379400-d367-11e9-96f8-b200c9981342.jpeg)
@@ -92,7 +96,7 @@
 
 https://code.tutsplus.com/ko/tutorials/the-30-css-selectors-you-must-memorize--net-16048
 
-
+<br/>
 
 ### html 5 표준확인
 
@@ -100,7 +104,7 @@ https://code.tutsplus.com/ko/tutorials/the-30-css-selectors-you-must-memorize--n
 - [html5 mulder21c : 블로그] https://mulder21c.github.io/html/
 - [html5 한글명세서] https://mulder21c.github.io/html/
 
-
+<br/>
 
 ### CSS 구체성 점수
 
@@ -129,7 +133,7 @@ https://code.tutsplus.com/ko/tutorials/the-30-css-selectors-you-must-memorize--n
 > 1. 지정한 스타일이 안먹는다고 생각햇을떄. 추적할때. 파악용도
 > 2. 클래스가 동적으로 추가될 가능성이 있을떄; 다른 사람이 수정해서 내 소스의 상속이 깨질 우려가 있을 경우.
 
-
+<br/>
 
 ### Shadow
 
@@ -149,7 +153,7 @@ box-shadow: none | x-position y-position blur spread color | inset | initial | i
 > - initial : 기본값으로 설정한다.
 > - inherit : 부모 요소의 속성값을 상속받는다.
 
-
+<br/>
 
 ```css
 text-shadow: offset-x offset-y blur-radius color | none | initial | inherit
@@ -163,7 +167,7 @@ text-shadow: offset-x offset-y blur-radius color | none | initial | inherit
 > - initial : 기본값으로 설정한다.
 > - inherit : 부모 요소의 속성값을 상속받는다.
 
-
+<br/>
 
 ### Entity list
 
@@ -172,6 +176,8 @@ text-shadow: offset-x offset-y blur-radius color | none | initial | inherit
 [사용가능한 특수문자 코드 리스트] https://www.w3schools.com/cssref/css_entities.asp
 
 
+
+### <br/>
 
 ### Opacity
 
@@ -187,6 +193,8 @@ opacity: number | initial | inherit
 
   
 
+### <br/>
+
 ### 시나리오 작성
 
  CSS의 style을 작성할 때, 시나리오를 작성하며 차근차근 하는것을 익숙해지도록 한다.
@@ -200,7 +208,7 @@ opacity: number | initial | inherit
 
 
 
-### z-index
+### <br/>z-index
 
 요소들의 배치가 자유로워지면서, 때떄로 서로의 위치를 겹치게 하는 경우가 생긴다. 그 때 사용하는것이 z-index.
 
@@ -208,7 +216,7 @@ opacity: number | initial | inherit
 
 [z-index 를 잘 설명한 블로그] http://dev.epiloum.net/904
 
-
+<br/>
 
 ### background
 
@@ -229,7 +237,7 @@ background : url('./images//ani_flower_01.png') no-repeat 0 -10px, url('./images
 
 ```
 
-
+<br/>
 
 ### 애니메이션
 
@@ -270,7 +278,7 @@ transform 은 좌표공간을 변형함으로써 일반적인 문서 흐름을 �
 
 그 중, transform : translate는 요소의 위치를 이동 시키는 함수이다. 구버전의 browser는 사용이 안된다.
 
-### 
+### <br/>
 
 #### animation-duration 
 
@@ -280,7 +288,7 @@ transform 은 좌표공간을 변형함으로써 일반적인 문서 흐름을 �
     animation-duration: 5s;
 ```
 
-
+<br/>
 
 #### animation-fill-mode 속성 및 내용
 
