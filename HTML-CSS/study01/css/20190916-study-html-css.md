@@ -14,4 +14,6 @@
 
 - float 대신에 inline-block 사용시 주의점.
 
+- 밑줄 gradient 만드는 방법들.
+
   
