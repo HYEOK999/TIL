@@ -6,7 +6,7 @@
 
 - 강조 태그 ( em , strong )
 
-- font weight 가중치 (추가 예정)
+- font weight 가중치 
 
 - 데이터는 숨기고 이미지를 표기하는 IR 기법. 종류 및 장단점
 
@@ -14,7 +14,9 @@
 
 - float 대신에 inline-block 사용시 주의점.
 
-- 밑줄 gradient 만드는 방법들. (추가 예정)
+- 밑줄 gradient 만드는 방법들.
+
+- 애니메이션 방법들
 
   
 
@@ -57,6 +59,78 @@
 <br/><br/>
 
 ### font-weight 가중치
+
+[웹 폰트 파헤치기](http://www.beautifulcss.com/archives/431)
+
+웹 폰트는 그룹화가 가능하다.
+
+예를 들어보면, 다음과 같다.
+
+~~~~~css
+@font-face {
+    font-family: Ngothic-Regular;
+    src: url('NanumGothic-Regular.woff') format('woff');
+}
+ 
+@font-face {
+    font-family: Ngothic-Bold;
+    src: url('NanumGothic-Bold.woff') format('woff');
+}
+ 
+@font-face {
+    font-family: Ngothic-ExtraBold;
+    src: url('NanumGothic-ExtraBold.woff') format('woff');
+}
+ 
+@font-face {
+    font-family: Ngothic-Italic;
+    src: url('NanumGothic-Italic.woff') format('woff');
+}
+~~~~~
+
+나눔고딕 보통, 굵게 , 아주굵게, 이탤릭 을 사용한다고 가정시 보통 웹폰트의 이름을 모두 다르게 붙이고 필요에 따라 각 스타일을 호출한다.
+
+<br/>
+
+<strong>이와 같이 같은 나눔고딕들을 묶어서 사용하는 방법이 바로 font-weight 다. 다음 코드를 보자. </strong>
+
+~~~~css
+@font-face {
+  font-family: "Nanum Gothic";
+  font-weight: 400;
+  src: url('NanumGothic-Regular.woff') format('woff');
+}
+ 
+@font-face {
+  font-family: "Nanum Gothic";
+  font-weight: 700;
+  src: url('NanumGothic-Bold.woff') format('woff');
+}
+ 
+@font-face {
+  font-family: "Nanum Gothic";
+  font-weight: 800;
+  src: url('NanumGothic-ExtraBold.woff') format('woff');
+}
+ 
+@font-face {
+  font-family: "Nanum Gothic";
+  font-weight: 400;
+  font-style: italic;
+  src: url('NanumGothic-Italic.woff') format('woff');
+}
+~~~~
+
+위와 같이 font-family는 나눔고딕이라는 그룹으로 맺고 각 weight와 style을 통해 각 글꼴을 선택할 수 있게된다.
+
+~~~~~html
+body { font-family: "Nanum Gothic" }
+ 
+h1 { font-weight: 400 } /* NanumGothic-Regular.woff */
+h2 { font-weight: 700 } /* NanumGothic-Bold.woff */
+h3 { font-weight: 800 } /* NanumGothic-ExtraBold.woff */
+h4 { font-weight: 400; font-style: italic } /* NanumGothic-Italic.woff */
+~~~~~
 
 <br/><br/>
 
@@ -187,3 +261,192 @@
 
 ### 밑줄 gradient 만드는 방법들.
 
+1. 가상 요소 absolute 를 이용한 방법.
+
+   밑줄을 그리고 싶은 곳에 가상요소를 하나 띄우고 absolute화 한후 높이와 넓이를 맞춰서 대치하는 방법.
+
+   ~~~~css
+   .news::before{
+       content: "";
+       background: red linear-gradient(to right,#aaa,#fff);
+       position : absolute;
+       top : 30px;
+       left : 0;
+       width: 80%;
+       height: 1px;
+   }
+   ~~~~
+
+   <br/>
+
+2. border 선 자체에 gradient를 설정 하는 방법
+
+   ~~~~~css
+   .news-heading{
+       margin : 20px 0;
+       padding : 0 0 15px 0;
+       width : 80%;
+       font-size : 1.5rem;
+       color: #bb7b13;
+       border-style: solid;
+       border-image: linear-gradient(to right, rgb(168, 167, 167), rgb(228, 228, 228));
+       border-image-slice: 0 0 1 0;
+       border-image-width: 0 0 1px 0;
+       border-left: none;
+   }
+   ~~~~~
+
+
+
+<br/>
+
+<br/>
+
+### 애니메이션 방법들
+
+![save](https://user-images.githubusercontent.com/31315644/65040310-08a39600-d98f-11e9-8cb6-513d9c9a33ac.png)
+
+[CSS 애니메이션 사용하기 참고](https://developer.mozilla.org/ko/docs/Web/CSS/CSS_Animations/Using_CSS_animations)
+
+~~~css
+/* 1번 Fade Slide In From Top */		
+@keyframes fade-slide-in-from-top {
+  0% {
+    transform: translateY(-4rem);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.app-header {
+  opacity: 0;
+  animation: 
+    fade-slide-in-from-top
+    0.35s                 
+    0.4s                  
+    ease-out              
+    forwards;             
+}
+~~~
+
+
+
+~~~~~css
+/* 2번 Fade Slide In From Left */
+@keyframes fade-slide-in-from-left {
+  0% {
+    transform: translateX(-4rem); /*right는 transform: translatxX(4rem);*/
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.brand {
+  opacity: 0;
+  animation: 
+    fade-slide-in-from-left
+    0.35s                  
+    0.4s                   
+    ease-out               
+    forwards;              
+}
+~~~~~
+
+
+
+~~~~css
+/* 3번 Fade In & out */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+button[title="메뉴 열기"] {
+  opacity: 0;
+  animation: 
+    fade-in   /* name */
+    0.35s     /* duration */
+    0.4s      /* delay */
+    ease-out  /* timing function */
+    forwards; /* fill mode */
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.button[title="메뉴 열기"] {
+  animation: 
+    fade-out
+    0.35s                  
+    0.4s                   
+    ease-out               
+    forwards;              
+}
+~~~~
+
+
+
+~~~~~css
+/* 4번 Fade Slide In From Bottom */
+@keyframes fade-slide-in-from-bottom {
+  0% {
+    transform: translateY(4rem);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.ediya-menu__item {
+  opacity: 0;
+  animation: 
+    fade-slide-in-from-bottom
+    0.35s                  
+    0.4s                   
+    ease-out               
+    forwards;              
+}
+
+~~~~~
+
+~~~css
+/* 5번 Motion Sequnce Animation */
+.ediya-menu__item {
+  /* 0% */
+  opacity: 0;
+  transform: translateY(4rem);
+  /* 100% */
+  animation: transform-none 0.3s 0.85s cubic-bezier(0.6, 0.01, 0.16, 1) forwards;
+}
+ 
+/* 시간 차 애니메이션 */
+.ediya-menu__item:nth-child(1) { animation-duration: 0.8s }
+.ediya-menu__item:nth-child(2) { animation-duration: 1.2s }
+.ediya-menu__item:nth-child(3) { animation-duration: 1.6s }
+.ediya-menu__item:nth-child(4) { animation-duration: 2.0s }
+
+~~~
+
+[그외 사이트 참조](https://seulbinim.github.io/WTC/index.html#/3/18)
+
+1. Effective Management  애니메이션 코드 수 줄이고 관리하기.
+2. Text Sequencing Motion
+3. Stop & Play Animation for Everyone (애니메이션 껏다 켜기 버튼기능)
