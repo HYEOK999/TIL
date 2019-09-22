@@ -1,0 +1,130 @@
+body{
+    margin: 0;
+}
+
+.slides {
+    display: block;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.slides * {
+    user-select: none;
+}
+
+.slide-container input {
+    display: none;  
+} 
+
+
+.slide-container { 
+    display: block; 
+}
+
+.slide-image {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    opacity: 0;
+    transition: all .7s ease-in-out;
+}   
+
+.slide-image img {
+    width: auto;
+    min-width: 100%;
+    height: 100%;
+}
+
+.carousel-controls {
+    position: absolute;
+    top: calc(50% - 30px);
+    left: 0;
+    right: 0;
+    z-index: 999;
+    color: #fff;
+}
+
+.carousel-controls label {
+    display: none;
+    position: absolute;
+    padding: 0;
+    transition: padding .2s;
+    cursor: pointer;
+}
+
+.carousel-controls .prev-slide {
+    text-align: left;
+    padding: 0 20px;
+    margin-left: 100px;
+    left: 0;
+}
+
+.carousel-controls .prev-slide:hover {
+    padding: 0 30px;
+}
+
+.carousel-controls .next-slide {
+    text-align: right;
+    padding : 0 20px;
+    margin-right : 100px;
+    right: 0;
+}
+
+.carousel-controls .next-slide:hover {
+    padding: 0 30px;
+}
+
+.carousel-dot-group {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    z-index: 999;
+    text-align: center;
+}
+
+.carousel-dot-group .carousel-dot {
+    display: none;
+}
+
+input:checked ~ .carousel-dot-group .carousel-dot {
+    display: inline-block;
+    width: 20px;
+    height: 5px;
+    background-color: #fff;
+    opacity: 0.5;
+    margin-right: 1px;
+}
+
+.slide-container > input:checked + .slide-image {
+    opacity: 1; /*투명해제*/
+    transform: scale(1);
+    transition: opacity 1s ease-in-out;
+}
+
+.slide-container > input:checked + .carousel-controls label {
+    display: block; 
+}
+
+
+#img-1:checked ~ .carousel-dot-group .img-dot-1,
+#img-2:checked ~ .carousel-dot-group .img-dot-2,
+#img-3:checked ~ .carousel-dot-group .img-dot-3,
+#img-4:checked ~ .carousel-dot-group .img-dot-4,
+#img-5:checked ~ .carousel-dot-group .img-dot-5,
+#img-6:checked ~ .carousel-dot-group .img-dot-6,
+#img-7:checked ~ .carousel-dot-group .img-dot-7{
+    width: 30px;
+	background-color: black;
+}
+
+
+.slide-container > input:checked ~ .carousel-controls label { 
+    display: block; 
+}
