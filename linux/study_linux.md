@@ -1,10 +1,12 @@
+![리눅스](https://t1.daumcdn.net/cfile/tistory/9923B0495D66434618)
+
+---------
 
 
-<br/>
 
-### 리눅스
+### 리눅스 명령어
 
-command line interface 
+ 리눅스의 특징 : command line interface 
 
 ls : 파일보기
 
@@ -33,7 +35,7 @@ rm -r [파일명] : 폴더 삭제 명령어
 
 man [명령어명] : 예) man ls     
 
-​	 거기서 상세 단어 검색 : 예) /sort : sort라는 단어 검색 -> 넘기는 방법은 n키 누르면 됨. 돌아가는 방법은 b키 누르면 됨.			
+1. man 내부 상세 단어 검색 : 예) /sort : sort라는 단어 검색 -> 넘기는 방법은 n키 누르면 됨. 돌아가는 방법은 b키 누르면 됨.
 
 man과 --help의 차이 : help는 간결하게 명령어의 기능및 옵션 / man은 상세하게 보여준다.
 
@@ -59,13 +61,13 @@ cp [원본파일] [대상위치]
 
 ### sudo : 임시로 권리자 권한을 빌려온다.
 
-super user do -> 권리자 권한 
+ sudo는 super user do 의 약자로 권리자 권한을 의미함. 
 
 제일 심각한 명령어 : sudo rm -rf / => 묻지도 따지지않고 루트디렉토리 전부 삭제
 
-sudo [command] 권한만 빌림.
+- sudo [command] 권한만 빌림.
 
-su - : root계정으로 전환함.
+- su - : root계정으로 전환함.
 
 <br/>
 
@@ -94,20 +96,18 @@ su - : root계정으로 전환함.
 
 <br/>
 
-### 리눅스 명령어 기반에서 다운로드 받는 방법
+### 리눅스 명령어 기반에서 다운로드 받는 방법 : wget
 
 ​	다운로드 받을 프로그램이 필요하다. ( wget 이용 )
 
-​	wget url주소 : 파일명 그대로 받게됨.
-
-​	wget -O [파일명] url주소
+	- wget url주소 : 파일명 그대로 받게됨.
+	- wget -O [파일명] url주소
 
 <br/>
 
+### 오픈소스 다운로드 방법 : git
 
+​	맘에 드는 git 주소 들어가서 git clone~
 
+<br/>
 
-
-
-
- 
