@@ -37,7 +37,7 @@ Today I Leaned...
 >
 >[CSS 7가지 단위](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-7가지-단위.md)
 >
->[CSS inline-block](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-inlineblock주의점.md)
+>[CSS inline-block 주의점](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-inlineblock주의점.md)
 >
 >[CSS 선택자 정리](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-선택자정리.md)
 
