@@ -35,11 +35,11 @@ Today I Leaned...
 >
 >[20190925-study-html-css](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/20190925-study-html-css.md)
 >
->[CSS 7가지 단위]([https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-7%EA%B0%80%EC%A7%80-%EB%8B%A8%EC%9C%84.md](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-7가지-단위.md))
+>[CSS 7가지 단위](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-7가지-단위.md)
 >
->[CSS inline-block]([https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-inlineblock%EC%A3%BC%EC%9D%98%EC%A0%90.md](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-inlineblock주의점.md))
+>[CSS inline-block](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-inlineblock주의점.md)
 >
->[CSS 선택자 정리](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-선택자정리.md)]
+>[CSS 선택자 정리](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/CSS-선택자정리.md)
 
 <br/>
 
