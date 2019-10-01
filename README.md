@@ -51,6 +51,8 @@ Today I Leaned...
 >
 >[20190930-linux-study02](https://github.com/HYEOK999/TIL/blob/master/linux/study_linux02.md)
 >
+>[20191001-linux-study03](https://github.com/HYEOK999/TIL/blob/master/linux/study_linux03.md)
+>
 >[20190930-linux-IORedirection](https://github.com/HYEOK999/TIL/blob/master/linux/study_IORedirection.md)
 
 <br/>
