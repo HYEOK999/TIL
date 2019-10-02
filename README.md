@@ -64,6 +64,8 @@ Today I Leaned...
 >[20191001-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191001-study-javascript.md)
 >
 >[20191002-ESLint](https://github.com/HYEOK999/TIL/blob/master/ESLint설명.md)
+>
+>[20191002-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191002-study-javascript.md)
 
 <br/>
 
