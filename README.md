@@ -51,9 +51,9 @@ Today I Leaned...
 >
 >[20190930-linux-study02](https://github.com/HYEOK999/TIL/blob/master/linux/study_linux02.md)
 >
->[20191001-linux-study03](https://github.com/HYEOK999/TIL/blob/master/linux/study_linux03.md)
->
 >[20190930-linux-IORedirection](https://github.com/HYEOK999/TIL/blob/master/linux/study_IORedirection.md)
+>
+>[20191001-linux-study03](https://github.com/HYEOK999/TIL/blob/master/linux/study_linux03.md)
 
 <br/>
 
@@ -63,15 +63,21 @@ Today I Leaned...
 
 >[20191001-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191001-study-javascript.md)
 >
->[20191002-ESLint](https://github.com/HYEOK999/TIL/blob/master/ESLint설명.md)
->
 >[20191002-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191002-study-javascript.md)
+
+<br/>
+
+### JavaScript Stack Tip
+
+>[ESLint](https://github.com/HYEOK999/TIL/blob/master/ESLint설명.md)
 
 <br/>
 
 ### JavaScript 예습
 
 > [3. 자바스크립트 개발환경 / 4. 실행방법](https://github.com/HYEOK999/TIL/blob/master/homework/191001-subject.md)
+>
+> [5. 데이터타입 / 6. 연산자](https://github.com/HYEOK999/TIL/blob/master/homework/191002-subject.md)
 
 <br/>
 
@@ -84,4 +90,5 @@ Today I Leaned...
 >[20191001-서울에서 김서방 찾기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_02.md)
 >
 >[20191002-수수박수박수박수박수박수?](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_03.md)
-
+>
+>[20191003-완주하지 못한 선수](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_04.md)
