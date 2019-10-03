@@ -1,4 +1,4 @@
-![JavaScript](https://user-images.githubusercontent.com/31315644/65955840-fabc3d80-e483-11e9-8c3b-159d71ad0789.jpeg)
+![JavaScript](https://user-images.githubusercontent.com/31315644/66104821-b9976b00-e5f4-11e9-84e9-20c797dd2c51.jpeg)
 
 ----------
 

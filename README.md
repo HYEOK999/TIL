@@ -83,5 +83,5 @@ Today I Leaned...
 >
 >[20191001-서울에서 김서방 찾기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_02.md)
 >
->[20191001-수수박수박수박수박수박수?](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_03.md)
+>[20191002-수수박수박수박수박수박수?](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_03.md)
 
