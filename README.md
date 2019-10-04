@@ -71,7 +71,7 @@ Today I Leaned...
 
 >[ESLint](https://github.com/HYEOK999/TIL/blob/master/ESLint설명.md)
 >
->[웹 브라우저 동작 원리]([https://github.com/HYEOK999/TIL/blob/master/javaScript/%EC%9B%B9%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80_%EB%8F%99%EC%9E%91%EC%9B%90%EB%A6%AC.md](https://github.com/HYEOK999/TIL/blob/master/javaScript/웹브라우저_동작원리.md))
+>[웹 브라우저 동작 원리](https://github.com/HYEOK999/TIL/blob/master/javaScript/웹브라우저_동작원리.md)
 
 <br/>
 
