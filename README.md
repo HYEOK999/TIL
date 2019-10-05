@@ -71,6 +71,8 @@ Today I Leaned...
 
 ### JavaScript Stack Tip
 
+>[VSC-환경셋팅](https://github.com/HYEOK999/TIL/blob/master/javaScript/VSC_Settings.md)
+>
 >[ESLint](https://github.com/HYEOK999/TIL/blob/master/ESLint설명.md)
 >
 >[웹 브라우저 동작 원리](https://github.com/HYEOK999/TIL/blob/master/javaScript/웹브라우저_동작원리.md)
