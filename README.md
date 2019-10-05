@@ -100,4 +100,6 @@ Today I Leaned...
 >[20191003-완주하지 못한 선수](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_04.md)
 >
 >[20191004-체육복-재도전](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_05.md)
+>
+>[20191005-완주하지 못한 선수-재도전]()
 
