@@ -15,7 +15,7 @@ function solution(answers) {
   let keysArr;
 
   for (arrayNum = 0; arrayNum < 3; arrayNum++) {
-    keysArr = Object.keys(student)[i];
+    keysArr = Object.keys(student)[arrayNum];
 
     for (i = 0; i < answers.length; i++) {
       if (j === student[keysArr].length) {
@@ -23,35 +23,13 @@ function solution(answers) {
       }
 
       if (answers[i] === student[keysArr][j]) {
-        answerNum[0]++;
+        answerNum[arrayNum]++;
       }
       j++;
     }
+    j = 0;
   }
 
-  j = 0;
-  for (i = 0; i < answers.length; i++) {
-    if (j === student.s2.length) {
-      j = 0;
-    }
-
-    if (answers[i] === student.s2[j]) {
-      answerNum[1]++;
-    }
-    j++;
-  }
-
-  j = 0;
-  for (i = 0; i < answers.length; i++) {
-    if (j === student.s3.length) {
-      j = 0;
-    }
-
-    if (answers[i] === student.s3[j]) {
-      answerNum[2]++;
-    }
-    j++;
-  }
   console.log(answerNum);
   maxNum = Math.max.apply(null, answerNum);
 
