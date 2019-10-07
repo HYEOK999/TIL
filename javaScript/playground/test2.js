@@ -1,6 +1,17 @@
-var a = 10;
-console.log(a);
+// var a = 23;
+// if(a % 2){
+//   console.log("홀수");
+// }
+// else{
+//   console.log("짝수");
+// }
 
+var b = 21;
+if (b % 2 == 0) {
+  console.log("짝수");
+} else {
+  console.log("홀수");
+}
 
 // 식별자 이름 : 숫자 , 문자  , 특수기호(_ , $)
 // 규칙1 : 맨 앞자리 숫자 불가능

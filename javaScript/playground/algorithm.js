@@ -9,18 +9,24 @@ function solution(answers) {
   };
   let answerNum = [0, 0, 0];
   let maxNum = 0;
+  let arrayNum = 0;
   let i = 0;
   let j = 0;
+  let keysArr;
 
-  for (i = 0; i < answers.length; i++) {
-    if (j === student.s1.length) {
-      j = 0;
-    }
+  for (arrayNum = 0; arrayNum < 3; arrayNum++) {
+    keysArr = Object.keys(student)[i];
 
-    if (answers[i] === student.s1[j]) {
-      answerNum[0]++;
+    for (i = 0; i < answers.length; i++) {
+      if (j === student[keysArr].length) {
+        j = 0;
+      }
+
+      if (answers[i] === student[keysArr][j]) {
+        answerNum[0]++;
+      }
+      j++;
     }
-    j++;
   }
 
   j = 0;

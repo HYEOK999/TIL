@@ -45,63 +45,45 @@
 
 ~~~javascript
 function solution(answers) {
-    var answer = [];
-    var student = { s1 : [1, 2, 3, 4, 5] , 
-                   s2 : [2, 1, 2, 3, 2, 4, 2, 5], 
-                   s3 : [3, 3, 1, 1, 2, 2, 4, 4, 5, 5] };
-    let answer_num = [0,0,0];
-    let max_num = 0;
-    let j = 0;
-    
-    for(var i = 0 ; i < answers.length ; i++ ){
-        
-        if(j == student.s1.length){
-            j = 0;
-        }
-        
-        if(answers[i] == student.s1[j]){
-            answer_num[0]++;
-        }
-        j++;
-    }
-    
-    j = 0;
-    for(var i = 0 ; i < answers.length ; i++ ){
-        
-        if(j == student.s2.length){
-            j = 0;
-        }
-        
-        if(answers[i] == student.s2[j]){
-            answer_num[1]++;
-        }
-        j++;
-    }
-    
-    j = 0;
-    for(var i = 0 ; i < answers.length ; i++ ){
-        
-        if(j == student.s3.length){
-            j = 0;
-        }
-        
-        if(answers[i] == student.s3[j]){
-            answer_num[2]++;
-        }
-        j++;
-    }
+  let answer = [];
+  let student = {
+    s1: [1, 2, 3, 4, 5],
+    s2: [2, 1, 2, 3, 2, 4, 2, 5],
+    s3: [3, 3, 1, 1, 2, 2, 4, 4, 5, 5]
+  };
+  let answerNum = [0, 0, 0];
+  let maxNum = 0;
+  let arrayNum = 0;
+  let i = 0;
+  let j = 0;
+  let keysArr;
 
-    max_num = Math.max.apply(null, answer_num);
-    
-    for(var i = 0 ; i < 3 ; i++ ){
-        if(answer_num[i] == max_num){
-            answer.push(i+1);
-        }    
+  for (arrayNum = 0; arrayNum < 3; arrayNum++) {
+    keysArr = Object.keys(student)[arrayNum];
+
+    for (i = 0; i < answers.length; i++) {
+      if (j === student[keysArr].length) {
+        j = 0;
+      }
+
+      if (answers[i] === student[keysArr][j]) {
+        answerNum[arrayNum]++;
+      }
+      j++;
     }
-    
-    answer.sort();
-    
-    return answer;
+    j = 0;
+  }
+
+  maxNum = Math.max.apply(null, answerNum);
+
+  for (i = 0; i < 3; i++) {
+    if (answerNum[i] === maxNum) {
+      answer.push(i + 1);
+    }
+  }
+  answer.sort();
+
+  return answer;
 }
 ~~~
 
