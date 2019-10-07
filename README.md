@@ -86,6 +86,8 @@ Today I Leaned...
 > [3. 자바스크립트 개발환경 / 4. 실행방법](https://github.com/HYEOK999/TIL/blob/master/homework/191001-subject.md)
 >
 > [5. 데이터타입 / 6. 연산자](https://github.com/HYEOK999/TIL/blob/master/homework/191002-subject.md)
+>
+> [7. 제어문 / 8. 타입변환과 단축평가 / 9. 객체 리터럴](https://github.com/HYEOK999/TIL/blob/master/homework/191007-subject.md)
 
 <br/>
 
