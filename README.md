@@ -3,10 +3,7 @@ Today I Leaned...
 
 ### HTML&CSS
 
->[20190902-study-termianl](https://github.com/HYEOK999/TIL/blob/master/git-github/20190902-study-terminal.md)
->
->[20190902-start-git](https://github.com/HYEOK999/TIL/blob/master/git-github/20190902-start-git.md)
->
+
 >[20190903-Test-web-page](https://github.com/HYEOK999/TIL/blob/master/personal-study/web/Test-web-page/20190903-Test-web-page.md)
 >
 >[20190904-study-html-css](https://github.com/HYEOK999/TIL/blob/master/HTML-CSS/study01/20190904-study-html-css.md)
@@ -45,8 +42,12 @@ Today I Leaned...
 
 <br/>
 
-### HTML&CSS
+### linux
 
+>[20190902-study-termianl](https://github.com/HYEOK999/TIL/blob/master/git-github/20190902-study-terminal.md)
+>
+>[20190902-start-git](https://github.com/HYEOK999/TIL/blob/master/git-github/20190902-start-git.md)
+>
 >[20190930-linux-study01](https://github.com/HYEOK999/TIL/blob/master/linux/study_linux01.md)
 >
 >[20190930-linux-study02](https://github.com/HYEOK999/TIL/blob/master/linux/study_linux02.md)
