@@ -22,6 +22,7 @@ problem01();
 ```
 
 <br/>
+
 ### 2. for문을 사용하여 0부터 10미만의 정수 중에서 짝수만을 작은 수부터 출력하시오.
 
 ![2번](https://user-images.githubusercontent.com/31315644/66459367-db3e9980-eaaf-11e9-9478-369e8eba6764.jpeg)
@@ -40,6 +41,7 @@ function problem02() {
 problem02();
 ```
 <br/>
+
 ### 3. for문을 사용하여 0부터 10미만의 정수 중에서 짝수만을 작은 수부터 문자열로 출력하시오.
 
 ![3번](https://user-images.githubusercontent.com/31315644/66459386-e1cd1100-eaaf-11e9-97ea-1fdae9656e77.jpeg)
@@ -163,6 +165,7 @@ function problem08() {
 problem08();
 ```
 <br/>
+
 ### 9. 1부터 20 미만의 정수 중에서 2 또는 3의 배수인 수의 총합을 구하시오. (결과 : 117)
 
 ```javascript
@@ -183,6 +186,7 @@ function problem09() {
 problem09();
 ```
 <br/>
+
 ### 10. 두 개의 주사위를 던졌을 때, 눈의 합이 6이 되는 모든 경우의 수를 출력하시오.
 
 ![10번](https://user-images.githubusercontent.com/31315644/66459438-f6a9a480-eaaf-11e9-8f22-654703b26ed3.jpeg)
@@ -311,6 +315,7 @@ function problem13() {
 problem13();
 ```
 <br/>
+
 ### 14. 삼각형 출력하기 - pattern 4
 
 다음을 참고하여 *(별)로 트리를 문자열로 완성하라. 개행문자(‘\n’)를 사용하여 개행한다. 완성된 문자열의 마지막은 개행문자(‘\n’)로 끝나도 관계없다.
@@ -339,6 +344,7 @@ function problem14() {
 problem14();
 ```
 <br/>
+
 ### 15. 정삼각형 출력하기
 
 ![15번](https://user-images.githubusercontent.com/31315644/66459434-f6110e00-eaaf-11e9-9698-918e507f369e.jpeg)
