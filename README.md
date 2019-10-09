@@ -109,4 +109,6 @@ Today I Leaned...
 >[20191005-완주하지 못한 선수-재도전](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_06.md)
 >
 >[20191007-모의고사](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_07.md)
+>
+>[20191008-Poiema제어문](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_08.md)
 
