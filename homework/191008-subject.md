@@ -247,7 +247,7 @@ copy에는 두 가지가 있다.
 
 <br/>
 
-#### shaloow copy 
+#### shallow copy 
 
 **1. slice 메서드 이용 **- Array.prototype.slice.call(변수명)
 
