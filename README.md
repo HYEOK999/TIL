@@ -71,6 +71,8 @@ Today I Leaned...
 >[20191007-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191007-study-javascript.md)
 >
 >[20191008-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191008-study-javascript.md)
+>
+>[20191010-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191010-study-javascript.md)
 
 <br/>
 
@@ -117,4 +119,6 @@ Today I Leaned...
 >[20191008-Poiema제어문](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_08.md)
 >
 >[20191009-K번째 수](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_09.md)
+>
+>[20191010-2016년](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_10.md)
 
