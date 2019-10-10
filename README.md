@@ -95,6 +95,10 @@ Today I Leaned...
 > [7. 제어문 / 8. 타입변환과 단축평가 / 9. 객체 리터럴](https://github.com/HYEOK999/TIL/blob/master/homework/191007-subject.md)
 >
 > [10. 원시 값과 객체의 비교](https://github.com/HYEOK999/TIL/blob/master/homework/191008-subject.md)
+>
+> [11. 함수](https://github.com/HYEOK999/TIL/blob/master/homework/191010-subject11.md)
+>
+> [12. 스코프](https://github.com/HYEOK999/TIL/blob/master/homework/191010-subject12.md)
 
 <br/>
 
