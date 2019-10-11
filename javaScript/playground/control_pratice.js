@@ -12,17 +12,17 @@
 // }
 
 // console.log(printToLowerCase()); // hello
-
-function print(arr) {
-  var str = 'Hello';
-  return arr(str);
+function outer(fn) {
+  var x = 1;
+  var y = 2;
+  return fn(x, y);// 3
 }
 
-console.log( print(function (str) {
-  return str.toUpperCase();
-}));
+function inner(x, y) {
+  var dd = x + y;
+  return dd;
+}
 
-console.log( print(function (str){
-  return str += ' GOGOGO';
-}));
-
+console.log(
+  outer(inner)
+);
