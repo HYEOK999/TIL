@@ -13,15 +13,16 @@
 
 // console.log(printToLowerCase()); // hello
 
-function f(f) {
-  var string  = 'Hello';
-  return f(string);
+function print(arr) {
+  var str = 'Hello';
+  return arr(str);
 }
 
-console.log( f(function (str){
+console.log( print(function (str) {
   return str.toUpperCase();
 }));
 
-console.log( f(function(str){
-  return str.toLowerCase();
+console.log( print(function (str){
+  return str += ' GOGOGO';
 }));
+
