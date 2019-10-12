@@ -502,11 +502,10 @@ function getDayNameOther(a, b) {
     day = `0${day}`;
   }
 
-  let answer = week[new Date(`2016-${month}-${day}`).getDay()];
+  const answer = week[new Date(`2016-${month}-${day}`).getDay()];
 
   return answer;
 }
 
-
 console.log(getDayNameOther(5, 24)); // TUE
-console.log(getDayNameOther(1, 1)); // TUE
+console.log(getDayNameOther(1, 1)); // FRI
