@@ -624,7 +624,7 @@ console.log(
 
 고차함수들로는 `map`,`filter`,`reduce`,`find` 등등이 있다.
 
-`map`의 예
+`map`, `filter`의 예
 
 ```javascript
 // 콜백 함수를 사용하는 고차 함수 map
