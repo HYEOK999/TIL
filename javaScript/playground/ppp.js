@@ -150,12 +150,147 @@ function waterMelon(n) {
 console.log('n이 3인 경우: '+ waterMelon(3));
 console.log('n이 4인 경우: '+ waterMelon(4));
 
+// 9.
+function nextSqaure(n) {
+  let answer = 0;
+  if (n === undefined) return 'no';
 
-//23. 인수로 주어진 배열 arr에서 짝수이고 3보다 큰 수만을 구하여 이를 배열로 반환하는 함수를 작성하라
+  for (let i = 0; i <= n; i++) {
+    if (i ** 2 === n) {
+      answer = (i + 1) ** 2;
+      break;
+    } else {
+      answer = 'no';
+    }
+  }
+  return answer;
+}
+
+console.log(nextSqaure());    // no
+console.log(nextSqaure(0));   // 1
+console.log(nextSqaure(1));   // 4
+console.log(nextSqaure(2));   // no
+console.log(nextSqaure(3));   // no
+console.log(nextSqaure(121)); // 144
+console.log(nextSqaure(165)); // no
+console.log(nextSqaure(400)); // 441
+
+// 10.
+
+function getMaxValueFromArray(array) {
+  return Math.max.apply(null, array);
+}
+console.log(getMaxValueFromArray([3, 6, -2, -5, 7, 3])); // 7
+
+function getMinValueFromArray(array) {
+  return Math.min.apply(null, array);
+}
+console.log(getMinValueFromArray([3, 6, -2, -5, 7, 3])); // -5
+
+// 11.
+function checkPalindrom(str) {
+  if (str.length < 1 || str == undefined) return false;
+  let j = str.length;
+
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === str[j - 1]) {
+      j--;
+    } else {
+      return false;
+    }
+  }
+  return true;
+}
+
+console.log(checkPalindrom('dad')); // true
+console.log(checkPalindrom('mom')); // true
+console.log(checkPalindrom('palindrom')); // false
+console.log(checkPalindrom('s')); // true
+
+// 12.
+function uniq(array) {
+    return array.filter( function (item, index) {
+    return array.indexOf(item) == index;
+   });
+}
+
+console.log(uniq([2, 1, 2, 3, 4, 3, 4])); // [ 2, 1, 3, 4 ]
+
+
+// 13.
+function isNotOverlapArray(array) {
+  return array.every(function (currentValue, index) {
+    return currentValue <= array.length && array.indexOf(currentValue) === index;
+  });
+}
+
+console.log(isNotOverlapArray([4, 1, 3, 2])); // true
+console.log(isNotOverlapArray([4, 1, 3]));    // false
+console.log(isNotOverlapArray([1, 2, 2]));    // false
+
+// 14.
+function findDuplicated(array) {
+  return array.filter(function (currentValue, index) {
+    return array.indexOf(currentValue) !== index;
+  });
+}
+
+console.log(findDuplicated([1, 2, 3, 4, 1, 2, 3 ])); // [ 1, 2, 3 ]
+
+// 15.
+function sumDivisor(num) {
+  let result = 0;
+  for (let i = 1; i <= num; i++) {
+    if (num % i == 0) {
+      result += i;
+    }
+  }
+
+  return result;
+}
+
+console.log(sumDivisor(12)); // 28
+// 16.
+function numberOfPrime(n) {
+  let result = 0;
+  let count = 0;
+  for (let i = 2; i <= n; i++) {
+    count = 0;
+    for (let j = 1; j <= i; j++) {
+      if (i % j == 0) {
+        count++;
+      }
+    }
+    if (count == 2) {
+      result++;
+    }
+  }
+
+  return result;
+}
+
+console.log(numberOfPrime(10)); // 4
+
+// 17.
+function fibonacci(n) {
+  if (n == 0){
+    return
+  }
+  return fibonacci(n-1);
+}
+
+console.log(fibonacci(2)); // 1
+console.log(fibonacci(3)); // 2
+console.log(fibonacci(4)); // 3
+console.log(fibonacci(5)); // 5
+console.log(fibonacci(6)); // 8
+
+
+// 23. 인수로 주어진 배열 arr에서 짝수이고 3보다 큰 수만을 구하여 이를 배열로 반환하는 함수를 작성하라
 function getArray(arr) {
-  let numArray = [];
-  for(let i = 0; i < arr.length; i++) {
-    if(arr[i] % 2 == 0 && arr[i] > 3) {
+  const numArray = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] % 2 == 0 && arr[i] > 3) {
       numArray.push(arr[i]);
     }
   }
