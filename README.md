@@ -101,6 +101,8 @@ Today I Leaned...
 > [11. 함수](https://github.com/HYEOK999/TIL/blob/master/homework/191010-subject11.md)
 >
 > [12. 스코프](https://github.com/HYEOK999/TIL/blob/master/homework/191010-subject12.md)
+>
+> [13. 전역 변수의 문제점 / 14. let, const와 블록 레벨 스코프](https://github.com/HYEOK999/TIL/blob/master/homework/191011-subject1314.md)
 
 <br/>
 
