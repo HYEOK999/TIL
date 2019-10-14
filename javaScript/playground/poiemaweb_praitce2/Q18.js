@@ -6,11 +6,11 @@
 */
 function digitSum(n) {
   if (n < 0 || n > 100000000) return false;
-  const number = String(n);
+  const NUMBER = String(n);
   let answer = 0;
 
-  for (let i = 0; i < number.length; i++) {
-    answer += +number[i];
+  for (let i = 0; i < NUMBER.length; i++) {
+    answer += +NUMBER[i];
   }
 
   return answer;
@@ -25,11 +25,11 @@ function digitSum(n) {
   if (n < 0 || n > 100000000) return false;
   let number = String(n);
   number = number.split('');
-  const answer = number.reduce(function (sumValue, currentValue) {
+  const ANSWER = number.reduce(function (sumValue, currentValue) {
     return +sumValue + +currentValue;
   });
 
-  return answer;
+  return ANSWER;
 }
 
 console.log(digitSum(123));  // 6

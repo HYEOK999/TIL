@@ -6,13 +6,13 @@
 */
 
 function generateRange(from, to) {
-  const res = [];
+  const RES = [];
 
   for (let i = from; i <= to; i++) {
-    res.push(i);
+    RES.push(i);
   }
 
-  return res;
+  return RES;
 }
 
 console.log(generateRange(10, 15)); // [ 10, 11, 12, 13, 14, 15 ]

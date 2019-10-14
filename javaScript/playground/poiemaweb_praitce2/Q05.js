@@ -7,7 +7,7 @@ toWeirdCase함수는 문자열을 인수로 전달받는다.
 주의) 문자열 전체의 짝/홀수 인덱스가 아니라 단어(공백을 기준)별로 짝/홀수 인덱스를 판단한다.
 */
 function toWeirdCase(s) {
-  const strArray = s.split(' ');
+  const STR_ARRAY = s.split(' ');
   let fullStr = '';
 
   function UpCase(str) {
@@ -19,12 +19,12 @@ function toWeirdCase(s) {
   }
 
 
-  for (let i = 0; i < strArray.length; i++) {
-    for (let j = 0; j < strArray[i].length; j++) {
+  for (let i = 0; i < STR_ARRAY.length; i++) {
+    for (let j = 0; j < STR_ARRAY[i].length; j++) {
       if (j % 2 == 0) {
-        fullStr += UpCase(strArray[i][j]);
+        fullStr += UpCase(STR_ARRAY[i][j]);
       } else {
-        fullStr += LowCase(strArray[i][j]);
+        fullStr += LowCase(STR_ARRAY[i][j]);
       }
     }
     fullStr += ' ';

@@ -17,16 +17,16 @@ Harshad함수는 양의 정수 n을 매개변수로 입력받는다. 이 n이 �
 예를 들어 n이 10, 12, 18이면 True를 리턴 11, 13이면 False를 리턴한다.
 */
 function isHarshad(n) {
-  const number = String(n);
+  const NUMBER = String(n);
   let result = 0;
 
-  for (let i = 0; i < number.length; i++) {
-    result += +number[i];
+  for (let i = 0; i < NUMBER.length; i++) {
+    result += +NUMBER[i];
   }
 
   console.log(result);
 
-  return number % result === 0;
+  return NUMBER % result === 0;
 }
 
 console.log(isHarshad(10)); // true

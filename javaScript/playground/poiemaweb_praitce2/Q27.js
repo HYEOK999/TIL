@@ -8,7 +8,7 @@
 */
 function getDayName(a, b) {
   let answer = '';
-  const dayOfTheWeek = ['FRI', 'SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU'];
+  const DAY_OF_THE_WEEK = ['FRI', 'SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU'];
   let j = 0;
 
   for (let month = 1; month <= a; month++) {
@@ -16,7 +16,7 @@ function getDayName(a, b) {
       case 1: case 3: case 5: case 7: case 8: case 10: case 12:
         for (let x = 1; x <= 31; x++) {
           if (month == a && x == b) {
-            answer = dayOfTheWeek[j];
+            answer = DAY_OF_THE_WEEK[j];
             break;
           } else {
             j++;
@@ -29,7 +29,7 @@ function getDayName(a, b) {
       case 4: case 6: case 9: case 11:
         for (let x = 1; x <= 30; x++) {
           if (month == a && x == b) {
-            answer = dayOfTheWeek[j];
+            answer = DAY_OF_THE_WEEK[j];
             break;
           } else {
             j++;
@@ -42,7 +42,7 @@ function getDayName(a, b) {
       default:
         for (let x = 1; x <= 29; x++) {
           if (month == a && x == b) {
-            answer = dayOfTheWeek[j];
+            answer = DAY_OF_THE_WEEK[j];
             break;
           } else {
             j++;
@@ -65,7 +65,7 @@ console.log(getDayName(5, 24)); // TUE
 function getDayNameOther(a, b) {
   let month = String(a);
   let day = String(b);
-  const week = ['SUN', 'MON', 'TUE', 'WEN', 'THU', 'FRI', 'SAT'];
+  const WEEK = ['SUN', 'MON', 'TUE', 'WEN', 'THU', 'FRI', 'SAT'];
 
   if (month.length < 2) {
     month = `0${month}`;
@@ -75,9 +75,9 @@ function getDayNameOther(a, b) {
     day = `0${day}`;
   }
 
-  const answer = week[new Date(`2016-${month}-${day}`).getDay()];
+  const ANSWER = WEEK[new Date(`2016-${month}-${day}`).getDay()];
 
-  return answer;
+  return ANSWER;
 }
 
 

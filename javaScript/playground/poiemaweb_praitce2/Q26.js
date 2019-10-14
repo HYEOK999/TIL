@@ -11,7 +11,7 @@ function specialSort(array) {
   return array.sort();
 }
 
-const testArray = [-1, 1, 3, -2, 2, 0];
+const TEST_ARRAY = [-1, 1, 3, -2, 2, 0];
 
-console.log(testArray); // [ -1, 1, 3, -2, 2, 0 ]
-console.log(specialSort(testArray)); // [ -1, -2, 0, 1, 2, 3 ]
+console.log(TEST_ARRAY); // [ -1, 1, 3, -2, 2, 0 ]
+console.log(specialSort(TEST_ARRAY)); // [ -1, -2, 0, 1, 2, 3 ]

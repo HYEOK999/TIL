@@ -7,15 +7,15 @@
 예를들어 [1, 3, 4, 8, 13, 17, 20, 23, 24]이 주어졌다면, 결과값은 [[3, 4], [23, 24]]가 될 것이다.
 */
 function findMinDistance(array) {
-  const temp = [];
+  const TEMP = [];
   const ANSWER = [];
 
   for (let i = 1; i < array.length; i++) {
-    temp.push(array[i] - array[i - 1]);
+    TEMP.push(array[i] - array[i - 1]);
   }
 
-  for (let i = 0; i < temp.length; i++) {
-    if (temp[i] == Math.min.apply(0, temp)) {
+  for (let i = 0; i < TEMP.length; i++) {
+    if (TEMP[i] == Math.min.apply(0, TEMP)) {
       ANSWER.push([array[i], array[i + 1]]);
     }
   }
@@ -24,5 +24,5 @@ function findMinDistance(array) {
 
 // 1차원 점의 배열
 // var array = [1, 3, 4, 8, 13, 17, 20, 23, 24];
-const array = [1, 3, 4, 8, 13, 17, 20, 23, 24];
-console.log(findMinDistance(array)); // [[3, 4], [23, 24]]
+const ARRAY = [1, 3, 4, 8, 13, 17, 20, 23, 24];
+console.log(findMinDistance(ARRAY)); // [[3, 4], [23, 24]]
