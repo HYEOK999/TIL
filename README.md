@@ -134,4 +134,5 @@ Today I Leaned...
 >
 >[20191012-Poiema알고리즘 6-10](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_13.md)
 >
->[20191012-Poiema알고리즘 11-15]
+>[20191012-Poiema알고리즘 11-15](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_14.md)
+
