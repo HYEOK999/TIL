@@ -18,6 +18,7 @@ function getCount8() {
       }
     }
   }
+
   return count8;
 }
 
