@@ -75,6 +75,8 @@ Today I Leaned...
 >[20191010-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191010-study-javascript.md)
 >
 >[20191011-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191011-study-javascript.md)
+>
+>[20191014-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191014-study-javascript.md)
 
 <br/>
 
@@ -103,6 +105,20 @@ Today I Leaned...
 > [12. 스코프](https://github.com/HYEOK999/TIL/blob/master/homework/191010-subject12.md)
 >
 > [13. 전역 변수의 문제점 / 14. let, const와 블록 레벨 스코프](https://github.com/HYEOK999/TIL/blob/master/homework/191011-subject1314.md)
+>
+> [15. 프로퍼티 정의](https://github.com/HYEOK999/TIL/blob/master/homework/191014-subject15.md)
+>
+> [16. 생성자 함수에 의한 객체 생성](https://github.com/HYEOK999/TIL/blob/master/homework/191014-subject16.md)
+>
+> [17. 함수와 일급 객체](https://github.com/HYEOK999/TIL/blob/master/homework/191014-subject17.md)
+
+<br/>
+
+<br/>
+
+### JavaScript 테스트 오답 및 재정리
+
+> [1. 테스트 오답](https://github.com/HYEOK999/TIL/blob/master/javaScript/DailyTest01.md)
 
 <br/>
 
