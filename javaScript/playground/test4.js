@@ -1,10 +1,17 @@
-var x = 10;
+const PERSON = {
+  firstName: 'Lee',
+  lastName: 'Hyeok',
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  },
+  set fullName(firstName) {
+    this.firstName = firstName;
+  }
+};
 
-function add() {
-  var x = 11;
-  console.log(x);
-  return x;
-}
+PERSON.fullName = 'Kim';
+console.log(PERSON.fullName); // 'Lee'
 
-add();
-console.log(x);
+console.log(Object.getOwnPropertyDescriptors(PERSON));
+
+
