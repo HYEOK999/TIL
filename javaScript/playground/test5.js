@@ -3,6 +3,9 @@ function Person(name){//Pe
   if(this instanceof Person){
     console.log("true");
   }
+  else{
+    console.log("false");
+  }
   this.name = 'Lee';
   this.sayHi = function(){
     return this.name;
@@ -11,5 +14,5 @@ function Person(name){//Pe
 }
 
 //const me = Person(); // undefined
-const me = new Person();
+const me = Person();
 console.log(me);
