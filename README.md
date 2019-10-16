@@ -79,6 +79,8 @@ Today I Leaned...
 >[20191014-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191014-study-javascript.md)
 >
 >[20191015-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191015-study-javascript.md)
+>
+>[20191017-javascript]
 
 <br/>
 
@@ -113,6 +115,14 @@ Today I Leaned...
 > [16. 생성자 함수에 의한 객체 생성](https://github.com/HYEOK999/TIL/blob/master/homework/191014-subject16.md)
 >
 > [17. 함수와 일급 객체](https://github.com/HYEOK999/TIL/blob/master/homework/191014-subject17.md)
+>
+> [18. 프로토타입](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject18.md)
+>
+> [19. 엄격모드](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject19.md)
+>
+> [20. this](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject20.md)
+>
+> [21. 실행컨텍스트](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject21.md)
 
 <br/>
 
