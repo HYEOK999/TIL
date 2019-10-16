@@ -120,9 +120,9 @@ Today I Leaned...
 >
 > [19. 엄격모드](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject19.md)
 >
-> [20. this](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject20.md)
+> [20. 전역객체](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject20.md)
 >
-> [21. 실행컨텍스트](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject21.md)
+> [21. this](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject21.md)
 
 <br/>
 
