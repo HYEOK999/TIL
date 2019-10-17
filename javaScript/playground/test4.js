@@ -13,5 +13,3 @@ PERSON.fullName = 'Kim';
 console.log(PERSON.fullName); // 'Lee'
 
 console.log(Object.getOwnPropertyDescriptors(PERSON));
-
-
