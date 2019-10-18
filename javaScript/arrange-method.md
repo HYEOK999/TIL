@@ -156,6 +156,12 @@ for (const prop in person) {
 
 <br/>
 
+### 빌트인 객체 생성자 함수(new Object(),new String(),new Number() ...)
+
+Object, Number, String, Function , Boolean, Math, Date, RegExp, Array
+
+<br/>
+
 ### 빌트인 전역 함수 (전역객체(window)의 메소드)
 
 eval : 문자열 형태로 매개변수에 전달된 코드를 런타임에 동적으로 평가하고 실행하여 결과값을 반환한다. (가급적 사용 금지)
