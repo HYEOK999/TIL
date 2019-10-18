@@ -11,46 +11,30 @@ function getDayName(a, b) {
   const DAY_OF_THE_WEEK = ['FRI', 'SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU'];
   let j = 0;
 
+  function forMun(month, day) {
+    for (let x = 1; x <= day; x++) {
+      if (month == a && x == b) {
+        answer = DAY_OF_THE_WEEK[j];
+        break;
+      } else {
+        j++;
+        if (j == 7) {
+          j = 0;
+        }
+      }
+    }
+  }
+
   for (let month = 1; month <= a; month++) {
     switch (month) {
       case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-        for (let x = 1; x <= 31; x++) {
-          if (month == a && x == b) {
-            answer = DAY_OF_THE_WEEK[j];
-            break;
-          } else {
-            j++;
-            if (j == 7) {
-              j = 0;
-            }
-          }
-        }
+        forMun(month, 31);
         break;
       case 4: case 6: case 9: case 11:
-        for (let x = 1; x <= 30; x++) {
-          if (month == a && x == b) {
-            answer = DAY_OF_THE_WEEK[j];
-            break;
-          } else {
-            j++;
-            if (j == 7) {
-              j = 0;
-            }
-          }
-        }
+        forMun(month, 30);
         break;
       default:
-        for (let x = 1; x <= 29; x++) {
-          if (month == a && x == b) {
-            answer = DAY_OF_THE_WEEK[j];
-            break;
-          } else {
-            j++;
-            if (j == 7) {
-              j = 0;
-            }
-          }
-        }
+        forMun(month, 29);
         break;
     }
   }
@@ -59,6 +43,7 @@ function getDayName(a, b) {
 }
 
 console.log(getDayName(5, 24)); // TUE
+console.log(getDayName(1, 9)); // SAT
 
 // 다른 풀이
 

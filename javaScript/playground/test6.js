@@ -1,12 +1,32 @@
-const arrs = [1,1,3,3,0,1,1];
-function solution(arr) {
-  let answer = [];
+const person = {
+  // 데이터 프로퍼티
+  firstName: 'Ungmo',
+  lastName: 'Lee'
 
-  answer = arr.filter(function (currentValue, index) {
-    return currentValue !== arr[index - 1];
-  });
-  console.log(answer);
-  return answer;
-}
+  // fullName은 접근자 함수로 구성된 접근자 프로퍼티이다.
+  // getter 함수
+};
 
-console.log(solution(arrs));
+Object.defineProperty(person, 'lastName', {
+  writable: false,
+  enumerable: false,
+});
+
+Object.defineProperty(person, 'fullName', {
+  // getter 함수
+  get: function () { // === get() {
+    return this.firstName + ' ' + this.lastName;
+  },
+  // setter 함수
+  set: function (name) { // === set(name) {
+    [this.firstName, this.lastName] = name.split(' ');
+  },
+  enumerable: true,
+  // configurable: false
+});
+
+descriptor = Object.getOwnPropertyDescriptor(person, 'fullName');
+
+console.log(descriptor);
+person.fullName = 'Kim HYEOK';
+console.log(person);
