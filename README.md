@@ -81,6 +81,8 @@ Today I Leaned...
 >[20191015-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191015-study-javascript.md)
 >
 >[20191017-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191017-study-javascript.md)
+>
+>[20191018-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191018-study-javascript.md)
 
 <br/>
 
@@ -91,6 +93,8 @@ Today I Leaned...
 >[ESLint](https://github.com/HYEOK999/TIL/blob/master/ESLint설명.md)
 >
 >[웹 브라우저 동작 원리](https://github.com/HYEOK999/TIL/blob/master/javaScript/웹브라우저_동작원리.md)
+>
+>[메소드 정리 - 정리중](https://github.com/HYEOK999/TIL/blob/master/javaScript/arrange-method.md)
 
 <br/>
 

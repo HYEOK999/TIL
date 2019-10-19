@@ -26,10 +26,7 @@ you.sayHello();
 // 모든 함수는 호출했을 때 자신이 생성된곳의 상위 스코프를 기억한다.
 const kk = {
   name: 'Lee',
-  address: 'Seoul',
-  __proto__: { a : 5 }
 };
-
+//console.log(Object.getOwnPropertyDescriptor(Object.prototype, '__proto__'));
+console.log(kk.name);
 console.log(Object.getOwnPropertyDescriptor(kk, 'name'));
-console.log(kk.__proto__);
-console.log(Object.getOwnPropertyDescriptor(Object.prototype, '__proto__'));
