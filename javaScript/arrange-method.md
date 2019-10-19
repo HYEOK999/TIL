@@ -156,12 +156,6 @@ for (const prop in person) {
 
 <br/>
 
-### 빌트인 객체 생성자 함수(new Object(),new String(),new Number() ...)
-
-Object, Number, String, Function , Boolean, Math, Date, RegExp, Array
-
-<br/>
-
 ### 빌트인 전역 함수 (전역객체(window)의 메소드)
 
 eval : 문자열 형태로 매개변수에 전달된 코드를 런타임에 동적으로 평가하고 실행하여 결과값을 반환한다. (가급적 사용 금지)
@@ -192,7 +186,28 @@ encodeURIComponent / decodeURIComponent : 쿼리 파라미터 구분자로 사�
 
 <br/>
 
-#### map
+#### map 함수
+
+
+
+#### reduce 함수
+
+누적값에 현잿값을 넣어가면 순
+
+`배열.reduce((누적값, 현잿값, 인덱스, 요소) => { return 결과 }, 초깃값);`
+
+`배열.reduce( function (누적값, 현잿값, 인덱스, 요소) { return 결과 }, 초깃값);`
+
+~~~javascript
+result = oneTwoThree.reduce((acc, cur, i) => {
+  console.log(acc, cur, i);
+  return acc + cur;
+}, 0);
+// 0 1 0
+// 1 2 1
+// 3 3 2
+result; // 6
+~~~
 
 
 
@@ -202,10 +217,25 @@ setTimeout
 
 ------------
 
+### Array
+
+#### sort 함수
+
+`배열명.sort()` : 배열 내용을 문자열로 간접변환 한 후 문자열 순으로 정렬.( 반활할때는 원래 타입으로 돌려놓는다. )
+
+`배열명.sort(function(a,b){return a - b;});` : 숫자 정렬시 사용. 오름차순으로 정렬한다.
+`배열명.sort(function(a,b){return b - a;})` : 숫자 정렬 시 사용.  내림차순으로 정렬한다.
+
+#### pop() , shift() 함수
+
+`배열명.pop()`: 배열의 마지막 아이템 제거. 
+
+`배열명.shift()`: 배열의 첫번째 아이템 제거.
+
 number 타입 - Math.abs(); , 고차함수
 
 string 타입 - split, splice, slice, join, 공백없애는함수
 
-array 타입 - 고차함수, indexOf
+array 타입 - 고차함수, indexOf , 정렬함수
 
 객체 - for in
