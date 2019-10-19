@@ -2,116 +2,72 @@
 
 ------
 
-문제 출저 : poiema 알고리즘 연습 문제
+문제 출저 : 프로그래머스
 
+### 예산
 
+###### 문제 설명
 
-### 26. 특별한 정렬 **
+S사에서는 각 부서에 필요한 물품을 지원해 주기 위해 부서별로 물품을 구매하는데 필요한 금액을 조사했습니다. 그러나, 전체 예산이 정해져 있기 때문에 모든 부서의 물품을 구매해 줄 수는 없습니다. 그래서 최대한 많은 부서의 물품을 구매해 줄 수 있도록 하려고 합니다.
 
-n개의 정수를 가진 배열이 있다. 이 배열은 양의 정수와 음의 정수를 모두 가지고 있다. 이 배열을 좀 특별한 방법으로 정렬해야 한다. 음의 정수는 앞쪽에 내림차순으로, 양의 정수는 뒷쪽에 있어야 한다. 단, 인수로 주어진 원본 배열은 변경되지 않아야 한다.
+물품을 구매해 줄 때는 각 부서가 신청한 금액만큼을 모두 지원해 줘야 합니다. 예를 들어 1,000원을 신청한 부서에는 정확히 1,000원을 지원해야 하며, 1,000원보다 적은 금액을 지원해 줄 수는 없습니다.
 
-예를 들어, [-1, 1, 3, -2, 2, 0]이 주어졌을 때, [-1, -2, 0, 1, 2, 3]를 반환한다.
+부서별로 신청한 금액이 들어있는 배열 d와 예산 budget이 매개변수로 주어질 때, 최대 몇 개의 부서에 물품을 지원할 수 있는지 return 하도록 solution 함수를 완성해주세요.
 
-```javascript
-function specialSort(array) {
-	return array.sort();
-}
+##### 제한사항
 
-const testArray = [-1, 1, 3, -2, 2, 0];
+- d는 부서별로 신청한 금액이 들어있는 배열이며, 길이(전체 부서의 개수)는 1 이상 100 이하입니다.
+- d의 각 원소는 부서별로 신청한 금액을 나타내며, 부서별 신청 금액은 1 이상 100,000 이하의 자연수입니다.
+- budget은 예산을 나타내며, 1 이상 10,000,000 이하의 자연수입니다.
 
-console.log(testArray); // [ -1, 1, 3, -2, 2, 0 ]
-console.log(specialSort(testArray)); // [ -1, -2, 0, 1, 2, 3 ]
-```
+------
 
-<br/>
+##### 입출력 예
 
+| d           | budget | result |
+| ----------- | ------ | ------ |
+| [1,3,2,5,4] | 9      | 3      |
+| [2,2,3,3]   | 10     | 4      |
 
+##### 입출력 예 설명
 
-### 27. 요일 구하기 **
+입출력 예 #1
+각 부서에서 [1원, 3원, 2원, 5원, 4원]만큼의 금액을 신청했습니다. 만약에, 1원, 2원, 4원을 신청한 부서의 물품을 구매해주면 예산 9원에서 7원이 소비되어 2원이 남습니다. 항상 정확히 신청한 금액만큼 지원해 줘야 하므로 남은 2원으로 나머지 부서를 지원해 주지 않습니다. 위 방법 외에 3개 부서를 지원해 줄 방법들은 다음과 같습니다.
 
-2016년 1월 1일은 금요일이다. 2016년 a월 b일은 무슨 요일일까? 두 수 a, b를 입력받아 a월 b일이 무슨 요일인지 출력하는 getDayName 함수를 완성하라.
+- 1원, 2원, 3원을 신청한 부서의 물품을 구매해주려면 6원이 필요합니다.
+- 1원, 2원, 5원을 신청한 부서의 물품을 구매해주려면 8원이 필요합니다.
+- 1원, 3원, 4원을 신청한 부서의 물품을 구매해주려면 8원이 필요합니다.
+- 1원, 3원, 5원을 신청한 부서의 물품을 구매해주려면 9원이 필요합니다.
 
-요일의 이름은 일요일부터 토요일까지 각각 SUN, MON, TUE, WED, THU, FRI, SAT를 출력한다. 예를 들어 a=5, b=24가 입력된다면 5월 24일은 화요일이므로 TUE를 반환한다.
+3개 부서보다 더 많은 부서의 물품을 구매해 줄 수는 없으므로 최대 3개 부서의 물품을 구매해 줄 수 있습니다.
 
-```javascript
-function getDayName(a, b) {
-  let answer = '';
-  const dayOfTheWeek = ['FRI', 'SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU'];
-  let j = 0;
+입출력 예 #2
+모든 부서의 물품을 구매해주면 10원이 됩니다. 따라서 최대 4개 부서의 물품을 구매해 줄 수 있습니다.
 
-  for (let month = 1; month <= a; month++) {
-    switch (month) {
-      case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-        for (let x = 1; x <= 31; x++) {
-          if (month == a && x == b) {
-            answer = dayOfTheWeek[j];
-            break;
-          } else {
-            j++;
-            if (j == 7) {
-              j = 0;
-            }
-          }
+~~~javascript
+/*
+function solution(d, budget) {
+    var answer = 0;
+    d = d.sort(function(a,b) { return a-b; })
+    
+    for(var i=0; i<d.length, 0<budget; i++){
+        console.log(budget);
+        budget = budget-d[i];
+        if(budget >= 0){
+            answer++;
         }
-        break;
-      case 4: case 6: case 9: case 11:
-        for (let x = 1; x <= 30; x++) {
-          if (month == a && x == b) {
-            answer = dayOfTheWeek[j];
-            break;
-          } else {
-            j++;
-            if (j == 7) {
-              j = 0;
-            }
-          }
-        }
-        break;
-      default:
-        for (let x = 1; x <= 29; x++) {
-          if (month == a && x == b) {
-            answer = dayOfTheWeek[j];
-            break;
-          } else {
-            j++;
-            if (j == 7) {
-              j = 0;
-            }
-          }
-        }
-        break;
     }
-  }
-
-  return answer;
+    
+    return answer;
 }
+*/
+function solution(d, budget) {
+    d.sort(function(a, b){return a - b});
 
-console.log(getDayName(5, 24)); // TUE
-
-// 다른 풀이
-
-function getDayNameOther(a, b) {
-  let month = String(a);
-  let day = String(b);
-  const week = ['SUN', 'MON', 'TUE', 'WEN', 'THU', 'FRI', 'SAT'];
-
-  if (month.length < 2) {
-    month = `0${month}`;
-  }
-
-  if (day.length < 2) {
-    day = `0${day}`;
-  }
-
-  let answer = week[new Date(`2016-${month}-${day}`).getDay()];
-
-  return answer;
+    while (d.reduce(function(a, b) {return a + b}, 0) > budget)     { 
+        d.pop();                                                   }
+    return d.length;
 }
-
-
-console.log(getDayNameOther(5, 24)); // TUE
-console.log(getDayNameOther(1, 1)); // FRI
-```
+~~~
 
 <br/>
-
