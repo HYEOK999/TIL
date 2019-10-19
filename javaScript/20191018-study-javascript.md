@@ -19,10 +19,14 @@
 - 전역 프로퍼티(Global property)
 - this
   - 호출 방식
+  
   - this의 binding 확정시간
+  
   - bind
+  
   - Call Apply
-- <br/>
+  
+    <br/>
 
 ------
 
