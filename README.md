@@ -175,4 +175,8 @@ Today I Leaned...
 >[20191016-Poiema알고리즘 26-27](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_17.md)
 >
 >[20191017-같은 숫자는 싫어](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_18.md)
+>
+>[20191018-예산](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_19.md)
+>
+>[20191019-기능 개발](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_20.md)
 
