@@ -1,17 +1,8 @@
-const Person = function () {
-  let _name = '';
+// 배열의 요소 중에 10보다 큰 요소가 1개 이상 존재하는지 확인
+let results = [5, 10, 15]
 
-  function Persons(name) {
-    _name = name;
-  }
+let result = results.some(function(i){
+  return i > 10;
+});
 
-  Persons.prototype.sayHi = function(){
-    console.log(`${_name}`);
-  }
-
-  return Persons;
-};
-
-const me = new Person('Lee');
-console.log(me.prototype);
-console.log(typeof(me));
+console.log(result);
