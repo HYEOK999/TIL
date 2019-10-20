@@ -219,18 +219,49 @@ setTimeout
 
 ### Array
 
-#### sort 함수
+#### sort 
 
 `배열명.sort()` : 배열 내용을 문자열로 간접변환 한 후 문자열 순으로 정렬.( 반활할때는 원래 타입으로 돌려놓는다. )
 
 `배열명.sort(function(a,b){return a - b;});` : 숫자 정렬시 사용. 오름차순으로 정렬한다.
 `배열명.sort(function(a,b){return b - a;})` : 숫자 정렬 시 사용.  내림차순으로 정렬한다.
 
-#### pop() , shift() 함수
+#### pop() , shift() , push() , unshift(),delete 연산자 
 
-`배열명.pop()`: 배열의 마지막 아이템 제거. 
+`배열명.pop()` : 배열에 맨 뒤 삭제. length 영향 o. 제거한 요소를 반환
 
-`배열명.shift()`: 배열의 첫번째 아이템 제거.
+`배열명.shift()` : 배열에 맨 앞 삭제. legnth 영향 o
+
+`배열명.push()` : 배열에 맨 뒤에 요소 추가. length 영향 o. 변경된 length 값을 반환함.
+
+`배열명.unshift()` : 배열에 맨 앞에 요소 추가. length 영향 o. 변경된 length 값을 반환함.
+
+`delete 배열명[인덱스]` : 배열의 인덱스 부분의 값을 삭제(empty - undefined로 변경). length 영향 x 
+
+#### Array.isArray()
+
+ 주어진 인수가 배열이면 true, 배열이 아니면 false를 반환한다.
+
+~~~~~javascript
+// true
+Array.isArray([]);
+Array.isArray([1, 2]);
+Array.isArray(new Array());
+
+// false
+Array.isArray();
+Array.isArray({});
+Array.isArray(null);
+Array.isArray(undefined);
+Array.isArray(1);
+Array.isArray('Array');
+Array.isArray(true);
+Array.isArray(false);
+~~~~~
+
+
+
+
 
 number 타입 - Math.abs(); , 고차함수
 

@@ -2,7 +2,7 @@
 
 ------
 
-문제 출저 : 프로그래머스
+문제 출처 : 프로그래머스
 
 ### 수박수박수박수박수박수?
 
@@ -27,7 +27,7 @@ function solution(n) {
     var su = "수";
     var bak = "박";
     var i = 0;
-        
+
     for(i=1;i<=n;i++){
       if(i%2==0){
          answer = answer + bak;
@@ -36,7 +36,7 @@ function solution(n) {
          answer = answer + su;
       }
     }
-    
+
     return answer;
 }
 ~~~

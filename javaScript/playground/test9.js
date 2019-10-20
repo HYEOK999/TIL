@@ -18,15 +18,10 @@ const Person = (function () {
 
 const me = new Person('Lee');
 console.log(me);
+console.log(me.__proto__);
 me.sayHello();
 
 const you = new Person('Kim');
 you.sayHello();
 
 // 모든 함수는 호출했을 때 자신이 생성된곳의 상위 스코프를 기억한다.
-const kk = {
-  name: 'Lee',
-};
-//console.log(Object.getOwnPropertyDescriptor(Object.prototype, '__proto__'));
-console.log(kk.name);
-console.log(Object.getOwnPropertyDescriptor(kk, 'name'));

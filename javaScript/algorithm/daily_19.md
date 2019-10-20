@@ -2,7 +2,7 @@
 
 ------
 
-문제 출저 : 프로그래머스
+문제 출처 : 프로그래머스
 
 ### 예산
 
@@ -49,7 +49,7 @@ S사에서는 각 부서에 필요한 물품을 지원해 주기 위해 부서�
 function solution(d, budget) {
     var answer = 0;
     d = d.sort(function(a,b) { return a-b; })
-    
+
     for(var i=0; i<d.length, 0<budget; i++){
         console.log(budget);
         budget = budget-d[i];
@@ -57,14 +57,14 @@ function solution(d, budget) {
             answer++;
         }
     }
-    
+
     return answer;
 }
 */
 function solution(d, budget) {
     d.sort(function(a, b){return a - b});
 
-    while (d.reduce(function(a, b) {return a + b}, 0) > budget)     { 
+    while (d.reduce(function(a, b) {return a + b}, 0) > budget)     {
         d.pop();                                                   }
     return d.length;
 }

@@ -2,7 +2,7 @@
 
 ------
 
-문제 출저 : 프로그래머스
+문제 출처 : 프로그래머스
 
 <br/>
 
@@ -46,19 +46,19 @@
 function solution(n, lost, reserve) {
     var answer = 0;
     var array = [];
-    
+
     for(var i=0;i<n;i++){
         array[i] = 1;
     }
-    
+
     for(var i=0;i<reserve.length;i++){
         array[reserve[i]-1]++;
     }
-    
+
     for(var i=0;i<lost.length;i++){
         array[lost[i]-1]--;
     }
-    
+
     for(var i=0;i<n;i++){
         if(array[i] == 0){
             if(array[i-1] == 2){
@@ -73,32 +73,32 @@ function solution(n, lost, reserve) {
             }
         }
     }
-    
+
     for(var i=0;i<array.length;i++){
         if(array[i] == 2){
             array[i] = 1;
         }
         answer = answer + array[i];
     }
-    
+
     return answer;
 
     // test 12 Error!
 //     var answer = n - lost.length;
-        
+
 //     for(var i=0; i<lost.length; i++){
 //             if(reserve.includes(lost[i])){
 //                 reserve.splice(reserve.indexOf(lost[i]),1)
 //                 answer++;
 //                 continue;
 //             }
-            
+
 //             else if(reserve.includes(lost[i]-1)){
 //                 reserve.splice(reserve.indexOf(lost[i]-1),1);
 //                 answer++;
 //                 continue;
 //             }
-            
+
 //             else if(reserve.includes(lost[i]+1)){
 //                 reserve.splice(reserve.indexOf(lost[i]+1),1)
 //                 answer++;

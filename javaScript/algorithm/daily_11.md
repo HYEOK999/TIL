@@ -2,7 +2,7 @@
 
 ------
 
-문제 출저 : 프로그래머스
+문제 출처 : 프로그래머스
 
 ### 가운데 글자 가져오기
 
@@ -25,7 +25,7 @@
 ~~~~javascript
 function solution(s) {
     var answer = '';
-    
+
     if(s.length%2 == 1) {
         answer = s.slice(s.length/2, s.length/2+1);
     } else{

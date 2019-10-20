@@ -2,7 +2,7 @@
 
 ------
 
-문제 출저 : 프로그래머스
+문제 출처 : 프로그래머스
 
 ### 2016년
 
@@ -35,7 +35,7 @@ function solution(a, b) {
 
     for(var month=1;month<=a;month++){
     switch(month){
-        case 1: case 3: case 5: case 7: case 8: case 10: case 12:   
+        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
             for(var x=1;x <= 31; x++){
                 if(month == a && x == b){
                     answer =  dayOfTheWeek[j];
@@ -46,7 +46,7 @@ function solution(a, b) {
                     if( j == 7){
                         j = 0;
                     }
-                }       
+                }
             }
             break;
         case 4: case 6: case 9: case 11:
@@ -59,10 +59,10 @@ function solution(a, b) {
                     if( j == 7){
                         j = 0;
                     }
-                }       
+                }
             }
             break;
-            
+
         default :
               for(var x=1; x <= 29; x++){
                 if(month == a && x == b){
@@ -73,8 +73,8 @@ function solution(a, b) {
                     j++;
                     if( j == 7){
                         j = 0;
-                    } 
-                }       
+                    }
+                }
             }
             break;
         }

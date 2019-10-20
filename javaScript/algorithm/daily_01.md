@@ -2,7 +2,7 @@
 
 -------------
 
-문제 출저 : 프로그래머스
+문제 출처 : 프로그래머스
 
 ### 체육복
 
@@ -41,8 +41,8 @@ function solution(n, lost, reserve) {
     var answer = n-lost.length;
     var temp_value = 0;
     var lost_value = 0;
-    
-        
+
+
     for(var i=0;i<reserve.length;i++){
        for(var j=0;j<lost.length;j++){
            if(reserve[j]-1 == lost[i]){
@@ -61,7 +61,7 @@ function solution(n, lost, reserve) {
         }
     }
     answer = answer + lost_value;
-    
+
     return answer;
 }
 ~~~

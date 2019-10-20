@@ -19,13 +19,13 @@
 - 전역 프로퍼티(Global property)
 - this
   - 호출 방식
-  
+
   - this의 binding 확정시간
-  
+
   - bind
-  
+
   - Call Apply
-  
+
     <br/>
 
 ------
@@ -79,7 +79,7 @@ const Person = (function () {
   function Person(name) {
     _name = name;
   }
- 
+
   // 프로토타입 메소드 // 중첩함수가 아님
   Person.prototype.sayHello = function () {
     console.log(`Hi! My name is ${_name}`);
@@ -247,7 +247,7 @@ console.log(Object.getPrototypeOf(obj) === Person.prototype); // true
 
  ESLint에서는 `Object.create(null)`과 같이 프로토타입이 null이 객체를 프로토타입으로 삼고있는 객체가 있을 수 있으므로,
 
-빌트인 메소드를 부를 떄 `객체명.빌트인메소드` 하는 것을 추천하지않고 있다.
+빌트인 메소드를 부를 때 `객체명.빌트인메소드` 하는 것을 추천하지않고 있다.
 
 ~~~javascript
 // 프로토타입이 null인 객체를 생성한다.
@@ -260,7 +260,7 @@ console.log(Object.getPrototypeOf(obj) === null); // true
 // obj는 Object.prototype의 빌트인 메소드를 사용할 수 없다. (비추천)
 console.log(obj.hasOwnProperty('a')); // TypeError: obj.hasOwnProperty is not a function
 
-// Object.prototype의 빌트인 메소드는 객체로 직접 호출하지 않는다. 
+// Object.prototype의 빌트인 메소드는 객체로 직접 호출하지 않는다.
 console.log(Object.prototype.hasOwnProperty.call(obj, 'a')); // true
 
 ~~~
@@ -298,7 +298,7 @@ console.log(Object.getPrototypeOf(obj) === myProto); // true
 
 ### 정적 메소드
 
-> 정적(static) 프로퍼티/메소드는 생성자 함수로 인스턴스를 생성하지 않아도 참조/호출할 수 있는 프로퍼티/메소드를 말한다. 
+> 정적(static) 프로퍼티/메소드는 생성자 함수로 인스턴스를 생성하지 않아도 참조/호출할 수 있는 프로퍼티/메소드를 말한다.
 
 ~~~javascript
 // 생성자 함수
@@ -335,7 +335,7 @@ me.staticMethod(); // TypeError: me.staticMethod is not a function
 
 ### for…in 문
 
-- 객체의 모든 프로퍼티를 순회하며 열거(enumeration)하려면 for…in 문을 사용한다. 
+- 객체의 모든 프로퍼티를 순회하며 열거(enumeration)하려면 for…in 문을 사용한다.
 
 - for…in 문은 프로퍼티를 열거할 때 순서를 보장하지 않는다
 
@@ -440,7 +440,7 @@ encodeURIComponent / decodeURIComponent : 쿼리 파라미터 구분자로 사�
 #### 호출 방식
 
 일반함수로서 호출 : `foo( );` ➤ this : window
-생성자함수로서 호출: `new foo( );` ➤ this : 인스턴스 
+생성자함수로서 호출: `new foo( );` ➤ this : 인스턴스
 메소드로서 호출 : `o.foo( );` ➤ this : 메소드를 호출한 객체
 간접 호출 : `foo.call(x);` ➤ this : 전달한 것이 this
 
@@ -452,7 +452,7 @@ encodeURIComponent / decodeURIComponent : 쿼리 파라미터 구분자로 사�
 
 #### this의 binding 확정시간
 
-> 함수가 호출 되었을 떄, this의 binding이 확정 된다.
+> 함수가 호출 되었을 때, this의 binding이 확정 된다.
 
 **바인딩(binding)** : 바인딩이란 식별자와 값을 연결하는 과정을 의미한다. 예를 들어 변수는 할당에 의해 값이 바인딩된다.
 
@@ -507,7 +507,7 @@ function convertArgsToArray() {
 convertArgsToArray(1, 2, 3); // [ 1, 2, 3 ]
 ~~~~
 
-`slice`는 내부에서 `this`를 건다. 그러나 ` Array.prototype`는 객체다! 
+`slice`는 내부에서 `this`를 건다. 그러나 ` Array.prototype`는 객체다!
 
 참고) 전역객체는 표준 빌트인 객체(Object, String, Number, Function, Array…)를 프로퍼티로 갖는다.
 

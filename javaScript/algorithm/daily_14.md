@@ -2,7 +2,7 @@
 
 ------
 
-문제 출저 : poiema 알고리즘 연습 문제
+문제 출처 : poiema 알고리즘 연습 문제
 
 ### 11. Check Palindrom
 

@@ -2,7 +2,7 @@
 
 ------
 
-문제 출저 : 프로그래머스
+문제 출처 : 프로그래머스
 
 ### 서울에서 김서방 찾기
 
@@ -26,7 +26,7 @@ String형 배열 seoul의 element중 Kim의 위치 x를 찾아, 김서방은 x�
 function solution(seoul) {
     var answer = '';
     var seoul_array_num = 0;
-      
+
     for(var i=0;i<seoul.length;i++){
         if(seoul[i] == "Kim"){
             seoul_array_num = i;
@@ -34,7 +34,7 @@ function solution(seoul) {
         }
     }
     answer = "김서방은 " + seoul_array_num + "에 있다"
-    
+
     return answer;
 }
 ~~~

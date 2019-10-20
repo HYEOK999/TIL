@@ -2,7 +2,7 @@
 
 ------
 
-문제 출저 : 프로그래머스
+문제 출처 : 프로그래머스
 
 ### 완주하지 못한 선수
 
@@ -47,9 +47,9 @@ function solution(participant, completion) {
     var completion_array = [];
     completion_array = completion;
     var num = 0;
-    
+
     for(var i=0;i<participant.length;i++){
-        
+
         for(var j=0;j<completion_array.length;j++){
             if(participant[i] == completion_array[j]){
                 completion_array[j] = null;
@@ -58,7 +58,7 @@ function solution(participant, completion) {
             }
             num = 1;
         }
-    
+
         if(num == 1){
             answer = participant[i];
         }

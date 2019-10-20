@@ -2,7 +2,7 @@
 
 ------
 
-문제 출저 : 프로그래머스
+문제 출처 : 프로그래머스
 
 **해당 문제 효율성(시간)이 너무 떨어져 재도전하였음.**
 
@@ -47,8 +47,8 @@ function solution(participant, completion) {
     var answer = '';
     participant.sort();
     completion.sort();
-    
-    /* 
+
+    /*
     //for in 구문을 자주 사용하지 말라는 MDN 통계가 있었음.
     for(var i in participant){
         if(participant[i] != completion[i]){
@@ -56,13 +56,13 @@ function solution(participant, completion) {
         }
     }
     */
-    
+
     for(var i=0;i<participant.length;i++){
         if(participant[i] != completion[i]){
             return answer = participant[i];
         }
     }
-    
+
     return answer;
 }
 ```
