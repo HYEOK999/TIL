@@ -127,6 +127,10 @@ Today I Leaned...
 > [20. 전역객체](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject20.md)
 >
 > [21. this](https://github.com/HYEOK999/TIL/blob/master/homework/191015-subject21.md)
+>
+> [26-1 : 배열 - 배열 개요 및 배열 메소드](https://github.com/HYEOK999/TIL/blob/master/homework/191016-subject26-1.md)
+>
+> [26-2 : 배열 - 고차함수](https://github.com/HYEOK999/TIL/blob/master/homework/191016-subject26-2.md)
 
 <br/>
 
