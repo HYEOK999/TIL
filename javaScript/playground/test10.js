@@ -1,8 +1,12 @@
-// 배열의 요소 중에 10보다 큰 요소가 1개 이상 존재하는지 확인
-let results = [5, 10, 15]
+function solution(n) {
+  var answer = '';
+  if (n % 3 == 0) {
+    answer += String(Math.floor(n / 3) - 1) + String(4);
+    answer = Number(answer);
+  } else {
+    answer += String(Math.floor(n / 3)) + String(n % 3);
+    answer = Number(answer);
+  }
 
-let result = results.some(function(i){
-  return i > 10;
-});
-
-console.log(result);
+  return String(answer);
+}
