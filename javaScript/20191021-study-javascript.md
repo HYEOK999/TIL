@@ -23,7 +23,7 @@
 - 배열 요소의 참조
   - 배열 요소의 추가와 갱신
 - 배열 요소의 삭제
-  - [배열 메소드](https://github.com/HYEOK999/TIL/blob/master/javaScript/배열메소드.md)
+- [배열 메소드](https://github.com/HYEOK999/TIL/blob/master/javaScript/배열메소드.md)
 - [고차함수](https://github.com/HYEOK999/TIL/blob/master/javaScript/고차함수.md)
 
 <br/>
