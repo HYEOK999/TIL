@@ -100,7 +100,7 @@ Today I Leaned...
 >
 >[배열 메소드](https://github.com/HYEOK999/TIL/blob/master/javaScript/배열메소드.md)
 >
->[배열 고차 함수]([https://github.com/HYEOK999/TIL/blob/master/javaScript/%EA%B3%A0%EC%B0%A8%ED%95%A8%EC%88%98.md](https://github.com/HYEOK999/TIL/blob/master/javaScript/고차함수.md))
+>[배열 고차 함수](https://github.com/HYEOK999/TIL/blob/master/javaScript/고차함수.md)
 
 <br/>
 
