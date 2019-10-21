@@ -26,8 +26,8 @@
   - 배열 요소의 추가와 갱신
 
   - 배열 요소의 삭제
-  - [배열 메소드]
-  - [고차함수]
+  - [배열 메소드]([https://github.com/HYEOK999/TIL/blob/master/javaScript/%EB%B0%B0%EC%97%B4%EB%A9%94%EC%86%8C%EB%93%9C.md](https://github.com/HYEOK999/TIL/blob/master/javaScript/배열메소드.md))
+  - [고차함수]([https://github.com/HYEOK999/TIL/blob/master/javaScript/%EA%B3%A0%EC%B0%A8%ED%95%A8%EC%88%98.md](https://github.com/HYEOK999/TIL/blob/master/javaScript/고차함수.md))
 
 <br/>
 
@@ -424,12 +424,12 @@ console.log(arr.length); // 2 - length 프로퍼티에 변경이 반영된다.
 
 ### 배열 메소드
 
-[배열 메소드]()
+[배열 메소드]([https://github.com/HYEOK999/TIL/blob/master/javaScript/%EB%B0%B0%EC%97%B4%EB%A9%94%EC%86%8C%EB%93%9C.md](https://github.com/HYEOK999/TIL/blob/master/javaScript/배열메소드.md))
 
 <br>
 
 ### 고차함수
 
-[고차함수]()
+[고차함수]([https://github.com/HYEOK999/TIL/blob/master/javaScript/%EA%B3%A0%EC%B0%A8%ED%95%A8%EC%88%98.md](https://github.com/HYEOK999/TIL/blob/master/javaScript/고차함수.md))
 
 <br>
