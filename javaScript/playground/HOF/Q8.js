@@ -7,9 +7,7 @@ const todos = [
 
 function countCompletedTodos() {
   return todos.reduce((pre, todo) => {
-    if (todo.completed === true) {
-      pre += 1;
-    }
+    if (todo.completed === true) pre++;
     return pre;
   }, 0);
 }
