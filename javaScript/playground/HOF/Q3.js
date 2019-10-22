@@ -5,17 +5,12 @@ const todos = [
   { id: 1, content: 'Javascript', completed: false }
 ];
 
-// function sortBy(key) {
-//   return todos.slice(0, todos.length).sort(
-//     (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
-//   );
-// }
-
 function sortBy(key) {
-  return Object.assign([], todos.sort(
+  return todos.slice(0, todos.length).sort(
     (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
-  ));
+  );
 }
+
 
 console.log(sortBy('id'));
 /*
