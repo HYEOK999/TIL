@@ -1,480 +1,342 @@
-<img src="https://cdn.pixabay.com/photo/2013/11/12/19/57/toothed-belt-drive-209677_960_720.jpg" style="zoom: 67%;" />
+<img src="https://cdn.pixabay.com/photo/2015/11/10/08/22/pay-1036469_960_720.jpg" style="zoom:50%;" />
 
 ------
 
-## JacaScript 정규 표현식
+## JacaScript Number 래퍼 객체
 
-- 정규 표현식
-  - 플래그
-  - 패턴
-    - `.` 패턴
-    - 문자 또는 문자열 패턴
-    - 자주 사용하는 정규 표현식
-      - [특정 단어로 시작하는지 검사한다.](#a1)
-      - [특정 단어로 끝나는지 검사한다.](#a2)
-      - [숫자인지 검사한다.](#a3)
-      - [하나 이상의 공백으로 시작하는지 검사한다.](#a4)
-      - [아이디로 사용 가능한지 검사한다. (영문자, 숫자만 허용, 4~10자리)](#a5)
-      - [메일 주소 형식에 맞는지 검사한다.](#a6)
-      - [핸드폰 번호 형식에 맞는지 검사한다.](#a7)
-      - [특수 문자 포함 여부를 검사한다.](#a8)
-    - RegExp Constructor
-      - 정규 표현식을 사용하는 메소드
-    - RegExp Method
-      - RegExp.prototype.exec
-      - RegExp.prototype.test
+- Number 래퍼 객체
+  - Number Constructor
+  - Number() 생성자 함수를 통해서 만들어진 Number 객체는 객체다.
+  - Number Property
+    - Number.EPSILON
+    - Number.MAX_VALUE
+    - Number.MIN_VALUEa
+    - Number.POSITIVE_INFINITY
+    - Number.NEGATIVE_INFINITY
+    - Number.NaN
+  - Number.Method
+    - Number.isFinite(testValue: number): boolean
+    - Number.isInteger(testValue: number): boolean 
+    - Number.isNaN(testValue: number): boolean 
+    - Number.isSafeInteger(testValue: number): boolean
+    - Number.prototype.toExponential(fractionDigits?: number): string
+    - Number.prototype.toFixed(fractionDigits?: number): string
+    - Number.prototype.toString(radix?: number): string
+    - Number.prototype.valueOf(): number ES1
 
 <br/>
 
---------
+-------
 
-## 정규 표현식
+## Number 래퍼 객체
 
- 정규 표현식(Regular Expression)은 문자열에서 특정 내용을 찾거나 대체 또는 발췌하는데 사용한다.
-정규 표현식은 리터럴 표기법으로 생성할 수 있다.
-
-<img src="https://poiemaweb.com/img/regular_expression.png" style="zoom:50%;" />
-
-정규표현식을 사용하는 자바스크립트 메소드는 
-
-RegExp.prototype.exec, RegExp.prototype.test, String.prototype.match, String.prototype.replace, String.prototype.search, String.prototype.split 
-
-등이 있다.
+>Number 객체는 원시 타입 number를 다룰 때 유용한 프로퍼티와 메소드를 제공하는 레퍼(wrapper) 객체이다.
+>
+>**변수 또는 객체의 프로퍼티가 숫자를 값**으로 **가지고** 있다면 Number 객체의 별도 생성없이 **Number 객체의 프로퍼티와 메소드를 사용할 수 있다.**
 
 ```javascript
-const targetStr = 'This is a pen.';
-const regexr = /is/ig;
+var num = 1.5;
+console.log(num.toFixed()); // 2
+```
 
-// RegExp 객체의 메소드
-console.log(regexr.exec(targetStr)); // [ 'is', index: 2, input: 'This is a pen.' ]
-console.log(regexr.test(targetStr)); // true
+위에서 원시 타입을 담고 있는 변수 num이 Number.prototype.toFixed() 메소드를 호출할 수 있는 것은 변수 num의 값이 일시적으로 wrapper객체로 변환되었기 때문이다.
 
-// String 객체의 메소드
-console.log(targetStr.match(regexr)); // [ 'is', 'is' ]
-console.log(targetStr.replace(regexr, 'IS')); // ThIS IS a pen.
-// String.prototype.search는 검색된 문자열의 첫번째 인덱스를 반환한다.
-console.log(targetStr.search(regexr)); // 2 ← index
-console.log(targetStr.split(regexr));  // [ 'Th', ' ', ' a pen.' ]
+<br/>
+
+### Numver Constructor
+
+Number 객체는 Number() 생성자 함수를 통해 생성할 수 있다. (new는 생략할 수 있다.)
+
+만일 인자가 숫자로 변환될 수 없다면 NaN을 반환한다.
+
+```javascript
+var x = new Number(123);
+var y = new Number('123');
+var z = new Number('str');
+
+console.log(x); // 123
+console.log(y); // 123
+console.log(z); // NaN
+
+var o = Number('123');
+
+console.log(typeof o, o); // number 123
 ```
 
 <br/>
 
-### 플래그
+####  Number() 생성자 함수를 통해서 만들어진 Number 객체는 객체다.
 
-| Flag | Meaning     | Description                               |
-| :--: | :---------- | :---------------------------------------- |
-|  i   | Ignore Case | 대소문자를 구별하지 않고 검색한다.        |
-|  g   | Global      | 문자열 내의 모든 패턴을 검색한다.         |
-|  m   | Multi Line  | 문자열의 행이 바뀌더라도 검색을 계속한다. |
-
-플래그는 옵션이므로 선택적으로 사용한다. 
-
-플래그를 사용하지 않은 경우 문자열 내 검색 매칭 대상이 1개 이상이더라도 첫번째 매칭한 대상만을 검색하고 종료한다.
-
-~~~javascript
-const targetStr = 'Is this all there is?';
-
-// 문자열 is를 대소문자를 구별하여 한번만 검색한다.
-let regexr = /is/;
-
-console.log(targetStr.match(regexr)); // [ 'is', index: 5, input: 'Is this all there is?' ]
-
-// 문자열 is를 대소문자를 구별하지 않고 대상 문자열 끝까지 검색한다.
-regexr = /is/ig;
-
-console.log(targetStr.match(regexr)); // [ 'Is', 'is', 'is' ]
-console.log(targetStr.match(regexr).length); // 3
-~~~
-
-<br/>
-
-### 패턴
-
-​	검색하고 싶은 문자열을 지정한다. 이때 따옴표는 생략한다. 만약 따옴표를 입력시 따옴표까지 검색하게 된다.
-추가로 패턴에 특별한 의미를 지니는 메타문자 또는 기호로 표현할 수 있다.
-
-#### `.` 패턴
-
-`.`은 임의의 문자 한 개를 의미한다. 문자의 내용은 무엇이든지 상관없다. 
-플래그를 사용하지 않을 경우 `.` 패턴이 많아도 첫 결과 만 검색된다.
-반복을 위해서는 `g` 플래그를 사용하면  `.` 패턴의 갯수대로 반환한다.
-
-~~~javascript
-const targetStr = 'AA BB Aa Bb';
-
-// 임의의 문자 3개를 반복하여 검색
-const regexr = /.../g;
-
-console.log(targetStr.match(regexr)); // [ 'AA ', 'BB ', 'Aa ' ]
-~~~
-
-<br/>
-
-모든 문자를 선택하려면 `.`와 `g`를 동시에 지정한다.
+일반적으로 숫자를 사용할 때는 원시 타입 숫자를 사용한다.
 
 ```javascript
-const targetStr = 'AA BB Aa Bb';
+var x = 123;
+var y = new Number(123);
 
-// 임의의 한문자를 반복 검색
-const regexr = /./g;
+console.log(x == y);  // true
+console.log(x === y); // false
 
-console.log(targetStr.match(regexr));
-// [ 'A', 'A', ' ', 'B', 'B', ' ', 'A', 'a', ' ', 'B', 'b' ]
+console.log(typeof x); // number
+console.log(typeof y); // object
 ```
 
 <br/>
 
-#### 문자 또는 문자열 패턴
+### Number Property
 
-패턴에 문자 또는 문자열을 지정하면 일치하는 문자 또는 문자열을 추출한다.
+#### Number.EPSILON 
 
-- 플래그가 없으면 대소문자를 구별하고 첫번째 결과만 반환한다.
+> Number.EPSILON은 JavaScript에서 표현할 수 있는 가장 작은 수이다. (ES6)
+>
+>  Number.EPSILON은 약 2.2204460492503130808472633361816E-16 또는 2-52이다.
+
+<br/>
+
+#### Number.MAX_VALUE || Number.MIN_VALUE
+
+> Number.MAX_VALUE는 JavaScript에서 Infinity를 제외한 표현할 수 있는 가장 큰 수 이다. 
+>
+> Number.MAX_VALUE는 가장 큰 숫자(1.7976931348623157e+308)를 반환한다. 
+>
+> Number.MIN_VALUE는 JavaScript에서 사용 가능한 가장 작은 숫자(5e-324)를 반환한다.
+>
+> MIN_VALUE는 0에 가장 가까운 양수 값이다. MIN_VALUE보다 작은 숫자는 0으로 변환된다.
 
 ~~~~javascript
-const targetStr = 'AA BB Aa Bb';
+Number.MAX_VALUE; // 1.7976931348623157e+308
 
-// 'A'를 검색
-const regexr = /A/;
+var num = 10;
+num.MAX_VALUE;    // undefined
 
-console.log(targetStr.match(regexr)); // 'A'
-~~~~
+console.log(Infinity > Number.MAX_VALUE); // true
+----------------------------------------------------
+Number.MIN_VALUE; // 5e-324
 
-- 모든 결과와 대소문자를 구별하지 않게 하려면 플래그 `i`를 사용한다.
+var num = 10;
+num.MIN_VALUE;    // undefined
 
-~~~javascript
-const targetStr = 'AA BB Aa Bb';
-
-// 'A'를 대소문자 구분없이 반복 검색
-const regexr = /A/ig;
-
-console.log(targetStr.match(regexr)); // [ 'A', 'A', 'A', 'a' ]
-~~~
-
-- 앞선 패턴을 최소 한번 반복하려면 앞선 패턴 뒤에 `+`를 붙인다.
-
-~~~javascript
-const targetStr = 'AA AAA BB Aa Bb';
-
-// 'A'가 한번이상 반복되는 문자열('A', 'AA', 'AAA', ...)을 반복 검색
-const regexr = /A+/g;
-
-console.log(targetStr.match(regexr)); // [ 'AA', 'AAA', 'A' ]
-~~~
-
-- `|`를 사용하면 or의 의미를 가지게 된다.
-
-```javascript
-const targetStr = 'AA BB Aa Bb';
-
-// 'A' 또는 'B'를 반복 검색
-const regexr = /A|B/g;
-
-console.log(targetStr.match(regexr)); // [ 'A', 'A', 'B', 'B', 'A', 'B' ]
-```
-
-- 분해되지 않은 단어 레벨로 추출하기 위해서는 `+`를 같이 사용하면 된다.
-
-```javascript
-const targetStr = 'AA AAA BB Aa Bb';
-
-// 'A' 또는 'B'가 한번 이상 반복되는 문자열을 반복 검색
-// 'A', 'AA', 'AAA', ... 또는 'B', 'BB', 'BBB', ...
-const regexr = /A+|B+/g;
-
-console.log(targetStr.match(regexr)); // [ 'AA', 'AAA', 'BB', 'A', 'B' ]
-
-```
-
-- `[]`내의 문자는 or로 동작한다. 그 뒤에 `+`를 사용하여 앞선 패턴을 한번 이상 반복하게 한다.
-
-```javascript
-const targetStr = 'AA BB Aa Bb';
-
-// 'A' 또는 'B'가 한번 이상 반복되는 문자열을 반복 검색
-// 'A', 'AA', 'AAA', ... 또는 'B', 'BB', 'BBB', ...
-const regexr = /[AB]+/g; // /A+|B+/g
-
-console.log(targetStr.match(regexr)); // [ 'AA', 'BB', 'A', 'B' ]
-
-```
-
-- 범위를 지정하려면 `[]`내에 `-`를 사용한다. 아래의 경우 대문자 알파벳을 추출한다.
-
-```javascript
-const targetStr = 'AA BB ZZ Aa Bb';
-
-// 'A' ~ 'Z'가 한번 이상 반복되는 문자열을 반복 검색
-// 'A', 'AA', 'AAA', ... 또는 'B', 'BB', 'BBB', ... ~ 또는 'Z', 'ZZ', 'ZZZ', ...
-
-const regexr = /[A-Z]+/g;
-
-console.log(targetStr.match(regexr)); // [ 'AA', 'BB', 'ZZ', 'A', 'B' ]
-
-```
-
-- 대소문자를 구별하지 않고 알파벳을 추출하려면 아래와 같이 한다.
-
-```javascript
-const targetStr = 'AA BB Aa Bb';
-
-// 'A' ~ 'Z' 또는 'a' ~ 'z'가 한번 이상 반복되는 문자열을 반복 검색
-const regexr = /[A-Za-z]+/g;
-// 아래와 동일하다.
-// const regexr = /[A-Z]+/gi;
-
-console.log(targetStr.match(regexr)); // [ 'AA', 'BB', 'Aa', 'Bb' ]
-
-```
-
-- 숫자를 추출하는 방법이다.
-
-```javascript
-const targetStr = 'AA BB Aa Bb 24,000';
-
-// '0' ~ '9'가 한번 이상 반복되는 문자열을 반복 검색
-const regexr = /[0-9]+/g;
-
-console.log(targetStr.match(regexr)); // [ '24', '000' ]
-
-```
-
-- 컴마 때문에 결과가 분리되므로 패턴에 포함시킨다.
-
-```javascript
-const targetStr = 'AA BB Aa Bb 24,000';
-
-// '0' ~ '9' 또는 ','가 한번 이상 반복되는 문자열을 반복 검색
-const regexr = /[0-9,]+/g;
-
-console.log(targetStr.match(regexr)); // [ '24,000' ]
-
-```
-
-- `\d`는 숫자를 의미한다. `\D`는 '0' ~ '9'가 아닌 문자 를 의미한다.
-
-```javascript
-const targetStr = 'AA BB Aa Bb 24,000';
-
-// '0' ~ '9' 또는 ','가 한번 이상 반복되는 문자열을 반복 검색
-let regexr = /[\d,]+/g;
-
-console.log(targetStr.match(regexr)); // [ '24,000' ]
-
-// '0' ~ '9'가 아닌 문자(숫자가 아닌 문자) 또는 ','가 한번 이상 반복되는 문자열을 반복 검색
-regexr = /[\D,]+/g;
-
-console.log(targetStr.match(regexr)); // [ 'AA BB Aa Bb ', ',' ]
-
-```
-
-- `\w`는 알파벳과 숫자를 의미한다. `\W`는 `\w`와 반대로 동작한다.
-
-~~~~javascript
-const targetStr = 'AA BB Aa Bb 24,000';
-
-// 알파벳과 숫자 또는 ','가 한번 이상 반복되는 문자열을 반복 검색
-let regexr = /[\w,]+/g;
-
-console.log(targetStr.match(regexr)); // [ 'AA', 'BB', 'Aa', 'Bb', '24,000' ]
-
-// 알파벳과 숫자가 아닌 문자 또는 ','가 한번 이상 반복되는 문자열을 반복 검색
-regexr = /[\W,]+/g;
-
-console.log(targetStr.match(regexr)); // [ ' ', ' ', ' ', ' ', ',' ]
-
+console.log(Number.MIN_VALUE > 0); // true
 ~~~~
 
 <br/>
 
-### 자주 사용하는 정규 표현식
+#### Number.POSITIVE_INFINITY 
 
-- 특정 단정로 시작하는지 검색한다. <a id="a1"></a>
+양의 무한대 `Infinity`를 반환한다.
 
 ```javascript
-const url = 'http://example.com';
+Number.POSITIVE_INFINITY // Infinity
 
-// 'http'로 시작하는지 검사
-// ^ : 문자열의 처음을 의미한다.
-const regexr = /^http/;
-
-console.log(regexr.test(url)); // true
-
+var num = 10;
+num.POSITIVE_INFINITY;   // undefined
 ```
 
-- 특정 단어로 끝나는지 검사한다. <a id="a2"></a>
+<br/>
+
+#### Number.NEGATIVE_INFINITY 
+
+음의 무한대 `-Infinity`를 반환한다.
 
 ```javascript
-const fileName = 'index.html';
+Number.NEGATIVE_INFINITY // -Infinity
 
-// 'html'로 끝나는지 검사
-// $ : 문자열의 끝을 의미한다.
-const regexr = /html$/;
-
-console.log(regexr.test(fileName)); // true
-
+var num = 10;
+num.NEGATIVE_INFINITY;   // undefined
 ```
 
-- 숫자인지 검사한다. <a id="a3"></a>
+<br/>
+
+#### Number.NaN 
+
+숫자가 아님(Not-a-Number)을 나타내는 숫자값이다. Number.NaN 프로퍼티는 window.NaN 프로퍼티와 같다.
 
 ```javascript
-const targetStr = '12345';
-
-// 모두 숫자인지 검사
-// [^]: 부정(not)을 의미한다. 얘를 들어 [^a-z]는 알파벳 소문자로 시작하지 않는 모든 문자를 의미한다.
-// [] 바깥의 ^는 문자열의 처음을 의미한다.
-const regexr = /^\d+$/;
-
-console.log(regexr.test(targetStr)); // true
-
+console.log(Number('xyz')); // NaN
+console.log(1 * 'string');  // NaN
+console.log(typeof NaN);    // number
 ```
 
-- 하나 이상의 공백으로 시작하는지 검사한다. <a id="a4"></a>
+<br/>
+
+###  Number Method
+
+#### Number.isFinite(testValue: number): boolean ES6
+
+> 매개변수에 전달된 값이 정상적인 유한수인지를 검사하여 그 결과를 Boolean으로 반환한다.
 
 ```javascript
-const targetStr = ' Hi!';
-
-// 1개 이상의 공백으로 시작하는지 검사
-// \s : 여러 가지 공백 문자 (스페이스, 탭 등) => [\t\r\n\v\f]
-const regexr = /^[\s]+/;
-
-console.log(regexr.test(targetStr)); // true
-
+/**
+ * @param {any} testValue - 검사 대상 값. 암묵적 형변환되지 않는다.
+ * @return {boolean}
+ */
+Number.isFinite(testValue)
 ```
 
-- 아이디로 사용 가능한지 검사한다. (영문자, 숫자만 허용, 4~10자리) <a id="a5"></a>
+Number.isFinite()는 전역 함수 isFinite()와 차이가 있다. 
+
+전역 함수 isFinite()는 인수를 숫자로 변환하여 검사를 수행하지만 Number.isFinite()는 인수를 변환하지 않는다. 따라서 숫자가 아닌 인수가 주어졌을 때 반환값은 언제나 false가 된다.
+
+<br/>
+
+#### Number.isInteger(testValue: number): boolean ES6
+
+>  매개변수에 전달된 값이 정수(Integer)인지 검사하여 그 결과를 Boolean으로 반환한다. 
+>
+> 검사전에 인수를 숫자로 변환하지 않는다.
 
 ```javascript
-const id = 'abc123';
-
-// 알파벳 대소문자 또는 숫자로 시작하고 끝나며 4 ~10자리인지 검사
-// {4,10}: 4 ~ 10자리
-const regexr = /^[A-Za-z0-9]{4,10}$/;
-
-console.log(regexr.test(id)); // true
-
-```
-
-- 메일 주소 형식에 맞는지 검사한다. <a id="a6"></a>
-
-```javascript
-const email = 'ungmo2@gmail.com';
-
-const regexr = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-
-console.log(regexr.test(email)); // true
-
-```
-
-- 핸드폰 번호 형식에 맞는지 검사한다. <a id="a7"></a>
-
-```javascript
-const cellphone = '010-1234-5678';
-
-const regexr = /^\d{3}-\d{3,4}-\d{4}$/;
-
-console.log(regexr.test(cellphone)); // true
-
-```
-
-- 특수 문자 포함 여부를 검사한다. <a id="a8"></a>
-
-```javascript
-const targetStr = 'abc#123';
-
-// A-Za-z0-9 이외의 문자가 있는지 검사
-let regexr = /[^A-Za-z0-9]/gi;
-
-console.log(regexr.test(targetStr)); // true
-
-// 아래 방식도 동작한다. 이 방식의 장점은 특수 문자를 선택적으로 검사할 수 있다.
-regexr = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-
-console.log(regexr.test(targetStr)); // true
-
-// 특수 문자 제거
-console.log(targetStr.replace(regexr, '')); // abc123
+/**
+ * @param {any} testValue - 검사 대상 값. 암묵적 형변환되지 않는다.
+ * @return {boolean}
+ */
+Number.isInteger(testValue)
 
 ```
 
 <br/>
 
-### Javascript Regular Expression
+#### Number.isNaN(testValue: number): boolean ES6
 
-#### RegExp Constructor
+> 매개변수에 전달된 값이 NaN인지를 검사하여 그 결과를 Boolean으로 반환한다.
 
-- JS는 정규표현식을 위해 RegExp 객체를 지원한다.
-- 객체 생성을 위해서 리터럴 방식과 RegExp 생성자 함수를 사용할 수 있다.
+```javascript
+/**
+ * @param {any} testValue - 검사 대상 값. 암묵적 형변환되지 않는다.
+ * @return {boolean}
+ */
+Number.isNaN(testValue)
+
+```
+
+Number.isNaN()는 전역 함수 isNaN()와 차이가 있다. 
+
+전역 함수 isNaN()는 인수를 숫자로 변환하여 검사를 수행하지만 Number.isNaN()는 인수를 변환하지 않는다. 따라서 숫자가 아닌 인수가 주어졌을 때 반환값은 언제나 false가 된다.
+
+<br/>
+
+#### Number.isSafeInteger(testValue: number): boolean ES6
+
+>  매개변수에 전달된 값이 안전한(safe) 정수값인지 검사하여 그 결과를 Boolean으로 반환한다. 
+>
+> 안전한 정수값은 -(253 - 1)와 253 - 1 사이의 정수값이다. 검사전에 인수를 숫자로 변환하지 않는다.
+
+```javascript
+/**
+ * @param {any} testValue - 검사 대상 값. 암묵적 형변환되지 않는다.
+ * @return {boolean}
+ */
+Number.isSafeInteger(testValue)
+
+```
+
+<br/>
+
+#### Number.prototype.toExponential(fractionDigits?: number): string ES3
+
+>  대상을 지수 표기법으로 변환하여 문자열로 반환한다. 지수 표기법이란 매우 큰 숫자를 표기할 때 주로 사용하며 e(Exponent) 앞에 있는 숫자에 10의 n승이 곱하는 형식으로 수를 나타내는 방식이다.
+
+```javascript
+1234 = 1.234e+3
+/**
+ * @param {number} [fractionDigits] - 0~20 사이의 정수값으로 소숫점 이하의 자릿수를 나타낸다. 옵션으로 생략 가능하다.
+ * @return {string}
+ */
+numObj.toExponential([fractionDigits])
+
+```
+
+<br/>
+
+#### 정수 리터럴과 함께 메소드를 사용할 경우. 주의점
+
+```javascript
+77.toString(); // SyntaxError: Invalid or unexpected token
+
+```
+
+의 경우 `.`이 소숫점인지 아닌지 모르기 때문에 에러를 일으킨다. 따라서 다음과 같은 방법을 권장한다.
+
+```javascript
+(77).toString(); // '77'
+
+```
+
+<br/>
+
+#### Number.prototype.toFixed(fractionDigits?: number): string ES3
+
+매개변수로 지정된 소숫점자리를 반올림하여 문자열로 반환한다.
+
+```javascript
+/**
+ * @param {number} [fractionDigits] - 0~20 사이의 정수값으로 소숫점 이하 자릿수를 나타낸다. 기본값은 0이며 옵션으로 생략 가능하다.
+ * @return {string}
+ */
+numObj.toFixed([fractionDigits])
+
+```
 
 ~~~javascript
-new RegExp(pattern[, flags])
+var numObj = 12345.6789;
+
+// 소숫점 이하 반올림
+console.log(numObj.toFixed());   // '12346'
+// 소숫점 이하 1자리수 유효, 나머지 반올림
+console.log(numObj.toFixed(1));  // '12345.7'
+// 소숫점 이하 2자리수 유효, 나머지 반올림
+console.log(numObj.toFixed(2));  // '12345.68'
+// 소숫점 이하 3자리수 유효, 나머지 반올림
+console.log(numObj.toFixed(3));  // '12345.679'
+// 소숫점 이하 6자리수 유효, 나머지 반올림
+console.log(numObj.toFixed(6));  // '12345.678900'
 
 ~~~
 
-- pattern 정규표현식의 텍스트
-- flags 정규표현식의 플래그 (g, i, m, u, y)
+<br/>
+
+#### Number.prototype.toString(radix?: number): string ES1
+
+숫자를 문자열로 변환하여 반환한다.
 
 ```javascript
-// 정규식 리터럴
-/ab+c/i;
-
-new RegExp('ab+c', 'i');
-
-new RegExp(/ab+c/, 'i');
-
-new RegExp(/ab+c/i); // ES6
+/**
+ * @param {number} [radix] - 2~36 사이의 정수값으로 진법을 나타낸다. 옵션으로 생략 가능하다.
+ * @return {string}
+ */
+numObj.toString([radix])
 
 ```
 
-#### 정규표현식을 사용하는 메소드
+~~~javascript
+var count = 10;
+console.log(count.toString());   // '10'
+console.log((17).toString());    // '17'
+console.log(17 .toString());     // '17'
+console.log((17.2).toString());  // '17.2'
 
-- RegExp.prototype.exec
-- RegExp.prototype.test
-- String.prototype.match
-- String.prototype.replace
-- String.prototype.search
-- String.prototype.split
+var x = 16;
+console.log(x.toString(2));       // '10000'
+console.log(x.toString(8));       // '20'
+console.log(x.toString(16));      // '10'
+
+console.log((254).toString(16));  // 'fe'
+console.log((-10).toString(2));   // '-1010'
+console.log((-0xff).toString(2)); // '-11111111'
+
+~~~
 
 <br/>
 
-### RegExp Method
+#### Number.prototype.valueOf(): number ES1
 
-#### RegExp.prototype.exec(target: string): RegExpExecArray | null ES3
-
-문자열을 검색하여 매칭 결과를 반환한다. 반환값은 배열 또는 null이다.
+Number 객체의 원시 타입 값(primitive value)을 반환한다.
 
 ```javascript
-const target = 'Is this all there is?';
-const regExp = /is/;
+var numObj = new Number(10);
+console.log(typeof numObj); // object
 
-const res = regExp.exec(target);
-console.log(res); // [ 'is', index: 5, input: 'Is this all there is?' ]
-
-```
-
-exec 메소드는 g 플래그를 지정하여도 첫번째 메칭 결과만을 반환한다.
-
-```javascript
-const target = 'Is this all there is?';
-const regExp = /is/g;
-
-const res = regExp.exec(target);
-console.log(res); // [ 'is', index: 5, input: 'Is this all there is?' ]
+var num = numObj.valueOf();
+console.log(num);           // 10
+console.log(typeof num);    // number
 
 ```
-
-<br/>
-
-#### RegExp.prototype.test(target: string): boolean ES3
-
-문자열을 검색하여 매칭 결과를 반환한다. 반환값은 true 또는 false이다.
-
-```javascript
-const target = 'Is this all there is?';
-const regExp = /is/;
-
-const res = regExp.test(target);
-console.log(res); // true
-
-```
-
-<br/>
