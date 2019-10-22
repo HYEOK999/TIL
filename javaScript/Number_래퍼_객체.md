@@ -2,7 +2,7 @@
 
 ------
 
-## JacaScript Number 래퍼 객체
+## JavaScript Number 래퍼 객체
 
 - Number 래퍼 객체
   - Number Constructor
