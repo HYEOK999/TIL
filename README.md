@@ -101,6 +101,8 @@ Today I Leaned...
 >[배열 메소드](https://github.com/HYEOK999/TIL/blob/master/javaScript/배열메소드.md)
 >
 >[배열 고차 함수](https://github.com/HYEOK999/TIL/blob/master/javaScript/고차함수.md)
+>
+>[정규 표현식](https://github.com/HYEOK999/TIL/blob/master/javaScript/정규표현식.md)
 
 <br/>
 
@@ -137,6 +139,8 @@ Today I Leaned...
 > [26-1 : 배열 - 배열 개요 및 배열 메소드](https://github.com/HYEOK999/TIL/blob/master/homework/191016-subject26-1.md)
 >
 > [26-2 : 배열 - 고차함수](https://github.com/HYEOK999/TIL/blob/master/homework/191016-subject26-2.md)
+>
+> [27 : 정규 표현식](https://github.com/HYEOK999/TIL/blob/master/homework/191021-subject27.md)
 
 <br/>
 
