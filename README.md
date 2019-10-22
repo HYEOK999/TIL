@@ -198,6 +198,7 @@ Today I Leaned...
 >
 >[20191019-기능 개발](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_20.md)
 >
->[20191021-기능 개발 재풀이]()
+>[20191021-Poiema-HOF 1~4](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/포이마HOF_01.md)
 >
->[20191022-Poiema-HOF](https://github.com/HYEOK999/TIL/tree/master/javaScript/playground/HOF)
+>[20191022-Poiema-HOF 5~8](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/포이마HOF_02.md)
+
