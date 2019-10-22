@@ -2,7 +2,7 @@
 
 ------
 
-## JavaScript Study 12
+## JavaScript Study 13
 
 - 용어
 
