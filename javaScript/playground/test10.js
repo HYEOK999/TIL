@@ -1,26 +1,14 @@
-const Users = (function() {
-  function Users() {
-    console.log(this);
-    this.users = [
-      { id: 1, name: 'Lee' },
-      { id: 2, name: 'Kim' }
-    ];
+function solution(n) {
+  let answer = '';
+  if (n % 3 == 0) {
+    answer += String(Math.floor(n / 3) - 1) + String(4);
+    answer = Number(answer);
+  } else {
+    answer += String(Math.floor(n / 3)) + String(n % 3);
+    answer = Number(answer);
   }
 
-  Users.prototype.findById = function(id) {
-    console.log(this);
-    return this.users.filter(user => user.id === id);
-  };
+  return String(answer);
+}
 
-  Users.prototype.remove = function(id) {
-    console.log(this);
-    this.users = this.user.filter(user => user.id !== id);
-  };
-
-  return Users;
-}());
-
-const users = new Users();
-let user = users.findById(1);
-user = users.remove(1);
-console.log(user);
+solution(11); // 42
