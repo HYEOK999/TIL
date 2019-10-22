@@ -103,6 +103,8 @@ Today I Leaned...
 >[배열 고차 함수](https://github.com/HYEOK999/TIL/blob/master/javaScript/고차함수.md)
 >
 >[정규 표현식](https://github.com/HYEOK999/TIL/blob/master/javaScript/정규표현식.md)
+>
+>[Number 래퍼 객체](https://github.com/HYEOK999/TIL/blob/master/javaScript/Number_래퍼_객체.md)
 
 <br/>
 
