@@ -8,6 +8,7 @@ const todos = [
 function toggleCompletedById(id) {
   const result = todos.map((todo) => {
     if (todo.id == id) todo.completed = !todo.completed;
+    // if (todo.id == id) ...todo , {...todo, completed: !todo.completed};
     return todo;
   });
 

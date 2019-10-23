@@ -9,8 +9,12 @@ const todos = [
 //   todos = [newTodo].concat(todos);
 // }
 
+// function addTodo(newTodo) {
+//   todos.unshift(newTodo);
+// }
+
 function addTodo(newTodo) {
-  todos.unshift(newTodo);
+  Object.assign(todos, todos.reduce((pre, todo) => pre.concat(todo), [newTodo]));
 }
 
 addTodo({ id: 4, content: 'Test', completed: false });

@@ -1,14 +1,21 @@
 function solution(n) {
   let answer = '';
-  if (n % 3 == 0) {
-    answer += String(Math.floor(n / 3) - 1) + String(4);
-    answer = Number(answer);
-  } else {
-    answer += String(Math.floor(n / 3)) + String(n % 3);
-    answer = Number(answer);
+  let temp = 0;
+
+  while (n > 0) {
+    temp = n % 3;
+    n = Math.floor(n / 3);
+    if (temp == 0) {
+      temp = 4;
+      n--;
+    }
+    answer += temp;
   }
 
-  return String(answer);
+  answer = answer.split('').reverse().join('');
+
+  return answer;
 }
 
-solution(11); // 42
+
+solution(3);
