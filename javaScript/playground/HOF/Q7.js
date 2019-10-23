@@ -6,12 +6,11 @@ const todos = [
 ];
 
 function toggleCompletedAll() {
-  Object.assign(todos, todos.map((todo) => {
-    if (!todo.completed) todo.completed = !todo.completed;
+  todos.map((todo) => {
+    if (!todo.completed) Object.assign(todo, { completed: true });
     return todo;
-  }));
+  });
 }
-
 
 // function toggleCompletedAll() {
 //   Object.assign(todos, todos.map((todo) => ({ ...todo, completed: true })));

@@ -23,6 +23,11 @@ function sortBy(key) {
   );
 }
 
+// function sortBy(key) {
+//   var arr = Array.apply(null, todos);
+//   return arr.sort((a, b) => a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0));
+// }
+
 console.log(sortBy('id'));
 /*
 [
