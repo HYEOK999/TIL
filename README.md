@@ -201,4 +201,6 @@ Today I Leaned...
 >[20191021-Poiema-HOF 1~4](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/포이마HOF_01.md)
 >
 >[20191022-Poiema-HOF 5~8](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/포이마HOF_02.md)
+>
+>[20191023-124 나라](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_21.md)
 
