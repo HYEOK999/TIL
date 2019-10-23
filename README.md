@@ -107,6 +107,8 @@ Today I Leaned...
 >[정규 표현식](https://github.com/HYEOK999/TIL/blob/master/javaScript/정규표현식.md)
 >
 >[Number 래퍼 객체](https://github.com/HYEOK999/TIL/blob/master/javaScript/Number_래퍼_객체.md)
+>
+>[Math 객체](https://github.com/HYEOK999/TIL/blob/master/javaScript/수학함수.md)
 
 <br/>
 
