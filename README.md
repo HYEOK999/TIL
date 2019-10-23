@@ -146,7 +146,7 @@ Today I Leaned...
 >
 > [26-2 : 배열 - 고차함수](https://github.com/HYEOK999/TIL/blob/master/homework/191016-subject26-2.md)
 >
-> [27 : 정규 표현식](https://github.com/HYEOK999/TIL/blob/master/homework/191021-subject27.md)
+> [26M : 정규 표현식](https://github.com/HYEOK999/TIL/blob/master/homework/191021-subject26(M).md)
 
 <br/>
 
