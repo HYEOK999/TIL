@@ -17,8 +17,14 @@ const todos = [
 //   );
 // }
 
+// function sortBy(key) {
+//   return todos.concat().sort(
+//     (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
+//   );
+// }
+
 function sortBy(key) {
-  return todos.concat().sort(
+  return [...todos].sort(
     (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
   );
 }

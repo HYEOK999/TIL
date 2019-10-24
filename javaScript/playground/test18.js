@@ -1,4 +1,4 @@
-function makeCounter() {
+const Counter = (function makeCounter() {
   // 카운트 상태를 유지하기 위한 자유 변수
   let counter = 0;
 
@@ -8,7 +8,7 @@ function makeCounter() {
     counter = predicate(counter);
     return counter;
   };
-}
+}());
 
 // 보조 함수
 function increase(n) {
@@ -22,8 +22,7 @@ function decrease(n) {
 
 // 함수로 함수를 생성한다.
 // makeCounter 함수는 보조 함수를 인수로 전달받아 함수를 반환한다
-const counter = makeCounter(); // ①
-console.log(counter(increase)); // 1
-console.log(counter(increase)); // 2
-console.log(counter(decrease)); // 1
-console.log(counter(decrease)); // 0
+console.log(Counter(increase)); // 1
+console.log(Counter(increase)); // 2
+console.log(Counter(decrease)); // 1
+console.log(Counter(decrease)); // 0
