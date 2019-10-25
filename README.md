@@ -151,6 +151,8 @@ Today I Leaned...
 > [26M : 정규 표현식](https://github.com/HYEOK999/TIL/blob/master/homework/191021-subject26(M).md)
 >
 > [23 : 클로저](https://github.com/HYEOK999/TIL/blob/master/homework/191023-subject23.md)
+>
+> [24 : 클래스](https://github.com/HYEOK999/TIL/blob/master/homework/191024-subject24.md)
 
 <br/>
 
