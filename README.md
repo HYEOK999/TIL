@@ -213,4 +213,8 @@ Today I Leaned...
 >[20191022-Poiema-HOF 5~8](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/포이마HOF_02.md)
 >
 >[20191023-124 나라](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_21.md)
+>
+>[20191024-문자열 내림차순으로 배치하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_22.md)
+>
+>[20191025-문자열 내 마음대로 정렬하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_23.md)
 
