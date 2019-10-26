@@ -163,6 +163,10 @@ Today I Leaned...
 ### JavaScript 테스트 오답 및 재정리
 
 > [1. 테스트 오답](https://github.com/HYEOK999/TIL/blob/master/javaScript/DailyTest01.md)
+>
+> [2. 2주차 시험 정리](https://github.com/HYEOK999/TIL/blob/master/javaScript/2주차시험리스트.md)
+>
+> 
 
 <br/>
 
