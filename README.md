@@ -217,4 +217,6 @@ Today I Leaned...
 >[20191024-문자열 내림차순으로 배치하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_22.md)
 >
 >[20191025-문자열 내 마음대로 정렬하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_23.md)
+>
+>[20191026-기능 개발, 재도전](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_24.md)
 
