@@ -37,24 +37,24 @@
 
 ~~~javascript
 function solution(progresses, speeds) {
-  var answer = [];
-  let booleanValue;
-  let count;
+  let answer = [];
+  let count = 0;
 
-  while (progresses.length) {
-    booleanValue = false;
+  while (progresses[0]) {
     count = 0;
     for (let i = 0; i < progresses.length; i++) {
-      progresses[i] += speeds[i];
+      progresses[i] = progresses[i] + speeds[i];
     }
-
-    while (progresses.length != 0 && progresses[0] >= 100) {
-      booleanValue = true;
+    while (progresses[0] >= 100) {
       count++;
+      console.log(progresses);
+
       progresses.shift();
       speeds.shift();
+      console.log(progresses);
     }
-    if (booleanValue == true) {
+
+    if (count > 0) {
       answer.push(count);
     }
   }
@@ -63,7 +63,7 @@ function solution(progresses, speeds) {
 }
 ~~~
 
-### 도저히 알고리즘이 떠 오르질 않아서 타 블로그의 내용을 보고 이해했다. 다음에 다시 도전 할 것.
+### 재도전, 성공 - 마지막에 0값이 많이 들어가서 0초과할 경우만 `push`하게끔 설정하였다.
 
 해당 문제는 배열을 맨 앞부터 잘라내는 방식 큐 ( FIFO )으로 해결한다.
 
