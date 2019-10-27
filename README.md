@@ -156,7 +156,7 @@ Today I Leaned...
 >
 > [24 : 클래스](https://github.com/HYEOK999/TIL/blob/master/homework/191024-subject24.md)
 >
-> [27 : Spread 문법 / 28 : 디스트럭처링 할당 / 29 : 표준 빌트인 객체와 래퍼객체](https://github.com/HYEOK999/TIL/blob/master/homework/191016-subject272829.md)
+> [27 : Spread 문법 / 28 : 디스트럭처링 할당 / 29 : 표준 빌트인 객체와 래퍼객체](https://github.com/HYEOK999/TIL/blob/master/homework/191027-subject272829.md)
 
 <br/>
 
