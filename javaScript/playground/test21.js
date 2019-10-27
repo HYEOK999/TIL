@@ -28,10 +28,16 @@ function solution(progresses, speeds) {
     }
     while (progresses[0] >= 100) {
       count++;
+      console.log(progresses);
+
       progresses.shift();
+      speeds.shift();
+      console.log(progresses);
     }
 
-    answer.push(count);
+    if (count > 0) {
+      answer.push(count);
+    }
   }
 
   return answer;

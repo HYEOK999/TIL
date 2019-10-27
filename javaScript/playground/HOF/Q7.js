@@ -5,25 +5,27 @@ let todos = [
   { id: 1, content: 'Javascript', completed: false }
 ];
 
+function toggleCompletedAll() {
+  todos.map((todo) =>Object.assign(todo, {completed : true}));
+}
+
+toggleCompletedAll();
+
+console.log(todos);
+
 // function toggleCompletedAll() {
-//   todos.map((todo) => {
-//     if (!todo.completed) Object.assign(todo, { completed: true });
-//     return todo;
-//   });
+//   todos = todos.map((todo) => (!todo.completed ? { ...todo, completed: true } : todo));
 // }
 
-
-function toggleCompletedAll() {
-  todos = todos.map((todo) => (!todo.completed ? { ...todo, completed: true } : todo));
-}
+// function toggleCompletedAll() {
+//   todos = todos.map((todo) => ({ ...todo, completed: true }));
+// }
 
 // function toggleCompletedAll() {
 //   Object.assign(todos, todos.map((todo) => ({ ...todo, completed: true })));
 // }
 
-toggleCompletedAll();
 
-console.log(todos);
 /*
 [    return { ...todo, completed: true }
   { id: 3, content: 'HTML', completed: true },
