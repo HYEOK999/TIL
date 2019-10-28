@@ -225,4 +225,6 @@ Today I Leaned...
 >[20191025-문자열 내 마음대로 정렬하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_23.md)
 >
 >[20191026-기능 개발, 재도전](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_24.md)
+>
+>[20191028-나누어 떨어지는 숫자 배열](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_25.md)
 
