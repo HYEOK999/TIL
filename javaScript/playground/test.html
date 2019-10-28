@@ -2,77 +2,20 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
 </head>
 <body>
-
+  <ul>
+    <li id="one" class="a"> aa </li>
+    <li class="a"> bb </li>
+    <li class='b'>ddd</li>
+  </ul>
 </body>
 <script>
+  const a = document.querySelector('#one');
+  console.log(a.hasChildNodes('li'));
+  console.log(a.children);
 
-// 3. 프로퍼티 정렬
-const todos = [
-  { id: 3, content: 'HTML', completed: false },
-  { id: 2, content: 'CSS', completed: true },
-  { id: 1, content: 'Javascript', completed: false }
-];
-
-const _todos = todos.slice();
-
-function sortBy(key) {
-  return _todos.sort(
-    (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
-  );
-}
-
-// function sortBy(key) {
-//   return Array.prototype.apply(todos).sort(
-//     (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
-//   );
-// }
-
-// function sortBy(key) {
-//   return todos.concat().sort(
-//     (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
-//   );
-// }
-
-// function sortBy(key) {
-//   return [...todos].sort(
-//     (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
-//   );
-// }
-
-// function sortBy(key) {
-//   var arr = Array.apply(null, todos);
-//   return arr.sort((a, b) => a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0));
-// }
-
-console.log(sortBy('id'));
-/*
-[
-  { id: 1, content: 'Javascript', completed: false },
-  { id: 2, content: 'CSS', completed: true },
-  { id: 3, content: 'HTML', completed: false }
-]
-*/
-console.log(sortBy('content'));
-/*
-[
-  { id: 2, content: 'CSS', completed: true },
-  { id: 3, content: 'HTML', completed: false },
-  { id: 1, content: 'Javascript', completed: false }
-]
-*/
-console.log(sortBy('completed'));
-/*
-[
-  { id: 3, content: 'HTML', completed: false },
-  { id: 1, content: 'Javascript', completed: false },
-  { id: 2, content: 'CSS', completed: true }
-]
-*/
-
+  a.nextElementSibling.className = "blues2"
 </script>
 </html>
