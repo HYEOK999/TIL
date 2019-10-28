@@ -1,14 +1,14 @@
-const Person = (function () {
-  let _name = '';
-  function Person(name) {
-    _name = name;
+class Person{
+  #_name = '';
+
+  constructor(name){
+    this.#_name = name;
   }
 
-  Person.prototype.sayHi = function () {
-    return console.log(`Hi ${_name}`);
-  };
+  sayHi(){
+    return console.log('Hi' + this.#_name);
+  }
+}
 
-  return Person;
-}());
-const person = new Person('KIM');
+const person = new Person();
 person.sayHi();

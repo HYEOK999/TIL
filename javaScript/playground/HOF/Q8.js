@@ -5,18 +5,18 @@ const todos = [
   { id: 1, content: 'Javascript', completed: false }
 ];
 
-function countCompletedTodos() {
-  return todos.reduce((pre, todo) => {
-    if (todo.completed === true) {
-      return pre + 1;
-    }
-    return pre;
-  }, 0);
-}
-
-
 // function countCompletedTodos() {
-//   return todos.filter((todo) => todo.completed === true).length;
+//   return todos.reduce((pre, todo) => {
+//     if (todo.completed === true) {
+//       return pre + 1;
+//     }
+//     return pre;
+//   }, 0);
 // }
+
+
+function countCompletedTodos() {
+  return todos.filter((todo) => todo.completed === true).length;
+}
 
 console.log(countCompletedTodos()); // 1

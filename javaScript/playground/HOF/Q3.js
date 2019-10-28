@@ -5,11 +5,13 @@ const todos = [
   { id: 1, content: 'Javascript', completed: false }
 ];
 
-// function sortBy(key) {
-//   return todos.slice(0, todos.length).sort(
-//     (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
-//   );
-// }
+const _todos = todos.slice();
+
+function sortBy(key) {
+  return _todos.sort(
+    (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
+  );
+}
 
 // function sortBy(key) {
 //   return Array.prototype.apply(todos).sort(
@@ -23,11 +25,11 @@ const todos = [
 //   );
 // }
 
-function sortBy(key) {
-  return [...todos].sort(
-    (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
-  );
-}
+// function sortBy(key) {
+//   return [...todos].sort(
+//     (a, b) => (a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
+//   );
+// }
 
 // function sortBy(key) {
 //   var arr = Array.apply(null, todos);
