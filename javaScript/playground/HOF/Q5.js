@@ -9,7 +9,7 @@ function removeTodo(id) {
   todos = todos.filter((todo) => (todo.id % 2 === 1));
 }
 
-removeTodo(1);
+removeTodo(3);
 
 console.log(todos);
 /*

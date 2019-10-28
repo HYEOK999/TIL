@@ -1,14 +1,13 @@
-class Person{
-  #_name = '';
-
-  constructor(name){
-    this.#_name = name;
-  }
-
-  sayHi(){
-    return console.log('Hi' + this.#_name);
+class Base {
+  constructor() {
+  console.log(new.target);
+	console.log(this instanceof Derived);
+	console.log(this instanceof Base);
+	console.log(this instanceof Object);
   }
 }
 
-const person = new Person();
-person.sayHi();
+class Derived extends Base {
+  constructor() { super(); }
+}
+
