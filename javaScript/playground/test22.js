@@ -1,4 +1,7 @@
-// 객체의 병합
-// 프로퍼티가 중복되는 경우, 뒤에 위치한 프로퍼티가 우선권을 갖는다.
-const merged = {...{ x: 1, y: 2 },... { y: 10, z: 3 }};
-console.log(merged); // { x: 1, y: 10, z: 3 }
+let n = 10;
+let x = Array(10);
+x.fill(1);
+console.log(x);
+
+
+x.filter((item,index) => )

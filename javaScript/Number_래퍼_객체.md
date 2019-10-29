@@ -8,21 +8,21 @@
   - Number Constructor
   - Number() 생성자 함수를 통해서 만들어진 Number 객체는 객체다.
   - Number Property
-    - Number.EPSILON
-    - Number.MAX_VALUE
-    - Number.MIN_VALUEa
-    - Number.POSITIVE_INFINITY
-    - Number.NEGATIVE_INFINITY
-    - Number.NaN
+    - [Number.EPSILON](#a1)
+    - [Number.MAX_VALUE || Number.MIN_VALUE](#a2)
+    - [Number.POSITIVE_INFINITY](#a3)
+    - [Number.NEGATIVE_INFINITY](#a4)
+    - [Number.NaN](#a5)
   - Number.Method
-    - Number.isFinite(testValue: number): boolean
-    - Number.isInteger(testValue: number): boolean 
-    - Number.isNaN(testValue: number): boolean 
-    - Number.isSafeInteger(testValue: number): boolean
-    - Number.prototype.toExponential(fractionDigits?: number): string
-    - Number.prototype.toFixed(fractionDigits?: number): string
-    - Number.prototype.toString(radix?: number): string
-    - Number.prototype.valueOf(): number ES1
+    - [Number.isFinite(testValue: number): boolean](#b1)
+    - [Number.isInteger(testValue: number): boolean](#b2)
+    - [Number.isNaN(testValue: number): boolean](#b3)
+    - [Number.isSafeInteger(testValue: number): boolean](#b4)
+    - [Number.prototype.toExponential(fractionDigits?: number): string](#b5)
+    - [Number.prototype.toFixed(fractionDigits?: number): string](#b7)
+    - [Number.prototype.toString(radix?: number): string](#b8)
+      - 정수 리터럴과 함께 메소드를 사용할 경우. 주의점
+    - [Number.prototype.valueOf(): number ES1](#b9)
 
 <br/>
 
@@ -43,7 +43,7 @@ console.log(num.toFixed()); // 2
 
 <br/>
 
-### Numver Constructor
+### Number Constructor
 
 Number 객체는 Number() 생성자 함수를 통해 생성할 수 있다. (new는 생략할 수 있다.)
 
@@ -84,7 +84,7 @@ console.log(typeof y); // object
 
 ### Number Property
 
-#### Number.EPSILON 
+#### Number.EPSILON <a id="a1"></a>
 
 > Number.EPSILON은 JavaScript에서 표현할 수 있는 가장 작은 수이다. (ES6)
 >
@@ -92,7 +92,7 @@ console.log(typeof y); // object
 
 <br/>
 
-#### Number.MAX_VALUE || Number.MIN_VALUE
+#### Number.MAX_VALUE || Number.MIN_VALUE <a id="a2"></a>
 
 > Number.MAX_VALUE는 JavaScript에서 Infinity를 제외한 표현할 수 있는 가장 큰 수 이다. 
 >
@@ -120,7 +120,7 @@ console.log(Number.MIN_VALUE > 0); // true
 
 <br/>
 
-#### Number.POSITIVE_INFINITY 
+#### Number.POSITIVE_INFINITY  <a id="a3"></a>
 
 양의 무한대 `Infinity`를 반환한다.
 
@@ -133,7 +133,7 @@ num.POSITIVE_INFINITY;   // undefined
 
 <br/>
 
-#### Number.NEGATIVE_INFINITY 
+#### Number.NEGATIVE_INFINITY  <a id="a4"></a>
 
 음의 무한대 `-Infinity`를 반환한다.
 
@@ -146,7 +146,7 @@ num.NEGATIVE_INFINITY;   // undefined
 
 <br/>
 
-#### Number.NaN 
+#### Number.NaN  <a id="a5"></a>
 
 숫자가 아님(Not-a-Number)을 나타내는 숫자값이다. Number.NaN 프로퍼티는 window.NaN 프로퍼티와 같다.
 
@@ -160,7 +160,7 @@ console.log(typeof NaN);    // number
 
 ###  Number Method
 
-#### Number.isFinite(testValue: number): boolean ES6
+#### Number.isFinite(testValue: number): boolean ES6  <a id="b1"></a>
 
 > 매개변수에 전달된 값이 정상적인 유한수인지를 검사하여 그 결과를 Boolean으로 반환한다.
 
@@ -178,7 +178,7 @@ Number.isFinite()는 전역 함수 isFinite()와 차이가 있다.
 
 <br/>
 
-#### Number.isInteger(testValue: number): boolean ES6
+#### Number.isInteger(testValue: number): boolean ES6 <a id="b2"></a>
 
 >  매개변수에 전달된 값이 정수(Integer)인지 검사하여 그 결과를 Boolean으로 반환한다. 
 >
@@ -195,7 +195,7 @@ Number.isInteger(testValue)
 
 <br/>
 
-#### Number.isNaN(testValue: number): boolean ES6
+#### Number.isNaN(testValue: number): boolean ES6 <a id="b3"></a>
 
 > 매개변수에 전달된 값이 NaN인지를 검사하여 그 결과를 Boolean으로 반환한다.
 
@@ -214,7 +214,7 @@ Number.isNaN()는 전역 함수 isNaN()와 차이가 있다.
 
 <br/>
 
-#### Number.isSafeInteger(testValue: number): boolean ES6
+#### Number.isSafeInteger(testValue: number): boolean ES6  <a id="b4"></a>
 
 >  매개변수에 전달된 값이 안전한(safe) 정수값인지 검사하여 그 결과를 Boolean으로 반환한다. 
 >
@@ -231,7 +231,7 @@ Number.isSafeInteger(testValue)
 
 <br/>
 
-#### Number.prototype.toExponential(fractionDigits?: number): string ES3
+#### Number.prototype.toExponential(fractionDigits?: number): string ES3 <a id="b5"></a>
 
 >  대상을 지수 표기법으로 변환하여 문자열로 반환한다. 지수 표기법이란 매우 큰 숫자를 표기할 때 주로 사용하며 e(Exponent) 앞에 있는 숫자에 10의 n승이 곱하는 형식으로 수를 나타내는 방식이다.
 
@@ -247,23 +247,7 @@ numObj.toExponential([fractionDigits])
 
 <br/>
 
-#### 정수 리터럴과 함께 메소드를 사용할 경우. 주의점
-
-```javascript
-77.toString(); // SyntaxError: Invalid or unexpected token
-
-```
-
-의 경우 `.`이 소숫점인지 아닌지 모르기 때문에 에러를 일으킨다. 따라서 다음과 같은 방법을 권장한다.
-
-```javascript
-(77).toString(); // '77'
-
-```
-
-<br/>
-
-#### Number.prototype.toFixed(fractionDigits?: number): string ES3
+#### Number.prototype.toFixed(fractionDigits?: number): string ES3 <a id="b7"></a>
 
 매개변수로 지정된 소숫점자리를 반올림하여 문자열로 반환한다.
 
@@ -294,7 +278,7 @@ console.log(numObj.toFixed(6));  // '12345.678900'
 
 <br/>
 
-#### Number.prototype.toString(radix?: number): string ES1
+#### Number.prototype.toString(radix?: number): string ES1 <a id="b8"></a>
 
 숫자를 문자열로 변환하여 반환한다.
 
@@ -325,9 +309,23 @@ console.log((-0xff).toString(2)); // '-11111111'
 
 ~~~
 
+##### 정수 리터럴과 함께 메소드를 사용할 경우. 주의점 
+
+```javascript
+77.toString(); // SyntaxError: Invalid or unexpected token
+
+```
+
+의 경우 `.`이 소숫점인지 아닌지 모르기 때문에 에러를 일으킨다. 따라서 다음과 같은 방법을 권장한다.
+
+```javascript
+(77).toString(); // '77'
+
+```
+
 <br/>
 
-#### Number.prototype.valueOf(): number ES1
+#### Number.prototype.valueOf(): number ES1 <a id="b9"></a>
 
 Number 객체의 원시 타입 값(primitive value)을 반환한다.
 
