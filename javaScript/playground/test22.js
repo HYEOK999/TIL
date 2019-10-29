@@ -1,11 +1,4 @@
-class Base {
-  constructor() {
-  console.log(new.target);
-  console.log(this instanceof Derived);
-  console.log(this instanceof Base);
-  console.log(this instanceof Object);
-  }
-}
-class Derived extends Base {
-  constructor() { super(); }
-}
+// 객체의 병합
+// 프로퍼티가 중복되는 경우, 뒤에 위치한 프로퍼티가 우선권을 갖는다.
+const merged = {...{ x: 1, y: 2 },... { y: 10, z: 3 }};
+console.log(merged); // { x: 1, y: 10, z: 3 }

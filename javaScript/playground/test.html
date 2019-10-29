@@ -1,26 +1,49 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
   <style>
     .b { color: red;}
+    .abc { width: 600px; height: 600px; border: 1px solid #000000; display: block;}
+    .aaa { width: 200px; border: 1px solid #000000; display: block;}
   </style>
 </head>
 <body>
-  <ul>
-    <li class="b"> bb1 </li>
-    <li class="b"> bb2 </li>
-    <li class="b"> bb3 </li>
-  </ul>
-
+  <div class="abc"> Learn to code <em class="aaa"></em> </div>
 </body>
 <script>
-  const a = document.getElementsByClassName('b');
-  const b = Array.prototype.slice.apply(a);
-  [].concat(a);
-  for (let i = 0; i < b.length; i++) {
-    b[i].className = 'blue';
-  }
+  const arr = ['JavaScript', 'HTML', 'SASS'];
+  const a = document.querySelector('.aaa');
+  let i = 0;
+  setInterval(function refeat() {
+    if (i > 2) i = 0;
+
+    // 한글자 씩 추가
+    for (let j = 0; j < arr[i].length; j++) {
+      setTimeout(function () {
+        a.textContent += arr[i][j];
+      }, 1000);
+    }
+
+    a.textContent = '';
+    i++;
+    return refeat();
+  }, 1000);
   </script>
+</html> -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .a{width:200px; display: block; border:1px solid black};
+  </style>
+</head>
+<body>
+  <div class="a">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  </div>
+</body>
 </html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <ul id="my-id" style="color: red">
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>Java Script</li>
+  </ul>
+
+  <ul id="myId" style="color: green">
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+  </ul>
+  <input type="text" value="100">
+  <script>
+    // 요소 1개 선택
+    const $ul = document.querySelector('#my-id');
+    console.log($ul);
+    console.log($ul.style.color = 'blue');
+    console.log([...$ul.classList].forEach((item) => console.log(item)));
+    console.log($ul.classList.add('class3'));
+    console.log($ul.classList.contains('class3'));
+    console.log($ul.classList.remove('class3'));
+    $ul.firstElementChild.style.color = 'red';
+
+    // 다중 요소 선택
+    const $lis = document.querySelectorAll('li');
+    console.log($lis);
+    [...$lis].forEach((item, index) => item.classList.add(`class${index + 1}`));
+    console.log($lis);
+
+    // ul.#myId 안에 있는 요소들을 문자열로 반환한다.
+    console.log(document.querySelector('#myId').innerHTML);
+    document.querySelector('#myId').innerHTML = '<h1>Hi</h1>';
+    document.querySelector('#myId').innerHTML += '<h2>Hi</h2>';
+
+    const $input = document.querySelector('input');
+    console.dir($input);
+  </script>
+</body>
+</html>

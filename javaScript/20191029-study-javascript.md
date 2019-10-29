@@ -2,32 +2,55 @@
 
 ------
 
-## JavaScript Study 16
+## JavaScript Study 17
 
 - 용어
-- 클래스 상속 관계 instanceof
-- 스프레드 문법
-  - 함수 호출문의 인수 목록
-  - 배열 리터럴 내부
-    - 배열 병합
-    - 배열 복사
-    - 유사 배열 객체 배열 변환
-  - 객체 리터럴 내부
-    - 객체 병합
-- 디스트럭처링
-  - 배열 디스트럭처링 
-    - 배열 디스트럭처링의 조건
-    - Rest 요소
-    - 예제 - Date 객체에서 년 , 월 , 일
-  - 객체 디스트럭처링
-    - 객체 디스트럭처링의 조건
-    - 값만 추출
-    - 배열 디스터럭처링과 혼용이 가능하다
-    - Rest 프로퍼티
-    - 예제 - 고차함수의 매개변수로 이용
-- 표준 빌트인 객체와 래퍼 
-  - 객체자바스크립트 3가지 객체 분류
-  - 원시값과 래퍼 객체 
+
+- String 생성자 함수
+
+  - 문자열은 유사배열 객체 + 이터러블
+
+  - 문자열 명시적 타입 변환 (new 없이 사용했을 때)
+
+  - length 프로퍼티
+
+  - String 메서드
+
+    - indexOf
+    - includes
+
+    - charat
+    - replace
+    - split
+    - substring
+    - trim
+    - repeat
+    - include
+
+- Date 객체
+
+  - new Date()
+  - new Date(milliseconds)
+  - new Date(dateString)
+  - new Date(year, month[, day, hour, minute, second, millisecond])
+  - Date 생성자 함수를 new 연산자없이 호출
+
+- DOM
+
+  - DOM 트리
+
+- DOM 검색
+
+  - 하나의 요소 노드 선택
+  - 여러개의 요소 노드 선택
+
+- DOM 탐색
+
+- DOM Manipulation (조작)
+
+  - 텍스트 노드에의 접근/수정
+  - 어트리뷰트 노드에의 접근/수정
+  - HTML 콘텐츠 조작(Manipulation)
 
 <br/>
 
@@ -37,511 +60,773 @@
 
 ### 용어 - ( 러버덕 )
 
-- 스프레드 문법
-- 함수 호출문 
-- 배열 리터럴 시 스프레드
-- 객체 리터럴 시 스프레드
-- 디스트럭처링
-- 원시값과 래퍼 객체
+- String 생성자
 
-<br/>
+- String 메서드
+
+- lenght 프로퍼티
+
+- DOM 객체
+
+- DOM 트리
+
+- DOM 검색 ,탐색 ,조작
+
+  <br/>
 
 ---------
 
-### 클래스 상속 관계 instanceof
+## String 생성자 함수
 
-~~~javascript
-class Base {
-  constructor() {
-  console.log(new.target);  // class Dreived~ , class Base~
-	console.log(this instanceof Derived); // true , false
-	console.log(this instanceof Base); // true , true
-	console.log(this instanceof Object); // true , true
-  }
-}
-
-class Derived extends Base {
-  constructor() { super(); }
-}
-
-const derived = new Derived();  
-const base = new Base();
-~~~
-
-<br/>
-
-### 스프레드 문법
-
->  하나로 뭉쳐 있는 여러 값들의 집합을 펼쳐서(전개, 분산하여, spread) 개별적인 값들의 목록으로 만든다.
-
-대상 : iterable 가능한 존재들 ( for…of 문으로 순회할 수 있는 이터러블 )
-
-- Array, String, Map, Set, DOM data structure(NodeList, HTMLCollection), Arguments
-- 스프레드는 연산자가 아니다. 결과물만 단독으로 사용 불가능. (예 : 스프레드를 사용해서 변수에 사용해보면 담을 수 없다.)
-- 함수 호출문의 인수 목록 ( 함수의 매개변수는 Rest 파라미터 )
-- 배열 리터럴의 요소 목록
-- 객체 리터럴의 프로퍼티 목록 
-
-~~~javascript
-// ...[1, 2, 3]는 [1, 2, 3]을 개별 요소로 분리한다(→ 1, 2, 3)
-console.log(...[1, 2, 3]) // 1 2 3
-
-// 문자열은 이터러블이다.
-console.log(...'Hello'); // H e l l o
-
-// Map과 Set은 이터러블이다.
-console.log(...new Map([['a', '1'], ['b', '2']])); // [ 'a', '1' ] [ 'b', '2' ]
-console.log(...new Set([1, 2, 3])); // 1 2 3
-
-// 이터러블이 아닌 일반 객체는 스프레드 문법의 대상이 될 수 없다.
-console.log(...{ a: 1, b: 2 });
-// TypeError: Found non-callable @@iterator
-~~~
-
-![spread](https://user-images.githubusercontent.com/31315644/67654022-73cd8880-f98f-11e9-8b09-9cef4b53d34b.jpeg)
-
-<br/>
-
-#### 함수 호출문의 인수 목록
-
-~~~javascript
-const arr = [1, 2, 3];
-
-// 배열 arr의 요소 중에서 최대값을 구하기 위해 Math.max를 사용한다.
-const maxValue = Math.max(arr);
-
-console.log(maxValue); // NaN
-~~~
-
-`Math.max();` 는 가변인자 함수이기 때문에 갯수가 정해진 배열은 들어갈 수 없다. 따라서 엣날에는 `apply` 를 이용했다.
-
-`apply` 는 2번째 인수로 배열을 받는다. 
-
-Math.max()` 를 호출 시 `apply` 에 2번쨰 인수(배열형태)가 배열이 풀어져 `Math.max()` 로 넘어간다.
-
-~~~javascript
-// apply 함수의 2번째 인수(배열)는 apply 함수가 호출하는 함수의 인수 목록이다.
-// 따라서 배열이 펼쳐져서 인수로 전달되는 효과가 있다.
-var maxValue = Math.max.apply(null, arr);
-~~~
-
-<br/>
-
-위 복잡한 구문을 스프레드로 사용 시 간결하고 편리하다.
-
-~~~javascript
-const arr = [1, 2, 3];
-
-// 스프레드 문법을 사용하여 배열 arr을 1, 2, 3으로 펼쳐서 Math.max에 전달한다.
-// Math.max(...[1, 2, 3])는 Math.max(1, 2, 3)과 같다.
-const maxValue = Math.max(...arr);
-
-console.log(maxValue); // 3
-~~~
-
-<br/>
-
-Rest 파라미터와는 정반대 개념이다. Rest파라미터는 풀어진것을 모은다.
-
-~~~javascript
-// Rest 파라미터는 인수들의 목록을 배열로 전달받는다.
-function foo(param, ...rest) {
-  console.log(param); // 1
-  console.log(rest);  // [ 2, 3 ]
-}
-
-// 스프레드 문법은 배열과 같은 이터러블을 펼쳐서 개별적인 값들의 목록을 만든다.
-// [1, 2, 3] -> 1, 2, 3
-foo(...[1, 2, 3]);
-~~~
-
-<br/>
-
-#### 배열 리터럴 내부 
-
-##### 배열 병합
-
-기존 배열 병합 방법들 ( concat, push )
-
-~~~javascript
-// ES5
-var arr = [1, 2].concat([3, 4]);
-console.log(arr); // [1, 2, 3, 4]
-
-// ES5
-var arr1 = [1, 2];
-var arr2 = [3, 4];
-
-Array.prototype.push.apply(arr1, arr2);
-
-console.log(arr1); // [1, 2, 3, 4]
-~~~
-
-spread 사용 시
-
-~~~javascript
-// ES6 concat 대체
-const arr = [...[1, 2], 3, 4];
-console.log(arr); // [1, 2, 3, 4]
-
-// ES6 push 대체
-const arr1 = [1, 2];
-const arr2 = [3, 4];
-
-arr1.push(...arr2); // arr1.push(3, 4)와 같다.
-console.log(arr1); // [1, 2, 3, 4]
-~~~
-
-<br/>
-
-##### 배열 복사
-
-기존의 배열에 다른 배열의 요소들을 삽입 ( splice 메소드 )  - splie는 배열을 직접고친다. (원본배열 변경)
+- 표준 빌트인 객체인 String 객체는 생성자 함수 객체이다. 
+- 따라서 new 연산자와 함께 호출하여 String 인스턴스를 생성할 수 있다.
+- String 생성자 함수에 인수를 전달하지 않고 new 연산자와 함께 호출하면 [[StringData]] 내부 슬롯에 빈 문자열을 할당한 String 래퍼 객체를 생성한다.
 
 ```javascript
-// ES5
-var arr1 = [1, 4];
-var arr2 = [2, 3];
-
-// apply 메소드의 2번째 인수는 배열이다. 이것은 인수 목록으로 splice 메소드에 전달된다.
-// [1, 0].concat(arr2) → [1, 0, 2, 3]
-// arr1.splice(1, 0, 2, 3) → arr1[1]부터 0개의 요소를 제거하고
-// 그자리(arr1[1])에 새로운 요소(2, 3)를 삽입한다.
-Array.prototype.splice.apply(arr1, [1, 0].concat(arr2));
-
-console.log(arr1); // [1, 2, 3, 4]
+const strObj = new String('Lee');
+console.log(strObj);
+// String {0: "L", 1: "e", 2: "e", length: 3, [[PrimitiveValue]]: "Lee"}
+strObj.valueOf(); //'Lee'
 ```
 
-스프레드 문법 - **얕은 복사**
+위 예제를 크롬 브라우저의 개발자 도구에서 실행해보면 [[PrimitiveValue]]라는 프로퍼티가 보인다. 
+이는 [[StringData]] 내부 슬롯을 가리킨다. ES5에서는 [[StringData]]을 [[PrimitiveValue]]이라 불렸다.
+
+1. String 생성자 함수에 문자열을 인수로 전달 ( 문자열이 아니라면 문자열로 강제 변환한다. )
+2. [[StringData]] 내부 슬롯에 인수로 전달받은 문자열을 할당
+3. String 래퍼 객체를 생성한다.
+
+<br/>
+
+### 문자열은 유사배열 객체 + 이터러블
+
+~~~javascript
+console.log(strObj[0]); // L
+~~~
+
+<br/>
+
+### 문자열 명시적 타입 변환 (new 없이 사용했을 때)
+
+명시적 타입 변환 : new 연산자를 사용하지 않고 String 생성자 함수를 호출하면 String 인스턴스가 아닌 문자열을 반환한다. 
 
 ```javascript
-// ES6
-const arr1 = [1, 4];
-const arr2 = [2, 3];
+// 숫자 타입 => 문자열 타입
+String(1);        // -> "1"
+String(NaN);      // -> "NaN"
+String(Infinity); // -> "Infinity"
 
-arr1.splice(1, 0, ...arr2);
-
-console.log(arr1); // [1, 2, 3, 4]
+// 불리언 타입 => 문자열 타입
+String(true);  // -> "true"
+String(false); // -> "false"
 ```
 
 <br/>
 
-##### 유사 배열 객체 배열 변환
+### length 프로퍼티
 
-기존 방법
+length 프로퍼티는 문자열의 문자 개수를 반환한다.
+
+```javascript
+'Hello'.length;    // -> 5
+'안녕하세요!'.length; // -> 6
+```
+
+문자열 레퍼 객체는 배열과 마찬가지로 length 프로퍼티를 갖는다. 
+그리고 인덱스를 나타내는 숫자를 프로퍼티 키로, 각 문자를 프로퍼티 값으로 가지므로 문자열 레퍼 객체는 유사 배열 객체이다.
+
+<br/>
+
+### String 메서드
+
+#### indexOf
+
+- 첫번쨰 인수로 전달한 문자열을 검색해 첫번쨰 인덱스를 반환. 검색 실패시 -1을 반환
+- 두번째 인수는 생략가능. 시작할 인덱스를 전달 가능하다.
 
 ~~~javascript
-// ES5
-function sum() {
-  // 유사 배열 객체인 arguments를 배열로 변환
-  var args = Array.prototype.slice.apply(arguments);
+const str = 'Hello World';
 
-  return args.reduce(function (pre, cur) {
-    return pre + cur;
-  }, 0);
+// 문자열 str에서 'l'을 검색하여 첫번째 인덱스를 반환한다.
+let index = str.indexOf('l');
+console.log(index); // 2
+
+// 문자열 str에서 'or'을 검색하여 첫번째 인덱스를 반환한다.
+index = str.indexOf('or');
+console.log(index); // 7
+
+// 문자열 str에서 'x'를 검색하여 첫번째 인덱스를 반환한다.
+// 검색에 실패하면 -1을 반환한다.
+index = str.indexOf('x');
+console.log(index); // -1
+
+// 문자열 str의 인덱스 3부터 'l'을 검색하여 첫번째 인덱스를 반환한다.
+index = str.indexOf('l', 3);
+console.log(index); // 3
+~~~
+
+<br/>
+
+#### includes
+
+- 첫번쨰 인수로 전달한 문자열이 포함되어 있는지 확인하여 그 결과를 true 또는 false로 반환한다.
+- 두번째 인수는 생략가능. 시작할 인덱스를 전달 가능하다.
+
+```javascript
+const str = 'Hello world';
+
+str.includes('Hello'); // -> true
+str.includes('');      // -> true
+str.includes('x');     // -> false
+str.includes();        // -> false
+
+// String.prototype.indexOf 메소드로 대체할 수 있다.
+console.log(str.indexOf('hello')); // 0
+```
+
+<br/>
+
+#### charat
+
+- charAt 메소드는 인수로 전달한 인덱스에 위치한 문자를 반환한다.
+- 인덱스는 문자열의 범위, 즉 0 ~ (문자열 길이 - 1) 사이의 정수이어야 한다. 
+- 인덱스가 문자열의 범위를 벗어난 정수인 경우, 빈문자열을 반환한다.
+
+```javascript
+const str = 'Hello';
+
+for (let i = 0; i < str.length; i++) {
+  console.log(str.charAt(i)); // H e l l o
 }
+```
 
-console.log(sum(1, 2, 3)); // 6
-~~~
+<br/>
 
-스프레드 문법
+#### replace
+
+- 원본 문자열을 변경한다.
+- 첫번째 인수 - 문자열 또는 정규 표현식 : 검색할 문자열 , 여러개인 경우 1개만 반환
+- 두번째 인수 - 문자열 또는 치환 함수 : 바꿀 문자열 , 특수패턴 : $&는 검색된 문자열을 의미
 
 ~~~javascript
-// ES5
-function sum() {
-  // 유사 배열 객체인 arguments를 배열로 변환
-	var args = [...arguments];
+const str = 'Hello world';
 
-  return args.reduce(function (pre, cur) {
-    return pre + cur;
-  }, 0);
-}
-
-console.log(sum(1, 2, 3)); // 6
+// 첫번째로 검색된 문자열만 대체하여 새로운 문자열을 반환한다.
+console.log(str.replace('world', 'Lee')); // Hello Lee
 ~~~
 
-<br/>
-
-#### 객체 리터럴 내부
-
- 객체에서도 spread를 사용할 수 있는 경우가 딱 1가지 존재한다. 바로 객체 리터럴에서 사용하는 것이다.
-
-주로, `Object.assign()`을 대체하기 위해 사용한다.
-
-<br/>
-
-##### 객체 병합
-
-기존에서 객체 병합	
-
-Object.assign의 병합은 뒷 인자에서 앞 인자 순으로 이동한다.
-
-제일 앞에 `{}`을 해준 이유는 새로운 객체를 할당하기 위함이다.
+문자열.match(정규표현식)은 해당 정규표현식 조건에 해당되는 문자열을 찾아서 반환한다.
 
 ~~~javascript
-// 객체의 병합
-// 프로퍼티가 중복되는 경우, 뒤에 위치한 프로퍼티가 우선권을 갖는다.
-const merged = Object.assign({}, { x: 1, y: 2 }, { y: 10, z: 3 });
-console.log(merged); // { x: 1, y: 10, z: 3 }
-
-// 특정 프로퍼티 변경
-const changed = Object.assign({}, { x: 1, y: 2 }, { y: 100 });
-console.log(changed); // { x: 1, y: 100 }
-
-// 프로퍼티 추가
-const added = Object.assign({}, { x: 1, y: 2 }, { z: 0 });
-console.log(added); // { x: 1, y: 2, z: 0 }
-~~~
-
-스프레드 문법
-
-~~~javascript
-// 객체의 병합 - 스프레드
-// 프로퍼티가 중복되는 경우, 뒤에 위치한 프로퍼티가 우선권을 갖는다.
-const merged = { ...{ x: 1, y: 2 }, ...{ y: 10, z: 3 } };
-console.log(merged); // { x: 1, y: 10, z: 3 }
-
-// 특정 프로퍼티 변경
-const changed = { ...{ x: 1, y: 2 }, y: 100 };
-// changed = { ...{ x: 1, y: 2 }, ...{ y: 100 } }
-console.log(changed); // { x: 1, y: 100 }
-
-// 프로퍼티 추가
-const added = { ...{ x: 1, y: 2 }, z: 0 };
-// added = { ...{ x: 1, y: 2 }, ...{ z: 0 } }
-console.log(added); // { x: 1, y: 2, z: 0 }
-~~~
-
-<br/>
-
-### 디스트럭처링
-
-#### 배열 디스트럭처링
-
-예전에는 각 배열의 값을 변수에 담기 위해서는 다음과 같이 하나하나 넣어줘야만 했다.
-
-~~~javascript
-// ES5
-var arr = [1, 2, 3];
-
-var one   = arr[0];
-var two   = arr[1];
-var three = arr[2];
-
-console.log(one, two, three); // 1 2 3
-~~~
-
-<br/>
-
-디스트럭처링을 사용한다면 코드 수를 많이 줄일 수 있다.
-
-~~~javascript
-// ES6 배열 디스트럭처링 할당
-const arr = [1, 2, 3];
-
-// 변수 one, two, three를 선언하고 배열 arr을 디스트럭처링하여 할당한다.
-// 이때 할당 기준은 배열의 인덱스이다.
-const [one, two, three] = arr;
-
-console.log(one, two, three); // 1 2 3
-~~~
-
-여기서 `[one, two, three]`는 배열이 아니다. 디스트럭처링 할당이다.
-
-~~~javascript
-let x, y;
-[x, y] = [1, 2];
-
-// 위의 문과 아래의 문은 동치이다.
-const [x, y] = [1, 2];
-~~~
-
-<br/>
-
-##### 배열 디스트럭처링의 조건
-
-1. 선언과 초기화가 무조건 동시에 진행되어야한다. (만약, 선언만 한다면 에러 유발)
-2. 반드시 배열이 와야한다.
-3. 순서대로 할당한다.
-4. 받고자하는 배열의 수가 더 작을 경우 `undefined`가 할당된다.
-5. 받고자하는 배열의 수가 더 많을 경우 무시한다.
-
-<br/>
-
-##### Rest 요소
-
-~~~javascript
-// Rest 요소
-const [x, ...y] = [1, 2, 3];
-console.log(x, y); // 1 [ 2, 3 ]
-~~~
-
-<br/>
-
-##### 예제 - Date 객체에서 년 , 월 , 일
-
-~~~javascript
-const today = new Date(); // Mon Sep 16 2019 02:03:42 GMT+0900 (한국 표준시)
-const formattedDate = today.toISOString().substring(0, 10); // "2019-09-15"
-
-// 문자열을 분리하여 배열로 변환한 후, 배열 디스트럭처링 할당을 통해 필요한 요소를 취득한다.
-const [year, month, day] = formattedDate.split('-');
-console.log([year, month, day]); // ['2019', '09', '15']
-~~~
-
-<br/>
-
-#### 객체 디스트럭처링 할당
-
-객체에서도 디스트럭처링을 할당할 수 있다.
-
-기존에는 다음과 같이 해야했다.
-
-~~~~javascript
-// ES5
-var user = { firstName: 'Ungmo', lastName: 'Lee' };
-
-var firstName = user.firstName;
-var lastName  = user.lastName;
-
-console.log(firstName, lastName); // Ungmo Lee
-~~~~
-
-<br/>
-
-ES6 에서의 디스트럭처링을 할당.
-
-~~~javascript
-// ES6 객체 디스트럭처링 할당
-const user = { firstName: 'Ungmo', lastName: 'Lee' };
-
-// 변수 lastName, firstName을 선언하고 객체 user를 디스트럭처링하여 할당한다.
-// 이때 프로퍼티 키를 기준으로 디스트럭처링 할당이 이루어진다. 순서는 의미가 없다.
-const { lastName, firstName } = user;
-
-console.log(firstName, lastName); // Ungmo Lee
-~~~
-
-~~~javascript
-const { lastName, firstName } = user;
-// 위와 아래는 동치이다.
-const { lastName: lastName, firstName: firstName } = user;
-~~~
-
-<br/>
-
-##### 객체 디스트럭처링의 조건
-
-1. 선언과 초기화가 무조건 동시에 진행되어야한다. (만약, 선언만 한다면 에러 유발)
-2. 반드시 객체가 와야한다. (혹은 객체인 변수)
-3. 프로퍼티 키에 맞춰서 할당한다.
-
-<br/>
-
-##### 값만 추출
-
-~~~javascript
-const todo = { id: 1, content: 'HTML', completed: true };
-
-// todo 객체로부터 id 프로퍼티만을 추출한다.
-const { id } = todo;
-console.log(id); // 1
-~~~
-
-<br/>
-
-##### 배열 디스터럭처링과 혼용이 가능하다
-
-~~~javascript
-const todos = [
-  { id: 1, content: 'HTML', completed: true },
-  { id: 2, content: 'CSS', completed: false },
-  { id: 3, content: 'JS', completed: false }
-];
-
-// todos 배열의 두번째 요소인 객체로부터 id 프로퍼티만을 추출한다.
-const [, { id }] = todos;
-console.log(id); // 2
-~~~
-
-<br/>
-
-##### Rest 프로퍼티
-
-~~~~javascript
-const { x, ...rest } = { x: 1, y: 2, z: 3 };
-console.log(x, rest); // 1 { y: 2, z: 3 }
-~~~~
-
-<br/>
-
-##### 예제 - 고차함수의 매개변수로 이용
-
-~~~~javascript
-const todos = [
-  { id: 3, content: 'HTML', completed: false },
-  { id: 2, content: 'CSS', completed: true },
-  { id: 1, content: 'Javascript', completed: false }
-];
-
-function render() {
-  let html = '';
-
-  todos.forEach(({id, content, completed}) => {
-    html += (`<li id="${id}">
-      <label><input type="checkbox" ${completed ? 'checked' : '' } > ${content}</label>
-    </li>`);
+// camelCase => snake_case
+function camelToSnake(camelCase) {
+  // /.[A-Z]/g => 문자와 대문자로 이루어진 문자열 검색
+  // 두번째 인수로 치환 함수를 전달할 수 있다.
+  return camelCase.replace(/.[A-Z]/g, match => {
+    console.log(match); // 'oW'
+    return match[0] + '_' + match[1].toLowerCase();
   });
-
-  return html;
 }
 
-console.log(render());
+const camelCase = 'helloWorld';
+camelToSnake(camelCase); // -> 'hello_world'
 
-~~~~
+// snake_case => camelCase
+function snakeToCamel(snakeCase) {
+  // /_[a-z]/g => _와 소문자로 이루어진 문자열 검색
+  // 두번째 인수로 치환 함수를 전달할 수 있다.
+  return snakeCase.replace(/_[a-z]]/g, match => {
+    console.log(match); // '_w'
+    return match[1].toUpperCase();
+  }); // helloWorld
+}
 
-<br/>
-
-### 표준 빌트인 객체와 래퍼 객체
-
-#### 자바스크립트 3가지 객체 분류
-
-| 구분                                       | 설명                                                         |
-| :----------------------------------------- | :----------------------------------------------------------- |
-| 표준 빌트인 객체(standard built-in object) | Object, Sting, Number, Array, Function과 같이 ECMAScript 사양에 정의된 객체 / 애플리케이션 전역의 공통 기능을 제공. |
-| 호스트 객체(host object)                   | 브라우저 환경에서 제공하는 window, XmlHttpRequest, HTMLElement 등의 DOM 노드 객체와 같이 호스트 환경에 정의된 객체. 예를 들어 브라우저에서 동작하는 환경과 브라우저 외부에서 동작하는 환경의 자바스크립트(Node.js)는 다른 호스트 객체를 사용할 수 있다. |
-| 사용자 정의 객체(user-defined object)      | 표준 빌트인 객체와 호스트 객체처럼 외부에서 제공되는 객체가 아닌 사용자가 직접 정의한 객체. |
-
-<br/>
-
-#### 표준 빌트인 객체 
-
-> ECMAScript 사양에 정의된 객체를 말하며 애플리케이션 전역의 공통 기능을 제공한다.
-
- Object, String, Number, Boolean, Symbol, Date, Math, RegExp, Array, Map/Set, WeakMap/WeakSet, Function, Generator, Promise, Reflect, Proxy, JSON, Error 등등
-
-- 표준 빌트인 객체는 전역 객체의 프로퍼티이다. 따라서 언제나 참조가 가능하다
-- 자바스크립트의 실행환경에 구애받지 않고 사용할 수 있다.
+const snakeCase = 'hello_world';
+snakeToCamel(snakeCase); // -> 'helloWorld'
+~~~
 
 <br/>
 
-#### 원시값과 래퍼 객체 
+#### split
+
+- 원본 문자열은 변경되지 않는다.
+- 첫번째 인수로 전달한 문자열 또는 정규표현식을 대상 문자열에서 검색하여 문자열을 구분한 후 분리된 각 문자열로 이루어진 배열을 반환한다. 
+
+~~~javascript
+/**
+ * @param {string | RegExp} [separator] - 구분 대상 문자열 또는 정규표현식
+ * @param {number} [limit] - 구분 대상수의 한계를 나타내는 정수
+ * @return {string[]}
+ */
+str.split([separator[, limit]])
+~~~
+
+~~~javascript
+const str = 'How are you doing?';
+
+// 공백으로 구분(단어로 구분)하여 배열로 반환한다
+console.log(str.split(' ')); // [ 'How', 'are', 'you', 'doing?' ]
+
+// 정규 표현식
+console.log(str.split(/\s/)); // [ 'How', 'are', 'you', 'doing?' ]
+
+// 인수가 없는 경우, 대상 문자열 전체를 단일 요소로 하는 배열을 반환한다.
+console.log(str.split()); // [ 'How are you doing?' ]
+
+// 각 문자를 모두 분리한다
+console.log(str.split('')); // [ 'H','o','w',' ','a','r','e',' ','y','o','u',' ','d','o','i','n','g','?' ]
+
+// 공백으로 구분하여 배열로 반환한다. 단 요소수는 3개까지만 허용한다
+console.log(str.split(' ', 3)); // [ 'How', 'are', 'you' ]
+
+// 'o'으로 구분하여 배열로 반환한다.
+console.log(str.split('o')); // [ 'H', 'w are y', 'u d', 'ing?' ]
+~~~
+
+<br/>
+
+#### substring
+
+- 첫번째 인수의 값 부터 두번째 인수의 바로 전(두번쨰 인수는 미포함)까지 위치한 부분 문자열을 반환한다.
+- 두번쨰 인수는 생략이 가능하다. 첫번쨰 인수의 값부터 끝까지 반환한다.
+- 원본 배별은 변하지 않는다.
+- 인수가 0보다 작거나 NaN 일경우, 강제로 0 취급
+- 인수가 문자열의 길이보다 클 경우 그 인수는 문자열의 길이로 취급.
+- **slice와 거의 동일하게 동작하나 slice는 음수일 경우 뒤부터 음수만큼 복사해서 반환한다.**
+
+~~~javascript
+const str = 'Hello World';
+
+// 인덱스 1부터 인덱스 4 이전까지의 부분 문자열을 반환한다.
+str.substring(1, 4); // -> ell
+str.substring(1); // -> 'ello World'
+~~~
+
+<img src="https://poiemaweb.com/assets/fs-images/string-1.png" alt="img" style="zoom:50%;" />
+
+<br/>
+
+#### trim
+
+- 대상 문자열 양쪽 끝에 있는 공백 문자를 제거한 문자열을 반환한다.
 
 ~~~~javascript
-const str = 'hello';
+const str = '   foo  ';
 
-// 원시 타입인 문자열이 프로퍼티와 메소드를 갖고 있다.
-console.log(str.length); // 5
-console.log(str.toUpperCase()); // HELLO
+console.log(str.trim()); // 'foo'
+
+// String.prototype.replace
+console.log(str.replace(/\s/g, ''));   // 'foo'
+console.log(str.replace(/^\s+/g, '')); // 'foo  '
+console.log(str.replace(/\s+$/g, '')); // '   foo'
+
+// String.prototype.{trimStart,trimEnd} : Proposal stage 3
+console.log(str.trimStart()); // 'foo  '
+console.log(str.trimEnd());   // '   foo'
 ~~~~
-
-원시값은 객체가 아니므로 프로퍼티나 메소드를 가질 수 없음에도 불구하고 원시값인 문자열이 마치 객체처럼 동작한다.
-
-이유 : 원시값인 **문자열, 숫자, 불리언 값**의 경우, 마치 객체처럼 이들 원시값에 대해 마침표 표기법(또는 대괄호 표기법)으로 접근하면 자바스크립트 엔진은 일시적으로 원시값을 연관된 객체로 변환한다. 
-
-즉 , 원시값(문자열 숫자 불리언) ► 객체로 임시 변환(래퍼 객체) ► 원시값
-
-이처럼 문자열, 숫자, 불리언 값에 대해 객체처럼 접근하면 생성되는 **임시 객체를 레퍼 객체(wrapper object)**라 한다.
 
 <br/>
 
+#### repeat
+
+- 인수로 전달한 정수만큼 반복해 연결한 새로운 문자열을 반환한다.
+- 인수로 전달한 정수가 0이면 빈 문자열을 반환 , 음수면 RangeError 발생
+
+~~~javascript
+const str = 'abc';
+
+str.repeat(0);   // -> ''
+str.repeat(1);   // -> 'abc'
+str.repeat(2);   // -> 'abcabc'
+str.repeat(2.5); // -> 'abcabc' (2.5 → 2)
+str.repeat(-1);  // -> RangeError: Invalid count value
+~~~
+
+<br/>
+
+## Date 객체
+
+날짜 시간 요일 까지 제공하는 빌트인 객체이면서 생성자 함수.
+
+Date 생성자 함수로 생성한 Date 객체는 내부적으로 숫자값을 갖는다. 
+
+이 값은 1970년 1월 1일 00:00(UTC)을 기점으로 현재 시간까지의 밀리초를 나타낸다.
+
+한국시간(KST) 는 UTC보다 9시간이 빠르다.
+
+<br/>
+
+### new Date()
+
+**인수를 전달하지 않으면 현재 날짜와 시간을 가지는 인스턴스를 반환**한다.
+
+```javascript
+const date = new Date();
+console.log(date); // Thu May 16 2019 17:16:13 GMT+0900 (한국 표준시)
+```
+
+<br/>
+
+### new Date(milliseconds)
+
+인수로 숫자 타입의 밀리초를 전달하면 1970년 1월 1일 00:00(UTC)을 기점으로 인수로 전달된 밀리초만큼 경과한 날짜와 시간을 가지는 인스턴스를 반환한다.
+
+<br/>
+
+### new Date(dateString)
+
+- **인수로 날짜와 시간을 나타내는 문자열을 전달하면 지정된 날짜와 시간을 가지는 인스턴스를 반환**한다. 
+- 인수로 전달한 문자열은 Date.parse 메소드에 의해 해석 가능한 형식이어야 한다.
+
+```javascript
+let date = new Date('May 16, 2019 17:22:10');
+console.log(date); // Thu May 16 2019 17:22:10 GMT+0900 (한국 표준시)
+
+date = new Date('2019/05/16/17:22:10');
+console.log(date); // Thu May 16 2019 17:22:10 GMT+0900 (한국 표준시)
+```
+
+<br/>
+
+### new Date(year, month[, day, hour, minute, second, millisecond])
+
+- 인수로 년, 월, 일, 시, 분, 초, 밀리초를 의미하는 숫자를 전달하면 지정된 날짜와 시간을 가지는 인스턴스를 반환한다. 
+- 이때 년, 월은 반드시 지정하여야 한다. 지정하지 않은 옵션 정보는 0 또는 1으로 초기화된다.
+
+인수는 다음과 같다.
+
+| 인수        | 내용                                                         |
+| :---------- | :----------------------------------------------------------- |
+| year        | 1900년 이후의 년                                             |
+| month       | 월을 나타내는 **0 ~ 11**까지의 정수 (주의: 0부터 시작, 0 = 1월) |
+| day         | 일을 나타내는 1 ~ 31까지의 정수                              |
+| hour        | 시를 나타내는 0 ~ 23까지의 정수                              |
+| minute      | 분을 나타내는 0 ~ 59까지의 정수                              |
+| second      | 초를 나타내는 0 ~ 59까지의 정수                              |
+| millisecond | 밀리초를 나타내는 0 ~ 999까지의 정수                         |
+
+년, 월을 지정하지 않은 경우 1970년 1월 1일 00:00(UTC)을 가지는 인스턴스를 반환한다.
+
+```javascript
+// 월을 나타내는 4는 5월을 의미한다.
+// 2019/5/1/00:00:00:00
+let date = new Date(2019, 4);
+console.log(date); // Wed May 01 2019 00:00:00 GMT+0900 (한국 표준시)
+
+// 월을 나타내는 4는 5월을 의미한다.
+// 2019/5/16/17:24:30:00
+date = new Date(2019, 4, 16, 17, 24, 30, 0);
+console.log(date); // Thu May 16 2019 17:24:30 GMT+0900 (한국 표준시)
+
+// 가독성이 훨씬 좋다.
+date = new Date('2019/5/16/17:24:30:10');
+console.log(date); // Thu May 16 2019 17:24:30 GMT+0900 (한국 표준시)
+```
+
+<br/>
+
+### Date 생성자 함수를 new 연산자없이 호출
+
+Date 생성자 함수를 new 연산자없이 호출하면 인스턴스를 반환하지 않고 결과값을 문자열로 반환한다.
+
+```javascript
+let date = Date();
+console.log(typeof date, date); // string Thu May 16 2019 17:33:03 GMT+0900 (한국 표준시)
+```
+
+<br/>
+
+## DOM
+
+- HTML 파서가 HTML을 분석해서 결과물을 만들어내는 것이 DOM tree. 
+- HTML 문법은 중첩관계 표현 가능하다. 
+- 태그들 사이에 다른 요소가 올 수 있다. 
+- 요소 안에 요소가 중첩되는 관계를 통해 트리를 만들 수 있음 (부자-자식 관계)
+- CSS는 부자-자식 관계가 없고 룰셋이 중첩되거나 하지는 않는다. CSS는 HTML 없으면 무용지물. 
+- CSSOM tree 는 DOM tree에 종속적이다. 
+
+`<head>` 태그 안의 내용은 브라우저를 위한 정보를 적어준다.
+
+`<script>`태그도 `<head>`에게 적어주는 것이 맞으나, 이럴경우 `<script>`가 블락당할 수 있으니 `body`아래에 적어준다.
+
+<br/>
+
+DOM은 콘솔창 ➤ Properties 에 들어가야 확인 할 수 있다.
+
+![DOMM](https://user-images.githubusercontent.com/31315644/67741128-78f80980-fa5b-11e9-974c-04f7ffaf4b81.jpeg)
+
+어트리뷰트와 DOM 요소는 항상 1대1 매칭되지 않는다. (예를들어 class, cal, span는 프로퍼티가 없다.)
+
+- `html` 의  `id`, `class` 어트리뷰트의 값의 네이밍은 케밥케이스 , 카멜케이스가 통상적이다.
+- `class`는 예전 버전에는 `className`에 문자열 형태로 추가되는 식이었기 때문에 `split()`를 이용해 하나하나 잘라내서 접근해야됬지만, 현재는 `classList`라는 객체를 통해서 관리되기 떄문에 더욱 간편해졌다.
+- 태그 요소의 특정 속성들의 하위 자식들에게 상속될 수 있다. ( ul ➤ li : `<style = "color:red">` )
+- 어트리뷰트는 프로퍼티와 구조가 다르다. (어트리뷰트 != 프로퍼티)
+- 어트리뷰트 class != className , classList
+- DOM 객체는 전부 window에 들어있다.
+
+<br/>
+
+### DOM 트리
+
+<img src="https://poiemaweb.com/img/dom-tree.png" alt="DOM tree" style="zoom:48%;" />
+
+- DOM 객체는 전부 `window`에 들어있다.
+
+- DOM트리의 진입점은 항상 `document`다.
+
+- 각각의 가지들을 '노드' 라 한다.
+
+- DOM tree에 접근하기 위한 시작점인 노드를 '문서노드'라 한다.
+
+- html 태그 내의 요소와 1:1 맵핑하는 노드를 '요소노드'라 한다.
+
+- html 태그 내의 요소의 어트리뷰트와 1:1 맵핑하는 노드를 '어트리뷰트 노드'라 한다. 어트리뷰트노드는 형제 노드다.
+
+- html 태그 내의 요소 안의 텍스트들과 1:1 맵핑하는 노드를 '텍스트 노드'라 한다. 텍스트노드는 자식 노드다.
+
+- 아래는 DOM tree의 객체 구조다.
+
+  ![Element Node](https://poiemaweb.com/img/HTMLElement.png)
+
+<br/>
+
+## DOM 검색
+
+특정 요소에 접근하는 것을 의미.
+
+<br/>
+
+### 하나의 요소 노드 선택
+
+[document.getElementById(id)](https://developer.mozilla.org/ko/docs/Web/API/Document/getElementById)
+
+- id 어트리뷰트 값으로 요소 노드를 한 개 선택한다. 복수개가 선택된 경우, 첫번째 요소만 반환한다.
+- Return: HTMLElement를 상속받은 객체
+- 모든 브라우저에서 동작
+- id는 전역으로 만들어지기 때문에 이 방법은 추천하지 않는다.
+
+<br/>
+
+[document.querySelector(cssSelector)](https://developer.mozilla.org/ko/docs/Web/API/Document/querySelector)
+
+- CSS 셀렉터를 사용하여 요소 노드를 한 개 선택한다. 복수개가 선택된 경우, 첫번째 요소만 반환한다.
+- Return: HTMLElement를 상속받은 객체
+- IE8 이상의 브라우저에서 동작
+- 배열메소드들이 더 다양하기 떄문에 배열로 변경하여 사용하면 좋다.
+
+<br/>
+
+### 여러 개의 요소 노드 선택
+
+[document.getElementsByClassName(class)](https://developer.mozilla.org/ko/docs/Web/API/Document/getElementsByClassName)
+
+- class 어트리뷰트 값으로 요소 노드를 모두 선택한다. 공백으로 구분하여 여러 개의 class를 지정할 수 있다.
+- Return: HTMLCollection (live) ➤ 매우 큰 혼란을 준다.
+- IE9 이상의 브라우저에서 동작
+- 사용 금지
+
+<br/>
+
+[document.querySelectorAll(selector)](https://developer.mozilla.org/ko/docs/Web/API/Document/querySelectorAll)
+
+- 지정된 CSS 선택자를 사용하여 요소 노드를 모두 선택한다.
+- Return: [NodeList](https://developer.mozilla.org/ko/docs/Web/API/NodeList) (non-live)
+- IE8 이상의 브라우저에서 동작
+- 배열메소드들이 더 다양하기 떄문에 배열로 변경하여 사용하면 좋다.
+
+~~~javascript
+// querySelectorAll는 Nodelist(non-live)를 반환한다. IE8+
+const elems = document.querySelectorAll('.red');
+
+// 배열메소드들이 더 다양하기 떄문에 배열로 변경하여 사용하면 좋다.
+[...elems].forEach(elem => elem.className = 'blue');
+~~~
+
+<br/>
+
+## DOM 탐색
+
+​	DOM 검색 하여 특정 요소에 접근하여 그 요소에 대한 부모 형제 자식 등을 찾아가는 것을 의미.
+
+<br/>
+
+[parentNode](https://developer.mozilla.org/ko/docs/Web/API/Node/parentNode) - 부모
+
+- 부모 노드를 탐색한다.
+- Return: HTMLElement를 상속받은 객체
+- 모든 브라우저에서 동작
+
+[firstChild](https://developer.mozilla.org/ko/docs/Web/API/Node/firstChild), [lastChild](https://developer.mozilla.org/ko/docs/Web/API/Node/lastChild) - 자식
+
+- **텍스트노드를 포함한 자식 노드를 탐색한다.**
+- Return: HTMLElement를 상속받은 객체
+- IE9 이상의 브라우저에서 동작
+- 위 두개의 프로퍼티는 각각 텍스트노드를 못건너뛰기 때문에 [firstElementChild](https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/firstElementChild), [lastElementChild](https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/lastElementChild)를 사용한다.
+
+[hasChildNodes()](https://developer.mozilla.org/ko/docs/Web/API/Node/hasChildNodes) - 자식
+
+- 자식 노드가 있는지 확인하고 Boolean 값을 반환한다.
+- Return: Boolean 값
+- 모든 브라우저에서 동작
+
+[childNodes](https://developer.mozilla.org/ko/docs/Web/API/Node/childNodes) - 자식
+
+- 자식 노드의 컬렉션을 반환한다. **텍스트 요소를 포함한 모든 자식 요소를 반환한다.**
+- Return: [NodeList](https://developer.mozilla.org/ko/docs/Web/API/NodeList) (non-live)
+- 모든 브라우저에서 동작
+
+[children](https://developer.mozilla.org/ko/docs/Web/API/ParentNode/children) - 자식
+
+- 자식 노드의 컬렉션을 반환한다. **자식 요소 중에서 Element type 요소만을 반환한다.**
+- Return: [HTMLCollection](https://developer.mozilla.org/ko/docs/Web/API/HTMLCollection) (live)
+- IE9 이상의 브라우저에서 동작
+
+[previousSibling](https://developer.mozilla.org/ko/docs/Web/API/Node/previousSibling), [nextSibling](https://developer.mozilla.org/ko/docs/Web/API/Node/nextSibling) - 형제
+
+- 형제 노드를 탐색한다. 
+- **text node를 포함한 모든 형제 노드를 탐색한다.**
+- Return: HTMLElement를 상속받은 객체모든 브라우저에서 동작
+
+[previousElementSibling](https://developer.mozilla.org/en-US/docs/Web/API/NonDocumentTypeChildNode/previousElementSibling), [nextElementSibling](https://developer.mozilla.org/en-US/docs/Web/API/NonDocumentTypeChildNode/nextElementSibling) - 형제
+
+- 형제 노드를 탐색한다. 
+- **형제 노드 중에서 Element type 요소만을 탐색한다.**
+- Return: HTMLElement를 상속받은 객체IE9 이상의 브라우저에서 동작
+
+```javascript
+const elem = document.querySelector('ul');
+
+elem.firstElementChild.nextElementSibling.className = 'blue';
+elem.firstElementChild.nextElementSibling.previousElementSibling.className = 'blue';
+```
+
+<br/>
+
+## DOM Manipulation (조작)
+
+<br/>
+
+### 텍스트 노드에의 접근/수정
+
+<img src="https://poiemaweb.com/img/nodeValue.png" alt="nodeValue" style="zoom:48%;" />
+
+[nodeValue](https://developer.mozilla.org/ko/docs/Web/API/Node/nodeValue) , nodeType , nodeName
+
+- 노드의 값을 반환한다.
+- Return: 텍스트 노드의 경우는 문자열, 요소 노드의 경우 null 반환
+- IE6 이상의 브라우저에서 동작한다.
+
+~~~javascript
+// 해당 텍스트 노드의 부모 요소 노드를 선택한다.
+const one = document.getElementById('one');
+console.dir(one); // HTMLLIElement: li#one.red
+
+// nodeName, nodeType을 통해 노드의 정보를 취득할 수 있다.
+console.log(one.nodeName); // LI
+console.log(one.nodeType); // 1: Element node
+
+// firstChild 프로퍼티를 사용하여 텍스트 노드를 탐색한다.
+const textNode = one.firstChild;
+
+// nodeName, nodeType을 통해 노드의 정보를 취득할 수 있다.
+console.log(textNode.nodeName); // #text
+console.log(textNode.nodeType); // 3: Text node
+
+// nodeValue 프로퍼티를 사용하여 노드의 값을 취득한다.
+console.log(textNode.nodeValue); // Seoul
+
+// nodeValue 프로퍼티를 이용하여 텍스트를 수정한다.
+textNode.nodeValue = 'Pusan';
+~~~
+
+<br/>
+
+### 어트리뷰트 노드에의 접근/수정
+
+![nodeValue](https://poiemaweb.com/img/nodeValue.png)
+
+어트리뷰트 노드을 조작할 때 다음 프로퍼티 또는 메소드를 사용할 수 있다.
+
+[className](https://developer.mozilla.org/ko/docs/Web/API/Element/className)
+
+- class 어트리뷰트의 값을 취득 또는 변경한다. className 프로퍼티에 값을 할당하는 경우, class 어트리뷰트가 존재하지 않으면 class 어트리뷰트를 생성하고 지정된 값을 설정한다. class 어트리뷰트의 값이 여러 개일 경우, 공백으로 구분된 문자열이 반환되므로 String 메소드 `split(' ')`를 사용하여 배열로 변경하여 사용한다.
+- 모든 브라우저에서 동작한다.
+
+[classList](https://developer.mozilla.org/ko/docs/Web/API/Element/classList)
+
+- add, remove, item, toggle, contains, replace 메소드를 제공한다.
+- IE10 이상의 브라우저에서 동작한다.
+- 추천한다.
+
+~~~javascript
+const elems = document.querySelectorAll('li');
+
+// className
+[...elems].forEach(elem => {
+  // class 어트리뷰트 값을 취득하여 확인
+  if (elem.className === 'red') {
+    // class 어트리뷰트 값을 변경한다.
+    elem.className = 'blue';
+  }
+});
+
+// classList
+[...elems].forEach(elem => {
+  // class 어트리뷰트 값 확인
+  if (elem.classList.contains('blue')) {
+    // class 어트리뷰트 값 변경한다.
+    elem.classList.replace('blue', 'red');
+  }
+});
+~~~
+
+- [id](https://developer.mozilla.org/ko/docs/Web/API/Element/id)
+
+  id 어트리뷰트의 값을 취득 또는 변경한다. id 프로퍼티에 값을 할당하는 경우, id 어트리뷰트가 존재하지 않으면 id 어트리뷰트를 생성하고 지정된 값을 설정한다.모든 브라우저에서 동작한다.
+
+```javascript
+// h1 태그 요소 중 첫번째 요소를 취득
+const heading = document.querySelector('h1');
+
+console.dir(heading); // HTMLHeadingElement: h1
+console.log(heading.firstChild.nodeValue); // Cities
+
+// id 어트리뷰트의 값을 변경.
+// id 어트리뷰트가 존재하지 않으면 id 어트리뷰트를 생성하고 지정된 값을 설정
+heading.id = 'heading';
+console.log(heading.id); // heading
+```
+
+이외의 어트리뷰트
+
+[hasAttribute(attribute)](https://developer.mozilla.org/en-US/docs/Web/API/Element/hasAttribute)
+
+- 지정한 어트리뷰트를 가지고 있는지 검사한다.
+- Return : Boolean
+- IE8 이상의 브라우저에서 동작한다.
+
+[getAttribute(attribute)](https://developer.mozilla.org/ko/docs/Web/API/Element/getAttribute)
+
+- 어트리뷰트의 값을 취득한다.
+- Return : 문자열
+- 모든 브라우저에서 동작한다.
+
+[setAttribute(attribute, value)](https://developer.mozilla.org/ko/docs/Web/API/Element/setAttribute)
+
+- 어트리뷰트와 어트리뷰트 값을 설정한다.
+- Return : undefined
+- 모든 브라우저에서 동작한다.
+
+[removeAttribute(attribute)](https://developer.mozilla.org/ko/docs/Web/API/Element/removeAttribute)
+
+- 지정한 어트리뷰트를 제거한다.
+- Return : undefined
+- 모든 브라우저에서 동작한다.
+
+<br/>
+
+attribute는 고정값 이고 DOM객체의 프로퍼티는 동적으로 변한다.
+
+Attributes는 key : value 형태로 관리한다.
+
+~~~html
+<input type="text" value="100">
+~~~
+
+위 `input`태그의 `value`어트리뷰트의 값 100은 고정(초기값)이다. 이 값을 직접 변경을 하고 싶다면 `input`태그 안의 Attributes 프로퍼티 내의 value를 변경해야한다. input 요소의 value프로퍼티를 변경해도 초기값은 그대로 100이다.
+
+즉, 어트리뷰트 와 프로퍼티는 다른것이며 따로 관리된다.
+
+~~~~html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <ul id="my-id" style="color: red">
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>Java Script</li>
+  </ul>
+
+  <ul id="myId" style="color: green">
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+  </ul>
+  <input type="text" value="100">
+  <script>
+    // 요소 1개 선택
+    const $ul = document.querySelector('#my-id');
+    console.log($ul);
+    console.log($ul.style.color = 'blue');
+    console.log([...$ul.classList].forEach((item) => console.log(item)));
+    console.log($ul.classList.add('class3'));
+    console.log($ul.classList.contains('class3'));
+    console.log($ul.classList.remove('class3'));
+    $ul.firstElementChild.style.color = 'red';
+
+    // 다중 요소 선택
+    const $lis = document.querySelectorAll('li');
+    console.log($lis);
+    [...$lis].forEach((item, index) => item.classList.add(`class${index + 1}`));
+    console.log($lis);
+
+    // ul.#myId 안에 있는 요소들을 문자열로 반환한다.
+    console.log(document.querySelector('#myId').innerHTML);
+    document.querySelector('#myId').innerHTML = '<h1>Hi</h1>';
+    document.querySelector('#myId').innerHTML += '<h2>Hi</h2>';
+
+    // 어트리뷰트 접근
+    const $input = document.querySelector('input');
+    console.dir($input);
+  </script>
+</body>
+</html>
+~~~~
+
+<br/>
+
+### HTML 콘텐츠 조작(Manipulation)
+
+<br/>
+
+[textContent](https://developer.mozilla.org/ko/docs/Web/API/Node/textContent)
+
+- 요소의 텍스트 콘텐츠를 취득 또는 변경한다. 이때 마크업은 무시된다. textContent를 통해 요소에 새로운 텍스트를 할당하면 텍스트를 변경할 수 있다. 이때 순수한 텍스트만 지정해야 하며 마크업을 포함시키면 문자열로 인식되어 그대로 출력된다.
+- IE9 이상의 브라우저에서 동작한다.
+
+[innerText](https://developer.mozilla.org/ko/docs/Web/API/Node/innerText)
+
+- innerText 프로퍼티를 사용하여도 요소의 텍스트 콘텐츠에만 접근할 수 있다. 하지만 아래의 이유로 사용하지 않는 것이 좋다.
+
+  - 비표준이다.
+
+  - CSS에 순종적이다. 예를 들어 CSS에 의해 비표시(visibility: hidden;)로 지정되어 있다면 텍스트가 반환되지 않는다.
+
+  - CSS를 고려해야 하므로 textContent 프로퍼티보다 느리다
+
+[innerHTML](https://developer.mozilla.org/ko/docs/Web/API/Element/innerHTML)
+
+- 해당 요소의 모든 자식 요소를 포함하는 모든 콘텐츠를 하나의 문자열로 취득할 수 있다. 이 문자열은 마크업을 포함한다.
+- 마크업이 포함된 새로운 콘텐츠를 지정하면 새로운 요소를 DOM에 추가할 수 있다.
+- 크로스 스크립팅 공격에 취약하다. 
+
+~~~javascript
+const one = document.getElementById('one');
+
+// 마크업이 포함된 콘텐츠 취득
+console.log(one.innerHTML); // Seoul
+
+// 마크업이 포함된 콘텐츠 변경
+one.innerHTML += '<em class="blue">, Korea</em>';
+
+// 마크업이 포함된 콘텐츠 취득
+console.log(one.innerHTML); // Seoul <em class="blue">, Korea</em>
+~~~
+
+<br/>
