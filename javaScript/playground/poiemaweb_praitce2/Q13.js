@@ -8,9 +8,7 @@
 예를 들어 주어진 배열이 [4, 1, 3, 2]이라면 true, [4, 1, 3] 또는 [1, 3]이라면 false를 반환한다.
 */
 function isNotOverlapArray(array) {
-  return array.every(function (currentValue, index) {
-    return currentValue <= array.length && array.indexOf(currentValue) === index;
-  });
+  return array.every((currentValue, index) => currentValue <= array.length && array.indexOf(currentValue) === index);
 }
 
 console.log(isNotOverlapArray([4, 1, 3, 2])); // true

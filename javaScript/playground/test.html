@@ -3,19 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
+  <style>
+    .b { color: red;}
+  </style>
 </head>
 <body>
   <ul>
-    <li id="one" class="a"> aa </li>
-    <li class="a"> bb </li>
-    <li class='b'>ddd</li>
+    <li class="b"> bb1 </li>
+    <li class="b"> bb2 </li>
+    <li class="b"> bb3 </li>
   </ul>
+
 </body>
 <script>
-  const a = document.querySelector('#one');
-  console.log(a.hasChildNodes('li'));
-  console.log(a.children);
-
-  a.nextElementSibling.className = "blues2"
-</script>
+  const a = document.getElementsByClassName('b');
+  const b = Array.prototype.slice.apply(a);
+  [].concat(a);
+  for (let i = 0; i < b.length; i++) {
+    b[i].className = 'blue';
+  }
+  </script>
 </html>

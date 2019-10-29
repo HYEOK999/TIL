@@ -7,7 +7,7 @@ for 문은 사용하지 않도록 하자.
 
 */
 function uniq(array) {
-  return array.filter(function (item, index) {
+  return array.filter((item, index) => {
     return array.indexOf(item) == index;
   });
 }
