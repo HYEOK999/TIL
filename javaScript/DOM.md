@@ -157,7 +157,7 @@ DOM은 다음 두 가지 기능을 담당한다.
 </html>
 ~~~~
 
-<img src="https://poiemaweb.com/img/dom-tree.png" alt="DOM tree" style="zoom:50%;" />\
+<img src="https://poiemaweb.com/img/dom-tree.png" alt="DOM tree" style="zoom:50%;" />
 
 
 
@@ -971,7 +971,7 @@ four.style.fontSize = '2em';
 
 <br/>
 
-####[window.getComputedStyle(element[, pseudoElt])](https://developer.mozilla.org/ko/docs/Web/API/Window/getComputedStyle) <a id="last2"></a>
+#### [window.getComputedStyle(element[, pseudoElt])](https://developer.mozilla.org/ko/docs/Web/API/Window/getComputedStyle) <a id="last2"></a>
 
 - style 프로퍼티의 값을 취득할 때 사용한다.
 - 인자로 주어진 요소의 모든 CSS 프로퍼티 값을 반환한다.
