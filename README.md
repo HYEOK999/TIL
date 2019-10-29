@@ -93,6 +93,8 @@ Today I Leaned...
 >[20191025-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191025-study-javascript.md)
 >
 >[20191028-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191028-study-javascript.md)
+>
+>[20191029-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191029-study-javascript.md)
 
 <br/>
 
