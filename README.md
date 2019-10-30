@@ -102,6 +102,8 @@ Today I Leaned...
 
 >[VSC-환경셋팅](https://github.com/HYEOK999/TIL/blob/master/javaScript/VSC_Settings.md)
 >
+>[Git-branch 및 협업](https://github.com/HYEOK999/TIL/blob/master/javaScript/gitbranch_collabo.md)
+>
 >[ESLint](https://github.com/HYEOK999/TIL/blob/master/ESLint설명.md)
 >
 >[웹 브라우저 동작 원리](https://github.com/HYEOK999/TIL/blob/master/javaScript/웹브라우저_동작원리.md)
@@ -119,6 +121,8 @@ Today I Leaned...
 >[Math 객체](https://github.com/HYEOK999/TIL/blob/master/javaScript/수학함수.md)
 >
 >[Date 객체](https://github.com/HYEOK999/TIL/blob/master/javaScript/날짜함수.md)
+>
+>[String 객체](https://github.com/HYEOK999/TIL/blob/master/javaScript/문자열객체.md)
 >
 >[DOM](https://github.com/HYEOK999/TIL/blob/master/javaScript/DOM.md)
 
@@ -237,4 +241,6 @@ Today I Leaned...
 >[20191026-기능 개발, 재도전](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_24.md)
 >
 >[20191028-나누어 떨어지는 숫자 배열](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_25.md)
+>
+>[20191029-두 정수 사이의 합](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_26.md)
 
