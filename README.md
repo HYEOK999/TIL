@@ -243,4 +243,6 @@ Today I Leaned...
 >[20191028-나누어 떨어지는 숫자 배열](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_25.md)
 >
 >[20191029-두 정수 사이의 합](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_26.md)
+>
+>[20191030-콜라츠 추측](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_27.md)
 
