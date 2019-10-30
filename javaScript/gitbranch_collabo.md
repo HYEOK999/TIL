@@ -116,6 +116,8 @@ master  - develop을 머지
 
 <br/>
 
+![git_flow](https://user-images.githubusercontent.com/31315644/67853249-7aa3f900-fb51-11e9-9c50-3d1b35e93d84.jpeg)
+
 #### git flow 지원 확인
 
 ~~~
@@ -303,5 +305,7 @@ add / commit ➢ git flow feature finish 브랜치명 ➢ (현재 위치:develop
 8. Merge pull request(github.com) ➢ git pull ➢ git flow release start v0.0.1.001910300001 ➢ git flow release finish v0.0.1.001910300001 ➢ (현재 위치 develop)  ➢ git push ➢ git checkout master ➢ (현재 위치 master) ➢  git push
 
 **모든 팀원은 merge 발생 시 pm-origin의 develop을 자신의 develop 으로 pull 하여 업데이트 한다.**
+
+![insight-network](https://user-images.githubusercontent.com/31315644/67853349-b50d9600-fb51-11e9-9580-6412eb77cd65.jpeg)
 
 <br/>
