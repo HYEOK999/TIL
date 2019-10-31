@@ -251,4 +251,6 @@ Today I Leaned...
 >[20191029-두 정수 사이의 합](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_26.md)
 >
 >[20191030-콜라츠 추측](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_27.md)
+>
+>[20191031-Todo 가벼운 실습(바닐라)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/todo실습.md)
 
