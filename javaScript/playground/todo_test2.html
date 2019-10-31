@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+    <input type="text" class="input-todo" placeholder="Enter todo!">
+    <button class="add">add</button>
+    <ul class="todos"></ul>
+</body>
+<script>
+    const $inputTodo = document.querySelector('.input-todo');
+    const $addButton = document.querySelector('.add');
+    const $todos = document.querySelector('.todos');
+    $addButton.onclick = function () {
+      // console.log('onclick');
+      // console.log($inputTodo.value);
+      if (!$inputTodo.value) return;
+      console.log($inputTodo.value);
+      $todos.innerHTML += `<li><label><input type="checkbox"> ${$inputTodo.value}</lable></li>`;
+      $inputTodo.value = '';
+    };
+
+    $todos.onchange = function ({ target }) {
+      // e.target = <input type="checkbox">
+      // console.log(e.target.checked);
+      const $todo = target.parentNode.parentNode;
+      console.log($todo);
+      // if (target.checked) {
+      // 취소선 긋기
+      // css property -> camelCase naming
+      //     $todo.style.textDecoration = 'line-through';
+      // } else {
+      //     $todo.style.textDecoration = 'none';
+      // }
+      $todo.style.textDecoration = target.checked ? 'line-through' : 'none';
+    };
+</script>
+</html>

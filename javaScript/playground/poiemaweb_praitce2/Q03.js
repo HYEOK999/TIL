@@ -6,7 +6,7 @@ alphaString46 함수는 문자열 s를 매개변수로 입력받는다. s의 길
 예를 들어 s가 ‘a234’이면 false를 리턴하고 ‘1234’라면 true를 리턴한다.
 */
 function alphaString46(s) {
-  if (s == undefined) {
+  if (s == undefined || s.includes(' ')) {
     return false;
   }
   if (s.length > 3 && s.length < 7) {

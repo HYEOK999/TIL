@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      .red  { color: #ff0000; }
+      .blue { color: #0000ff; }
+    </style>
+  </head>
+  <body>
+    <div>
+      <input type="text" value="100">
+      <button> Click me </button>
+      <div class="text2"></div>
+    </div>
+  </body>
+  <script>
+    const $input = document.querySelector('input');
+    const $button = document.querySelector('button');
+    const $div = document.querySelector('.text2');
+    // const $div = document.querySelector('.text2');
+
+    $input.addEventListener('input', function () {
+      $div.innerHTML = this.value;
+    });
+
+    // $button.onclick = () => {
+    //   console.log('Click Event!');
+    //   console.log($input.value);
+      // $div.appendChild(document.createElement('h1'));
+      // const $h1 = document.querySelector('h1');
+      // $h1.textContent = $input.value;
+    //   $div.innerHTML = $input.value;
+    // };
+
+    console.log($input);
+    console.log($button);
+  </script>
+</html>

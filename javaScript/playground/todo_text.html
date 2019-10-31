@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    p {
+      display : inline-block;
+      line-height: 19px;
+      font-size: 12px;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .input {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h1>Todo List</h1>
+  <input class="input" placeholder="할 일을 입력하세요.">
+  <button class="add">add</button>
+  <p class="errorMessage"></p>
+  <ul class="todos"></ul>
+</body>
+<script>
+  const $input = document.querySelector('.input');
+  const $todos = document.querySelector('.todos');
+  const $addButton = document.querySelector('.add');
+  const $errorMessage = document.querySelector('.errorMessage');
+  // const $li = document.querySelector('.todo');
+  // const $remove = document.querySelector('.remove');
+
+  $addButton.addEventListener('click', function () {
+    if ($input.value.length != 0) {
+      $errorMessage.innerHTML = '';
+      $todos.innerHTML += `<li class="todo"> ${$input.value} <button class="remove">X</button></li>`;
+      $input.value = '';
+    } else $errorMessage.innerHTML = '글자를 입력해주세요.';
+  });
+
+  $input.addEventListener('keydown', function (e) {
+    if ($input.value.length != 0 && e.keyCode === 13) {
+      $errorMessage.innerHTML = '';
+      $todos.innerHTML += `<li class="todo"> ${$input.value} <button class="remove">X</button></li>`;
+      $input.value = '';
+    }
+
+    if (!$input.value) $errorMessage.innerHTML = '글자를 입력해주세요.';
+  });
+
+  $todos.addEventListener('click', function (e) {
+    if (!e.target.classList.contains('remove')) return;
+    $todos.removeChild(e.target.parentNode);
+    // if (e.target.classList.contains('remove')) e.target.parentNode.remove();
+  });
+</script>
+</html>
