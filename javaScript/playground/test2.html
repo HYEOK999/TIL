@@ -1,48 +1,34 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <style>
+    html, body { height: 100%;}
+  </style>
 </head>
 <body>
-  <ul id="my-id" style="color: red">
-    <li>HTML</li>
-    <li>CSS</li>
-    <li>Java Script</li>
-  </ul>
-
-  <ul id="myId" style="color: green">
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-  </ul>
-  <input type="text" value="100">
+  <p>버튼을 클릭하면 이벤트 전파를 중단한다. <button>버튼</button></p>
   <script>
-    // 요소 1개 선택
-    const $ul = document.querySelector('#my-id');
-    console.log($ul);
-    console.log($ul.style.color = 'blue');
-    console.log([...$ul.classList].forEach((item) => console.log(item)));
-    console.log($ul.classList.add('class3'));
-    console.log($ul.classList.contains('class3'));
-    console.log($ul.classList.remove('class3'));
-    $ul.firstElementChild.style.color = 'red';
+    const body = document.querySelector('body');
+    const para = document.querySelector('p');
+    const button = document.querySelector('button');
 
-    // 다중 요소 선택
-    const $lis = document.querySelectorAll('li');
-    console.log($lis);
-    [...$lis].forEach((item, index) => item.classList.add(`class${index + 1}`));
-    console.log($lis);
+    // 버블링
+    body.addEventListener('click', function () {
+      console.log('Handler for body.');
+    });
 
-    // ul.#myId 안에 있는 요소들을 문자열로 반환한다.
-    console.log(document.querySelector('#myId').innerHTML);
-    document.querySelector('#myId').innerHTML = '<h1>Hi</h1>';
-    document.querySelector('#myId').innerHTML += '<h2>Hi</h2>';
+    // 버블링
+    para.addEventListener('click', function () {
+      console.log('Handler for paragraph.');
+    });
 
-    const $input = document.querySelector('input');
-    console.dir($input);
+    // 버블링
+    button.addEventListener('click', function (event) {
+      console.log('Handler for button.');
+
+      // 이벤트 전파를 중단한다.
+      event.stopPropagation();
+    });
   </script>
 </body>
 </html>
