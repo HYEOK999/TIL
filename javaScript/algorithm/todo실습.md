@@ -1,0 +1,161 @@
+
+
+<img src="https://user-images.githubusercontent.com/31315644/67931582-8bae4200-fc05-11e9-8c09-85390936bf64.png" alt="todos" style="zoom:33%;" />
+
+------
+
+## TODO DOM + 이벤트 가벼운 실습
+
+<br/>
+
+### 코드 ▼
+
+~~~html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo list</title>
+  <style>
+    body{
+      background: #7ca7c7;
+      font-size: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      width: 100vw;
+      flex:auto;
+    }
+
+    .input {
+      width: 100vw;
+      height: 40px;
+      font-size: 20px;
+      text-indent: 20px;
+      border : none;
+    }
+
+    div {
+      position: relative;
+    }
+
+    .addList {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 100%;
+      font-size: 20px;
+      color: white;
+      border: none;
+      background: black;
+
+    }
+    .remove {
+      width: 30px;
+      height: 20px;
+      color: white;
+      border: none;
+      border-radius: 10px 10px 10px 10px;
+      background: red;
+    }
+    .todos{
+
+    }
+    .todo {
+      width: 40vw;
+      display: flex;
+      justify-content: space-between;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <main>
+      <h1> Todo List </h1>
+      <div>
+        <input class="input" type="text" placeholder="할 일을 입력하세요.">
+        <button class="addList">추가</button>
+      </div>
+      <ul class="todos"></ul>
+  </main>
+</body>
+<script>
+  const $input = document.querySelector('.input');
+  const $addList = document.querySelector('.addList');
+  const $todos = document.querySelector('.todos');
+  let count = 0;
+
+  function addInnerHtml() {
+    $todos.innerHTML += `
+    <li class="todo">
+      <input type="checkbox" id='abc${count}'>
+      <label for="abc${count}">
+        ${$input.value}
+      </label>
+      <button class="remove">삭제</button>
+    </li>`;
+    $input.value = '';
+    count++;
+  }
+
+  $addList.onclick = function () {
+    if ($input.value) {
+      addInnerHtml();
+      $input.focus();
+    }
+  };
+
+  $input.onkeydown = function (e) {
+    if (($input.value) && e.keyCode === 13) {
+      addInnerHtml();
+    }
+  };
+
+  // onchage는 check 박스에서만 가능하다.
+  $todos.onchange = function ({ target }) {
+    console.log(target);
+    const $todo = target.parentNode;
+    console.log($todo);
+    $todo.style.textDecoration = target.checked ? 'line-through' : 'none';
+  };
+
+  $todos.onclick = function (e) {
+    if (e.target.classList.value === 'remove') {
+      $todos.removeChild(e.target.parentNode);
+    }
+  };
+</script>
+</html>
+~~~
+
+#### 구현 기능
+
+1. 할 일 추가 기능 `$addList.onclick` ~~ `$todos.innerHTML += 내용`
+
+2. 할 일 삭제 기능 ` $todos.removeChild(e.target.parentNode);`
+
+3. 할 일 체크박스 혹은 글자 선택 시 밑줄 그어 지는 기능 
+`target.parent.style.textDecoration = target.checked ? 'line-through' : 'none';`
+
+4. 인풋박스에 포커스 게속 유지 ` $input.focus();`
+
+5. 키보드 엔터키로 추가 가능 ` $input.onkeydown` ~~ `$todos.innerHTML += 내용`
+
+<br/>
+
+### 결과 ▼
+
+![todo_test실습](https://user-images.githubusercontent.com/31315644/67956050-d7c5aa80-fc36-11e9-874e-e00a287ef8ae.jpeg)
+
