@@ -95,6 +95,8 @@ Today I Leaned...
 >[20191028-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191028-study-javascript.md)
 >
 >[20191029-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191029-study-javascript.md)
+>
+>[20191030-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191030-study-javascript.md)
 
 <br/>
 
@@ -125,6 +127,8 @@ Today I Leaned...
 >[String 객체](https://github.com/HYEOK999/TIL/blob/master/javaScript/문자열객체.md)
 >
 >[DOM](https://github.com/HYEOK999/TIL/blob/master/javaScript/DOM.md)
+>
+>[이벤트](https://github.com/HYEOK999/TIL/blob/master/javaScript/이벤트.md)
 
 <br/>
 
