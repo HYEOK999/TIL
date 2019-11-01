@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+    .red {
+      color: red;
+    }
+
+  </style>
+<body>
+  <p class="p1">버블링 이벤트
+    <button>버튼</button>
+  </p>
+  <div>
+    <p class="p2">두번째 p</p>
+  </div>
+  <script>
+    const div = document.querySelector('div');
+    const body = document.querySelector('body');
+    const para = document.querySelector('.p1');
+    const para2 = document.querySelector('.p2');
+    const button = document.querySelector('button');
+    // 버블링
+    body.addEventListener('click', function (e) {
+      console.log('Handler for body.');
+      body.style.backgroundColor = 'pink';
+      console.log(`현재 이벤트 페이즈 : ${e.eventPhase}`);
+    });
+    // 버블링
+    para.addEventListener('click', function (e) {
+      console.log('Handler for paragraph1.');
+      para.style.color = 'red';
+      console.log(`현재 이벤트 페이즈 : ${e.eventPhase}`);
+    });
+    // 버블링
+    // para2.addEventListener('click', function (e) {
+    //   console.log('Handler for paragraph2.');
+    //   para2.style.color = 'green';
+    //   console.log(e.eventPhase);
+    // });
+    // 버블링
+
+    div.addEventListener('mouseover', function (e) {
+      console.log('Handler for div.');
+      body.style.border = '1px solid black';
+      console.log(`현재 이벤트 페이즈 : ${e.eventPhase}`);
+    });
+
+    button.addEventListener('click', function (e) {
+      console.log('Handler for button.');
+      console.log(`현재 이벤트 페이즈 : ${e.eventPhase}`);
+      para2.addEventListener('mouseover', function (a) {
+        console.log('handler for setTimeout');
+        console.log(`현재 이벤트 페이즈 : ${a.eventPhase}`);
+      });
+    });
+  </script>
+</body>
+</html>
