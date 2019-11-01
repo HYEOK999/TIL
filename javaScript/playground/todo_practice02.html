@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo</title>
+</head>
+<body>
+  <input type="text" class="input" placeholder="Enter todo!">
+  <ul class="todos"></ul>
+<script>
+  let todos = [];
+  const $todos = document.querySelector('.todos');
+
+  function render() {
+    let html = '';
+    todos.forEach((todo) => {
+      html += `
+          <li ${todo.id}>
+            <lable>
+              <input type="checkbox" ${todo.completed ? 'checked' : ''}>
+              <span>${todo.content}</span>
+              <button>X</button>
+          </li>
+        `;
+    });
+
+    $todos.innerHTML = html;
+  }
+
+
+  const getTodos = function () {
+    // TODO: 서버로부터 데이터를 취득.
+    todos = [
+      { id: 1, content: 'HTML', completed: false },
+      { id: 2, content: 'CSS', completed: true },
+      { id: 2, content: 'CSS', completed: false }
+    ];
+
+    render();
+  };
+
+  // 이벤트
+  window.onload = getTodos;
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo</title>
+  <style>
+    input:checked + span  {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" class="input" placeholder="Enter todo!">
+  <ul class="todos"></ul>
+</body>
+<script>
+  const $input = document.querySelector('.input');
+  const $todos = document.querySelector('.todos');
+
+  $input.addEventListener('keydown', function (e) {
+    // console.log(e);
+    if (e.keyCode !== 13 || this.value.trim() === '') return;
+
+    $todos.innerHTML += `
+    <li>
+      <label>
+        <input type="checkbox">
+        <span>${$input.value}</span>
+      </label>
+      <button class="remove">X</button>
+    </li>`;
+    $input.value = '';
+  });
+
+  $todos.addEventListener('click', function (e) {
+    if (!e.target.classList.contains('remove')) return;
+    this.removeChild(e.target.parentNode);
+  });
+</script>
+</html>

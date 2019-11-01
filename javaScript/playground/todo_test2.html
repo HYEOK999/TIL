@@ -2,7 +2,17 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+
   <title>Document</title>
+  <style>
+    .cb:checked + .content{
+      text-decoration: line-through;
+    }
+
+    .completed {
+      text-decoration: line-through;
+    }
+  </style>
 </head>
 <body>
     <input type="text" class="input-todo" placeholder="Enter todo!">
@@ -13,28 +23,39 @@
     const $inputTodo = document.querySelector('.input-todo');
     const $addButton = document.querySelector('.add');
     const $todos = document.querySelector('.todos');
-    $addButton.onclick = function () {
-      // console.log('onclick');
-      // console.log($inputTodo.value);
-      if (!$inputTodo.value) return;
-      console.log($inputTodo.value);
-      $todos.innerHTML += `<li><label><input type="checkbox"> ${$inputTodo.value}</lable></li>`;
+
+    $inputTodo.onkeyup = e => {
+      if (e.target.value.trim() === '' || e.keyCode !== 13) return;
+      $todos.innerHTML += `
+      <li>
+        <label>
+          <input type="checkbox" class="cb">
+          <span class="content">${$inputTodo.value}</span>
+          <button class="remove">X</button>
+        </lable>
+      </li>`;
       $inputTodo.value = '';
     };
 
-    $todos.onchange = function ({ target }) {
-      // e.target = <input type="checkbox">
-      // console.log(e.target.checked);
-      const $todo = target.parentNode.parentNode;
-      console.log($todo);
-      // if (target.checked) {
-      // 취소선 긋기
-      // css property -> camelCase naming
-      //     $todo.style.textDecoration = 'line-through';
-      // } else {
-      //     $todo.style.textDecoration = 'none';
-      // }
-      $todo.style.textDecoration = target.checked ? 'line-through' : 'none';
-    };
+    // $addButton.onclick = function () {
+    //   // console.log('onclick');
+    //   // console.log($inputTodo.value);
+    //   if (!$inputTodo.value) return;
+    //   console.log($inputTodo.value);
+    //   $todos.innerHTML += `
+    //   <li>
+    //     <label>
+    //       <input type="checkbox" class="cb">
+    //       <span class="content">${$inputTodo.value}</span>
+    //       <button class="remove">X</button>
+    //     </lable>
+    //   </li>`;
+    //   $inputTodo.value = '';
+    // };
+
+    $todos.addEventListener('click', function (e) {  // 화살표함수의 this는 상위를 가리키기 때문에 여기서 this는 전역this가 된다.
+      if (!e.target.classList.contains('remove')) return;
+      this.removeChild(e.target.parentNode.parentNode);
+    });
 </script>
 </html>

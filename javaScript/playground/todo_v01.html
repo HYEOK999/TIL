@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List V.01</title>
+  <style>
+     .cb:checked + .content {
+       text-decoration: line-through;
+     }
+  </style>
+</head>
+<body>
+  <input class="input">
+  <ul class="todos"></ul>
+</body>
+<script>
+  const $input = document.querySelector('.input');
+  const $todos = document.querySelector('.todos');
+
+  $input.addEventListener('keydown', function (e) {
+    if (e.keyCode !== 13 || $input.value.trim() === '') return;
+    $todos.innerHTML += `<li>
+        <label>
+          <input type="checkbox" class="cb">
+          <span class="content">${$input.value}</span>
+        </label>
+        <button class="remove">X</button>
+      </li>`;
+    $input.value = '';
+  });
+
+  $todos.addEventListener('click', function (e) {
+    if (!e.target.classList.contains('remove')) return;
+    this.removeChild(e.target.parentNode);
+  });
+</script>
+</html>
