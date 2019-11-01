@@ -34,6 +34,7 @@
       `;
     });
     $todos.innerHTML = html;
+    console.log(todos);
   }
 
   const getTodos = function () {
@@ -46,11 +47,14 @@
     render();
   };
 
+  function findMaxId() {
+    return Math.max(0, ...todos.map((todo) => todo.id));
+  }
+
   const addTodos = function (e) {
     if (e.keyCode !== 13 || $input.value.trim() === '') return;
 
-    const MAX_ID = Math.max(0, ...todos.map((todo) => todo.id)) + 1;
-    todos = [...todos, { id: MAX_ID, content: $input.value, completed: false }];
+    todos = [...todos, { id: findMaxId() + 1, content: $input.value, completed: false }];
     $input.value = '';
 
     render();
@@ -62,6 +66,10 @@
     const listId = +(e.target.parentNode.id);
     todos = todos.filter((todo) => todo.id !== listId);
 
+    // Id 재정렬
+    if (todos.length !== findMaxId()) {
+      todos = todos.map((todo, index) => ({ ...todo, id: index + 1 }));
+    }
     render();
   };
 
