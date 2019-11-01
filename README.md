@@ -97,6 +97,10 @@ Today I Leaned...
 >[20191029-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191029-study-javascript.md)
 >
 >[20191030-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191030-study-javascript.md)
+>
+>[20191031-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/todo실습.md)
+>
+>[20191101-javasciprt-todo](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191101-study-javascript-todo.md)
 
 <br/>
 
@@ -189,6 +193,8 @@ Today I Leaned...
 > [2. 2주차 시험 정리](https://github.com/HYEOK999/TIL/blob/master/javaScript/2주차시험리스트.md)
 >
 > [3. 3주차 시험 정리](https://github.com/HYEOK999/TIL/blob/master/javaScript/3주차시험리스트.md)
+>
+> [4. 모의면접 정리](https://github.com/HYEOK999/TIL/blob/master/javaScript/모의면접_질문_정리.md)
 
 <br/>
 
