@@ -98,7 +98,7 @@ Today I Leaned...
 >
 >[20191030-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191030-study-javascript.md)
 >
->[20191031-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/todo실습.md)
+>[20191031-javascript]()
 >
 >[20191101-javasciprt-todo](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191101-study-javascript-todo.md)
 
@@ -258,5 +258,9 @@ Today I Leaned...
 >
 >[20191030-콜라츠 추측](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_27.md)
 >
->[20191031-Todo 가벼운 실습(바닐라)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/todo실습.md)
+>[20191031-x만큼 간격이 있는 n개의 숫자](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_28.md)
+>
+>[20191101-소수 찾기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_29.md)
+>
+>[20191102-실패율(카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_30.md)
 

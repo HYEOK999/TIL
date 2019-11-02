@@ -2,7 +2,7 @@
 
 ----------
 
-# JavaScript Study 19
+# JavaScript Study 20
 
 ## TODO-LIST 
 
