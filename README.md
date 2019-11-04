@@ -263,4 +263,6 @@ Today I Leaned...
 >[20191101-소수 찾기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_29.md)
 >
 >[20191102-실패율(카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_30.md)
+>
+>[20191104-약수의 합](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_31.md)
 
