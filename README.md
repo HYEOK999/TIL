@@ -100,7 +100,9 @@ Today I Leaned...
 >
 >[20191031-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191031-todo실습.md)
 >
->[20191101-javasciprt-todo](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191101-study-javascript-todo.md)
+>[20191101-javascript-todo](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191101-study-javascript-todo.md)
+>
+>[20191104-javascript-todo](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191104-study-javascript-todo.md)
 
 <br/>
 
