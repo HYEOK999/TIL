@@ -1,5 +1,5 @@
 function solution(N, stages) {
-  let answer = [];
+  const answer = [];
   // let totalStageLength = stages.length;
   const stage = [...stages].sort((a, b) => a - b);
 

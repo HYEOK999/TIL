@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List</title>
+  <style>
+    .check:checked + span {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" class="input">
+  <ul class="todos"></ul>
+</body>
+<script>
+  class Todos {
+    constructor() {
+      this.todos = [];
+      this.$todos = document.querySelector('.todos');
+      this.$input = document.querySelector('.input');
+    }
+
+    getTodo() {
+      this.todos = [
+        { id: 1, content: 'HTML', completed: false },
+        { id: 2, content: 'CSS', completed: true },
+        { id: 3, content: 'Javascript', completed: false }
+      ];
+      this.render();
+    }
+
+    render() {
+      let html = '';
+      this.todos.forEach((todo) => {
+        html += `
+        <li id="${todo.id}">
+          <label>
+            <input type='checkbox' class='check' ${todo.completed ? 'checked' : ''}>
+            <span>${todo.content}</span>
+          </label>
+          <button class="remove">X</button>
+        </li>`;
+      });
+
+      this.$todos.innerHTML = html;
+    }
+
+    findMaxId() {
+      return Math.max(0, ...this.todos.map((todo) => todo.id));
+    }
+
+    addTodo(e) {
+      if (e.keyCode !== 13 || this.$input.value.trim() === '') return;
+      this.add();
+      this.render();
+    }
+
+    removeTodo({ target }) {
+      if (!target.classList.contains('remove')) return;
+      this.remove(target);
+      this.render();
+    }
+
+    checkTodo({ target }) {
+      this.check(target);
+      this.render();
+    }
+
+    add() {
+      this.todos = [...this.todos, {
+        id: this.findMaxId() + 1,
+        content: this.$input.value,
+        completed: false
+      }];
+      this.$input.value = '';
+    }
+
+    remove(target) {
+      this.todos = this.todos
+        .filter((todo) => todo.id !== +target.parentNode.id)
+        .map((todo, index) => ({ ...todo, id: index + 1 }));
+    }
+
+    check(target) {
+      this.todos = this.todos.map((todo) => (
+        todo.id === +target.parentNode.parentNode.id ? { ...todo, completed: !todo.completed } : todo
+      ));
+    }
+
+    event() {
+      window.addEventListener('load', () => this.getTodo());
+      this.$input.addEventListener('keydown', (e) => this.addTodo(e));
+      this.$todos.addEventListener('click', (e) => this.removeTodo(e));
+      this.$todos.addEventListener('change', (e) => this.checkTodo(e));
+    }
+  }
+
+  const todos = new Todos();
+  todos.event();
+</script>
+</html>
