@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Todos 2.0</title>
+  <style>
+    .nav {
+      display: flex;
+      margin: 15px;
+      list-style: none;
+    }
+
+    .nav > li {
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .nav > li.active {
+      color: #fff;
+      background-color: #23b7e5;
+    }
+
+    .nav-state {
+      margin-left: 60px;
+    }
+  </style>
+</head>
+<body>
+  <ul class="nav">
+    <li id="all" class="active">All</li>
+    <li id="active">Active</li>
+    <li id="completed">Completed</li>
+  </ul>
+  <div class="nav-state">all</div>
+  <script>
+    const $nav = document.querySelector('.nav');
+    $nav.onclick = (e) => {
+      if (e.target.classList.contains('nav')) return;
+      console.log(e.target.id);
+      [...$nav.childern].forEach(($navItem) => {
+        //  $navItem === e.target
+        // if ($navItem.id === e.target.id) $navItem.classList.add('active');
+        // else $navItem.classList.remove('active');
+
+        // toggle
+        $navItem.classList.toggle('active', $navItem === e.target);
+      });
+    };
+  </script>
+</body>
+</html>
