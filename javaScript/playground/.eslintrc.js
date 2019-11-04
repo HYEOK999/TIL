@@ -24,6 +24,7 @@ module.exports = {
       "no-underscore-dangle": "warn",
       // "no-plusplus": [ "error", { "allowForLoopAfterthoughts": true }],
       "comma-dangle": [ "error", "never"],
-      "no-nested-ternary": 0
+      "no-nested-ternary": 0,
+      "no-param-reassign": 0
     }
   };
