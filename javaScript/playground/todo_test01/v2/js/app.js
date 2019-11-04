@@ -1,6 +1,6 @@
 let todos = [];
+let tempTodos = [];
 let $navId = 'all';
-let tempTodos = 0;
 
 const $todos = document.querySelector('.todos');
 const $inputTodo = document.querySelector('.input-todo');
@@ -8,7 +8,7 @@ const $completeAll = document.querySelector('.complete-all');
 const $nav = document.querySelector('.nav');
 const $completedTodos = document.querySelector('.completed-todos');
 const $activeTodos = document.querySelector('.active-todos');
-const $btn = document.querySelector('.btn');
+const $clearCompleted = document.querySelector('.clear-completed > .btn');
 
 
 // 데이터 받아오기
@@ -29,6 +29,10 @@ function separateTab(navId) {
   } else {
     todos = todos.filter((todo) => (todo.completed));
   }
+}
+
+function findMaxId() {
+  return Math.max(0, ...todos.map((todo) => todo.id)) + 1;
 }
 
 function completedCount() {
@@ -55,18 +59,13 @@ function render() {
 
   $todos.innerHTML = html;
 
-  // 여기다 넣겠음
-  $completedTodos.textContent = String(completedCount());
-  $activeTodos.textContent = String(activeCount());
+  $completedTodos.textContent = completedCount();
+  $activeTodos.textContent = activeCount();
 
   todos = tempTodos;
 }
 
 // 기능
-function findMaxId() {
-  return Math.max(0, ...todos.map((todo) => todo.id)) + 1;
-}
-
 function addTodo(content) {
   todos = [{ id: findMaxId(), content, completed: false }, ...todos];
   console.log('[addTodo] : ', todos);
@@ -90,6 +89,14 @@ function allChangeToggle(checked) {
 function clearCompleted() {
   todos = todos.filter((todo) => !todo.completed);
   console.log('[clearCompleted] : ', todos);
+}
+
+function changeNav(navList) {
+  [...$nav.children].forEach(($navItem) => {
+    $navItem.classList.toggle('active', $navItem === navList);
+    if ($navItem.classList.contains('active')) $navId = $navItem.id;
+  });
+  console.log('[changeNav] : ', todos);
 }
 
 // 이벤트
@@ -121,16 +128,13 @@ $completeAll.onchange = ({ target }) => {
   render();
 };
 
-$btn.onclick = () => {
+$clearCompleted.onclick = () => {
   clearCompleted();
   render();
 };
 
 $nav.onclick = ({ target }) => {
   if (target.classList.contains('nav')) return;
-  [...$nav.children].forEach(($navItem) => {
-    $navItem.classList.toggle('active', $navItem === target);
-    if ($navItem.classList.contains('active')) $navId = $navItem.id;
-  });
+  changeNav(target);
   render();
 };

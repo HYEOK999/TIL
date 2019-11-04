@@ -37,18 +37,14 @@
   <div class="nav-state">all</div>
   <script>
     const $nav = document.querySelector('.nav');
-    $nav.onclick = (e) => {
-      if (e.target.classList.contains('nav')) return;
-      console.log(e.target.id);
-      [...$nav.childern].forEach(($navItem) => {
-        //  $navItem === e.target
-        // if ($navItem.id === e.target.id) $navItem.classList.add('active');
-        // else $navItem.classList.remove('active');
 
-        // toggle
-        $navItem.classList.toggle('active', $navItem === e.target);
+    $nav.onclick = function (e) {
+      console.log();
+      [...$nav.children].forEach((navItem) => {
+        navItem.classList.toggle('active', navItem === e.target);
       });
-    };
+      console.log($nav);
+    }
   </script>
 </body>
 </html>
