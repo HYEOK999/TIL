@@ -1,44 +1,226 @@
-![](https://images.velog.io/post-images/leejh3224/619516b0-e892-11e8-98f5-997ef3c38110/what-is-an-algorithm-featured.png)
+![quiz-2174368_1280](https://user-images.githubusercontent.com/31315644/68214647-3026ee80-0021-11ea-8e28-41a3aa5de18a.png)
 
 ------
 
-문제 출처 : 프로그래머스
+문제 출처 : poiema
 
-### 약수의 합
+### Toggle side nav
 
-###### 문제 설명
+![img](https://poiemaweb.com/assets/fs-images/exercise/toggle-side-nav.gif)
 
-정수 n을 입력받아 n의 약수를 모두 더한 값을 리턴하는 함수, solution을 완성해주세요.
+- 요구 사항
 
-##### 제한 사항
+  자바스크립트를 사용하여 버튼이 클릭되었을 때 사이드 내비게이션이 토글되도록 구현한다.
 
-- `n`은 0 이상 3000이하인 정수입니다.
-
-##### 입출력 예
-
-| n    | return |
-| ---- | ------ |
-| 12   | 28     |
-| 5    | 6      |
-
-###### 입출력 예 설명
-
-입출력 예 #1
-12의 약수는 1, 2, 3, 4, 6, 12입니다. 이를 모두 더하면 28입니다.
-
-입출력 예 #2
-5의 약수는 1, 5입니다. 이를 모두 더하면 6입니다.
-
-~~~javascript
-function solution(n) {
-    var answer = 0;
-    
-    for(let i = 1; i <= n; i++) {
-        answer += n % i == 0 ? i : 0;
+~~~html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Toggle side nav</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
     }
-    
-    return answer;
-}
+
+    .container {
+      position: relative;
+      overflow-x: hidden; /* 가로 scroll bar 방지 */
+      width: 100%;
+      height: 100%;
+    }
+
+    .main, .side-nav {
+      position: absolute;
+      top: 0;
+      height: 100%;
+      transition: transform 0.8s;
+    }
+
+    .main {
+      left: 0;
+      width: 100%;
+      background: antiquewhite;
+    }
+
+    .side-nav {
+      left: -300px;
+      width: 300px;
+      background: rebeccapurple;
+    }
+
+    .active > .main,
+    .active > .side-nav {
+      transform: translate3d(300px, 0, 0);
+    }
+
+    .toggle {
+      font-size: 2em;
+      color: maroon;
+      margin: 10px;
+      cursor: pointer;
+      transition: transform 0.5s;
+    }
+
+    .active .toggle {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="side-nav"></div>
+    <div class="main">
+      <i class="toggle fas fa-arrow-circle-right"></i>
+    </div>
+  </div>
+  <script>
+    const $toggle = document.querySelector('.toggle');
+    const $container = document.querySelector('.container');
+
+    $toggle.onclick = () => {
+      $container.classList.toggle('active');
+    };
+  </script>
+</body>
+</html>
+~~~
+
+<br/>
+
+### Scrolling goto top
+
+![popup-ui](https://poiemaweb.com/assets/fs-images/exercise/scrolling-goto-top.gif)
+
+
+
+- [Window.pageYOffset](https://developer.mozilla.org/en-US/docs/Web/API/Window/pageYOffset)
+- [Window.scrollTo()](https://developer.mozilla.org/ko/docs/Web/API/Window/scrollTo)
+- [Window.scroll()](https://developer.mozilla.org/en-US/docs/Web/API/Window/scroll)
+
+~~~html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>scrolling-goto-top</title>
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400);
+    @import url(https://use.fontawesome.com/releases/v5.5.0/css/all.css);
+
+    body {
+      font-family: 'Open Sans';
+      font-weight: 300;
+      background-color: #D6E1E5;
+    }
+
+    h1 {
+      color: #DB5B33;
+      font-weight: 300;
+      text-align: center;
+    }
+
+    .scoll-icon {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      font-size: 36px;
+      cursor: pointer;
+      animation: glow 4s infinite;
+      display: none;
+    }
+
+    @keyframes glow {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+        transform: translateY(10px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>JavaScript Scrolling goto top</h1>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+  <p>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
+  </p>
+
+  <div class="scoll-icon fa fa-angle-double-up"></div>
+
+  <script>
+    const $scollIcon = document.querySelector('.scoll-icon');
+
+    window.onscroll = () => {
+      $scollIcon.style.display = window.pageYOffset > 200 ? 'inline' : 'none';
+    };
+
+    $scollIcon.onclick = () => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+    };
+  </script>
+</body>
+</html>
 ~~~
 
 <br/>
