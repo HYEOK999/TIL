@@ -94,8 +94,7 @@
 
 ### Scrolling goto top
 
-![popup-ui](https://poiemaweb.com/assets/fs-images/exercise/scrolling-goto-top.gif)
-
+<img src="https://user-images.githubusercontent.com/31315644/68218868-5d2acf80-0028-11ea-816f-2ed6fd69ce72.jpeg" alt="scroll" style="zoom:50%;" />
 
 
 - [Window.pageYOffset](https://developer.mozilla.org/en-US/docs/Web/API/Window/pageYOffset)
