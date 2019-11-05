@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Stop watch</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
+
+    .stop-watch {
+      font-family: 'Source Code Pro', monospace;
+      text-align: center;
+      font-size: 3em;
+      padding: 30px;
+    }
+
+    .control {
+      width: 300px;
+      padding: 5px;
+      margin-top: 15px;
+      font-size: 36px;
+      font-weight: bold;
+      border: 2px solid #f44336;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .control:hover {
+      background: #f44336;
+      color: aliceblue;
+    }
+  </style>
+  <title>Stop watch</title>
+</head>
+<body>
+  <div class="stop-watch">
+    <div class="display">00:00:00</div>
+    <button class="control">Start</button>
+  </div>
+  <script>
+    // 버튼을 처음 클릭하면 스톱워치가 시작하고 버튼을 다시 클릭하면 일시 정지와 시작을 반복한다.
+    const $control = document.querySelector('.control');
+    const $display = document.querySelector('.display');
+    let timer = 0;
+    let btn = false;
+    let hour = '00';
+    let minute = '00';
+    let second = '00';
+
+    // console.dir($display.textContent.split(':'));
+    const format = (num) => {
+      num += '';
+      if (num.length == 1) {
+        num = `0${num}`;
+      }
+      return String(num);
+    };
+
+    $control.onclick = () => {
+      if (!btn) {
+        timer = setInterval(function () {
+          $display.textContent = `${format(hour)}:${format(minute)}:${format(second)}`;
+          second++;
+
+          if (second >= 100) {
+            minute++;
+            second = 0;
+          }
+
+          if (minute >= 60) {
+            hour++;
+            minute = 0;
+          }
+
+          if (hour >= 60) {
+            hour = 0;
+          }
+        }, 20);
+        btn = true;
+      } else {
+        clearInterval(timer);
+        btn = false;
+      }
+    };
+  </script>
+</body>
+</html>
