@@ -103,6 +103,10 @@ Today I Leaned...
 >[20191101-javascript-todo](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191101-study-javascript-todo.md)
 >
 >[20191104-javascript-todo](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191104-study-javascript-todo.md)
+>
+>[20191105-javascript-todo](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191105-study-javascript-todo.md)
+
+<br/>
 
 <br/>
 
@@ -135,6 +139,8 @@ Today I Leaned...
 >[DOM](https://github.com/HYEOK999/TIL/blob/master/javaScript/DOM.md)
 >
 >[이벤트](https://github.com/HYEOK999/TIL/blob/master/javaScript/이벤트.md)
+
+<br/>
 
 <br/>
 
@@ -202,7 +208,7 @@ Today I Leaned...
 
 <br/>
 
-### Algorithm
+### Algorithm & Quiz
 
 >[20190930-체육복](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_01.md)
 >
@@ -267,4 +273,6 @@ Today I Leaned...
 >[20191102-실패율(카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_30.md)
 >
 >[20191104-약수의 합](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_31.md)
+>
+>[20191105-Toggle side nav / Scrolling goto top](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_32.md)
 
