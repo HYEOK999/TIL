@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Counter</title>
+  <style>
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 130px;
+      margin: 20px auto;
+      font-size: 24px;
+      color: #3f51b5;
+    }
+
+    button {
+      padding: 5px 10px;
+      font-size: 24px;
+      border-radius: 5px;
+      color: #3f51b5;
+      border-color: #3f51b5;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .counter {
+      width: 50px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="increase">+</button>
+    <div class="counter">0</div>
+    <button class="decrease">-</button>
+  </div>
+
+  <script>
+    const $increase = document.querySelector('.increase');
+    const $decrease = document.querySelector('.decrease');
+    const $counter = document.querySelector('.counter');
+
+
+    const Counter = (function () {
+      let count = 0;
+
+      return {
+        increase() { return ++count; },
+        decrease() {
+          // if (count === 0) return;
+          return --count;
+        }
+      };
+    }());
+
+    $increase.onclick = () => {
+      $counter.textContent = Counter.increase();
+    };
+
+    $decrease.onclick = () => {
+      $counter.textContent = Counter.decrease();
+    };
+  </script>
+</body>
+</html>

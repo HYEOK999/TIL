@@ -21,16 +21,30 @@
     }
 
     /* CSS 작성 바랍니다. */
-    .popup {
-      background: white;
-      width: 300px;
+
+    .overlay{
       position: absolute;
       top: 0;
       left: 0;
-      padding: 30px 0;
+      background: rgba(0,0,0,.3);
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      z-index: 10;
+    }
+
+    .popup {
+      background: white;
+      width: 700px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      padding: 30px 20px;
       margin: 0 auto;
       box-shadow: 0 35px 15px 0 rgba(0,0,0,.3);
-      /* transform: translateX(auto); */
+      transform: translate(-50%, -50%);
+      display: none;
+      z-index: 15;
     }
 
     .btn-close{
@@ -58,6 +72,41 @@
   <p class="popup-message"></p>
   <script>
     const $popup = document.querySelector('.popup');
+    const $togglePopup = document.querySelector('.toggle-popup');
+    const $overlay = document.querySelector('.overlay');
+    const $input = document.querySelector('.popup > input');
+    const $popupMessage = document.querySelector('.popup-message');
+
+    // 기능
+    const showDisplay = () => {
+      $overlay.style.display = 'inline';
+      $popup.style.display = 'inline';
+    };
+
+    const nonShowDisplay = () => {
+      $overlay.style.display = 'none';
+      $popup.style.display = 'none';
+    };
+
+    // 이벤트
+    $togglePopup.onclick = () => {
+      showDisplay();
+    };
+
+    $overlay.onclick = () => {
+      nonShowDisplay();
+    };
+
+    $popup.onclick = ({ target }) => {
+      if (target.classList.contains('btn-cancel') || target.classList.contains('btn-close')) {
+        nonShowDisplay();
+      }
+      if (target.classList.contains('btn-ok')) {
+        $popupMessage.textContent = `form popup : ${$input.value}`;
+        nonShowDisplay();
+        $input.value = '';
+      }
+    };
   </script>
 </body>
 </html>

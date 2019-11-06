@@ -109,6 +109,10 @@
         hTime++;
         mTime = 0;
       }
+
+      if (hTime > 23) {
+        hTime = 0;
+      }
     };
 
     window.setInterval(timer, 1000);
