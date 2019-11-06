@@ -4,13 +4,19 @@
 
 문제 출처 : poiema
 
-### Toggle side nav
+### Counter
 
-![img](https://poiemaweb.com/assets/fs-images/exercise/toggle-side-nav.gif)
+![img](https://poiemaweb.com/assets/fs-images/exercise/counter.gif)
 
 - 요구 사항
 
-  자바스크립트를 사용하여 버튼이 클릭되었을 때 사이드 내비게이션이 토글되도록 구현한다.
+  1. 최소값은 0이다. 즉, 0과 양수만으로 카운트한다.
+
+  2. 클로저로 구현한다.
+
+<br/>
+
+#### 1. 함수 자체를 리턴하고 함수를 받아와서 출력하는 방법
 
 ~~~html
 <!DOCTYPE html>
@@ -19,72 +25,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Toggle side nav</title>
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+  <title>Counter</title>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
-
     .container {
-      position: relative;
-      overflow-x: hidden; /* 가로 scroll bar 방지 */
-      width: 100%;
-      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 130px;
+      margin: 20px auto;
+      font-size: 24px;
+      color: #3f51b5;
     }
 
-    .main, .side-nav {
-      position: absolute;
-      top: 0;
-      height: 100%;
-      transition: transform 0.8s;
-    }
-
-    .main {
-      left: 0;
-      width: 100%;
-      background: antiquewhite;
-    }
-
-    .side-nav {
-      left: -300px;
-      width: 300px;
-      background: rebeccapurple;
-    }
-
-    .active > .main,
-    .active > .side-nav {
-      transform: translate3d(300px, 0, 0);
-    }
-
-    .toggle {
-      font-size: 2em;
-      color: maroon;
-      margin: 10px;
+    button {
+      padding: 5px 10px;
+      font-size: 24px;
+      border-radius: 5px;
+      color: #3f51b5;
+      border-color: #3f51b5;
+      outline: none;
       cursor: pointer;
-      transition: transform 0.5s;
     }
 
-    .active .toggle {
-      transform: rotate(180deg);
+    .counter {
+      width: 50px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="side-nav"></div>
-    <div class="main">
-      <i class="toggle fas fa-arrow-circle-right"></i>
-    </div>
+    <button class="increase">+</button>
+    <div class="counter">0</div>
+    <button class="decrease">-</button>
   </div>
-  <script>
-    const $toggle = document.querySelector('.toggle');
-    const $container = document.querySelector('.container');
 
-    $toggle.onclick = () => {
-      $container.classList.toggle('active');
+  <script>
+    const $counter = document.querySelector('.counter');
+    const $increase = document.querySelector('.increase');
+    const $decrease = document.querySelector('.decrease');
+
+    const Counter = (function () {
+      let count = 0;
+
+      return function (fr) {
+        count = fr(count);
+        $counter.textContent = count;
+      };
+    }());
+
+    const increase = (n) => ++n;
+
+    const decrease = (n) => {
+      if (n == 0) return 0;
+      return --n;
     };
+
+    $increase.onclick = () => Counter(increase);
+    $decrease.onclick = () => Counter(decrease);
   </script>
 </body>
 </html>
@@ -92,134 +90,67 @@
 
 <br/>
 
-### Scrolling goto top
+#### 생성자 함수로 만들고 생성자함수 객체 프로토타입의 메소드를 호출하는 방법
 
-<img src="https://user-images.githubusercontent.com/31315644/68218868-5d2acf80-0028-11ea-816f-2ed6fd69ce72.jpeg" alt="scroll" style="zoom:50%;" />
+~~~~javascript
+const $counter = document.querySelector('.counter');
+const $increase = document.querySelector('.increase');
+const $decrease = document.querySelector('.decrease');
 
+const Counter = (function () {
+  let count = 0;
 
-- [Window.pageYOffset](https://developer.mozilla.org/en-US/docs/Web/API/Window/pageYOffset)
-- [Window.scrollTo()](https://developer.mozilla.org/ko/docs/Web/API/Window/scrollTo)
-- [Window.scroll()](https://developer.mozilla.org/en-US/docs/Web/API/Window/scroll)
+  function Counters() {
+  }
 
-~~~html
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>scrolling-goto-top</title>
-  <style>
-    @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400);
-    @import url(https://use.fontawesome.com/releases/v5.5.0/css/all.css);
+  Counters.prototype.increase = function () {
+    $counter.textContent = count++;
+  };
 
-    body {
-      font-family: 'Open Sans';
-      font-weight: 300;
-      background-color: #D6E1E5;
-    }
+  Counters.prototype.decrease = function () {
+    if (count == 0) return;
+    $counter.textContent = --count;
+  };
 
-    h1 {
-      color: #DB5B33;
-      font-weight: 300;
-      text-align: center;
-    }
+  return Counters;
+}());
 
-    .scoll-icon {
-      position: fixed;
-      left: 50%;
-      bottom: 20px;
-      font-size: 36px;
-      cursor: pointer;
-      animation: glow 4s infinite;
-      display: none;
-    }
+const counts = new Counter();
 
-    @keyframes glow {
-      0% {
-        opacity: 1;
-      }
+$increase.onclick = () => {
+  counts.increase();
+};
 
-      50% {
-        opacity: 0.3;
-        transform: translateY(10px);
-      }
-    }
-  </style>
-</head>
-<body>
-  <h1>JavaScript Scrolling goto top</h1>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-  <p>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, repudiandae quia. Veniam amet fuga, eveniet velit ipsa repudiandae nemo? Sit dolorem itaque laudantium dignissimos, rerum maiores nihil ad voluptates nostrum.
-  </p>
-
-  <div class="scoll-icon fa fa-angle-double-up"></div>
-
-  <script>
-    const $scollIcon = document.querySelector('.scoll-icon');
-
-    window.onscroll = () => {
-      $scollIcon.style.display = window.pageYOffset > 200 ? 'inline' : 'none';
-    };
-
-    $scollIcon.onclick = () => {
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      });
-    };
-  </script>
-</body>
-</html>
-~~~
+$decrease.onclick = () => {
+  counts.decrease();
+};
+~~~~
 
 <br/>
+
+#### 객체(증가함수, 감소함수)를 리턴하는 방법
+
+~~~javascript
+const $counter = document.querySelector('.counter');
+const $increase = document.querySelector('.increase');
+const $decrease = document.querySelector('.decrease');
+
+const Counter = (function () {
+  let count = 0;
+  
+  return {
+    increase() {
+      $counter.textContent = ++count;
+    },
+    decrease() {
+      if (count == 0) return;
+      $counter.textContent = --count;
+    }
+  };
+}());
+
+
+$increase.onclick = () => Counter.increase();
+$decrease.onclick = () => Counter.decrease();
+~~~
+
