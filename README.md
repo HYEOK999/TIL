@@ -285,4 +285,8 @@ Today I Leaned...
 >[20191105-Toggle side nav / Scrolling goto top](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_32.md)
 >
 >[20191106-Counter](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_33.md)
+>
+>[20191107-Stop Watch](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_34.md)
+>
+>[201908-Analog Clock]()
 
