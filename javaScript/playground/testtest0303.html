@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .exhibition-images{
+      background-color: rgb(211, 102, 102);
+      /* vertical-align : top; */
+      display: inline-block;
+      margin-top: 110px;
+      margin-left: 80px;
+      position: relative;
+    }
+    .slide-images,
+    .slide-images2 {
+      list-style: none;
+      padding-left: 0;
+    }
+    .slide-images{
+      margin: 0;
+      font-size: 0;
+      width: 1056px;
+      height: 330px;
+      overflow-x: hidden;
+      white-space: nowrap;
+    }
+    .slide-images2{
+      /* display: none; */
+      margin: 0;
+      font-size: 0;
+    }
+    .slide-images > li{
+      display: inline-block;
+      width: 264px;
+      height: 330px;
+    }
+    .slide-images2 > li{
+      display: inline-block;
+      width: 264px;
+      height: 330px;
+    }
+
+    .image-1{
+      background-image: url(./carousel-img/best_relic_img_1.jpg);
+    }
+    .image-2{
+      background-image: url(./carousel-img/best_relic_img_2.jpg);
+    }
+    .image-3{
+      background-image: url(./carousel-img/best_relic_img_3.jpg);
+    }
+    .image-4{
+      background-image: url(./carousel-img/best_relic_img_4.jpg);
+    }
+    .image-5{
+      background-image: url(./carousel-img/best_relic_img_5.jpg);
+    }
+    .image-6{
+      background-image: url(./carousel-img/best_relic_img_6.jpg);
+    }
+    .image-7{
+      background-image: url(./carousel-img/best_relic_img_7.jpg);
+    }
+    .image-8{
+      background-image: url(./carousel-img/best_relic_img_8.jpg);
+    }
+    /* 버튼 영역 */
+    .move-left,
+    .move-right{
+      position: absolute;
+      border: none;
+      background-color: rgba(255, 255, 255, 0);
+      width: 50px;
+      height: 47px;
+      color: white;
+      font-size: 5rem;
+      font-weight: 100;
+    }
+    .move-left{
+      left: 0;
+      top: 150px;
+    }
+    .move-right{
+      right: 0;
+      top: 150px;
+    }
+  </style>
+</head>
+<body>
+  <section class="exhibition-images">
+    <ul class='slide-images'>
+      <li class="image-1"><a href="#">금동향로</a></li>
+      <li class="image-2"><a href="#">금동풍탁</a></li>
+      <li class="image-3"><a href="#">금제사리외호 &middot; 내호</a></li>
+      <li class="image-4"><a href="#">금제사리봉영기</a></li>
+      <li class='image-5'><a href="#">치미</a></li>
+      <li class='image-6'><a href="#">녹유 서까래기와</a></li>
+      <li class='image-7'><a href="#">글자를 새긴 기와</a></li>
+      <li class='image-8'><a href="#">글자를 찍은 기와</a></li>
+    </ul>
+    <button class="move-left"><</button>
+    <button class="move-right">></button>
+</section>
+<script>
+  class Carousel {
+    constructor() {
+      this.carousel = document.querySelector('.exhibition-images');
+      this.container = this.carousel.querySelector('.slide-images');
+      this.item = this.carousel.querySelector('.slide-images li');
+
+      console.log(this.item);
+
+      this.prev = this.carousel.querySelector('.move-left');
+      this.next = this.carousel.querySelector('.move-right');
+
+
+      // 캐러셀 아이템의 width
+      this.itemWidth = this.item.offsetWidth * 4;
+      // 캐러셀 아이템의 개수
+      console.log(this.container);
+      this.itemLength = this.container.querySelectorAll('li').length / 4;
+
+      // 캐러셀 이동 거리
+      this.offset = 0;
+      // 현재 표시 중인 캐러셀 아이템
+      this.currentItem = 1;
+
+      // 설정 정보
+      this.config = {
+        duration: 200,
+        easing: 'ease-out'
+      };
+
+      this.init();
+      this.attachEvent();
+    }
+
+    init() {
+      // 첫번째 li의 width/height를 취득해 셋팅한다.
+      this.carousel.style.width = this.itemWidth + 'px';
+
+      // prev, next 버튼 활성화/비활성화 결정
+      this.checkMovable();
+    }
+
+    attachEvent() {
+      this.prev.addEventListener('click', this.moveToPrev.bind(this));
+      this.next.addEventListener('click', this.moveToNext.bind(this));
+    }
+
+    /*
+      prev 버튼 이벤트 핸들러
+      이전 슬라이더로 이동하기 위해 carousel-container 요소를 오른쪽으로 이동시킨다.
+    */
+    moveToPrev() {
+      // carousel-container 요소를 오른쪽으로 이동시키기 위해 이동거리를 캐러셀 아이템의 너비만큼 증시킨다.
+      this.offset += this.itemWidth;
+      // 이전 슬라이더로 이동하기 위해 carousel-container 요소를 오른쪽으로 이동시킨다.
+      this.move();
+      // 현재 표시 중인 캐러셀 아이템 인덱스(1~4)
+      this.currentItem--;
+      // prev, next 버튼 활성화/비활성화 결정
+      this.checkMovable();
+    }
+
+    /*
+      next 버튼 이벤트 핸들러
+      다음 슬라이더로 이동하기 위해 carousel-container 요소를 왼쪽으로 이동시킨다.
+    */
+    moveToNext() {
+      // carousel-container 요소를 왼쪽으로 이동시키기 위해 이동거리를 캐러셀 아이템의 너비만큼 감소시킨다.
+      this.offset -= this.itemWidth;
+      // 다음 슬라이더로 이동하기 위해 carousel-container 요소를 왼쪽으로 이동시킨다.
+      this.move();
+      // 현재 표시 중인 캐러셀 아이템 인덱스(1~4)
+      this.currentItem++;
+      // prev, next 버튼 활성화/비활성화 결정
+      this.checkMovable();
+    }
+
+    // offset 만큼 carousel-container 요소를 이동시킨다.
+    move() {
+      this.container.style.transition = `transform ${this.config.duration}ms ${this.config.easing}`;
+      this.container.style.transform = `translate3D(${this.offset}px, 0, 0)`;
+    }
+
+    // prev, next 버튼 활성화/비활성화 결정
+    checkMovable() {
+      if (this.currentItem === 1) {
+        this.prev.disabled = true;
+        this.prev.classList.add('disabled');
+      } else {
+        this.prev.disabled = false;
+        this.prev.classList.remove('disabled');
+      }
+
+      if (this.currentItem === this.itemLength) {
+        this.next.disabled = true;
+        this.next.classList.add('disabled');
+      } else {
+        this.next.disabled = false;
+        this.next.classList.remove('disabled');
+      }
+    }
+  }
+
+  window.onload = function () {
+    const carousel = new Carousel();
+  };
+</script>
+</body>
+</html>

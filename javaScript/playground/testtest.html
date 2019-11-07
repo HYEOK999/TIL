@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <ul class="todos">
+    <li class="1">1</li>
+    <li class="2">2</li>
+    <li class="3">3</li>
+    <li class="4">4</li>
+    <li class="5">5</li>
+    <li class="6">6</li>
+    <li class="7">7</li>
+    <li class="8">8</li>
+  </ul>
+</body>
+<script>
+  const $todos = document.querySelector('.todos');
+
+  const arr = [...$todos.children];
+
+  let html = '';
+  arr.forEach((item) => {
+    html += `
+      <li class='${item.className}'>${item.textContent}</li>
+    `;
+  });
+
+  console.log(html);
+
+  $todos.innerHTML += html;
+  // arr.forEach(item => $todos.innerHTML += item.outerHTML);
+</script>
+</html>
