@@ -189,6 +189,8 @@ Today I Leaned...
 > [30 : DOM](https://github.com/HYEOK999/TIL/blob/master/javaScript/DOM.md)
 >
 > [31M : 동기식 처리 모델 vs 비동기식 처리 모델 / 32M : 이벤트](https://github.com/HYEOK999/TIL/blob/master/homework/191030-subject31m32m.md)
+>
+> [34M : 비동기식 처리 모델과 Ajax / 35M : REST(Representational State Transfer) API](https://github.com/HYEOK999/TIL/blob/master/homework/191106-subject34m35m.md)
 
 <br/>
 
