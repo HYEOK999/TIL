@@ -139,6 +139,10 @@ Today I Leaned...
 >[DOM](https://github.com/HYEOK999/TIL/blob/master/javaScript/DOM.md)
 >
 >[이벤트](https://github.com/HYEOK999/TIL/blob/master/javaScript/이벤트.md)
+>
+>[비동기 처리 모델 , Ajax](https://github.com/HYEOK999/TIL/blob/master/javaScript/Ajax.md)
+>
+>[REST API](https://github.com/HYEOK999/TIL/blob/master/javaScript/RESTAPI.md)
 
 <br/>
 
