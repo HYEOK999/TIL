@@ -50,13 +50,15 @@
     let second = '00';
 
     // console.dir($display.textContent.split(':'));
-    const format = (num) => {
-      num += '';
-      if (num.length == 1) {
-        num = `0${num}`;
-      }
-      return String(num);
-    };
+    // const format = (num) => {
+    //   num += '';
+    //   if (num.length == 1) {
+    //     num = `0${num}`;
+    //   }
+    //   return String(num);
+    // };
+
+    const format = (num) => ((num + '').length === 1 ? `0${num}` : `${num}`);
 
     $control.onclick = () => {
       if (!btn) {

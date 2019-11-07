@@ -65,14 +65,15 @@
     let minute = '00';
     let second = '00';
 
-    // console.dir($display.textContent.split(':'));
-    const format = (num) => {
-      num += '';
-      if (num.length == 1) {
-        num = `0${num}`;
-      }
-      return String(num);
-    };
+    // const format = (num) => {
+    //   num += '';
+    //   if (num.length == 1) {
+    //     num = `0${num}`;
+    //   }
+    //   return String(num);
+    // };
+
+    const format = (num) => ((num + '').length === 1 ? `0${num}` : `${num}`);
 
     $control.onclick = () => {
       if (!btn) {
@@ -106,3 +107,30 @@
 ~~~
 
 <br/>
+
+#### 주요 코드
+
+1. 숫자가 1자리 수 일 때는 앞에 0을 붙인 문자열 변환
+
+해당 문제에서 제일 난해한 부분은 특정 수 일 때 문자열로 변환을 해줘야만 한다는 것이었다.
+
+따라 해당 시간을 화면에 보여주기 전에 먼저 문자열로 바꿔주면서 문자열 1자리 수라면 0을 앞에 붙이는 함수를 추가하였다.
+
+~~~~javascript
+    // const format = (num) => {
+    //   num += '';
+    //   if (num.length == 1) {
+    //     num = `0${num}`;
+    //   }
+    //   return String(num);
+    // };
+
+    const format = (num) => ((num + '').length === 1 ? `0${num}` : `${num}`);
+~~~~
+
+<br/>
+
+2. 정지 시작 토글 생성
+
+정지 한 후 다시 시작하는 토글기능을 위해 변수 btn을 만들고 클릭시 btn에 false 혹은 true값을 게속 번갈아가도록 설정 하였다.
+
