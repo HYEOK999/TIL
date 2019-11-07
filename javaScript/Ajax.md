@@ -1,4 +1,4 @@
-![arrow](https://user-images.githubusercontent.com/31315644/68327673-21b80000-0111-11ea-9e1f-aa2295dd76d9.png)
+<img src="https://user-images.githubusercontent.com/31315644/68359576-b3e6f500-015f-11ea-9ef8-f45b78dd0f97.png" alt="arrow" style="zoom: 50%;" />
 
 ------
 

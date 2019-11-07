@@ -1,4 +1,4 @@
-![girl](/Users/hyeokbook/Documents/docs_img/girl.jpg)
+![rest](https://user-images.githubusercontent.com/31315644/68327674-22509680-0111-11ea-9ab0-8cff7da105ba.jpg)
 
 ------
 
