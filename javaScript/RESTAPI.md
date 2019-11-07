@@ -23,8 +23,6 @@
 
 ------
 
-# 35강
-
 ## REST(Representational State Transfer) API
 
 REST의 기본 원칙을 성실히 지킨 서비스 디자인을 “RESTful”이라고 표현한다.
