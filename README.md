@@ -145,6 +145,8 @@ Today I Leaned...
 >[비동기 처리 모델 , Ajax](https://github.com/HYEOK999/TIL/blob/master/javaScript/Ajax.md)
 >
 >[REST API](https://github.com/HYEOK999/TIL/blob/master/javaScript/RESTAPI.md)
+>
+>[Promise](https://github.com/HYEOK999/TIL/blob/master/javaScript/Promise.md)
 
 <br/>
 
