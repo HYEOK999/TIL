@@ -4,133 +4,122 @@
 
 문제 출처 : poiema
 
-### Stop Watch
+### Tabs UI
 
-![img](https://poiemaweb.com/assets/fs-images/exercise/analog-clock.gif)
-
-- 요구 사항 : 현재 시간을 표시하여야 한다.
+![popup-ui](https://poiemaweb.com/assets/fs-images/exercise/popup-ui.gif)
 
 <br/>
 
 ~~~html
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Analog Clock</title>
+  <title>Popup</title>
   <style>
-    @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
+    @import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400);
 
-    .analog-clock {
-      position: relative;
-      margin: 100px auto 0;
-      width: 200px;
-      height: 200px;
-      background-color: aliceblue;
-      border-radius: 50%;
+    body {
+      font-family: 'Open Sans';
+      font-weight: 300;
+      background-color: #D6E1E5;
     }
 
-    .hand {
+    h1 {
+      color: #DB5B33;
+      font-weight: 300;
+      text-align: center;
+    }
+
+    /* CSS 작성 바랍니다. */
+
+    .overlay{
       position: absolute;
-      left: 50%;
-      width: 1px;
-      height: 100px;
-      /* 자바스크립트에 의해 덮어써진다. */
-      /* transform: translate3d(-50%, 0, 0); */
-      transform-origin: 100% 100%;
+      top: 0;
+      left: 0;
+      background: rgba(0,0,0,.3);
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      z-index: 10;
     }
 
-    .hour {
-      background-color: #f44336;
-    }
-
-    .minute {
-      background-color: #3f51b5;
-    }
-
-    .second {
-      background-color: #9e9e9e;
-      /* transform: rotate(100deg); */
-    }
-
-    .center-circle {
+    .popup {
+      background: white;
+      width: 700px;
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate3d(-50%, -50%, 0);
-      width: 12px;
-      height: 12px;
-      background-color: black;
-      border-radius: 50%;
+      padding: 30px 20px;
+      margin: 0 auto;
+      box-shadow: 0 35px 15px 0 rgba(0,0,0,.3);
+      transform: translate(-50%, -50%);
+      display: none;
+      z-index: 15;
     }
 
-    .digital-clock {
+    .btn-close{
       position: absolute;
-      top: 350px;
-      left: 50%;
-      transform: translate3d(-50%, 0, 0);
-      font-size: 2em;
-      font-family: 'Source Code Pro', monospace;
+      top: 0;
+      right: 0;;
     }
   </style>
 </head>
 <body>
-  <div class="clock">
-    <div class="analog-clock">
-      <div class="hour hand"></div>
-      <div class="minute hand"></div>
-      <div class="second hand"></div>
-      <div class="center-circle"></div>
-    </div>
-    <div class="digital-clock"></div>
+  <h1>JavaScript Popup</h1>
+
+  <div class="popup">
+    <h1>JavaScript Popup</h1>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+    <button class="btn-close">X</button>
+    <input type="text">
+    <button class="btn-ok">OK</button>
+    <button class="btn-cancel">Cancel</button>
   </div>
+  <div class="overlay"></div>
 
+  <button class="toggle-popup">show popup</button>
+
+  <p class="popup-message"></p>
   <script>
-    // transform: rotate(100deg);
-    const $second = document.querySelector('.second');
-    const $minute = document.querySelector('.minute');
-    const $hour = document.querySelector('.hour');
-    const $digitalClock = document.querySelector('.digital-clock');
+    const $popup = document.querySelector('.popup');
+    const $togglePopup = document.querySelector('.toggle-popup');
+    const $overlay = document.querySelector('.overlay');
+    const $input = document.querySelector('.popup > input');
+    const $popupMessage = document.querySelector('.popup-message');
 
-    let sTime = new Date().getSeconds();
-    let mTime = new Date().getMinutes();
-    let hTime = new Date().getHours();
-
-    // const format = (num) => {
-    //   num += '';
-    //   if (num.length == 1) {
-    //     num = `0${num}`;
-    //   }
-    //   return num;
-    // };
-
-    const format2 = (num) => (String(num).length == 1 ? `0${num}` : `${num}`);
-
-    const timer = () => {
-      $second.style.transform = `rotate(${sTime * 6}deg)`;
-      $minute.style.transform = `rotate(${mTime * 6 + sTime * 0.1}deg)`;
-      $hour.style.transform = `rotate(${(hTime % 12) * 30 + mTime * 0.5}deg)`;
-
-      $digitalClock.innerHTML = 				`${format2(hTime)}:${format2(mTime)}:${format2(sTime)}`;
-      sTime++;
-      if (sTime >= 60) {
-        mTime++;
-        sTime = 0;
-      }
-
-      if (mTime >= 60) {
-        hTime++;
-        mTime = 0;
-      }
-
-      if (hTime > 23) {
-        hTime = 0;
-      }
+    // 기능
+    const showDisplay = () => {
+      $overlay.style.display = 'inline';
+      $popup.style.display = 'inline';
     };
 
-    window.setInterval(timer, 1000);
+    const nonShowDisplay = () => {
+      $overlay.style.display = 'none';
+      $popup.style.display = 'none';
+    };
+
+    // 이벤트
+    $togglePopup.onclick = () => {
+      showDisplay();
+    };
+
+    $overlay.onclick = () => {
+      nonShowDisplay();
+    };
+
+    $popup.onclick = ({ target }) => {
+      if (target.classList.contains('btn-cancel') || target.classList.contains('btn-close')) {
+        nonShowDisplay();
+      }
+      if (target.classList.contains('btn-ok')) {
+        $popupMessage.textContent = `form popup : ${$input.value}`;
+        nonShowDisplay();
+        $input.value = '';
+      }
+    };
   </script>
 </body>
 </html>
@@ -140,65 +129,61 @@
 
 #### 주요 코드
 
-1. 숫자가 1자리 수 일 때는 앞에 0을 붙인 문자열 변환
+JS 보다 css때문에 힘들었던 문제다.
 
-해당 문제에서 제일 난해한 부분은 특정 수 일 때 문자열로 변환을 해줘야만 한다는 것이었다.
+1. 팝업시 나타나는 회색 배경 처리
 
-따라 해당 시간을 화면에 보여주기 전에 먼저 문자열로 바꿔주면서 문자열 1자리 수라면 0을 앞에 붙이는 함수를 추가하였다.
+   ~~~css
+   .overlay{
+     position: absolute;
+     top: 0;
+     left: 0;
+     background: rgba(0,0,0,.3);
+     width: 100vw;
+     height: 100vh;
+     display: none;
+     z-index: 10;
+   }
+   ~~~
 
-~~~~javascript
-    // const format = (num) => {
-    //   num += '';
-    //   if (num.length == 1) {
-    //     num = `0${num}`;
-    //   }
-    //   return String(num);
-    // };
+   position을 absolute하여 화면에서 띄우고 화면의 넓이 , 높이를 전부다 다 100view로 맞춰놓았다.
 
-    const format2 = (num) => ((num + '').length === 1 ? `0${num}` : `${num}`);
-~~~~
+   클릭시 display만 바꿔주면 되기 때문에 `none`처리 하였고 마크업상 overlay 나중에 나오기 때문에 z-index를 낮게 줌으로써 뒤에서 보이게끔 설정하였다.
 
-<br/>
+   <br/>
 
-2. 시간 알고리즘
+2. 팝업시 나타는 화면 처리
 
-~~~javascript
- const timer = () => {
-      $second.style.transform = `rotate(${sTime * 6}deg)`;
-      $minute.style.transform = `rotate(${mTime * 6 + sTime * 0.1}deg)`;
-      $hour.style.transform = `rotate(${(hTime % 12) * 30 + mTime * 0.5}deg)`;
+   ~~~css
+   .popup {
+     background: white;
+     width: 700px;
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     padding: 30px 20px;
+     margin: 0 auto;
+     box-shadow: 0 35px 15px 0 rgba(0,0,0,.3);
+     transform: translate(-50%, -50%);
+     display: none;
+     z-index: 15;
+   }
+   ~~~
 
-      $digitalClock.innerHTML = 				`${format2(hTime)}:${format2(mTime)}:${format2(sTime)}`;
-      sTime++;
-      if (sTime >= 60) {
-        mTime++;
-        sTime = 0;
-      }
+    팝업 클릭시 나타나는 화면은 현재 보는 화면에서 정중앙에 띄워서 나타나야 되기 때문에, position : absolute 를 주었고, 현재 위치에 중앙 위치인 top 50% , left 50% 에 transform: translate(-50%,-50%)를 줘서 정확히 반에 위치하게끔 설정하였다.
 
-      if (mTime >= 60) {
-        hTime++;
-        mTime = 0;
-      }
+   overlay보다 위에 있어야되기 때문에 z-index를 15주로 설정하였다.
 
-      if (hTime > 23) {
-        hTime = 0;
-      }
-    };
-~~~
+   <br/>
 
-360도 기준 1초는 6도이므로 x6을 한다. : `rotate(${sTime * 6}deg)`
+3. 삭제 버튼
 
-360도 기준 1분은 6도이므로 x6을 하고 1초가 60번을 움직여야만 1분이 움직이게 되므로 자연스러운 움직임을 위해 1초당 0.1도씩(60초 후 6도)움직이게 설정한다. : `rotate(${mTime * 6 + sTime * 0.1}deg)`
+   ~~~css
+   .btn-close{
+     position: absolute;
+     top: 0;
+     right: 0;;
+   }
+   ~~~
 
-360도 기준 1시간은 30도인데 시간은 24시간이므로 12를 나눠서 나온 나머지를 가지고 처리한다. 
-그리고 1분이 60번을 움직여야 1시간이 움직이게 되므로 자연스러운 움직임을 위해 1분당 0.5도씩(60분 후 30도) 움직이게 설정한다. : `rotate(${(hTime % 12) * 30 + mTime * 0.5}deg)`
-
-<br/>
-
-**디지털 시계**
-
-디지털 시계는 초부터 1씩 숫자를 증가시켜 초가 60을 넘기게 될 경우 0으로 만들고 분에 1을 더해준다.
-
-분 역시 60을 넘기게 될 경우 0으로 만들고 시간에 1을 더 해준다.
-
-시간은 23시( 정수이므로 24가 딱 되는 순간 )를 넘어가게 될 경우 0으로 초기화 해준다.
+   삭제 버튼의 위치가 오른쪽 상단에 걸쳐야되기 때문에 absolute로 하여 top:0 right:0을 주웠다.
