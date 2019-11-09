@@ -4,7 +4,10 @@
   <pre class="result"></pre>
   <script>
     const $result = document.querySelector('.result');
-    const render = content => { $result.textContent = JSON.stringify(content, null, 2); };
+    const render = content => {
+      console.log('render');
+      $result.textContent = JSON.stringify(content, null, 2);
+    };
 
     const promiseAjax = (method, url, payload) => {
       return new Promise((resolve, reject) => {
@@ -12,8 +15,9 @@
         xhr.open(method, url);
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify(payload));
-
+        console.log('abczz');
         xhr.onreadystatechange = function () {
+          console.log('onchange 이벤트');
           if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
           if (xhr.status >= 200 && xhr.status < 400) {
@@ -30,8 +34,11 @@
     // 포스트 id가 1인 포스트를 검색하고 프로미스를 반환한다.
     promiseAjax('GET', `${url}/1`)
       // 포스트 id가 1인 포스트를 작성한 사용자의 아이디로 작성된 모든 포스트를 검색하고 프로미스를 반환한다.
+      .then(console.log(1))
       .then(function (res){ return promiseAjax('GET', `${url}?userId=${JSON.parse(res).userId}`) })
       .then(JSON.parse)
+      .then(console.log(2))
+      .then(console.log(3))
       .then(render)
       .catch(console.error);
   </script>
