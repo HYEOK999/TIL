@@ -6,10 +6,9 @@
 
 ### Stop Watch
 
-![img](https://poiemaweb.com/assets/fs-images/exercise/stop-watch.gif)
+![img](https://poiemaweb.com/assets/fs-images/exercise/analog-clock.gif)
 
-- 요구 사항 : 버튼을 처음 클릭하면 스톱워치가 시작하고 버튼을 다시 클릭하면 일시 정지와 시작을 반복한다.
-
+- 요구 사항 : 현재 시간을 표시하여야 한다.
 
 <br/>
 
@@ -20,87 +19,118 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Stop watch</title>
+  <title>Analog Clock</title>
   <style>
     @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
 
-    .stop-watch {
+    .analog-clock {
+      position: relative;
+      margin: 100px auto 0;
+      width: 200px;
+      height: 200px;
+      background-color: aliceblue;
+      border-radius: 50%;
+    }
+
+    .hand {
+      position: absolute;
+      left: 50%;
+      width: 1px;
+      height: 100px;
+      /* 자바스크립트에 의해 덮어써진다. */
+      /* transform: translate3d(-50%, 0, 0); */
+      transform-origin: 100% 100%;
+    }
+
+    .hour {
+      background-color: #f44336;
+    }
+
+    .minute {
+      background-color: #3f51b5;
+    }
+
+    .second {
+      background-color: #9e9e9e;
+      /* transform: rotate(100deg); */
+    }
+
+    .center-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      width: 12px;
+      height: 12px;
+      background-color: black;
+      border-radius: 50%;
+    }
+
+    .digital-clock {
+      position: absolute;
+      top: 350px;
+      left: 50%;
+      transform: translate3d(-50%, 0, 0);
+      font-size: 2em;
       font-family: 'Source Code Pro', monospace;
-      text-align: center;
-      font-size: 3em;
-      padding: 30px;
-    }
-
-    .control {
-      width: 300px;
-      padding: 5px;
-      margin-top: 15px;
-      font-size: 36px;
-      font-weight: bold;
-      border: 2px solid #f44336;
-      border-radius: 4px;
-      cursor: pointer;
-      outline: none;
-    }
-
-    .control:hover {
-      background: #f44336;
-      color: aliceblue;
     }
   </style>
-  <title>Stop watch</title>
 </head>
 <body>
-  <div class="stop-watch">
-    <div class="display">00:00:00</div>
-    <button class="control">Start</button>
+  <div class="clock">
+    <div class="analog-clock">
+      <div class="hour hand"></div>
+      <div class="minute hand"></div>
+      <div class="second hand"></div>
+      <div class="center-circle"></div>
+    </div>
+    <div class="digital-clock"></div>
   </div>
+
   <script>
-    // 버튼을 처음 클릭하면 스톱워치가 시작하고 버튼을 다시 클릭하면 일시 정지와 시작을 반복한다.
-    const $control = document.querySelector('.control');
-    const $display = document.querySelector('.display');
-    let timer = 0;
-    let btn = false;
-    let hour = '00';
-    let minute = '00';
-    let second = '00';
+    // transform: rotate(100deg);
+    const $second = document.querySelector('.second');
+    const $minute = document.querySelector('.minute');
+    const $hour = document.querySelector('.hour');
+    const $digitalClock = document.querySelector('.digital-clock');
+
+    let sTime = new Date().getSeconds();
+    let mTime = new Date().getMinutes();
+    let hTime = new Date().getHours();
 
     // const format = (num) => {
     //   num += '';
     //   if (num.length == 1) {
     //     num = `0${num}`;
     //   }
-    //   return String(num);
+    //   return num;
     // };
 
-    const format = (num) => ((num + '').length === 1 ? `0${num}` : `${num}`);
+    const format2 = (num) => (String(num).length == 1 ? `0${num}` : `${num}`);
 
-    $control.onclick = () => {
-      if (!btn) {
-        timer = setInterval(function () {
-          $display.textContent = `${format(hour)}:${format(minute)}:${format(second)}`;
-          second++;
+    const timer = () => {
+      $second.style.transform = `rotate(${sTime * 6}deg)`;
+      $minute.style.transform = `rotate(${mTime * 6 + sTime * 0.1}deg)`;
+      $hour.style.transform = `rotate(${(hTime % 12) * 30 + mTime * 0.5}deg)`;
 
-          if (second >= 100) {
-            minute++;
-            second = 0;
-          }
+      $digitalClock.innerHTML = 				`${format2(hTime)}:${format2(mTime)}:${format2(sTime)}`;
+      sTime++;
+      if (sTime >= 60) {
+        mTime++;
+        sTime = 0;
+      }
 
-          if (minute >= 60) {
-            hour++;
-            minute = 0;
-          }
+      if (mTime >= 60) {
+        hTime++;
+        mTime = 0;
+      }
 
-          if (hour >= 60) {
-            hour = 0;
-          }
-        }, 20);
-        btn = true;
-      } else {
-        clearInterval(timer);
-        btn = false;
+      if (hTime > 23) {
+        hTime = 0;
       }
     };
+
+    window.setInterval(timer, 1000);
   </script>
 </body>
 </html>
@@ -125,12 +155,50 @@
     //   return String(num);
     // };
 
-    const format = (num) => ((num + '').length === 1 ? `0${num}` : `${num}`);
+    const format2 = (num) => ((num + '').length === 1 ? `0${num}` : `${num}`);
 ~~~~
 
 <br/>
 
-2. 정지 시작 토글 생성
+2. 시간 알고리즘
 
-정지 한 후 다시 시작하는 토글기능을 위해 변수 btn을 만들고 클릭시 btn에 false 혹은 true값을 게속 번갈아가도록 설정 하였다.
+~~~javascript
+ const timer = () => {
+      $second.style.transform = `rotate(${sTime * 6}deg)`;
+      $minute.style.transform = `rotate(${mTime * 6 + sTime * 0.1}deg)`;
+      $hour.style.transform = `rotate(${(hTime % 12) * 30 + mTime * 0.5}deg)`;
 
+      $digitalClock.innerHTML = 				`${format2(hTime)}:${format2(mTime)}:${format2(sTime)}`;
+      sTime++;
+      if (sTime >= 60) {
+        mTime++;
+        sTime = 0;
+      }
+
+      if (mTime >= 60) {
+        hTime++;
+        mTime = 0;
+      }
+
+      if (hTime > 23) {
+        hTime = 0;
+      }
+    };
+~~~
+
+360도 기준 1초는 6도이므로 x6을 한다. : `rotate(${sTime * 6}deg)`
+
+360도 기준 1분은 6도이므로 x6을 하고 1초가 60번을 움직여야만 1분이 움직이게 되므로 자연스러운 움직임을 위해 1초당 0.1도씩(60초 후 6도)움직이게 설정한다. : `rotate(${mTime * 6 + sTime * 0.1}deg)`
+
+360도 기준 1시간은 30도인데 시간은 24시간이므로 12를 나눠서 나온 나머지를 가지고 처리한다. 
+그리고 1분이 60번을 움직여야 1시간이 움직이게 되므로 자연스러운 움직임을 위해 1분당 0.5도씩(60분 후 30도) 움직이게 설정한다. : `rotate(${(hTime % 12) * 30 + mTime * 0.5}deg)`
+
+<br/>
+
+**디지털 시계**
+
+디지털 시계는 초부터 1씩 숫자를 증가시켜 초가 60을 넘기게 될 경우 0으로 만들고 분에 1을 더해준다.
+
+분 역시 60을 넘기게 될 경우 0으로 만들고 시간에 1을 더 해준다.
+
+시간은 23시( 정수이므로 24가 딱 되는 순간 )를 넘어가게 될 경우 0으로 초기화 해준다.
