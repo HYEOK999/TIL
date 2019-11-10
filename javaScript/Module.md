@@ -67,7 +67,7 @@ script 태그에 `type="module"` 어트리뷰트를 추가하면 로드된 자�
 
 <br/>
 
-### 파일 스코프 <a id="#a1"></a>
+### 파일 스코프 <a id="a1"></a>
 
 > 모듈은 **파일 스코프**를 갖는다. 
 > 즉, **모듈 내에서 var 키워드로 선언한 변수는 더 이상 전역 변수가 아니며 window 객체의 프로퍼티도 아니다.**
@@ -114,7 +114,7 @@ console.log(x);
 
 <br/>
 
-###export 키워드 <a id="#a2"></a>
+###export 키워드 <a id="a2"></a>
 
 모듈은 독립적인 파일 스코프를 갖기 때문에 모듈 안에서 선언한 모든 것들은 기본적으로 해당 모듈 내부에서만 참조가 가능하다.
 
@@ -122,7 +122,7 @@ console.log(x);
 >
 > 선언한 변수, 함수, 클래스 모두 export가 가능하다.
 
-#### 기본 export <a id="#a3"></a>
+#### 기본 export <a id="a3"></a>
 
 ```javascript
 // lib.js
@@ -144,7 +144,7 @@ export class Person {
 
 <br/>
 
-#### 모아서 export <a id="#a4"></a>
+#### 모아서 export <a id="a4"></a>
 
 - 선언문 앞에 매번 export 키워드를 붙이는 것이 싫다면 export 대상을 모아 하나의 객체로 구성하여 한번에 export할 수도 있다.
 
@@ -168,7 +168,7 @@ export { pi, square, Person };
 
 <br/>
 
-#### default export <a id="#a5"></a>
+#### default export <a id="a5"></a>
 
 - 모듈에서 하나만을 export할 때는 default 키워드를 사용할 수 있다. 
 - 다만, default를 사용하는 경우, var, let, const는 사용할 수 없다.
@@ -193,11 +193,11 @@ export default function (x) {
 
 <br/>
 
-### import 키워드 <a id="#a6"></a>
+### import 키워드 <a id="a6"></a>
 
 > export한 모듈을 import하기 위해서 사용한다.
 
-#### 기본 import <a id="#a7"></a>
+#### 기본 import <a id="a7"></a>
 
 - export한 모듈을 로드 시 export한 이름으로 import한다.
 
@@ -226,7 +226,7 @@ console.log(new lib.Person('Lee')); // Person { name: 'Lee' }
 
 <br/>
 
-#### 이름 변경 import <a id="#a8"></a>
+#### 이름 변경 import <a id="a8"></a>
 
 - 이름을 변경하여 import할 수도 있다.
 
@@ -241,7 +241,7 @@ console.log(new P('Kim')); // Person { name: 'Kim' }
 
 <br/>
 
-#### default export모듈을 import <a id="#a9"></a>
+#### default export모듈을 import <a id="a9"></a>
 
 - default 키워드와 함께 export한 모듈은 {} 없이 임의의 이름으로 import한다.
 
@@ -254,7 +254,7 @@ console.log(square(3)); // 9
 
 <br/>
 
-### import ~ export 동작 확인 <a id="#a10"></a>
+### import ~ export 동작 확인 <a id="a10"></a>
 
 브라우저가 지원하는 ES6 모듈 기능을 이용하여 import와 export가 동작하는지 확인해보자.
 
