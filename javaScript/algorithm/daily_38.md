@@ -4,11 +4,14 @@
 
 문제 출처 : poiema
 
-### Stop Watch
+### Tabs UI
 
-![img](https://poiemaweb.com/assets/fs-images/exercise/analog-clock.gif)
+![tabs-ui](https://poiemaweb.com/img/tabs-ui.gif)
 
-- 요구 사항 : 현재 시간을 표시하여야 한다.
+- 요구 사항 
+  1. 탭을 구성하는 데이터를 전달해 Tabs UI를 생성한다.
+  2. 라이브러리를 사용하지 않고 Vanilla javascript로 구현한다.
+  3. ES6의 class로 구현한다.
 
 <br/>
 
@@ -19,118 +22,165 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Analog Clock</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" rel="stylesheet">
+  <title>Tabs</title>
   <style>
-    @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro');
-
-    .analog-clock {
-      position: relative;
-      margin: 100px auto 0;
-      width: 200px;
-      height: 200px;
-      background-color: aliceblue;
-      border-radius: 50%;
+    *, *:before, *:after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .hand {
-      position: absolute;
-      left: 50%;
-      width: 1px;
-      height: 100px;
-      /* 자바스크립트에 의해 덮어써진다. */
-      /* transform: translate3d(-50%, 0, 0); */
-      transform-origin: 100% 100%;
+    html, body {
+      height: 100%;
     }
 
-    .hour {
-      background-color: #f44336;
+    body {
+      background-image: linear-gradient(20deg, #08aeea 0%, #2af598 100%);
+      font-family: 'Open Sans', Sans-serif;
     }
 
-    .minute {
-      background-color: #3f51b5;
+    .tabs {
+      min-width: 320px;
+      max-width: 800px;
+      padding: 50px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 4px;
     }
 
-    .second {
-      background-color: #9e9e9e;
-      /* transform: rotate(100deg); */
+    .tab {
+      display: inline-block;
+      margin: 0 0 -1px;
+      padding: 15px 25px;
+      text-align: center;
+      color: #555;
+      border: 1px solid transparent;
+      cursor: pointer;
     }
 
-    .center-circle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate3d(-50%, -50%, 0);
-      width: 12px;
-      height: 12px;
-      background-color: black;
-      border-radius: 50%;
+    .icon {
+      margin-right: 10px;
     }
 
-    .digital-clock {
-      position: absolute;
-      top: 350px;
-      left: 50%;
-      transform: translate3d(-50%, 0, 0);
-      font-size: 2em;
-      font-family: 'Source Code Pro', monospace;
+    .tab.active {
+      border: 1px solid #ddd;
+      border-top: 2px solid #f44336;
+      border-bottom: 1px solid #fff;
+    }
+
+    .tab-content {
+      /* display: none; */
+      padding: 20px;
+      border: 1px solid #ddd;
+      line-height: 1.6rem;
     }
   </style>
 </head>
 <body>
-  <div class="clock">
-    <div class="analog-clock">
-      <div class="hour hand"></div>
-      <div class="minute hand"></div>
-      <div class="second hand"></div>
-      <div class="center-circle"></div>
-    </div>
-    <div class="digital-clock"></div>
-  </div>
-
+  <div class="tabs"></div>
   <script>
-    // transform: rotate(100deg);
-    const $second = document.querySelector('.second');
-    const $minute = document.querySelector('.minute');
-    const $hour = document.querySelector('.hour');
-    const $digitalClock = document.querySelector('.digital-clock');
+    class Tab {
+      constructor(tabsData) {
+        this.tabsData = tabsData;
+        // active 클래스가 지정된 tab 요소와 같은 인덱스의 tab-content 요소만 표시
 
-    let sTime = new Date().getSeconds();
-    let mTime = new Date().getMinutes();
-    let hTime = new Date().getHours();
+        this.renderTabs();
 
-    // const format = (num) => {
-    //   num += '';
-    //   if (num.length == 1) {
-    //     num = `0${num}`;
-    //   }
-    //   return num;
-    // };
+        const $tabContent = document.querySelectorAll('.tab-content');
+        const $tab = document.querySelectorAll('.tab');
 
-    const format2 = (num) => (String(num).length == 1 ? `0${num}` : `${num}`);
+        // 탭 전환
+        this.toggleDisplay($tabContent);
+        console.log('[constructor]', this);
 
-    const timer = () => {
-      $second.style.transform = `rotate(${sTime * 6}deg)`;
-      $minute.style.transform = `rotate(${mTime * 6 + sTime * 0.1}deg)`;
-      $hour.style.transform = `rotate(${(hTime % 12) * 30 + mTime * 0.5}deg)`;
 
-      $digitalClock.innerHTML = 				`${format2(hTime)}:${format2(mTime)}:${format2(sTime)}`;
-      sTime++;
-      if (sTime >= 60) {
-        mTime++;
-        sTime = 0;
+        // tab 클릭 이벤트 핸들러 등록
+        document.querySelector('.tabs').onclick = ({ target }) => {
+          if (!target.classList.contains('tab')) return;
+          console.log('[constructor,document]', this);
+          this.changeActive(target, $tab, $tabContent);
+        };
       }
 
-      if (mTime >= 60) {
-        hTime++;
-        mTime = 0;
+      // tabsData 객체를 기반으로 tab-group 요소를 생성
+      renderTabs() {
+        const html = `
+          <ul class="tab-group">
+          ${this.tabsData.map((tab) => `
+            <li class="tab${tab.active ? ' active' : ''}">
+             <i class="icon ${tab.iconClass}"></i>${tab.title}
+            </li>`).join('')}
+          </ul>
+          <div class="tab-content-group">
+          ${this.tabsData.map((tab) => `
+            <div class="tab-content">${tab.content}</div>`).join('')}
+          </div>`;
+
+        document.querySelector('.tabs').insertAdjacentHTML('beforeend', html);
       }
 
-      if (hTime > 23) {
-        hTime = 0;
+      toggleDisplay($tabContent) {
+        this.tabsData.forEach((tab, index) => {
+          if (!tab.active) {
+            $tabContent[index].style.display = 'none';
+          }
+        });
       }
+
+      changeActive(target, $tab, $tabContent) {
+        console.log('[changeActive]', this);
+        this.tabsData = this.tabsData.map((tab) => (
+          tab.title === target.textContent.trim() ? { ...tab, active: true } : { ...tab, active: false }
+        ));
+
+        this.tabsData.forEach((tab, index) => {
+          if (!tab.active) {
+            $tab[index].classList.remove('active');
+            $tabContent[index].style.display = 'none';
+          } else {
+            $tab[index].classList.add('active');
+            $tabContent[index].style.display = 'block';
+          }
+        });
+      }
+      // do something!
+    }
+
+    window.onload = function () {
+      const tab = new Tab([
+        {
+          title: 'HTML',
+          active: true,
+          iconClass: 'fab fa-html5',
+          content: `<strong>HTML(HyperText Markup Language)</strong> is the most basic building block of the Web.
+            It describes and defines the content of a webpage along with the basic layout of the webpage.
+            Other technologies besides HTML are generally used to describe a web page's
+            appearance/presentation(CSS) or functionality/ behavior(JavaScript).`
+        },
+        {
+          title: 'CSS',
+          active: false,
+          iconClass: 'fab fa-css3',
+          content: `<strong>Cascading Style Sheets(CSS)</strong> is a stylesheet language used to describe
+            the presentation of a document written in HTML or XML (including XML dialects
+            such as SVG, MathML or XHTML). CSS describes how elements should be rendered on screen,
+            on paper, in speech, or on other media.`
+        },
+        {
+          title: 'JavaScript',
+          active: false,
+          iconClass: 'fab fa-js-square',
+          content: `<strong>JavaScript(JS)</strong> is a lightweight interpreted or JIT-compiled programming
+            language with first-class functions. While it is most well-known as the scripting
+            language for Web pages, many non-browser environments also use it, such as Node.js,
+            Apache CouchDB and Adobe Acrobat. JavaScript is a prototype-based, multi-paradigm,
+            dynamic language, supporting object-oriented, imperative, and declarative
+            (e.g. functional programming) styles.`
+        }
+      ]);
     };
-
-    window.setInterval(timer, 1000);
   </script>
 </body>
 </html>
@@ -140,65 +190,31 @@
 
 #### 주요 코드
 
-1. 숫자가 1자리 수 일 때는 앞에 0을 붙인 문자열 변환
+1. ` this.renderTabs();` 상단 존재
 
-해당 문제에서 제일 난해한 부분은 특정 수 일 때 문자열로 변환을 해줘야만 한다는 것이었다.
+타 문제와 다르게 위 코드가 상단에 존재해서 애를 먹은 문제이다. renderTabs가 작성이 미리 되어져 있었기 때문에 렌더링 후에 Dom 요소에 접근하였다.
 
-따라 해당 시간을 화면에 보여주기 전에 먼저 문자열로 바꿔주면서 문자열 1자리 수라면 0을 앞에 붙이는 함수를 추가하였다.
-
-~~~~javascript
-    // const format = (num) => {
-    //   num += '';
-    //   if (num.length == 1) {
-    //     num = `0${num}`;
-    //   }
-    //   return String(num);
-    // };
-
-    const format2 = (num) => ((num + '').length === 1 ? `0${num}` : `${num}`);
-~~~~
-
-<br/>
-
-2. 시간 알고리즘
+2. `changeActive`함수
 
 ~~~javascript
- const timer = () => {
-      $second.style.transform = `rotate(${sTime * 6}deg)`;
-      $minute.style.transform = `rotate(${mTime * 6 + sTime * 0.1}deg)`;
-      $hour.style.transform = `rotate(${(hTime % 12) * 30 + mTime * 0.5}deg)`;
+   changeActive(target, $tab, $tabContent) {
+        console.log('[changeActive]', this);
+        this.tabsData = this.tabsData.map((tab) => (
+          tab.title === target.textContent.trim() ? { ...tab, active: true } : { ...tab, active: false }
+        ));
 
-      $digitalClock.innerHTML = 				`${format2(hTime)}:${format2(mTime)}:${format2(sTime)}`;
-      sTime++;
-      if (sTime >= 60) {
-        mTime++;
-        sTime = 0;
+        this.tabsData.forEach((tab, index) => {
+          if (!tab.active) {
+            $tab[index].classList.remove('active');
+            $tabContent[index].style.display = 'none';
+          } else {
+            $tab[index].classList.add('active');
+            $tabContent[index].style.display = 'block';
+          }
+        });
       }
-
-      if (mTime >= 60) {
-        hTime++;
-        mTime = 0;
-      }
-
-      if (hTime > 23) {
-        hTime = 0;
-      }
-    };
 ~~~
 
-360도 기준 1초는 6도이므로 x6을 한다. : `rotate(${sTime * 6}deg)`
+처음에는 선택한 요소의 Content의 여부에 따라 tab을 결정한다. 
 
-360도 기준 1분은 6도이므로 x6을 하고 1초가 60번을 움직여야만 1분이 움직이게 되므로 자연스러운 움직임을 위해 1초당 0.1도씩(60초 후 6도)움직이게 설정한다. : `rotate(${mTime * 6 + sTime * 0.1}deg)`
-
-360도 기준 1시간은 30도인데 시간은 24시간이므로 12를 나눠서 나온 나머지를 가지고 처리한다. 
-그리고 1분이 60번을 움직여야 1시간이 움직이게 되므로 자연스러운 움직임을 위해 1분당 0.5도씩(60분 후 30도) 움직이게 설정한다. : `rotate(${(hTime % 12) * 30 + mTime * 0.5}deg)`
-
-<br/>
-
-**디지털 시계**
-
-디지털 시계는 초부터 1씩 숫자를 증가시켜 초가 60을 넘기게 될 경우 0으로 만들고 분에 1을 더해준다.
-
-분 역시 60을 넘기게 될 경우 0으로 만들고 시간에 1을 더 해준다.
-
-시간은 23시( 정수이므로 24가 딱 되는 순간 )를 넘어가게 될 경우 0으로 초기화 해준다.
+그후 tab 상태가 active라면 active클래스를 제거하고 display를 none처리하며 반대의 경우에는 active클래스를 추가하고 display를 block으로 보여준다.
