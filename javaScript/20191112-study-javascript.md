@@ -2,21 +2,18 @@
 
 ------
 
-## JavaScript Study 23
+## JavaScript Study 25
 
-- 비동기식 처리 모델과 Ajax
-
-  - 상대 경로 와 절대 경로
-- 클라이언트 및 서버 지식
-  - NPM & Express 를 이용한 로컬 서버 개설
-  - Ajax 란?
-    - Ajax 장점
-    - Ajax 단점
-    - Ajax 요청 방법
-  - REST API
-  - Method : GET . POST , PUT , DELETE , PATCH
-  - 콜백의 단점
-  - [실습](#a1)
+- 프로미스
+  - 프로미스를 만드는 방법
+- 프로미스 xhr , fetch, axios, async/await
+  - 프로미스 xhr
+  - fetch
+  - axios
+  - async/await
+- REST API
+- JSON Server 와 POSTMAN
+- GraphQL
 
 <br/>
 
@@ -26,325 +23,214 @@
 
 ### 용어 - ( 러버덕 )
 
-- 상대경로 
+- 프로미스
 
-- 절대경로
+- fetch
 
-- Ajax
+- axios
+
+- async/await
+
+- postman
 
 - REST API
 
-- 요청 Method
-
-- 콜백의 단점
-
   <br/>
 
--------
+----------
 
-## 비동기식 처리 모델과 Ajax
+### 프로미스
 
-<br/>
+> 비동기 처리에 대한 약속
 
-### 상대 경로 와 절대 경로
+브라우저는 멀티 스레드가 맞으나 JS는 싱글 스레드이다. 
 
-`.` : 지금 이 경로를 실행하고 있는 파일의 위치
-`/` : 서버의 루트
+**프로미스 질문 시 나와야하는 단어 : 후속처리함수, 순서보장, 비동기처리에 대한 약속, 콜백패턴**
 
-- 상대 경로 : 특정 곳을 기준으로 해서 위치의 경로를 기입하는 방식
-  - Desktop\test.txt
-- 절대 경로 :  최초의 시작점으로 경유한 경로를 전부 기입하는 방식
-  - C:\Users\KJH\Desktop\test.txt
+콜백 패턴은 XHR(XMLHTTPRequset)의 readyState와 onreadystatechange 함수 내에서 후속처리를 해야만하는데 이는 가독성을 크게 감속시킨다. 또한 콜백헬이나 에러처리등의 문제를 가지고 있다.  추가로  비동기처리는 순서를 보장하지 않는다. 이러한 문제들을 해결하기 위해서 프로미스가 나왔다.
+
+기본 콜백패턴에서 에러처리를 해결하기 위해서는 실패에대한 콜백을 또 던져주어야한다. 
 
 <br/>
 
-### 클라이언트 및 서버 지식
+#### 프로미스를 만드는 방법
 
-1. 브라우저에게 어떤 파일을 달라고 할 때는 위치를 알려줌 (일단 서버부터 알려주기.) 
-2. 서버마다 중복되지 않는 식별자가 있어야 함(IP) 도매인과 IP는 맵핑되어야 함. 
-3. naver.com이라고 치면 IP로 찾아가야함.  (DNS에 접근)
-4. DNS는 Domain Name System 
-5. sever는 폴더를 가지고 있음. 필요한 파일을 찾아서 읽어야함. 파일 안에는 2진수가 들어있음. 
-6. 하드디스크에 있는 파일을 읽는다는 것은 메모리에 올린다는 것을 의미. 
-7. 하드디스크에 물리적으로 있었던 파일이 메모리 상으로 올라옴. 
-8. 랜선을 타고 아스키코드를 보낸다. 
-9. 브라우저가 아스키코드를 받으면 메모리에 가지고 있다가 파싱. ( = 다운로드 )
-10. 아스키코드는 문자열. 유니코드는 언어에 종속되어있지 않음. 
-11. `src`는 서버의 경로로 써줘야 함. 
-12. Ajax는 통신을 하는 수단을 배우는 것.  
-13. Request가 가면 Response가 와야 함.
-14. Node.js 프레임워크 Express.
-15. npm은 Node Package Manager.
-16. Node.js는 모두 비동기, 콜백이다. 
-17. 정적인 데이터를 넘기려고 하면 어디에 가져다놓을지 생각해봐야함. (보통 루트에 갖다놔야 함.) 
-18. 우리가 만든 서버가 루트로 어디를 갖게 할지 설정, 기본적으로 루트로 접근했을 때 index.html을 리턴할 수 있도록 해야함. 
-19. 정적 파일의 제공. 
-20. 서버가 보내온 파일은 아스키코드(1바이트 문자열)로 보내진다. 
-21. 실무에 나갈 수록 오픈소스 등이 많아지는데 이런 것들을 통합적으로 관리 하기 위해 나온것이 Package Manager다.
-22. 서버와 클라이언트를 명확하게 나눌 수 있어야 함. 클라이언트가 요청을 날리는 방법 알아야 함.
+`new Promise((resolve, reject) => { 비동기 처리 내용 })`
 
-<br/>
+프로미스는 고차함수다. 고차함수는 인수로 함수를 받을 수 있다. 
 
-### NPM & Express 를 이용한 로컬 서버 개설
+프로미스는 내부에서 상태를 가지고 있다.
 
-node 상에서 사용되는 패키지 매니저는 `npm` 이다.
-node는 전부 비동기고 전부 콜백 방식이다.
-`localhost` : 개발단계에서 자신의 로컬 컴퓨터에서 테스트를 하기 위해서 서버환경을 만들어서 사용한 루프백 호스트명.
+~~~javascript
+// 프로미스 객체는 인수 2개를 받을 수 있다. 성공-resolve, 실패-reject
+const promise = new Promise((resolve, reject) => {
+  // 여기서 비동기를 처리한다.
+  const x = 1;
+  setTimeout(() => {
+    if (x % 2) resolve(x);
+    else reject(new Error('Error'));
+  });
+});
 
-아래 명령어를 통해 간단한 서버를 개설한다.
+console.log(typeof promise);
 
-- npm init -y : package.json 을 생성한다.
-- `npm install express` : express라는 패키지를 설치하겠다. (위치는 현재 디렉토리 위치)
-- 위 명령어 실행 후 `package.json` 의 `dependencies`에 설치된 패키지 명과 버전이 적히게 된다.
-- `node_modules폴더`가 생기는데 패키지를 `uninstall`하고 싶다면 해당 폴더를 삭제 하면된다.
-- 재 설치를 원할 경우 `npm i`만 쳐주면 된다.
-- `npm install -g nodemon ` : nodemon 패키지 전역 설치 -> 서버를 수시로 재시작 안해도 작동하게끔 해준다.
+// 프로미스 객체의 후속 처리 함수
+promise
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
+~~~
 
-<br/>
+.then 은 무조건 promise를 return 한다.
 
-### Ajax 란?
+.then이 게속해서 이어지는 것을 프로미스 체인닝 이라 한다.
 
-> JavaScript를 사용한 비동기 통신, 클라이언트와 서버간에 XML 데이터를 주고받는 기술,
->
-> XML : 데이터 형식의 일종
+~~~javascript
+const p = new Promise((resolve, reject) => {
+	resolve(1);
+});
 
-#### Ajax 장점
+p.then((num) => ++num)
+ .then((num) => ++num)
+ .then((num) => ++num)
+ .then((num) => console.log(num));
+~~~
 
-- 페이지 이동없이 고속으로 화면 전환 가능
-- 서버처리를 기다리 않고 비동기 요청 가능
-- 수신하는 데이터 양을 줄일 수 있고, 클라이언트에게 처리를 위임할 수 있다.
+정답은 4가 나온다.
 
 <br/>
 
-#### Ajax 단점
+### 프로미스 xhr , fetch, axios, async/await
 
-- 동일-출처 정책으로 인해 다른 도메인과는 통신이 불가능하다.( **이를 해결하기 위해 JSONP , CORS 등이 나옴**)
-- Ajax를 쓸 수 없는 브라우저가 있다.
-- Http 클라이언트 기능이 한정됨.
-- 페이지 이동없는 통신으로 인한 보안상 문제
-- 지원하는 Charset이 한정됨.
-- 요청을 남발시 서버 부하가 늘어남.
-- Debugging에 용이하지 않음. ( 에러를 잡기가 쉽지 않다. )
+#### 프로미스 xhr
+
+- 기본적으로 프로미스를 이용한 ajax통신을 위해서는 XMLHttpRequest 객체가 있어야만 사용할 수 있다.
+
+~~~javascript
+const ajax = (() => {
+  const req = (method, url, payload) => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(method, url);
+      xhr.setRequestHeader('content-type', 'application/json');
+      xhr.send(JSON.stringify(payload));
+      xhr.onload = () => {
+        if (xhr.status === 200 || xhr.status === 201) {
+          resolve(JSON.parse(xhr.response));
+        }
+      };
+      xhr.onerror = () => {
+        reject(new Error(xhr.status));
+      };
+    });
+  };
+  return {
+    get(url) {
+      return req('GET', url);
+    },
+    post(url, payload) {
+      return req('POST', url, payload);
+    },
+    patch(url, payload) {
+      return req('PATCH', url, payload);
+    },
+    delete(url) {
+      return req('DELETE', url);
+    }
+  };
+})();
+~~~
+
+~~~javascript
+// ajax get 통신
+ajax.get('/todos')
+  .then((data) => Math.max(0, ...data.map((a) => a.id)))
+  .then((id) => ajax.delete(`/todos/${id}`))
+  .then(console.log);
+~~~
 
 <br/>
 
-#### Ajax 요청 방법
+#### fetch를 사용했을 경우
 
-- XMLHttpRequest 
-- Axios : XMLHttpRequest를 좀 더 편리하게 쓰고자 나온 라이브러리. 현재 가장 많이 사용되는 HTTP 통신 라이브러리.
-- fetch : Axios라이브러리를 대체 하기 위해 나온 Web API( 라이브러리 import가 필요없다. )
+- 기본적인 베이스는 promise를 따라간다.
+- fetch는 xhr 함수를 만들 필요가 없다. 
+- 함수가 ajax 기능을 제공해주기 때문이다.
+- 다만 소스가 조금 가독성이 떨이지는 단점이 있다.
+
+~~~javascript
+fetch('/todos')
+  .then((res) => res.json())
+  .then((data) => Math.max(0, ...data.map((a) => a.id)))
+  .then((id) => fetch(`/todos/${id}`, {
+    method: 'DELETE'
+  }))
+  .then((res) => res.json())
+  .then(console.log);
+~~~
+
+<br/>
+
+#### axios를 사용했을 경우
+
+- 기본적인 베이스는 promise를 따라간다.
+- axios 역시 fetch처럼 xhr함수를 만들 필요가 없다.
+- fetch보다 훨씬 간결하고 가독성이 좋다.
+- 다만, html에서 axios의 API를 로드 해줘야만 한다.
+
+(CDN:   `<script src="https://unpkg.com/axios/dist/axios.min.js"></script> `)
+
+~~~javascript
+axios.get('/todos')
+  .then((res) => Math.max(0, ...(res.data).map((a) => a.id)))
+  .then((id) => ajax.delete(`/todos/${id}`))
+  .then(console.log);
+~~~
+
+<br/>
+
+#### async, await를 사용했을 경우
+
+- xhr , fetch, axios의 비동기 방식을 동기 방식 처럼 사용하기 위해서 사용한다.
+- async 함수 내에 있어야만 반드시 순서가 보장된다. 
+- 프로미스로 짠 코드들의 then은 전부다 async 안에 반드시 들어가 있어야한다!
+
+~~~javascript
+(async () => {
+  let todos = await ajax.get('/todos');
+  const id = Math.max(0, ...todos.map((todo) => todo.id));
+  todos = await ajax.delete(`/todos/${id}`);
+  console.log(todos);
+})();
+~~~
 
 <br/>
 
 ### REST API
 
-> Method 작성 시 시멘틱하게 작성하는 것. 
->
-> 따르지 않더라도 에러가 나는 것은 아니지만 협업하기 위해 필요로 한다.
+> REST란, 자원을 정의하고 자원에 대한 주소를 지정하는 방법의 모음
+
+- 백엔드가 개발이 늦을 경우 프론트는 짝퉁서버 Mock Server를 만들어서 사용할 수도 있다.
+	백엔드가 완료될 경우 프론트는 url만 백엔드 서버로 교체해서 사용한다.
+	MockServer를 만드는 방법은 여라가지가 있다. tool(JSON-Server)을 이용하여 사용할 수도 있다. 
+- 백엔드가 개발이 빠를 경우 해당 백엔드가 잘되는지 테스트를 해야만한다. 여기서 프론트는 Postman과 같은 tool 을 이용하여 이를 테스트 할 수 있다.
 
 <br/>
 
-### Method : GET . POST , PUT , DELETE , PATCH
+### JSON Server 와 POSTMAN
 
-> Method는 클라이언트가 서버로 요청을 날리는 방법.
+JSON.Server의 db.json에서 모든 프로퍼티 키는 반드시 쌍따옴표(`"`)로 열고 닫는다. 그냥 따옴표(`'`) 안된다. 반드시 쌍따옴표(`"`)
 
-- GET -> /todos : 모든 todos를 전부 가지고 온다.
-  GET -> /todos/1 : 모든 todos데이터 중에서 id가 1인 것만 가지고 온다.
-- POST -> 데이터를 생성할 떄 , payload
-- PUT -> 데이터 전체를 고칠떄 (예, content도 고치고 completed도 고칠떄) , payload
-- PATCH -> 데이터 일부를 고칠떄 (예, content만 고칠 떄) , payload
-- DELETE -> 전체 지우기 , 일부 지우기 (일부를 지우려면 조건을 필요로 함)
+postman에서 테스트 주소를 작성할 때 반드시 `http://`를 적어주어야만 한다.
+
+POST  ➤  Body  ➤  raw  ➤  JSON 체크
 
 <br/>
 
-### 콜백의 단점
+### GraphQL 
 
-Node Js의 모든 메서드는 전부 비동기이기 떄문에 순서를 보장해주기 위해서 비동기 함수 내부에서 콜백으로 주는 방법밖에 없다.
+facebook이 만든 새로운 패러다임. REST API와는 달리 정해진 형태가 있지 않다. 
 
-콜백의 단점 : 콜백헬, 에러처리 불가
-
-따라서 추가 된 것 , Promise(ES6) , Generate(문법이 어려움) , async(await) , RxJS
+REST API 다음 차세대 데이터 질의어(SQL)로 각광을 받고 있으며 REST 및 부속 웹서비스 아키텍쳐를 대체할 수 있다. 클라이언트는 필요한 데이터의 구조를 지정할 수 있으며, 서버는 정확히 동일한 구조로 데이터를 반환한다.
 
 <br/>
 
-### 실습 <a id="a1"></a>
-
-**서버 실행 : npm start**
-
-![폴더구조](https://user-images.githubusercontent.com/31315644/68385319-db0fe780-019c-11ea-8883-039b6969cad3.png)
-
-1. #### 서버 개설 및 준비 
-
-   `cd ~/Desktop/` : Desktop 디렉토리로 이동.
-
-   `mkdir practice-server && cd practice-server` : practice-server 폴더 만들고 이동.
-
-   `npm init -y` : package.json 을 생성한다.
-
-   `npm install express`  : express 패키지를 설치
-
-   `npm install -g nodemon ` : nodemon 패키지 전역 설치 -> 서버를 수시로 재시작 안해도 작동하게끔 해준다.
-
-   `code . ` : VSCode로 해당 폴더 열기.
-
-~~~bash
-// 터미널
-cd ~/Desktop/
-mkdir practice-server && cd practice-server
-npm init -y  
-npm install express 
-npm install -g nodemon 
-code . 
-~~~
-
- 만들어진 폴더에 `package.json` 파일의 `dependencies`에 express가 적혀져 있는 지 확인한다.
-
-`package.json` 파일에 `scripts`내용을 지우고 다음과 같이 적는다.
-
-~~~json
-// package.json
-"scripts": {
-	"start": "nodemon app"
- }
-~~~
-
-public 폴더 생성 ➤ 하위에 index.html 파일 , js 폴더 생성 ➤ js 폴더 하위에 index.js 생성
-
-<br/>
-
-2. #### app.js 작성
-
-   requestBody에는 key와 value를 담고 있는데 기본적으로 undefined 이기 떄문에, 
-
-   바디 파싱 미들웨어 `app.use(express.json());`  `app.use(express.urlencoded({ extended: true }));`
-
-   를 사용해야만 키와 값을 제대로 사용할 수 있다.
-
-~~~javascript
-// express 패키지(모듈)를 가지고 온다.
-const express = require('express');
-const app = express();
-
-let todos = [
-      { id: 1, content: 'HTML', completed: false },
-      { id: 2, content: 'CSS', completed: true },
-      { id: 2, content: 'CSS', completed: false }
-    ];
-
-// 루트 폴더를 'public'폴더로 지정함.
-// app.use는 미들웨어다. 미들웨어는 딱 1번만 실행됨.
-app.use(express.static('public'));
-
-// 바디 파싱 미들웨어
-app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // for parsing
-
-// request와 response 객체는 express가 제공함 
-// 보통 response는 html을 갖고있음
-// rest명령규칙으로 정함
-app.get('/',(req, res) => {
-  res.send('hello world!');
-});
-
-app.get('/todos', (req, res) => {
-  res.send(todos);
-})
-
-app.post('/todos', (req, res) => {
-    console.log(req.body);
-  res.send('POST');
-})
-
-// 해당 앱은 3000번 포트를 이용하겠다고 명시함.
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
-});
-~~~
-
-<br/>
-
-3. #### index.html 작성
-
-~~~html
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-  <script defer src="js/index.js"></script>
-</head>
-<body>
-  <input type="text" placeholder="enter todo!">
-  <ul class="todos"></ul>
-</body>
-</html>
-~~~
-
-<br/>
-
-4. #### index.js
-
-   `new XMLHttpRequest();` : XMLHttpRequest 객체 생성 ( Ajax 요청을 생성하고 전송 )
-
-   `xhr.open('GET', url)` : 서버로의 요청을 준비. 1인수 : 요청메소드 (GET, POST...) 2인수 : url (경로)
-
-   `xhr.send()` : 준비된 요청을 서버에 전달한다.( GET - 인수가 무시됨 ,  POST - 보낼데이터 인수로 줘야함(페이로드) )
-
-   `xhr.readyState ` : 0 1 2 3 4로 각각의 상태를 나타냄. 4는 서버측이 데이터를 전부 받았음을 의미.
-
-   `XMLHttpRequest.DONE` : 고정 값 4를 가리킨다. 요청 보내 졌을 떄 확인용 정적 프로퍼피
-
-   `xhr.status` : 서버에게 보낸 요청에 대한 http 에러코드가 담겨져 있다.( 200은 에러없이 전송 성공을 의미 )
-
-   `xhr.response` : 서버로부터 받아온 데이터가 담겨져있다.
-
-   `JSON.parse` : 함수로 해당 JSON 문자열을 해제 시킨다.
-
-~~~~javascript
-//DOMs
-const $todos = document.querySelector('.todos');
-let todos = [];
-
-const get = (url, f) => {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', url);
-  xhr.send(); // payLoad가 있다면 send에게 주고 없다면 비워둠.
-
-  xhr.onreadystatechange = () => {
-    if( xhr.readyState !== XMLHttpRequest.DONE ) return;
-    if( xhr.status === 200 ) {
-      f(JSON.parse(xhr.response));
-    } else {
-      console.error('Error : ', xhr.status, xhr.statusText);
-    }
-  };
-}
-
-const getTodos = () => {
-  get('./todos', render);
-};
-
-const render = (data) => {
-    console.log('Render');
-    let html = '';
-    todos = data;
-    // 디스트럭처링
-    todos.forEach(({ id, content, completed }) => {
-      html += `
-      <li id="${id}" class="todo-item">
-        <input class="checkbox" type="checkbox" id="ck-${id}" ${completed ? 'checked' : ''}>
-        <label for="ck-${id}">${content}</label>
-        <i class="remove-todo far fa-times-circle"></i>
-      </li>`;
-    });
-    $todos.innerHTML = html;
-  };
-
-window.onload = () => {
-  getTodos();
-}
-~~~~
-
-<br/>
