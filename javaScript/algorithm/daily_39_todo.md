@@ -1,4 +1,4 @@
-<img src="/Users/hyeokbook/Documents/docs_img/email-promise.png" alt="email-promise" style="zoom:50%;" />
+<img src="https://user-images.githubusercontent.com/31315644/68789010-e032d200-0687-11ea-99da-e0ffb48fa356.png" alt="email-promise" style="zoom:50%;" />
 
 --------
 
