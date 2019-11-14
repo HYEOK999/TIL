@@ -1,0 +1,220 @@
+![quiz-2174368_1280](https://user-images.githubusercontent.com/31315644/68214647-3026ee80-0021-11ea-8e28-41a3aa5de18a.png)
+
+------
+
+문제 출처 : poiema
+
+### Tabs UI
+
+![tabs-ui](https://poiemaweb.com/img/tabs-ui.gif)
+
+- 요구 사항 
+  1. 탭을 구성하는 데이터를 전달해 Tabs UI를 생성한다.
+  2. 라이브러리를 사용하지 않고 Vanilla javascript로 구현한다.
+  3. ES6의 class로 구현한다.
+
+<br/>
+
+~~~html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" rel="stylesheet">
+  <title>Tabs</title>
+  <style>
+    *, *:before, *:after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background-image: linear-gradient(20deg, #08aeea 0%, #2af598 100%);
+      font-family: 'Open Sans', Sans-serif;
+    }
+
+    .tabs {
+      min-width: 320px;
+      max-width: 800px;
+      padding: 50px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 4px;
+    }
+
+    .tab {
+      display: inline-block;
+      margin: 0 0 -1px;
+      padding: 15px 25px;
+      text-align: center;
+      color: #555;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .icon {
+      margin-right: 10px;
+    }
+
+    .tab.active {
+      border: 1px solid #ddd;
+      border-top: 2px solid #f44336;
+      border-bottom: 1px solid #fff;
+    }
+
+    .tab-content {
+      /* display: none; */
+      padding: 20px;
+      border: 1px solid #ddd;
+      line-height: 1.6rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="tabs"></div>
+  <script>
+    class Tab {
+      constructor(tabsData) {
+        this.tabsData = tabsData;
+        // active 클래스가 지정된 tab 요소와 같은 인덱스의 tab-content 요소만 표시
+
+        this.renderTabs();
+
+        const $tabContent = document.querySelectorAll('.tab-content');
+        const $tab = document.querySelectorAll('.tab');
+
+        // 탭 전환
+        this.toggleDisplay($tabContent);
+        console.log('[constructor]', this);
+
+
+        // tab 클릭 이벤트 핸들러 등록
+        document.querySelector('.tabs').onclick = ({ target }) => {
+          if (!target.classList.contains('tab')) return;
+          console.log('[constructor,document]', this);
+          this.changeActive(target, $tab, $tabContent);
+        };
+      }
+
+      // tabsData 객체를 기반으로 tab-group 요소를 생성
+      renderTabs() {
+        const html = `
+          <ul class="tab-group">
+          ${this.tabsData.map((tab) => `
+            <li class="tab${tab.active ? ' active' : ''}">
+             <i class="icon ${tab.iconClass}"></i>${tab.title}
+            </li>`).join('')}
+          </ul>
+          <div class="tab-content-group">
+          ${this.tabsData.map((tab) => `
+            <div class="tab-content">${tab.content}</div>`).join('')}
+          </div>`;
+
+        document.querySelector('.tabs').insertAdjacentHTML('beforeend', html);
+      }
+
+      toggleDisplay($tabContent) {
+        this.tabsData.forEach((tab, index) => {
+          if (!tab.active) {
+            $tabContent[index].style.display = 'none';
+          }
+        });
+      }
+
+      changeActive(target, $tab, $tabContent) {
+        console.log('[changeActive]', this);
+        this.tabsData = this.tabsData.map((tab) => (
+          tab.title === target.textContent.trim() ? { ...tab, active: true } : { ...tab, active: false }
+        ));
+
+        this.tabsData.forEach((tab, index) => {
+          if (!tab.active) {
+            $tab[index].classList.remove('active');
+            $tabContent[index].style.display = 'none';
+          } else {
+            $tab[index].classList.add('active');
+            $tabContent[index].style.display = 'block';
+          }
+        });
+      }
+      // do something!
+    }
+
+    window.onload = function () {
+      const tab = new Tab([
+        {
+          title: 'HTML',
+          active: true,
+          iconClass: 'fab fa-html5',
+          content: `<strong>HTML(HyperText Markup Language)</strong> is the most basic building block of the Web.
+            It describes and defines the content of a webpage along with the basic layout of the webpage.
+            Other technologies besides HTML are generally used to describe a web page's
+            appearance/presentation(CSS) or functionality/ behavior(JavaScript).`
+        },
+        {
+          title: 'CSS',
+          active: false,
+          iconClass: 'fab fa-css3',
+          content: `<strong>Cascading Style Sheets(CSS)</strong> is a stylesheet language used to describe
+            the presentation of a document written in HTML or XML (including XML dialects
+            such as SVG, MathML or XHTML). CSS describes how elements should be rendered on screen,
+            on paper, in speech, or on other media.`
+        },
+        {
+          title: 'JavaScript',
+          active: false,
+          iconClass: 'fab fa-js-square',
+          content: `<strong>JavaScript(JS)</strong> is a lightweight interpreted or JIT-compiled programming
+            language with first-class functions. While it is most well-known as the scripting
+            language for Web pages, many non-browser environments also use it, such as Node.js,
+            Apache CouchDB and Adobe Acrobat. JavaScript is a prototype-based, multi-paradigm,
+            dynamic language, supporting object-oriented, imperative, and declarative
+            (e.g. functional programming) styles.`
+        }
+      ]);
+    };
+  </script>
+</body>
+</html>
+~~~
+
+<br/>
+
+#### 주요 코드
+
+1. ` this.renderTabs();` 상단 존재
+
+타 문제와 다르게 위 코드가 상단에 존재해서 애를 먹은 문제이다. renderTabs가 작성이 미리 되어져 있었기 때문에 렌더링 후에 Dom 요소에 접근하였다.
+
+2. `changeActive`함수
+
+~~~javascript
+   changeActive(target, $tab, $tabContent) {
+        console.log('[changeActive]', this);
+        this.tabsData = this.tabsData.map((tab) => (
+          tab.title === target.textContent.trim() ? { ...tab, active: true } : { ...tab, active: false }
+        ));
+
+        this.tabsData.forEach((tab, index) => {
+          if (!tab.active) {
+            $tab[index].classList.remove('active');
+            $tabContent[index].style.display = 'none';
+          } else {
+            $tab[index].classList.add('active');
+            $tabContent[index].style.display = 'block';
+          }
+        });
+      }
+~~~
+
+처음에는 선택한 요소의 Content의 여부에 따라 tab을 결정한다. 
+
+그후 tab 상태가 active라면 active클래스를 제거하고 display를 none처리하며 반대의 경우에는 active클래스를 추가하고 display를 block으로 보여준다.
