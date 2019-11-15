@@ -1,8 +1,8 @@
-<img src="https://user-images.githubusercontent.com/31315644/68789010-e032d200-0687-11ea-99da-e0ffb48fa356.png" alt="email-promise" style="zoom:50%;" />
+<img src="https://user-images.githubusercontent.com/31315644/68863928-a0292900-0733-11ea-9784-8eab3512c70b.png" alt="email-fetch" style="zoom:50%;" />
 
 --------
 
-## TODO LIST FULL VERSION - PROMISE xhr
+## TODO LIST FULL VERSION - fetch
 
 ### Ajax 란?
 
@@ -16,7 +16,7 @@ Ajax 요청 방법 3가지
 
 -------
 
-###  PROMISE XMLHttpRequest
+###  fetch
 
 <img src="https://user-images.githubusercontent.com/31315644/68789904-aebb0600-0689-11ea-9c3f-116a5f08b61b.jpeg" alt="todoFolder구조" style="zoom: 33%;" />
 
@@ -32,7 +32,7 @@ Ajax 요청 방법 3가지
 
 5. [css/style.css](#a5)
 
-6. [js/01promise.js](#a6)
+6. [js/02fetch.js](#a6)
 
 ------------------
 
@@ -434,7 +434,7 @@ footer {
 
 <br/>
 
-- `js/01promise.js` <a id="a6"></a>
+- `js/02fetch.js` <a id="a6"></a>
 
 ~~~javascript
 let todos = [];
@@ -596,3 +596,4 @@ $nav.onclick = ({ target }) => {
 ~~~
 
 <br/>
+
