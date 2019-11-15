@@ -8,11 +8,37 @@ const $completeAll = document.querySelector('.complete-all');
 const $completedTodos = document.querySelector('.completed-todos');
 const $activeTodos = document.querySelector('.active-todos');
 
+
+
 const getTodos = () => {
   todos = [
-    { id: 1, content: 'HTML', completed: false },
-    { id: 2, content: 'CSS', completed: true },
-    { id: 3, content: 'Javascript', completed: false }
+    { id: 1,
+      content: 'HTML',
+      completed: false,
+      car: [
+        { fav: 'good' },
+        { fav: 'bad' },
+        { fav: 'normal' }
+      ]
+    },
+    { id: 2,
+      content: 'CSS',
+      completed: true,
+      car: [
+        { fav: 'good' },
+        { fav: 'bad' },
+        { fav: 'normal' }
+      ]
+    },
+    { id: 3,
+      content: 'Javascript',
+      completed: false,
+      car: [
+        { fav: 'good' },
+        { fav: 'bad' },
+        { fav: 'normal' }
+      ]
+    }
   ];
 
   todos.sort((todo1, todo2) => todo2.id - todo1.id);
@@ -60,19 +86,32 @@ const toggleAll = (checked) => {
   console.log('[toggleAll] : ', todos);
 };
 
+const a = (todo) => {
+  console.log('aaa', todo);
+  let html = '';
+  for (let i = 0; i < 3; i++) {
+    html += `<div>${todo[i].fav}</div>`;
+  }
+  console.log(html);
+  return html;
+};
+
 // 렌더링
 const render = () => {
   let html = '';
   const tempTodos = todos;
 
   separateTab();
+
   todos.forEach((todo) => {
     html += `
     <li id="${todo.id}" class="todo-item">
       <input class="checkbox" type="checkbox" id="ck-${todo.id}" ${todo.completed ? 'checked' : ''} >
       <label for="ck-${todo.id}">${todo.content}</label>
       <i class="remove-todo far fa-times-circle"></i>
-    </li>`;
+      ${a(todo.car)}
+    </li>
+    `;
   });
 
   $completedTodos.textContent = todos.filter((todo) => todo.completed).length;
