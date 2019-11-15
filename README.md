@@ -306,7 +306,7 @@ Today I Leaned...
 >
 >[20191113-TodoList XHR Promise](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_39_todo.md)
 >
->[20191114-TodoList Fetch]
+>[20191114-TodoList Fetch](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_40_todo.md)
 >
 >[20191115-TodoList Axios]
 
