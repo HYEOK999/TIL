@@ -1,8 +1,8 @@
-<img src="https://user-images.githubusercontent.com/31315644/68863936-a28b8300-0733-11ea-8ae8-08de5d0795bb.png" alt="email-axios" style="zoom:50%;" />
+<img src="https://user-images.githubusercontent.com/31315644/68863943-a4eddd00-0733-11ea-9a1e-3855dbef6bd0.png" alt="email-asyncawait" style="zoom:50%;" />
 
--------
+-------------
 
-## TODO LIST FULL VERSION - axios
+## TODO LIST FULL VERSION - async / await
 
 ### Ajax 란?
 
@@ -16,7 +16,7 @@ Ajax 요청 방법 3가지
 
 -------
 
-###  axios
+###  async / await
 
 <img src="https://user-images.githubusercontent.com/31315644/68789904-aebb0600-0689-11ea-9c3f-116a5f08b61b.jpeg" alt="todoFolder구조" style="zoom: 33%;" />
 
@@ -32,7 +32,7 @@ Ajax 요청 방법 3가지
 
 5. [css/style.css](#a5)
 
-6. [js/03axios.js](#a6)
+6. [js/04async.js](#a6)
 
 ------------------
 
@@ -434,7 +434,7 @@ footer {
 
 <br/>
 
-- `js/03axios.js` <a id="a6"></a>
+- `js/04async.js` <a id="a6"></a>
 
 ~~~javascript
 let todos = [];
