@@ -312,5 +312,5 @@ Today I Leaned...
 >
 >[20191115-TodoList Axios](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_41_todo.md)
 >
->[20191116-TodoList Async/Await]
+>[20191116-TodoList Async/Await](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_42_todo.md)
 
