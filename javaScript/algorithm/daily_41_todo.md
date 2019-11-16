@@ -1,8 +1,8 @@
-<img src="https://user-images.githubusercontent.com/31315644/68863928-a0292900-0733-11ea-9784-8eab3512c70b.png" alt="email-fetch" style="zoom:50%;" />
+<img src="https://user-images.githubusercontent.com/31315644/68863936-a28b8300-0733-11ea-8ae8-08de5d0795bb.png" alt="email-axios" style="zoom:50%;" />
 
---------
+-------
 
-## TODO LIST FULL VERSION - fetch
+## TODO LIST FULL VERSION - axios
 
 ### Ajax 란?
 
@@ -16,7 +16,7 @@ Ajax 요청 방법 3가지
 
 -------
 
-###  fetch
+###  axios
 
 <img src="https://user-images.githubusercontent.com/31315644/68789904-aebb0600-0689-11ea-9c3f-116a5f08b61b.jpeg" alt="todoFolder구조" style="zoom: 33%;" />
 
@@ -32,7 +32,7 @@ Ajax 요청 방법 3가지
 
 5. [css/style.css](#a5)
 
-6. [js/02fetch.js](#a6)
+6. [js/03axios.js](#a6)
 
 ------------------
 
@@ -434,7 +434,7 @@ footer {
 
 <br/>
 
-- `js/02fetch.js` <a id="a6"></a>
+- `js/03axios.js` <a id="a6"></a>
 
 ~~~javascript
 let todos = [];
@@ -596,4 +596,3 @@ $nav.onclick = ({ target }) => {
 ~~~
 
 <br/>
-
