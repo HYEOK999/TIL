@@ -2,18 +2,20 @@
 
 ------
 
-## JavaScript Study 26
+## JavaScript Study 27
 
-- 모듈
-  - ES6 모듈
-  - export 키워드
-  - import 키워드
-- Babel과 Webpack을 이용한 ES6 환경 구축
-  - npm 패키지 설치시 --save-dev 옵션
-  - babel-polyfill
-  - .babelrc 설정 파일 
-  - Webpack
-  - webpack.config.js 설정 파일
+- Symbol
+
+  - Symbol.for 메소드
+
+  - Symbol의 쓰임
+
+    1. 프로퍼티 키
+
+    2. 프로퍼티 은닉
+    3. 표준 빌트인 객체 확장 이용
+
+- 개발 커뮤니티 이용법
 
 <br/>
 
@@ -23,269 +25,193 @@
 
 ### 용어 - ( 러버덕 )
 
-- 모듈
+- Symbol
 
-- Babel
-
-- Webpack
+- Symbol.for
 
   <br/>
 
 ---------
 
-## 모듈
+## Symbol
 
- JS의 가장 큰 단점은 모듈이 존재하지 않는다는 것.
+원시값을 만드는 방법은 리터럴이 있다.
 
-예를들어, script태그를 여러개 이용해서 서로 다른 .js 을 불러들인 다면 js간의 충돌을 야기할 수 있다.
+근데 Symbol로도 원시값을 만들어낼 수 있는데 이 때 Symbol함수로 호출해야만 한다.
 
-이유는 모든 스크립트의 JS파일은 전역스코프를 공유하기 때문이다.
-
-> 모듈은 파일 단위로 분리 되어있다.
->
-> 이러한 모듈들은 독자적인 스코프를 나눠진다.
->
-> 스코프들간에 서로 통신하기 위해서는 export , import를 이용한다.
->
-> API들은 모듈패턴으로 구성된 코드들이다.
-
-함수 : 전역 스코프 내에서 재사용과 가독성을 높이는 코드의 조합, 입력을 받고 출력을 내보내는 일련의 과정
-
-모듈 : 파일 스코프 내에서 재사용과 가독성을 높이는 코드의 조합 (export. import)
-
-ES6 모듈 : ESM => script 태그의 일부로 사용 (현업에 안쓰임)
-
-JS의 모듈 : CommonJs(동기식) , AMD(Asynchronous Module Definition)(비동기식)
-
-모듈을 한파일로 번들링하는 Babel + Webpack을 이용하여 사용한다.
-
-번들링(여러개의 파일을 하나로 모음) 하는 이유
-
-1. script파일이 여러군데 흩어져있을 경우 문제가 생기므로 하나로 합쳐서 문제를 방지한다.
-2. 크로스 브라우징을 하기 위해서 ( Babel ) :  폴리필하여 구현함. 폴리필은 웹 개발에서 기능을 지원하지 않는 웹 브라우저 상의 기능을 구현하는 코드를 뜻한다.
-3. 모든 리소스를 전부 번들링이 가능하다.( 분리해서 번들링 하는 것도 가능함. )
-
-<br/>
-
-### ES6 모듈
-
-script 태그에 `type="module"` 어트리뷰트를 추가하면 로드된 자바스크립트 파일은 모듈로서 동작한다.
-
-```html
-<script type="module" src="lib.mjs"></script>
-<script type="module" src="app.mjs"></script>
-```
-
-ES6 모듈의 파일 확장자는 모듈임을 명확히 하기 위해 mjs를 사용하도록 권장한다.
-
-.mjs를 사용하게 되면 script는 자동으로 defer로 동작하게 되며 module 엄격모드(Strict Mode)로 한다.
-
-그냥 .js 확장자를 이용해도 사용은 가능하다.
-
-<br/>
-
-### export 키워드
-
-- 모듈은 독자적인 모듈 스코프를 갖기 때문에 모듈 안에 선언한 모든 식별자는 기본적으로 해당 모듈 내부에서만 참조할 수 있다. 
-- 만약 모듈 안에 선언한 식별자를 외부에 공개하여 다른 모듈들이 참조할 수 있게 하고 싶다면 export 키워드를 사용한다. 
-- 선언된 변수, 함수, 클래스 모두 export할 수 있다.
-- 모듈을 공개하려면 선언문 앞에 export 키워드를 사용한다. 
-- 여러 개를 export할 수 있는데 이때 각각의 export는 이름으로 구별할 수 있다.
-
-```javascript
-// lib.mjs
-// 변수의 공개
-export const pi = Math.PI;
-
-// 함수의 공개
-export function square(x) {
-  return x * x;
-}
-
-// 클래스의 공개
-export class Person {
-  constructor(name) {
-    this.name = name;
-  }
-}
-```
-
-선언문 앞에 매번 export 키워드를 붙이는 것이 싫다면 export 대상을 모아 하나의 객체로 구성하여 한번에 export할 수도 있다.
-
-```javascript
-// lib.mjs
-const pi = Math.PI;
-
-function square(x) {
-  return x * x;
-}
-
-class Person {
-  constructor(name) {
-    this.name = name;
-  }
-}
-
-// 변수, 함수 클래스를 하나의 객체로 구성하여 공개
-export { pi, square, Person };
-```
-
-모듈에서 하나만을 export할 때는 default 키워드를 사용할 수 있다.
-
-```javascript
-// lib.mjs
-export default function (x) {
-  return x * x;
-}
-```
-
-**다만, default를 사용하는 경우, var, let, const는 사용할 수 없다.**
-
-defualt를 import 할 때는 식별자만 적어주면 되기 떄문에 간편한다.
+> 생성된  Symbol은 객체가 아니라 변경 불가능한 원시 타입의 값이다.
 
 ~~~javascript
-import sqaure from './lib.mjs';
+// 심볼 mySymbol은 이름의 충돌 위험이 없는 유일한 프로퍼티 키
+let mySymbol = Symbol();
 
-console.log(sqaure(10)); // 100
+console.log(mySymbol);        // Symbol()
+console.log(typeof mySymbol); // symbol
+
+new Symbol(); // TypeError: Symbol is not a constructor
+~~~
+
+Symbol 함수는 래퍼 객체를 생성하는 생성자 함수(String, Number, Boolean 등등)과는 달리 `new`연산자를 이용하지 않는다.
+
+<br/>
+
+Symbol 함수에는 선택적으로 문자열을 인수로 전달할 수 있다. 
+
+**이 문자열은 심볼 값에 대한 설명으로 디버깅용도로만 이용된다.** 
+
+심볼 값에 대한 설명이 같더라도 생성된 심볼 값은 유일무이한 값이다.
+
+```javascript
+// 심볼 값에 대한 설명이 같더라도 유일무이한 심볼 값을 생성한다.
+const mySymbol1 = Symbol('mySymbol');
+const mySymbol2 = Symbol('mySymbol');
+
+console.log(mySymbol1 === mySymbol2); // false
+```
+
+<br/>
+
+심볼 값은 암묵적으로 문자열이나 숫자 타입으로 변환되지 않는다.
+
+```javascript
+const mySymbol = Symbol();
+
+// 심볼 값은 암묵적으로 타입 변환이 되지 않는다.
+console.log(mySymbol + ''); // TypeError: Cannot convert a Symbol value to a string
+console.log(+mySymbol);     // TypeError: Cannot convert a Symbol value to a string
+```
+
+<br/>
+
+단, 불리언 타입으로는 암묵적으로 타입 변환된다. 이를 통해 if 문 등에서 존재 확인이 가능하다.
+
+```javascript
+const mySymbol = Symbol();
+
+// 불리언 타입으로는 암묵적으로 타입 변환된다
+console.log(!!mySymbol); // true
+
+// if 문 등에서 존재 확인을 위해 사용할 수 있다.
+if (mySymbol) console.log('mySymbol is not empty.');
+```
+
+<br/>
+
+### Symbol.for 메소드
+
+Symbol.for 메소드는 인수로 전달받은 문자열을 키로 사용하여 키와 심볼 값의 쌍들이 저장되어 있는 전역 심볼 레지스트리(global symbol registry)에서 해당 키와 일치하는 심볼 값을 검색한다.
+
+- 검색에 성공하면 새로운 심볼 값을 생성하지 않고 검색된 심볼 값을 반환한다.
+- 검색에 실패하면 새로운 심볼 값을 생성하여 Symbol.for 메소드의 인수로 전달된 키로 전역 Symbol 레지스트리에 저장한 후, 생성된 심볼 값을 반환한다.
+
+그냥 Symbol은 유일무이한 심볼 값을 단 하나만 생성하기 때문에 전역 심볼 레지스트리에서 관리하지 않는다. 
+
+하지만, Symbol.for 메소드를 이용하면 전역에서 심볼 레지스트리를 통해 공유가 가능하다.
+
+~~~javascript
+// 전역 심볼 레지스트리에 mySymbol이라는 키로 저장된 심볼 값이 없으면 새로운 심볼 값을 생성
+const s = Symbol.for('mySymbol');
+
+// 전역 심볼 레지스트리에 저장된 심볼 값의 키를 추출
+console.log(Symbol.keyFor(s)); // mySymbol
+console.log(s); // Symbol(mySymbol)
 ~~~
 
 <br/>
 
-### import 키워드
+### Symbol의 쓰임
 
-모듈에서 공개(export)한 대상을 로드하려면 import 키워드를 사용한다.
+#### 1. 프로퍼티 키
 
-모듈이 export한 식별자로 import하며 ES6 모듈의 파일 확장자를 생략할 수 없다.
+심볼 값을 프로퍼티 키로 사용하려면 프로퍼티 키로 사용할 심볼 값에 대괄호를 사용해야 한다. 
+
+프로퍼티에 접근할 때도 마찬가지로 대괄호를 사용해야 한다.
 
 ```javascript
-// app.mjs
-// 같은 폴더 내의 lib.mjs 모듈을 로드.
-// lib.mjs 모듈이 export한 식별자로 import한다.
-// ES6 모듈의 파일 확장자를 생략할 수 없다.
-import { pi, square, Person } from './lib.mjs';
-
-console.log(pi);         // 3.141592653589793
-console.log(square(10)); // 100
-console.log(new Person('Lee')); // Person { name: 'Lee' }
-```
-
-<br/>
-
-## Babel과 Webpack을 이용한 ES6 환경 구축
-
-참고 : https://poiemaweb.com/es6-babel-webpack-1 , https://poiemaweb.com/es6-babel-webpack-2
-
-현재 대부분의 브라우저가 ES6를 지원하고 있지만 IE 혹은 몇 브라우저는 지원을 안하고 있기도 하다. 따라서 이러한 문제를 해결하기 위해서 Babel과 Webpack을 사용한다.
-
-추가적으로 ES6 의 모듈 기능보다는 Webpack의 모듈 번들러 기능이 더 유용해서 Webpack을 이용한다.
-
-ES6의 모듈을 사용하지 않는 이유는 다음과 같다.
-
-- IE를 포함한 구형 브라우저는 ES6 모듈을 지원하지 않는다.
-- 브라우저의 ES6 모듈 기능을 사용하더라도 트랜스파일링이나 번들링이 필요하다.
-- 아직 지원하지 않는 기능(Bare import 등)이 있다.
-- 점차 해결되고는 있지만 아직 몇가지 이슈가 있다.
-
-**트랜스파일러(Transpiler) [Babel](https://babeljs.io/)과 모듈 번들러(Module bundler) [Webpack](https://webpack.js.org/)을 이용하여 ES6+ 개발환경을 구축한다.**
-
-다시 정리하면
-
-`<script>` 태그를 그냥 사용할경우 해당 스크립트의 파일의 js들은 전역스코프를 가진다.
-이러한 전역 스코프를 피하기 위해서 파일 스코프단위로 끊는 ES6의 모듈기능을 이용을 하는데  ES6의 모듈 기능은 우선 ES6에서만 가능하다는 점 때문에 하위 호환을 해줄 필요가 있는 **트랜스파일러 Babel**을 이용해야만 한다.
-그리고 모듈화를 위해서는 `<script>` 파일이 점점 많아질 것이다. 이러한 현상은 네트웤 비용을 점차 늘리게 된다. 왜냐하면 각각의 js파일을 전부 불러들어야만 하기 때문이다. 그렇다고 js파일을 한개로 모으자니 모듈화의 의미가 없기 때문에 이것 조차 안된다. 이러한 현상을 막기 위해서 **번들러 Webpack**을 이용해야만 한다. 웹팩은 js, css를 묶어서 하나의 파일들로 만들어준다.
-
-<br/>
-
-### npm 패키지 설치시 --save-dev 옵션
-
---save-dev : 이 옵션으로 npm 설치 시 그냥 dependencies가 아니라 devDependencies가 생긴다.
-
-두개의 차이는 실제로 서버에서 사용해야하는지 와 사용을 하지 말아햐하는지의 차이다. 
-
-예를들어 eslint같은 것은 개발자를 위한 패키지 모듈인데 굳이 본서버에 올려서 노드모듈에 추가할 필요가 없다. 단지 개발을 쉽게하기 위한 툴이기 때문이다. 이러한 패키지들은 --save-dev로 설치하고 이러한 툴이 필요없는 패키지들은 해당 옵션을 사용하지 않는다.
-
-<br/>
-
-### babel-polyfill
-
-Babel을 사용하여 ES6+코드를 하위버전으로 트랜스파일링 했다고 가정하자.
-
-그런데도 ES6 문법 Promise, Object.assign, Array, from 등과 같은 문법은 하위버전에서 대체할만한 수단이 존재하지 않는다. 
-
-따라서 babel로 트랜스파일링을 해도 위 문법들은 그대로 남아있다. 이런 문제들은 polyfill을 사용해서 구현해야만 한다.
-
-polyfill이란? 기능을 지원하지 않는 웹 브라우저 상의 기능을 구현하는 코드를 의미한다.
-
-<br/>
-
-### .babelrc 설정 파일 
-
-Babel을 사용하려면 `@babel/preset-env`을 설치해야 한다. [@babel/preset-env](https://babeljs.io/docs/plugins/preset-env/)은 함께 사용되어야 하는 Babel 플러그인을 모아 둔 것으로 [Babel 프리셋](https://babeljs.io/docs/en/presets)이라고 부른다. Babel이 제공하는 공식 Babel 프리셋(Official Preset)은 아래와 같다.
-
-- [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env)
-- [@babel/preset-flow](https://babeljs.io/docs/en/babel-preset-flow)
-- [@babel/preset-react](https://babeljs.io/docs/en/babel-preset-react)
-- [@babel/preset-typescript](https://babeljs.io/docs/en/babel-preset-typescript)
-
-`@babel/preset-env`도 공식 프리셋의 하나이며 필요한 플러그인 들을 프로젝트 지원 환경에 맞춰서 동적으로 결정해 준다. 프로젝트 지원 환경은 [Browserslist](https://github.com/browserslist/browserslist) 형식으로 .browserslistrc 파일에 상세히 설정할 수 있다. 프로젝트 지원 환경 설정 작업을 생략하면 기본값으로 설정된다.
-
-<br/>
-
-### Webpack
-
-Webpack은 의존관계에 있는 모듈들을 하나의 자바스크립트 파일로 번들링하는 모듈 번들러이다.
-
-Webpack을 사용하면 의존 모듈이 하나의 파일로 번들링되므로 별도의 모듈로더가 필요없다.
-
-**다수의 자바스크립트 파일을 하나의 파일로 번들링하므로 html 파일에서 script 태그로 다수의 자바스크립트 파일을 로드해야 하는 번거로움도 사라진다.**
-
-<br/>
-
-### webpack.config.js 설정 파일
-
-webpack.config.js은 Webpack이 실행될 때 참조하는 설정 파일이다. 
-
-프로젝트 루트에 webpack.config.js 파일을 생성하고 아래처럼 작성한다. (예)
-
-~~~javascript
-const path = require('path');
-
-module.exports = {
-  // enntry file
-  entry: ['@babel/polyfill', './src/js/main.js'],
-  // 컴파일 + 번들링된 js 파일이 저장될 경로와 이름 지정
-  output: {
-    path: path.resolve(__dirname, 'dist/js'),
-    filename: 'bundle.js'
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        include: [
-          path.resolve(__dirname, 'src/js')
-        ],
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-proposal-class-properties']
-          }
-        }
-      }
-    ]
-  },
-  devtool: 'source-map',
-  // https://webpack.js.org/concepts/mode/#mode-development
-  mode: 'development'
+const obj = {
+  // 심볼 값으로 프로퍼티 키를 동적 생성
+  [Symbol.for('mySymbol')]: 1
 };
-~~~
 
-1.   entry: ['@babel/polyfill', './src/js/main.js'] : 이 코드는 해당 위치에 있는 파일을 번들링 하겠다는 의미다.
-2.   output: {
-       path: path.resolve(__dirname, 'dist/js'),
-       filename: 'bundle.js'
-     } : path는 위치를 의미한다. 즉, dist/js에 bundle.js라는 의미로 번들링 파일이 생성된다.
+console.log(obj[Symbol.for('mySymbol')]); // 1
+```
+
+**심볼 값은 유일무이한 값이므로 심볼 값으로 프로퍼티 키를 만들면 다른 프로퍼티 키와 절대 충돌하지 않는다.** 기존 프로퍼티 키와 충돌하지 않는 것은 물론, 미래에 추가될 어떤 프로퍼티 키와도 충돌할 위험이 없다.
 
 <br/>
+
+#### 2. 프로퍼티 은닉
+
+심볼 값으로 동적 생성한 프로퍼티 키로 만든 프로퍼티는 for…in 문이나 Object.keys, Object.getOwnPropertyNames 메소드로 찾을 수 없다. 
+
+즉, 프로퍼티를 은닉할 수 있다.
+
+~~~javascript
+const obj = {
+  // 심볼 값으로 프로퍼티 키를 동적 생성
+  [Symbol('mySymbol')]: 1
+};
+
+for (const key in obj) {
+  console.log(key); // 아무것도 출력되지 않는다.
+}
+
+console.log(Object.keys(obj)); // []
+console.log(Object.getOwnPropertyNames(obj)); // []
+~~~
+
+은닉된 Symbor을 찾기 위해서는 Object.getOwnPropertySymbols 메소드를 이용해야만 한다.
+
+```javascript
+const obj = {
+  // 심볼 값으로 프로퍼티 키를 동적 생성
+  [Symbol('mySymbol')]: 1
+};
+
+// ES6 : getOwnPropertySymbols
+console.log(Object.getOwnPropertySymbols(obj)); // [Symbol(mySymbol)]
+
+// 심볼 값을 찾을 수 있다.
+const symbolKey1 = Object.getOwnPropertySymbols(obj)[0];
+console.log(obj[symbolKey1]); // 1
+```
+
+<br/>
+
+#### 3. 표준 빌트인 객체 확장 이용
+
+보통으로는 표준 빌트인에 사용자 정의 메소드를 직접 추가해서 확장하여 사용하지는 않는다.
+
+그럼에도 불구하고 아래처럼 확장했다고 가정하자.
+
+~~~javascript
+// 표준 빌트인 객체를 확장하는 것은 권장하지 않는다.
+// 즉, Array.prototype은 읽기 전용으로 사용하는 것이 좋다.
+Array.prototype.sum = function () {
+  return this.reduce((p, c) => p + c, 0);
+};
+
+console.log([1, 2].sum()); // 3
+~~~
+
+나는 sum이라는 메소드를 Array.prototype에 확장해서 사용했다. 그런데 만약에 차후에 생긴 ES~~ 버전에서 sum이라는 메소드를 만들어 배포했다고 할 경우, 내 메소드가 빌트인 메소드를 덮어씌우게 된다. 이는 나중에 문제로 야기될 확률이 매우 높다. 
+
+하지만 중복될 가능성이 없는 심볼 값으로 프로퍼티 키를 생성하여 표준 빌트인 객체를 확장하면 표준 빌트인 객체의 기존 프로퍼티 키와 충돌하지 않는 것은 물론, 버전이 올라감에 따라 추가될지 모르는 어떤 프로퍼티 키와도 충돌할 위험이 없어 안전하게 표준 빌트인 객체를 확장할 수 있다.
+
+```javascript
+// 심볼 값으로 프로퍼티 키를 동적 생성하면 다른 프로퍼티 키와 절대 충돌하지 않는다.
+Array.prototype[Symbol.for('sum')] = function () {
+  return this.reduce((p, c) => p + c, 0);
+};
+
+console.log([1, 2][Symbol.for('sum')]()); // 3
+```
+
+
+
+<br/>
+
+### 개발 커뮤니티 이용법
+
+- twitter 이용 : 예) JS에서 유명한 사람들을 팔로우한다.(TC39에서 유명한 사람들)  그러면 그들과 관련된 트윗이 날라오는데 그것을 이용한다.
+- facebook 이용 : 프론트엔드 개발 그룹, 프론트엔드 스터디 그룹 과 같은 그룹들을 이용한다.
