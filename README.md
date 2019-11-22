@@ -157,6 +157,8 @@ Today I Leaned...
 >[Promise](https://github.com/HYEOK999/TIL/blob/master/javaScript/Promise.md)
 >
 >[Module](https://github.com/HYEOK999/TIL/blob/master/javaScript/Module.md)
+>
+>[Symbol](https://github.com/HYEOK999/TIL/blob/master/javaScript/symbol.md)
 
 <br/>
 
