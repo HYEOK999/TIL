@@ -320,3 +320,11 @@ Today I Leaned...
 >
 >[20191116-TodoList Async/Await](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_42_todo.md)
 
+<br/>
+
+<br/>
+
+### Project
+
+> [limrim 쇼핑몰 사이트 클론](https://github.com/HYEOK999/pinkjelly-project)
+

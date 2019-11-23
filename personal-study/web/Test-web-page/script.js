@@ -3,7 +3,9 @@ req.open("GET", "./json/image_list.json");
 req.onreadystatechange = function(){
     if(this.readyState == 4){
         var data = JSON.parse(this.response);
-        
+
+// 요소.classList.container().add
+
         for(var i= 0; i<data.length;i++){
             var div = document.createElement("div");
             div.setAttribute("class","image");
