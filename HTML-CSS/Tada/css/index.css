@@ -1,0 +1,237 @@
+@charset "utf-8";
+@import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css);
+@import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-jp.css);
+
+*, *::before, *::after{
+  box-sizing: border-box;
+}
+
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
+/*숨긴 콘텐츠*/
+.a11y-hidden, legend{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden; /* 넘치는 부분을 감쳐준다 */
+  clip: rect(0,0,0,0); /* 선행조건 : position:absolute 해당 화면을 잘라내서 보여줌 */
+  white-space: nowrap; /* 줄바꿈을 하지않음. */
+  opacity: 0; /* 투명도  */
+}
+
+/* clearfix - float 이슈를 해결하기 위한 선언 */
+.clearfix::after{
+  content: "";
+  display: block;
+  clear: both;
+}
+
+html{
+  font-size: 10px;
+}
+
+body{
+  font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', '돋움', 'Dotum', 'Sans-serif' !important;
+  font-weight: 400;
+}
+
+@media screen and (max-width: 765px){
+  header{
+    position: relative;
+    height: 60px;
+  }
+  .advertise a{
+    overflow: hidden;
+    display: block;
+  }
+  .advertise-img{
+    min-width: 500px;
+    width: 100%;
+    height: 100%;
+  }
+  .advertise-desktop-img{
+    display: none;
+  }
+  .main-header{
+    position: relative;
+  }
+  .menu-logo{
+    text-align: center;
+    position: absolute;
+    top: 2.8rem;
+    left: 3rem;
+    width: 98px;
+    text-indent: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .menu-logo a {
+    display: block;
+    height: 25px;
+  }
+  .menu-logo a::after{
+    content: '';
+    background: url(https://tadatada.com/static/images/btn_home_logo@4x.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .menu-btn{
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    border : none;
+    width: 4.4rem;
+    height: 4.4rem;
+    outline: 0;
+  }
+  .open-btn{
+    cursor: pointer;
+    background-size: contain;
+    background-image: url(https://tadatada.com/static/images/btn_menu@4x.png);
+    background-repeat: no-repeat;
+  }
+  .close-btn{
+    cursor: pointer;
+    background-size: contain;
+    background-image: url(https://tadatada.com/static/images/btn_menu_exit@4x.png);
+    background-repeat: no-repeat;
+  }
+  .mobile-open{
+    display: block;
+  }
+  .mobile-close{
+    display: none;
+  }
+  .menu-navigation-ul {
+    padding-top: 75px;
+    height: 100vh;
+    background: white;
+  }
+  .menu-navigation-ul li{
+    font-size: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+  }
+  .menu-navigation-ul > li > a:hover{
+    background: #6060791e;
+    color: #606079;
+    font-weight: bold;
+  }
+  .menu-navigation-ul >li > a {
+    display: block;
+    padding: 30px;
+  }
+  .menu-navigation-driver{
+    position: relative;
+  }
+  .menu-navigation-driver:after{
+    content:'';
+    background: url(https://tadatada.com/static/images/ic_arrow_up@3x.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    cursor: pointer;
+    top: 33px;
+    right: 28px;
+    width: 16px;
+    height: 8px;
+  }
+  .sub-menu-driver-ul li{
+    background: #f4f4f6;
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    /* line-height: 75px; */
+  }
+  .sub-menu-driver-ul li:hover{
+    color: #606079;
+    background: rgb(248, 248, 248);
+    font-weight: bold;
+  }
+  .sub-menu-driver-ul li a {
+    display: block;
+    line-height: 75px;
+    margin-left: 50px;
+  }
+
+  .slogun{
+    margin-top: 3.3rem;
+    position: relative;
+  }
+  .slogun-main{
+    width: 100%;
+    height: 163px;
+    padding-left: 3rem;
+  }
+  .slogun-main-text{
+    font-size: 22px;
+    font-weight: 200;
+    font-style: normal;
+    font-stretch: normal;
+    width: 100%;
+    height: 44px;
+    line-height: 1.45;
+  }
+  .slogun-img-mobile{
+    width: 375px;
+    height: 190px;
+    position: absolute;
+    right:0;
+    top:60px;
+  }
+  .slogun-img-desktop{
+    display: none;
+  }
+  .app-download {
+    text-align: center;
+    width: 100%;
+    display: block;
+    position: absolute;
+    top:314px;
+    left:0;
+  }
+  .play-store {
+    display: inline-block;
+    background-image: url(https://tadatada.com/static/images/btn_download_googleplay@4x.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 145px;
+    height: 48px;
+    margin-right:25px;
+    text-indent: 145px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .app-store{
+    background-size: contain;
+    background-image: url(https://tadatada.com/static/images/btn_download_appstore@4x.png);
+    display: inline-block;
+    background-repeat: no-repeat;
+    width: 145px;
+    height:48px;
+    text-indent: 145px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .slogun-sub{
+    padding-top:330px;
+    background: rgb(42, 43, 73);
+    height: 100vh;
+  }
+  .slogun-sub-text1 {
+    display: inline-block;
+    width: 130px;
+    padding-left: 3rem;
+    font-size: 33px;
+    color:#fff;
+    font-weight: 200;
+  }
+}
+/* @media screen and (max-width: 1280px){
+} */

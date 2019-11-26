@@ -4,14 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/index.css">
   <title>타다 : TADA</title>
 </head>
 <body>
+  <!-- 광고 -->
+  <aside class="advertise">
+      <!-- <h2>광고</h2>
+      <a>
+        <div>
+          <em>타다 프리미엄 드라이버를 모집합니다.</em>
+          <span>지원 혜택 보기 &gt;</span>
+        </div>
+        <img src="#" alt="#">
+      </a> -->
+    <h2 class="a11y-hidden">광고</h2>
+    <a>
+      <img class="advertise-img advertise-mobile-img" src="https://tadatada.com/static/images/premium_driver_banner_mobile.jpg" alt="타다 프리미엄 드라이버를 모집합니다.">
+      <img class="advertise-img advertise-desktop-img" src="https://tadatada.com/static/images/premium_driver_banner_desktop.jpg" alt="타다 프리미엄 드라이버를 모집합니다.">
+    </a>
+  </aside>
   <!-- 머리말 -->
   <header>
-    <h1>타다</h1>
-    <nav>
-      <ul>
+    <!-- 로고 시작-->
+    <h1 class="menu-logo"><a href="#">타다</a></h1>
+    <h2 class="a11y-hidden">메인 메뉴</h2>
+    <button class="menu-btn open-btn" aria-label="메인메뉴 열기"></button>
+    <nav class="menu-navigation mobile-open mobile-close">
+      <ul class="menu-navigation-ul">
         <li>
           <a href="#">이용방법</a>
         </li>
@@ -24,9 +45,9 @@
         <li>
           <a href="#">채용</a>
         </li>
-        <li>
+        <li class="menu-navigation-driver">
           <a href="#">드라이버</a>
-          <ul>
+          <ul class="sub-menu-driver-ul">
             <li><a href="#">스토리</a></li>
             <li><a href="#">지원하기</a></li>
           </ul>
@@ -34,34 +55,23 @@
       </ul>
     </nav>
   </header>
-  <!-- 광고 -->
-  <aside>
-    <!-- <h2>광고</h2>
-    <a>
-      <div>
-        <em>타다 프리미엄 드라이버를 모집합니다.</em>
-        <span>지원 혜택 보기 &gt;</span>
-      </div>
-      <img src="#" alt="#">
-    </a> -->
-    <h2>광고</h2>
-    <a>
-      <img src="https://tadatada.com/static/images/premium_driver_banner_desktop.jpg" alt="">
-    </a>
-  </aside>
+
   <!-- 슬로건 -->
-  <section>
-    <h2>슬로건</h2>
-    <div>
-      <span>바로가다 \n 이동의 기본, 타다</span>
-      <img src="https://tadatada.com/static/images/main_tada_car.png" alt="#">
-      <a href="#"></a>
-      <a href="#"></a>
+  <section class="slogun">
+    <h2 class="a11y-hidden">슬로건</h2>
+    <div class="slogun-main">
+      <span class="slogun-main-text">바로가다 <br/> 이동의 기본, 타다</span>
+      <img class="slogun-main-image slogun-img-mobile" src="https://tadatada.com/static/images/main_tada_car_mobile.png" alt="">
+      <img class="slogun-main-image slogun-img-desktop" src="https://tadatada.com/static/images/main_tada_car.png" alt="#">
+      <div class="app-download">
+        <a href="#" class="play-store">플레이스토어 다운로드</a>
+        <a href="#" class="app-store">앱스토어 다운로드</a>
+      </div>
     </div>
-    <div>
-      <span>이동의 \n기본을 \n바꾸다</span>
-      <span>더 정직하게, 더 편안하게, 더 안전하게.</span>
-      <p>타다는 "이동의 기본"을 지키는 것만으로도
+    <div class="slogun-sub">
+      <span class="slogun-sub-text1">이동의 기본을 바꾸다</span>
+      <span class="slogun-sub-text2">더 정직하게, 더 편안하게,더 안전하게.</span>
+      <p class="slogun-content">타다는 "이동의 기본"을 지키는 것만으로도
           지금보다 "더 나은 이동"이 되리라 믿습니다.
           일상 속 모든 이동이 더 좋은 경험이 될 수 있도록
           타다는 바로 가는 것을 멈추지 않고
@@ -73,7 +83,7 @@
     <section>
       <h2>타다의 소개</h2>
       <dl>
-        <dt>타다(TADA)는?</dt>
+        <dt class="main-titles">타다(TADA)는?</dt>
         <dd>
           타다(TADA)는 <b>새로운 이동의 기준</b>을 제시하는 모빌리티 플랫폼으로,
           <b>일상 속 이동</b>이 필요할 때 더욱 편리하고 안전하게 이용할 수 있습니다.
@@ -83,27 +93,27 @@
       <figure>
         <img src="https://tadatada.com/static/images/ic_feature_01_clean_n@4x.png" alt="#">
         <figcaption>
-          <span>더 편안하게, \n깨끗하게 유지되는 실내</span>
+          <span>더 편안하게, <br/>깨끗하게 유지되는 실내</span>
           <p>타다는 더욱 쾌적한 승차 경험을 제공하기 위해 정기적으로 차량 내/외부를 청소합니다. 타다는 매일 운행 전 차내 상태와 비품을 재정비하여 청결하고 정갈한 실내환경을 유지합니다.</p>
         </figcaption>
       </figure>
       <figure>
         <img src="https://tadatada.com/static/images/ic_feature_02_safe_n@4x.png" alt="#">
         <figcaption>
-          <span>더 안전하게, \n타다 드라이버 매뉴얼</span>
+          <span>더 안전하게, <br/>타다 드라이버 매뉴얼</span>
           <p>타다는 더욱 안전한 이동 경험을 제공하기 위해 타다만의 매뉴얼을 만들었습니다. 안전 운행을 위한 운행 매뉴얼과 이용자 대응 매뉴얼이 포함되며, 매 운행 시 이용자에게 드라이버에 대한 평가를 받아 시스템에 반영합니다.</p>
         </figcaption>
       </figure>
       <figure>
         <img src="https://tadatada.com/static/images/ic_feature_03_honest_n@4x.png" alt="#">
         <figcaption>
-          <span>더 정직하게, \n승차거부 없는 바로배차</span>
+          <span>더 정직하게, <br/>승차거부 없는 바로배차</span>
           <p>타다는 드라이버가 목적지를 확인하고 원하는 호출을 수락하는 것이 아닌, 타다만의 배차 시스템을 통해 차량이 '바로배차' 되는 시스템입니다. 드라이버는 이용자 탑승 전까지 도착지를 알 수 없으며, 호출 즉시 출발지에서 가장 가까운 차량이 바로배차되기 때문에 승차거부 걱정없이 타다를 이용하실 수 있습니다.</p>
         </figcaption>
       </figure>
     </section>
     <section>
-      <h2>타다 라인업</h2>
+      <h2 class="main-titles">타다 라인업</h2>
       <p>타다는 '타다 베이직'을 시작으로 다양한 모빌리티 라인업을 확장할 예정입니다.\n일상 속 모든 이동을 타다와 함께 할 수 있도록, 타다는 계속해서 고민하겠습니다.</p>
       <article>
         <h3>
@@ -200,7 +210,7 @@
       <button type="button" class="btn-line-next">다음 라인업 보기</button>
     </section>
     <section>
-      <h2>타다의 이용 방법</h2>
+      <h2 class="main-titles">타다의 이용 방법</h2>
       <img src="https://tadatada.com/static/images/bg_howto_mockup_mobile@4x.png" alt="#">
       <ol>
         <li>
@@ -252,14 +262,18 @@
       <button type="button" class="btn-useMethod-next">다음 이용 방법 보기</button>
     </section>
     <section>
-      <h2>타다 이용 안내</h2>
+      <h2 class="main-titles">타다 이용 안내</h2>
       <dl>
-        <dt>서비스 이용시간</dt>
+        <dt class="service-time-title">서비스 이용시간</dt>
         <dd>24시간 이용가능</dd>
-        <dt>출발가능지역</dt>
+      </dl>
+      <dl>
+        <dt class="service-time-title">출발가능지역</dt>
         <dd>전 지역 : 서울특별시 <br/>
             일부 지역 : 인천광역시, 경기도</dd>
-        <dt>도착가능지역</dt>
+      </dl>
+      <dl>
+        <dt class="service-time-title">도착가능지역</dt>
         <dd>전 지역 : 서울특별시, 구리시, 하남시, 성남시, 과천시, 광명시, 안양시, 부천시, 의정부시, 수원시, 용인시, 고양시, 군포시, 의왕시 <br/>
             일부 지역 : 인천광역시, 김포시, 남양주시
             <a href="#">&#42; 더 상세한 이용가능지역 확인하기 &gt;</a>
