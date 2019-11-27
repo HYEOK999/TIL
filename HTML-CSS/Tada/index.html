@@ -26,13 +26,13 @@
     </a>
   </aside>
   <!-- 머리말 -->
-  <header>
+  <header> <!--class="open-menu"-->
     <!-- 로고 시작-->
     <h1 class="menu-logo"><a href="#">타다</a></h1>
     <h2 class="a11y-hidden">메인 메뉴</h2>
-    <button class="menu-btn open-btn" aria-label="메인메뉴 열기"></button>
-    <nav class="menu-navigation mobile-open mobile-close">
-      <ul class="menu-navigation-ul">
+    <button class="menu-btn" aria-label="메인메뉴 열기"></button> <!--class="close-btn"-->
+    <nav class="menu-navigation moblie-toggle"> <!--mobile-toggle : display:none-->
+      <ul class="menu-list">
         <li>
           <a href="#">이용방법</a>
         </li>
@@ -45,9 +45,9 @@
         <li>
           <a href="#">채용</a>
         </li>
-        <li class="menu-navigation-driver">
+        <li class="menu-list-driver">
           <a href="#">드라이버</a>
-          <ul class="sub-menu-driver-ul">
+          <ul class="sub-menu">
             <li><a href="#">스토리</a></li>
             <li><a href="#">지원하기</a></li>
           </ul>
@@ -69,51 +69,47 @@
       </div>
     </div>
     <div class="slogun-sub">
-      <span class="slogun-sub-text1">이동의 기본을 바꾸다</span>
-      <span class="slogun-sub-text2">더 정직하게, 더 편안하게,더 안전하게.</span>
-      <p class="slogun-content">타다는 "이동의 기본"을 지키는 것만으로도
-          지금보다 "더 나은 이동"이 되리라 믿습니다.
-          일상 속 모든 이동이 더 좋은 경험이 될 수 있도록
-          타다는 바로 가는 것을 멈추지 않고
+      <span class="slogun-sub-text slogun-sub-title1">이동의<br/> 기본을<br/> 바꾸다</span>
+      <span class="slogun-sub-text slogun-sub-title2">더 정직하게,<br/> 더 편안하게,<br/>더 안전하게.</span>
+      <p class="slogun-content">타다는 "이동의 기본"을 지키는 것만으로도<br/>
+          지금보다 "더 나은 이동"이 되리라 믿습니다.<br/>
+          일상 속 모든 이동이 더 좋은 경험이 될 수 있도록<br/>
+          타다는 바로 가는 것을 멈추지 않고<br/>
           계속해서 고민하겠습니다.</p>
     </div>
   </section>
   <!-- 메인 -->
-  <main>
-    <section>
-      <h2>타다의 소개</h2>
+  <main class="main-wrap">
+    <section class="introduction">
+      <h2 class="a11y-hidden">타다의 소개</h2>
       <dl>
         <dt class="main-titles">타다(TADA)는?</dt>
-        <dd>
+        <dd class="introduction-description">
           타다(TADA)는 <b>새로운 이동의 기준</b>을 제시하는 모빌리티 플랫폼으로,
           <b>일상 속 이동</b>이 필요할 때 더욱 편리하고 안전하게 이용할 수 있습니다.
         </dd>
       </dl>
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/PuOcC1PJKWU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <figure>
-        <img src="https://tadatada.com/static/images/ic_feature_01_clean_n@4x.png" alt="#">
-        <figcaption>
-          <span>더 편안하게, <br/>깨끗하게 유지되는 실내</span>
+      <img class="introduction-video" src="https://tadatada.com/static/images/0922socar_06_266@2x.jpg">
+      <ul>
+        <li class="introduction-list">
+          <span class="introduction-list-title"><strong>더 편안하게</strong>, <br/>깨끗하게 유지되는 실내</span>
+          <img src="https://tadatada.com/static/images/ic_feature_01_clean_n@4x.png" alt="#">
           <p>타다는 더욱 쾌적한 승차 경험을 제공하기 위해 정기적으로 차량 내/외부를 청소합니다. 타다는 매일 운행 전 차내 상태와 비품을 재정비하여 청결하고 정갈한 실내환경을 유지합니다.</p>
-        </figcaption>
-      </figure>
-      <figure>
-        <img src="https://tadatada.com/static/images/ic_feature_02_safe_n@4x.png" alt="#">
-        <figcaption>
-          <span>더 안전하게, <br/>타다 드라이버 매뉴얼</span>
+        </li>
+        <li class="introduction-list">
+          <span class="introduction-list-title"><strong>더 안전하게</strong>, <br/>타다 드라이버 매뉴얼</span>
+          <img src="https://tadatada.com/static/images/ic_feature_02_safe_n@4x.png" alt="#">
           <p>타다는 더욱 안전한 이동 경험을 제공하기 위해 타다만의 매뉴얼을 만들었습니다. 안전 운행을 위한 운행 매뉴얼과 이용자 대응 매뉴얼이 포함되며, 매 운행 시 이용자에게 드라이버에 대한 평가를 받아 시스템에 반영합니다.</p>
-        </figcaption>
-      </figure>
-      <figure>
-        <img src="https://tadatada.com/static/images/ic_feature_03_honest_n@4x.png" alt="#">
-        <figcaption>
-          <span>더 정직하게, <br/>승차거부 없는 바로배차</span>
+        </li>
+        <li class="introduction-list">
+          <span class="introduction-list-title"><strong>더 정직하게</strong>, <br/>승차거부 없는 바로배차</span>
+          <img src="https://tadatada.com/static/images/ic_feature_03_honest_n@4x.png" alt="#">
           <p>타다는 드라이버가 목적지를 확인하고 원하는 호출을 수락하는 것이 아닌, 타다만의 배차 시스템을 통해 차량이 '바로배차' 되는 시스템입니다. 드라이버는 이용자 탑승 전까지 도착지를 알 수 없으며, 호출 즉시 출발지에서 가장 가까운 차량이 바로배차되기 때문에 승차거부 걱정없이 타다를 이용하실 수 있습니다.</p>
-        </figcaption>
-      </figure>
+        </li>
+      </ul>
     </section>
-    <section>
-      <h2 class="main-titles">타다 라인업</h2>
+    <section class="line-up">
+      <h2 class="main-titles tada-lineup">타다 라인업</h2>
       <p>타다는 '타다 베이직'을 시작으로 다양한 모빌리티 라인업을 확장할 예정입니다.\n일상 속 모든 이동을 타다와 함께 할 수 있도록, 타다는 계속해서 고민하겠습니다.</p>
       <article>
         <h3>
