@@ -321,6 +321,8 @@ Today I Leaned...
 >[20191116-TodoList Async/Await](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_42_todo.md)
 >
 >[20191126-위장](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_43.md)
+>
+>[20191127-정수 제곱근 판별](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_44.md)
 
 <br/>
 
