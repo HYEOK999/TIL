@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <input type="checkbox" name="aaa" class="abc">
+  <ul>
+    <li>a</li>
+    <li>c</li>
+    <li class="item3">item3</li>
+    <li class="item4">item4</li>
+    <li>e</li>
+  </ul>
+</body>
+<script>
+  const $abc = document.querySelector('.abc');
+
+  $abc.onclick = ({ target }) => {
+    console.dir(target.classList.toggle);
+  };
+</script>
+</html>
