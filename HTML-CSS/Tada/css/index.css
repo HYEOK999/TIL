@@ -353,6 +353,26 @@ body{
     width: 100px;
     background: #000;
   }
+  .lineup-sub-titles{
+    font-size: 16px;
+    font-weight: 300;
+    display: block;
+    text-align: center;
+    letter-spacing: -0.4px;
+    word-break: keep-all;
+    line-height: 1.5;
+    margin-top: 15px;
+    height: 100px;
+    color: #606079;
+    width: 100%;
+  }
+  .lineup-service{
+    margin-top: 71px;
+    margin-bottom: 31px;
+  }
+  .lineup-img, .lineup-content{
+    display: none;
+  }
 }
 /* @media screen and (max-width: 1280px){
 } */
