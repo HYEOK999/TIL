@@ -18,9 +18,30 @@
 </body>
 <script>
   const $abc = document.querySelector('.abc');
+  let name = '';
+  let names = '';
 
   $abc.onclick = ({ target }) => {
     console.dir(target.classList.toggle);
+  };
+
+  const $item3 = document.querySelector('.item3');
+
+  $item3.onclick = ({ target }) => {
+    if (!name) name = $item3.innerText;
+    console.dir(target.classList.toggle('active'));
+    if (target.classList[1] === 'active') {
+      target.innerText = '찍었다.';
+    } else {
+      target.innerText = name;
+    }
+  };
+
+  const $item4 = document.querySelector('.item4');
+
+  $item4.onclick = ({ target }) => {
+    if (!names) names = $item4.innerText;
+    target.innerText = target.innerText === names ? '찍었다.' : names;
   };
 </script>
 </html>
