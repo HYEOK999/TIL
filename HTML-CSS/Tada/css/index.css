@@ -428,6 +428,50 @@ body{
     right: -28px;
     background-image: url(https://tadatada.com/static/images/btn_lineup_right@3x.png);
   }
+  .progress-dot{
+    text-align: center;
+    height: 6px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }
+  .progress-dot span{
+    display: inline-block;
+    background-color: #9494a5;
+    width: 6px;
+    height: 6px;
+  }
+  .progress-dot span:nth-child(-n+5){
+    margin-right: 14px;
+  }
+  .doc-act{
+    background-color: #2a2a4c !important;
+  }
+  .service-contents{
+    padding: 35px 25px 25px 25px;
+    background-color: #f9f9f9;
+  }
+  .lineup-content span{
+    display: block;
+    margin: 0 auto;
+    font-weight: normal;
+    letter-spacing: -0.8px;
+    line-height: normal;
+    width: 100%;
+    height: 48px;
+    font-size: 20px;
+    color: #5f5f65;
+  }
+  .lineup-content p{
+    width: 100%;
+    height: auto;
+    font-size: 14px;
+    color: #5f5f65;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: 1.71;
+    letter-spacing: -0.6px;
+  }
 }
 /* @media screen and (max-width: 1280px){
 } */
