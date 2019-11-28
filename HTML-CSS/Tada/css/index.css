@@ -37,6 +37,7 @@ html{
 body{
   font-family: 'Spoqa Han Sans', 'Spoqa Han Sans JP', '돋움', 'Dotum', 'Sans-serif' !important;
   font-weight: 400;
+  font-smoothing : antialiased;
 }
 
 @media screen and (max-width: 765px){
@@ -334,7 +335,7 @@ body{
     height: auto;
     letter-spacing: -0.6px;
   }
-  .line-up{
+  .lineup{
     margin-top: 215px;
   }
   .tada-lineup{
@@ -345,7 +346,7 @@ body{
     text-align: center;
     position: absolute;
     display: block;
-    bottom: 55px;
+    bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
     height: 1px;
