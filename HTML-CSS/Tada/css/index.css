@@ -396,6 +396,38 @@ body{
   .lineup-tab:nth-child(-n+5){
     padding-right: 40px;
   }
+  .tab-on{
+    color: #2a2a4c;
+  }
+  .lineup-img > img{
+    display: block;
+    width: 100%;
+  }
+  .service-imges{
+    position: relative;
+  }
+  .service-imges button{
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 44px;
+    height: 44px;
+    text-indent: 45px;
+    border: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    top: 70px;
+  }
+  .btn-line-prev{
+    left: -15px;
+    background-image: url(https://tadatada.com/static/images/btn_lineup_left@3x.png);
+
+  }
+  .btn-line-next{
+    right: -28px;
+    background-image: url(https://tadatada.com/static/images/btn_lineup_right@3x.png);
+  }
 }
 /* @media screen and (max-width: 1280px){
 } */
