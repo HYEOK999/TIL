@@ -472,6 +472,68 @@ body{
     line-height: 1.71;
     letter-spacing: -0.6px;
   }
+  .use-method{
+    background: #2a2a4c;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    padding: 0 !important;
+    clear: both;
+  }
+  .use-method-title{
+    display: block;
+    padding-top: 64px;
+    font-size: 36px;
+    letter-spacing: -2px;
+    font-weight: 300;
+    text-align: center;
+    color: #fff;
+    margin: 0 auto;
+  }
+  .image-box{
+    display: block;
+    vertical-align: top;
+    margin: 0 auto;
+    padding-top: 60px;
+    width: 280px;
+    height: 492px;
+    text-align: center;
+  }
+  .phone-img{
+    width: 280px;
+    height: 492px;
+    margin: 0 auto;
+
+  }
+  .method{
+    display: none;
+    width: 100%;
+    height: 100%;
+  }
+  .method-act{
+    display: block;
+  }
+  .screens{
+    position: relative;
+    top: -467px;
+    width: 168px;
+    height: 298px;
+    margin: 44px 0 0 0;
+    vertical-align: top;
+    display: inline-block;
+  }
+  .screens li{
+    visibility: hidden;
+  }
+  .screen-img-act{
+    visibility: visible !important;
+  }
+  .screens img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+  }
 }
 /* @media screen and (max-width: 1280px){
 } */
