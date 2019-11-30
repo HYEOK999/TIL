@@ -117,6 +117,8 @@ Today I Leaned...
 >[20191113-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191113-study-javascript.md)
 >
 >[20191115-javascript](https://github.com/HYEOK999/TIL/blob/master/javaScript/20191115-study-javascript.md)
+>
+>[20191130-코어 자바스크립트 세미나](https://github.com/HYEOK999/TIL/blob/master/javaScript/CoreJavascript세미나.md)
 
 <br/>
 
