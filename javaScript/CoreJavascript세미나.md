@@ -264,3 +264,84 @@ var ryu = new Person('류성룡', 30);
 ```
 
 <br/>
+
+### 7강 : 클래스
+
+ES5 로 ES6에서 사용하는 클래스 구현해보기
+
+ES5 에서 사용되는 즉시 실행함수로 클래스처럼 구현하기.
+
+
+
+~~~javascript
+var extendClass = (function(){
+	function Bridge(){}
+	return function(Parent, Child){
+		Bridge.prototype = Parent.prototype;
+		Child.prototype = new Bridge();
+		Child.prototype.constructor = Child;
+		Child.prototype.superClass = Parent;
+	}
+})();
+
+function Person(name, age) {
+	this.name = name || '이름없음';
+	this.age = age || '나이모름';
+}
+
+Person.prototype.getName = function() {
+	return this.name;
+}
+
+Person.prototype.getAge = function() {
+	return this.age;
+}
+
+function Employee(name, age, position) {
+	this.superClass(name, age);
+	this.position = position || '직책모름';
+}
+
+extendClass(Person, Employee); // 소스
+
+Employee.prototype.getPosition = function(){
+	return this.position;
+}
+~~~
+
+ 소스 :  `extendClass`를 호출하게되면 인자로 함수 2개를 받는다.
+
+Person 함수와 Employee함수인데 extendClass 함수에서 정리를 깔끔하게 위해 빈 함수 bridge함수를 만들고 bridge함수의 프로토타입에 Person함수의 프로토타입을 대입한다. 
+
+그리고 2번째로 받은 인자 Employee함수의 프로토 타입에 bridge 함수를 생성자함수로 new호출한다. 
+
+<br/>
+
+위 과정을 클래스로 작성할 경우 다음과 같다.
+
+~~~javascript
+class Person {
+  	constructor(name, age) { 
+    	this.name = name || '이름없음';
+      this.age = age || '나이모름';
+    }
+  getName() {
+    return this.name;
+  }
+  getAge() {
+    return this.age;
+  }
+}
+class Employee extends Person {
+  constructor (name, age, position) {
+    super(name, age);
+    this.position = position || '직책모름';
+  }
+  getPosition() {
+    return this.position;
+  }
+}
+~~~
+
+
+
