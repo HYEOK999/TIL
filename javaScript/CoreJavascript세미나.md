@@ -1,3 +1,5 @@
+![core](https://user-images.githubusercontent.com/31315644/69897935-d7374580-1395-11ea-9ed6-d5b3898b3d76.jpeg)
+
 ----------
 
 # 코어 자바스크립트 세미나
@@ -5,10 +7,13 @@
 ## 정재남 저자님
 
 -----------
-
+**Index**
 - Data Types
-
-
+- 실핼 컨텍스트
+- This
+- call back function
+- 클로저
+- prototype
 
 ---------
 
@@ -28,17 +33,9 @@
 - Function
 - RegExp
 
-<br/>
-
-원시타입 
-
-var a;
-
-a = 'abc';
-
 <br>
 
-### 2강 : 실행 컨텍스트 (Execution Context)
+### 2강  : 실행 컨텍스트 (Execution Context)
 
 **실행에 필요한** 코드 흐름상의 배경이 되는 조건/환경.
 
@@ -56,7 +53,7 @@ outerEnvrionmentReference (현재 문맥에 관련 있는 외부 식별자 정�
 
 <br/>
 
-### 3강 THIS
+### 3강 : This
 
 ThisBinding은 실행컨텍스트가 활성화 되는 순간에 한다.
 
@@ -142,13 +139,13 @@ obj.b();
 
 <br/>
 
-### call back function
+### 4강 : call back function
 
-> call back : 호출 하다. 다시 돌려주다. return
->
-> function : 함수
+call back : 호출 하다. 다시 돌려주다. return
 
-제어권
+function : 함수
+
+**제어권**
 
 1. 실행 시점 (setInterver, setTimeout)
 
@@ -179,5 +176,91 @@ obj.b();
 
 <br/>
 
+### 5강 : 클로저
 
+클로저 : 함수와 그 함수가 선언될 당시의 렉시컬 환경의 결합.
 
+~~~javascript
+var outer = function () {
+  var a = 1;
+  var inner = function () {
+    console.log(++a);
+  };
+  ineer();
+}
+var outer2 = outer();
+console.log(outer2());
+console.log(outer2());	
+~~~
+
+컨텍스트 A(`outer`)에서 선언한 변수 a를 참조하는 내부함수B(`inner()`)를 A의 외부(`outer2`)로 전달할 경우, A(`outer`)가 종료된 이후에도 a가 사라지지 않는 현상이 클로저다.
+
+위 예제에서는 변수 a가 사라지지않고 게속 남아있다. 그것이 클로저다.
+
+클로저의 활용 : 정보은닉, 초기화 
+
+<br/>
+
+**정보은닉 예)**
+
+````javascript
+function a() {
+  var localA : 1;
+  var localB : 2;
+  var localC : 3;
+  return {
+    get a() { return localA; },
+    set a(v) { localA = v; },
+    get b() { return localB + localC; },
+    set b(v) { throw Error('read only'); } 
+  }
+}
+var obj = a();
+````
+
+localA , localB, localC 변수는 외부에서 접근이 불가능 하게 되었다.
+
+외부에서 요구할 수 있는 건 get a() , set a(v) 가 된다.
+
+즉, 함수 종료 이후에도 지역변수가 사라지지 않게 할 수 있다.
+
+<br/>
+
+### 6강 : prototype 
+
+**Prototype**
+
+![image](https://user-images.githubusercontent.com/31315644/69897804-5166ca80-1394-11ea-83f8-d3970a4dbf53.png)
+
+<br/>
+
+**프로토 타입을 이용해 생성자 함수에 접근하는 방법**
+
+[생성자 함수].prototype.constructor
+
+Object.getPrototypeOf([instance]).constructor
+
+[instance].__ proto __.constructor
+
+[instace].constructor
+
+<br/>
+
+**프로토 타입의 활용**
+
+```javascript
+fucntion Person(n, a){
+  this.name = n;
+  this.age = a;
+}
+Person.prototype.setOlder = function() {
+  this.age += 1;
+}
+Person.prototype.getAge = function() {
+  return this.age;
+}
+var lee = new Person('이순신', 40);
+var ryu = new Person('류성룡', 30);
+```
+
+<br/>
