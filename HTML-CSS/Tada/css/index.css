@@ -421,7 +421,6 @@ body{
   .btn-line-prev{
     left: -15px;
     background-image: url(https://tadatada.com/static/images/btn_lineup_left@3x.png);
-
   }
   .btn-line-next{
     right: -28px;
@@ -472,12 +471,12 @@ body{
     letter-spacing: -0.6px;
   }
   .use-method{
-    background: #2a2a4c;
+    background: rgb(53, 54, 83);
     margin: 0 auto;
     width: 100%;
-    height: 100%;
-    padding: 0 !important;
+    height: 90vh;
     clear: both;
+    position: relative;
   }
   .use-method-title{
     display: block;
@@ -488,33 +487,24 @@ body{
     text-align: center;
     color: #fff;
     margin: 0 auto;
+    margin-bottom: 20px;
   }
   .image-box{
     display: block;
-    vertical-align: top;
     margin: 0 auto;
     padding-top: 60px;
     width: 280px;
-    height: 492px;
+    height: 462px;
     text-align: center;
   }
   .phone-img{
     width: 280px;
-    height: 492px;
+    height: 462px;
     margin: 0 auto;
-
-  }
-  .method{
-    display: none;
-    width: 100%;
-    height: 100%;
-  }
-  .method-act{
-    display: block;
   }
   .screens{
     position: relative;
-    top: -467px;
+    top: -462px;
     width: 168px;
     height: 298px;
     margin: 44px 0 0 0;
@@ -532,6 +522,246 @@ body{
     width: 100%;
     height: 100%;
     left: 0px;
+  }
+  .btn-usemethod{
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 60px;
+    height: 60px;
+    text-indent: 61px;
+    border: none;
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    background-color: inherit;
+    top:50%;
+  }
+  .btn-usemethod-prev{
+    left: 0;
+    background-image: url(https://tadatada.com/static/images/btn_howto_left@4x.png);
+  }
+  .btn-usemethod-next {
+    right: 0;
+    background-image: url(https://tadatada.com/static/images/btn_howto_right@4x.png);
+  }
+  .how-method-list{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+  }
+  .method{
+    display: none;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 60px;
+  }
+  .method-act{
+    display: block;
+    text-align: center;
+    color: #fff;
+  }
+  .method-act span{
+    width: 100%;
+    height: 36px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .method-act p{
+    width: 100%;
+    height: 48px;
+    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1.71;
+    letter-spacing: -0.6px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .how-use-dot span{
+    background-color: rgb(86, 87, 109);
+  }
+  .how-use-dot-act{
+    background-color: rgb(236, 236, 236) !important;
+  }
+  .guide{
+    padding: 0 30px;
+    margin-top: 90px;
+  }
+  .guide-head{
+    text-align: left !important;
+  }
+  .guide-head::after{
+    display: block;
+    content: '';
+    width: 100px;
+    height: 45px;
+    border-bottom: 1px solid #2a2a4c;
+  }
+  .guide-box{
+    height: auto;
+    padding: 50px 0 10px 0;
+  }
+  .guide-title::before{
+    content: '';
+    display: block;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 33px;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .service-time::before{
+    background-image: url(https://tadatada.com/static/images/ic_howto_time@3x.png);
+  }
+  .start-locate::before{
+    background-image: url(https://tadatada.com/static/images/ic_howto_startpoint@3x.png);
+  }
+  .arrive-locate::before{
+    background-image: url(https://tadatada.com/static/images/ic_howto_destination@3x.png);
+  }
+  .guide-title{
+    width: 100%;
+    height: auto;
+    margin: 0px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #2a2a4c;
+    padding-top: 20px;
+    display: block;
+    opacity: 0.9;
+  }
+  .guide-content{
+    width: 100%;
+    height: auto;
+    font-size: 14px;
+    padding: 5px 0 0 ;
+    font-weight: normal;
+    color: rgba(42, 42, 76, 0.85);
+    word-break: keep-all !important;
+    font-size: 14px;
+    line-height: 1.71;
+  }
+  .guide-link{
+    font-weight: bold;
+    opacity: 0.9;
+  }
+  .location-bg{
+    background-image: url(https://tadatada.com/static/images/bg_vote_newarea.png);
+    background-position: center;
+    background-size: auto 372px;
+  }
+  .suggest{
+    height: 372px;
+  }
+  .suggest-fig{
+    display:block;
+    text-align: center;
+  }
+  .suggest-fig img{
+    width: 180px;
+    height: 124px;
+    margin-top: 48px;
+    margin-right: 30px;
+  }
+  .suggest-fig figcaption{
+    display: block;
+    width: 100%;
+    font-size: 24px;
+    letter-spacing: -1px;
+    font-weight: normal;
+    color: #2a2a4c;
+    line-height: 1.4;
+    margin: 40px 0 15px;
+  }
+  .suggest-link{
+    display: block;
+    text-align: center;
+    color: #2a2a4c;
+    font-size: 16px;
+  }
+  .history-bg{
+    background-size: auto 560px;
+    background-position: center;
+    background-image: url(https://tadatada.com/static/images/bg_corp_introduction_mobile.jpg);
+  }
+  .history-content{
+    display: block;
+    padding: 56px 30px;
+    width: 100%;
+    margin: 0 auto !important;
+    height: auto;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: left;
+    line-height: 1.9;
+    letter-spacing: -0.8px;
+    color: #fff;
+  }
+  .copylight{
+    position: relative;
+  }
+  .copylight-box{
+    color: #606079;
+    padding: 40px 30px 55px;
+    font-size: 12px;
+    height: auto;
+    background-color:rgba(149,135,134,0.1);
+  }
+  .copylight-box dd, .copylight-box dt{
+    padding-bottom: 10px;
+  }
+  .copylight-link-list{
+    position: absolute;
+    bottom: 35px;
+    left: 30px;
+    display: block;
+    width: 100%;
+  }
+  .copylight-link-list li{
+    display: inline-block;
+    font-size: 12px;
+    color: #606079;
+    padding-right: 20px;
+  }
+  .facebook a{
+    display: block;
+    width: 20px;
+    height: 20px;
+    text-indent: 21px;
+    white-space: nowrap;
+    overflow: hidden;
+    margin: -1px;
+    background-image: url(https://tadatada.com/static/images/btn_sns_facebook@3x.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+ }
+  .instagram a{
+    display: block;
+    width:20px;
+    height:20px;
+    margin: -1px;
+    text-indent: 21px;
+    white-space: nowrap;
+    overflow: hidden;
+    background-image: url(https://tadatada.com/static/images/btn_sns_instagram@3x.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  .tada-download{
+    text-align: center;
+    color: #fff;
+    width: 100%;
+    height: 58px;
+    font-size: 16px;
+    font-weight: bold;
+    display: table;
+    background-color: #01a4cd;
+  }
+  .tada-download a{
+    display: table-cell;
+    vertical-align: middle;
   }
 }
 /* @media screen and (max-width: 1280px){
