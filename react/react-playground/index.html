@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <label for="name">이름</label>
+  <input id="name" type="text" name="text">
+  <label for="email">이메일</label>
+  <input id="email" type="text" name="email">
+  <h2 class="email">이메일</h2>
+  <h2 class="name">이름</h2>
+</body>
+<script>
+  const $name = document.querySelector('#name');
+  const $email = document.querySelector('#email');
+  const $h2Email = document.querySelector('.email');
+  const $h2Name = document.querySelector('.name');
+
+console.dir($email);
+
+  $email.onkeydown = ({ target , keyCode }) => {
+
+    $h2Email.innerText = $email.value;
+    $h2Name.innerText = $name.value;
+  };
+
+</script>
+</html>
