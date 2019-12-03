@@ -308,7 +308,7 @@ Today I Leaned...
 >
 >[20191101-소수 찾기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_29.md)
 >
->[20191102-실패율(카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_30.md)
+>[20191102-실패율(2020 카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_30.md)
 >
 >[20191104-약수의 합](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_31.md)
 >
@@ -337,6 +337,8 @@ Today I Leaned...
 >[20191126-위장](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_43.md)
 >
 >[20191127-정수 제곱근 판별](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_44.md)
+>
+>[20191203-문자열 압축(2020 카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_45.md)
 
 <br/>
 
