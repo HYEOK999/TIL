@@ -128,6 +128,8 @@ Today I Leaned...
 
 >[VSC-환경셋팅](https://github.com/HYEOK999/TIL/blob/master/javaScript/VSC_Settings.md)
 >
+>[VSCode Debugger for Chrome](https://github.com/HYEOK999/TIL/blob/master/javaScript/GoggleDebuggerSet.md)
+>
 >[Git-branch 및 협업](https://github.com/HYEOK999/TIL/blob/master/javaScript/gitbranch_collabo.md)
 >
 >[ESLint](https://github.com/HYEOK999/TIL/blob/master/ESLint설명.md)
@@ -165,8 +167,6 @@ Today I Leaned...
 >[Symbol](https://github.com/HYEOK999/TIL/blob/master/javaScript/symbol.md)
 >
 >[iteration](https://github.com/HYEOK999/TIL/blob/master/javaScript/iteration.md)
->
->[VSCode Debugger for Chrome](https://github.com/HYEOK999/TIL/blob/master/javaScript/GoggleDebuggerSet.md)
 
 <br/>
 
