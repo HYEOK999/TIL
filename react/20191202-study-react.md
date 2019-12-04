@@ -2,7 +2,7 @@
 
 --------------
 
-# React 01
+# React Study 01
 
 - git commit 고치는 방법 3가지
 - prettier vs standard npm 기초
@@ -12,6 +12,21 @@
 - SPA , Single Page Application ( Vanila.js )
   - Proxy
 - 리액트 프로젝트 생성하기
+
+<br/>
+
+------
+
+<br/>
+
+### 용어 - ( 러버덕 )
+
+- 디스터럭처링 활용
+- SPA
+- Proxy
+- 리액트 프로젝트 생성하기
+
+<br/>
 
 --------------------------------------
 
