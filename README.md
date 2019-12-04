@@ -241,6 +241,8 @@ Today I Leaned...
 ### React 
 
 >[20191202-react](https://github.com/HYEOK999/TIL/blob/master/react/20191202-study-react.md)
+>
+>[20191204-react](https://github.com/HYEOK999/TIL/blob/master/react/20191204-study-react.md)
 
 <br/>
 
@@ -350,6 +352,6 @@ Today I Leaned...
 >
 > [GitHub Commit 독려 애플리케이션](https://github.com/HYEOK999/CarrotAndStick)
 >
-> [Tada 사이트 클론 - 반응형 (진행 중)](https://github.com/HYEOK999/TIL/tree/master/HTML-CSS/Tada)
+> [Tada 사이트 클론 - 반응형 (모바일 완료)](https://github.com/HYEOK999/TIL/tree/master/HTML-CSS/Tada)
 
 <br/>
