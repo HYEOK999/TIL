@@ -343,6 +343,8 @@ Today I Leaned...
 >[20191203-문자열 압축(2020 카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_45.md)
 >
 >[20191204-정수 내림차순으로 배치하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_46.md)
+>
+>[20191205-문자열 다루기 기본](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_47.md)
 
 <br/>
 
