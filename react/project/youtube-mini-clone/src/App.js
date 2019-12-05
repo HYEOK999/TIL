@@ -20,9 +20,9 @@ class App extends React.Component {
       counter: 0,
       className: 'App-header-2'
     }
-    // console.log(this)
-    this.add = this.add.bind(this)
+    this.adds = this.add.bind(this)
     this.minus = this.minus.bind(this)
+    console.log(this)
     // Object.keys(this).forEach((key) => {
     //   console.log(this);
     //   if (typeof this[key] === 'function') {
@@ -43,12 +43,15 @@ class App extends React.Component {
     // })
   }
   add() {
-    console.log(this);
+    console.log('answer : ' + this);
     this.setState({counter: this.state.counter + 100})
   }
   minus() {
     this.setState({counter: this.state.counter - 100})
   }
+  // test(obj) {
+  //   console.log(obj);
+  // }
   // calc(val) {
   //   this.setState({counter: this.state.counter + val})
   // }
@@ -56,7 +59,8 @@ class App extends React.Component {
   render(){
     return (
       <div className="App">
-        <button onClick={this.add}>+</button>{this.state.counter}<button onClick={this.minus}>-</button>
+        {/* <button onClick = {this.test(this.state)}>aaa</button> */}
+        <button onClick={this.adds}>+</button>{this.state.counter}<button onClick={this.minus.bind(this)}>-</button>
         {/* <button onClick={() => this.add(100)}>+</button>{this.state.counter}<button onClick={() => this.minus(-100)}>-</button> */}
       </div>
     );
