@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/31315644/68789010-e032d200-0687-11ea-99da-e0ffb48fa356.png" alt="email-promise" style="zoom:50%;" />
+<img src="https://user-images.githubusercontent.com/31315644/68863976-b1723580-0733-11ea-972a-1a5e8b7b4b1b.png" alt="email-promise" style="zoom:50%;" />
 
 --------
 
@@ -18,7 +18,7 @@ Ajax 요청 방법 3가지
 
 ###  PROMISE XMLHttpRequest
 
-<img src="https://user-images.githubusercontent.com/31315644/68789904-aebb0600-0689-11ea-9c3f-116a5f08b61b.jpeg" alt="todoFolder구조" style="zoom: 33%;" />
+<img src="https://user-images.githubusercontent.com/31315644/70317847-ede00f80-1861-11ea-8cc3-b71894651feb.jpeg" alt="ajax-folder" style="zoom:67%;" />
 
 1. [package.json](#a1)
 
@@ -32,7 +32,7 @@ Ajax 요청 방법 3가지
 
 5. [css/style.css](#a5)
 
-6. [js/01promise.js](#a6)
+6. [js/02promise.js](#a6)
 
 ------------------
 
@@ -180,8 +180,7 @@ app.listen(3000, () => {
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Todos 2.0</title>
   <link href="./css/style.css" rel="stylesheet">
-  <<script defer src="./js/01promise.js"></script>
-  <script defer src="./js/04async.js"></script>
+  <script defer src="./js/02promise.js"></script>
 </head>
 <body>
   <div class="container">
@@ -434,7 +433,7 @@ footer {
 
 <br/>
 
-- `js/01promise.js` <a id="a6"></a>
+- `js/02promise.js` <a id="a6"></a>
 
 ~~~javascript
 let todos = [];

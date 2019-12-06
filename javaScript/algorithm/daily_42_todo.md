@@ -18,7 +18,7 @@ Ajax 요청 방법 3가지
 
 ###  async / await
 
-<img src="https://user-images.githubusercontent.com/31315644/68789904-aebb0600-0689-11ea-9c3f-116a5f08b61b.jpeg" alt="todoFolder구조" style="zoom: 33%;" />
+<img src="https://user-images.githubusercontent.com/31315644/70317847-ede00f80-1861-11ea-8cc3-b71894651feb.jpeg" alt="ajax-folder" style="zoom:67%;" />
 
 1. [package.json](#a1)
 
@@ -32,7 +32,7 @@ Ajax 요청 방법 3가지
 
 5. [css/style.css](#a5)
 
-6. [js/04async.js](#a6)
+6. [js/05async.js](#a6)
 
 ------------------
 
@@ -180,8 +180,7 @@ app.listen(3000, () => {
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Todos 2.0</title>
   <link href="./css/style.css" rel="stylesheet">
-  <<script defer src="./js/01promise.js"></script>
-  <script defer src="./js/04async.js"></script>
+  <script defer src="./js/05async.js"></script>
 </head>
 <body>
   <div class="container">
@@ -434,7 +433,7 @@ footer {
 
 <br/>
 
-- `js/04async.js` <a id="a6"></a>
+- `js/05async.js` <a id="a6"></a>
 
 ~~~javascript
 let todos = [];
@@ -448,47 +447,10 @@ const $completeAll = document.querySelector('.complete-all');
 const $completedTodos = document.querySelector('.completed-todos');
 const $activeTodos = document.querySelector('.active-todos');
 
-const ajax = (() => {
-  const request = (method, url, payload) => new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open(method, url);
-    xhr.setRequestHeader('Content-type', 'application/json');
-    xhr.send(JSON.stringify(payload));
-
-    xhr.onload = () => {
-      if (xhr.status === 200 || xhr.status === 201) {
-        resolve(JSON.parse(xhr.response));
-      }
-    };
-    xhr.onerror = () => {
-      reject(xhr.status);
-    };
-  });
-
-  return {
-    get(url) {
-      return request('GET', url);
-    },
-    post(url, payload) {
-      return request('POST', url, payload);
-    },
-    delete(url) {
-      return request('DELETE', url);
-    },
-    patch(url, payload) {
-      return request('PATCH', url, payload);
-    },
-    put(url, payload) {
-      return request('PUT', url, payload);
-    }
-  };
-})();
-
-// 렌더
 const render = () => {
   let html = '';
-  const _todos = todos.filter((todo) => (navId === 'all' ? true : navId === 'active' ? !todo.completed : todo.completed));
 
+  const _todos = todos.filter((todo) => (navId === 'all' ? true : navId === 'active' ? !todo.completed : todo.completed));
   _todos.forEach(({ id, content, completed }) => {
     html += `
     <li id="${id}" class="todo-item">
@@ -507,49 +469,67 @@ const render = () => {
 const findMaxId = () => Math.max(0, ...todos.map((todo) => todo.id)) + 1;
 
 // 이벤트 함수
-const getTodos = () => {
-  ajax.get('./todos')
-    .then((res) => todos = res)
-    .then(render)
-    .catch((err) => console.log(err));
+const getTodos = async () => {
+  try {
+    const res = await axios.get('/todos');
+    todos = res.data;
+    render();
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-const addTodos = () => {
-  const todo = { id: findMaxId(), content: $inputTodo.value, completed: false };
-  ajax.post('./todos', todo)
-    .then((res) => todos = res)
-    .then(render)
-    .catch((err) => console.log(err));
+const addTodos = async () => {
+  try {
+    const todo = { id: findMaxId(), content: $inputTodo.value, completed: false };
+    const res = await axios.post('/todos', todo);
+    todos = res.data;
+    render();
+  } catch (error) {
+    console.error(error);
+  }
   $inputTodo.value = '';
 };
 
-const removeTodo = (id) => {
-  ajax.delete(`./todos/${id}`)
-    .then((res) => todos = res)
-    .then(render)
-    .catch((err) => console.log(err));
+const removeTodo = async (id) => {
+  try {
+    const res = await axios.delete(`/todos/${id}`);
+    todos = res.data;
+    render();
+  } catch (error) {
+    console.log(error);
+  }
+};
+// test5
+const toggleTodo = async (id) => {
+  try {
+    const completed = !todos.find((todo) => todo.id === +id).completed;
+    const res = await axios.patch(`/todos/${id}`, { completed });
+    todos = res.data;
+    render();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const toggleTodo = (id) => {
-  const completed = !todos.find((todo) => todo.id === +id).completed;
-  ajax.patch(`/todos/${id}`, { completed })
-    .then((res) => todos = res)
-    .then(render)
-    .catch((err) => console.log(err));
+const toggleAll = async (completed) => {
+  try {
+    const res = await axios.patch('./todos', { completed });
+    todos = res.data;
+    render();
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-const toggleAll = (completed) => {
-  ajax.patch('./todos', { completed })
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.error(err));
-};
-
-const clearTodos = () => {
-  ajax.delete('./completedTodos')
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.error(err));
+const clearTodos = async () => {
+  try {
+    const res = await axios.delete('./completedTodos');
+    todos = res.data;
+    render();
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const changeNav = (li) => {
@@ -563,7 +543,7 @@ const changeNav = (li) => {
 // 이벤트
 window.onload = () => {
   getTodos();
-  console.log('promise');
+  console.log('async');
 };
 
 $inputTodo.onkeyup = ({ target, keyCode }) => {
@@ -580,7 +560,6 @@ $todos.onchange = ({ target }) => {
   toggleTodo(target.parentNode.id);
 };
 
-
 $completeAll.onchange = ({ target }) => {
   toggleAll(target.checked);
 };
@@ -593,6 +572,7 @@ $nav.onclick = ({ target }) => {
   if (target.classList.contains('nav')) return;
   changeNav(target);
 };
+
 ~~~
 
 <br/>

@@ -1,8 +1,8 @@
-<img src="https://user-images.githubusercontent.com/31315644/68863928-a0292900-0733-11ea-9784-8eab3512c70b.png" alt="email-fetch" style="zoom:50%;" />
+<img src="https://user-images.githubusercontent.com/31315644/70317526-48c53700-1861-11ea-8352-50aa4168bbdd.png" alt="email-xhr-dispart" style="zoom:50%;" />
 
 --------
 
-## TODO LIST FULL VERSION - fetch
+## TODO LIST FULL VERSION - XHR Dispart
 
 ### Ajax 란?
 
@@ -16,9 +16,9 @@ Ajax 요청 방법 3가지
 
 -------
 
-###  fetch
+###  PROMISE XMLHttpRequest
 
-<img src="https://user-images.githubusercontent.com/31315644/70317847-ede00f80-1861-11ea-8cc3-b71894651feb.jpeg" alt="ajax-folder" style="zoom:67%;" />
+<img src="https://user-images.githubusercontent.com/31315644/70317847-ede00f80-1861-11ea-8cc3-b71894651feb.jpeg" alt="ajax-folder" style="zoom: 67%;" />
 
 1. [package.json](#a1)
 
@@ -32,7 +32,7 @@ Ajax 요청 방법 3가지
 
 5. [css/style.css](#a5)
 
-6. [js/03fetch.js](#a6)
+6. [js/00xhr-1.js](#a6)
 
 ------------------
 
@@ -180,7 +180,7 @@ app.listen(3000, () => {
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Todos 2.0</title>
   <link href="./css/style.css" rel="stylesheet">
-  <script defer src="./js/03fetch.js"></script>
+  <script defer src="./js/00xhr-1.js"></script>
 </head>
 <body>
   <div class="container">
@@ -433,12 +433,11 @@ footer {
 
 <br/>
 
-- `js/03fetch.js` <a id="a6"></a>
+- `js/00xhr-1.js` <a id="a6"></a>
 
 ~~~javascript
-let todos = [];
 let navId = 'all';
-
+let todos = [];
 const $todos = document.querySelector('.todos');
 const $inputTodo = document.querySelector('.input-todo');
 const $nav = document.querySelector('.nav');
@@ -448,10 +447,12 @@ const $completedTodos = document.querySelector('.completed-todos');
 const $activeTodos = document.querySelector('.active-todos');
 
 // 렌더
-const render = () => {
+const render = (data) => {
   let html = '';
-
+  todos = data;
+  console.log(todos);
   const _todos = todos.filter((todo) => (navId === 'all' ? true : navId === 'active' ? !todo.completed : todo.completed));
+
   _todos.forEach(({ id, content, completed }) => {
     html += `
     <li id="${id}" class="todo-item">
@@ -466,76 +467,107 @@ const render = () => {
   $todos.innerHTML = html;
 };
 
+
+const get = (url, fn) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', url);
+  xhr.send();
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState !== XMLHttpRequest.DONE) return;
+    // 200 정상 응답, POST는 가끔 201로 반환함.
+    if (xhr.status === 200 || xhr.status === 201) {
+      // todos = JSON.parse(xhr.response);
+      fn(JSON.parse(xhr.response)); // 요청의 응답 된 데이터 처리
+    } else {
+      console.error('error', xhr.status, xhr.statusText);
+    }
+  };
+};
+
+const post = (url, fn, payload) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', url);
+  xhr.setRequestHeader('Content-type', 'application/json');
+  xhr.send(JSON.stringify(payload));
+
+  console.log('data1', payload);
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState !== XMLHttpRequest.DONE) return;
+    // 200 정상 응답, POST는 가끔 201로 반환함.
+    if (xhr.status === 200 || xhr.status === 201) {
+      console.log('data2', JSON.parse(xhr.response));
+      fn(JSON.parse(xhr.response)); // 요청의 응답 된 데이터 처리
+    } else {
+      console.error('error', xhr.status, xhr.statusText);
+    }
+  };
+};
+
+const del = (url, fn) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open('DELETE', url);
+  xhr.setRequestHeader('Content-type', 'application/json');
+  xhr.send();
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState !== XMLHttpRequest.DONE) return;
+    // 200 정상 응답, POST는 가끔 201로 반환함.
+    if (xhr.status === 200 || xhr.status === 201) {
+      fn(JSON.parse(xhr.response)); // 요청의 응답 된 데이터 처리
+    } else {
+      console.error('error', xhr.status, xhr.statusText);
+    }
+  };
+};
+
+const patch = (url, fn, payload) => {
+  const xhr = new XMLHttpRequest();
+  xhr.open('PATCH', url);
+  xhr.setRequestHeader('Content-type', 'application/json');
+  xhr.send(JSON.stringify(payload));
+
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState !== XMLHttpRequest.DONE) return;
+    // 200 정상 응답, POST는 가끔 201로 반환함.
+    if (xhr.status === 200 || xhr.status === 201) {
+      todos = JSON.parse(xhr.response);
+      fn(JSON.parse(xhr.response)); // 요청의 응답 된 데이터 처리
+    } else {
+      console.error('error', xhr.status, xhr.statusText);
+    }
+  };
+};
+
+
 // 기능
 const findMaxId = () => Math.max(0, ...todos.map((todo) => todo.id)) + 1;
 
 // 이벤트 함수
 const getTodos = () => {
-  fetch('/todos')
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.log(err));
+  get('./todos', render);
 };
 
 const addTodos = () => {
-  const todo = { id: findMaxId(), content: $inputTodo.value, completed: false };
-
-  fetch('/todos', {
-    method: 'POST',
-    headers: { 'Content-type': 'application/json' },
-    body: JSON.stringify(todo)
-  })
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.log(err));
+  post('./todos', render, { id: findMaxId(), content: $inputTodo.value, completed: false });
   $inputTodo.value = '';
 };
 
 const removeTodo = (id) => {
-  fetch(`/todos/${id}`, {
-    method: 'DELETE'
-  })
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.log(err));
+  del(`./todos/${id}`, render);
 };
 
 const toggleTodo = (id) => {
+  console.log('todos=', todos);
   const completed = !todos.find((todo) => todo.id === +id).completed;
-  fetch(`/todos/${id}`, {
-    method: 'PATCH',
-    headers: { 'Content-type': 'application/json' },
-    body: JSON.stringify({ completed })
-  })
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.log(err));
+  patch(`/todos/${id}`, render, { completed });
 };
 
 const toggleAll = (completed) => {
-  fetch('./todos', {
-    method: 'PATCH',
-    headers: { 'Content-type': 'application/json' },
-    body: JSON.stringify({ completed })
-  })
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.error(err));
+  patch('./todos', render, { completed });
 };
 
 const clearTodos = () => {
-  fetch('./completedTodos', {
-    method: 'DELETE'
-  })
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.error(err));
+  del('./completedTodos', render);
 };
 
 const changeNav = (li) => {
@@ -546,11 +578,9 @@ const changeNav = (li) => {
   render();
 };
 
-
 // 이벤트
 window.onload = () => {
   getTodos();
-  console.log('fetch');
 };
 
 $inputTodo.onkeyup = ({ target, keyCode }) => {
@@ -579,8 +609,6 @@ $nav.onclick = ({ target }) => {
   if (target.classList.contains('nav')) return;
   changeNav(target);
 };
-
 ~~~
 
 <br/>
-

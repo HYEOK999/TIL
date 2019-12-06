@@ -1,8 +1,8 @@
-<img src="https://user-images.githubusercontent.com/31315644/68863928-a0292900-0733-11ea-9784-8eab3512c70b.png" alt="email-fetch" style="zoom:50%;" />
+<img src="https://user-images.githubusercontent.com/31315644/70317531-49f66400-1861-11ea-8f3e-04de69d9e309.png" alt="email-xhr-combine" style="zoom:50%;" />
 
 --------
 
-## TODO LIST FULL VERSION - fetch
+## TODO LIST FULL VERSION - XHR Combine
 
 ### Ajax 란?
 
@@ -16,7 +16,7 @@ Ajax 요청 방법 3가지
 
 -------
 
-###  fetch
+###  PROMISE XMLHttpRequest
 
 <img src="https://user-images.githubusercontent.com/31315644/70317847-ede00f80-1861-11ea-8cc3-b71894651feb.jpeg" alt="ajax-folder" style="zoom:67%;" />
 
@@ -32,7 +32,7 @@ Ajax 요청 방법 3가지
 
 5. [css/style.css](#a5)
 
-6. [js/03fetch.js](#a6)
+6. [js/01xhr-2.js](#a6)
 
 ------------------
 
@@ -180,7 +180,7 @@ app.listen(3000, () => {
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Todos 2.0</title>
   <link href="./css/style.css" rel="stylesheet">
-  <script defer src="./js/03fetch.js"></script>
+  <script defer src="./js/01xhr-2.js"></script>
 </head>
 <body>
   <div class="container">
@@ -433,129 +433,129 @@ footer {
 
 <br/>
 
-- `js/03fetch.js` <a id="a6"></a>
+- `js/01xhr-2.js` <a id="a6"></a>
 
 ~~~javascript
-let todos = [];
-let navId = 'all';
-
 const $todos = document.querySelector('.todos');
 const $inputTodo = document.querySelector('.input-todo');
-const $nav = document.querySelector('.nav');
 const $clearCompleted = document.querySelector('.clear-completed > .btn');
 const $completeAll = document.querySelector('.complete-all');
+const $nav = document.querySelector('.nav');
 const $completedTodos = document.querySelector('.completed-todos');
 const $activeTodos = document.querySelector('.active-todos');
 
-// 렌더
-const render = () => {
-  let html = '';
+let todos = [];
+let navID = 'all';
 
-  const _todos = todos.filter((todo) => (navId === 'all' ? true : navId === 'active' ? !todo.completed : todo.completed));
-  _todos.forEach(({ id, content, completed }) => {
+// TODOS 데이터 요청 및 받아오기.
+const ajax = (() => {
+  const request = (method, url, fn, payload) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.setRequestHeader('Content-type', 'application/json');
+    xhr.send(JSON.stringify(payload));
+
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState !== XMLHttpRequest.DONE) return;
+      // 200 정상 응답, POST는 가끔 201로 반환함.
+      if (xhr.status === 200 || xhr.status === 201) {
+        fn(JSON.parse(xhr.response)); // 요청의 응답 된 데이터 처리
+      } else {
+        console.error('error', xhr.status, xhr.statusText);
+      }
+    };
+  };
+
+  return {
+    get(url, fn) {
+      request('GET', url, fn);
+    },
+    post(url, fn, payload) {
+      request('POST', url, fn, payload);
+    },
+    delete(url, fn) {
+      request('DELETE', url, fn);
+    },
+    patch(url, fn, payload) {
+      request('PATCH', url, fn, payload);
+    },
+    put(url, fn, payload) {
+      request('PUT', url, fn, payload);
+    }
+  };
+})();
+
+// render 함수
+const render = (data) => {
+  let html = '';
+  todos = data;
+
+  todos = data.filter((todo) => (navID === 'all' ? true : navID === 'active' ? !todo.completed : todo.completed));
+
+  todos.forEach(({ id, content, completed }) => {
     html += `
     <li id="${id}" class="todo-item">
       <input class="checkbox" type="checkbox" id="ck-${id}" ${completed ? 'checked' : ''}>
       <label for="ck-${id}">${content}</label>
-      <button class="remove-todo">X</button>
+      <i class="remove-todo far fa-times-circle"></i>
     </li>`;
   });
 
-  $completedTodos.textContent = todos.filter((todo) => todo.completed).length;
-  $activeTodos.textContent = todos.filter((todo) => !todo.completed).length;
+  $completedTodos.textContent = data.filter((todo) => todo.completed).length;
+  $activeTodos.textContent = data.filter((todo) => !todo.completed).length;
   $todos.innerHTML = html;
+  console.log('[RENDER]', todos);
 };
 
-// 기능
+// 부가 기능 함수
 const findMaxId = () => Math.max(0, ...todos.map((todo) => todo.id)) + 1;
 
-// 이벤트 함수
+// 기능 함수
 const getTodos = () => {
-  fetch('/todos')
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.log(err));
+  ajax.get('./todos', render);
 };
 
-const addTodos = () => {
-  const todo = { id: findMaxId(), content: $inputTodo.value, completed: false };
-
-  fetch('/todos', {
-    method: 'POST',
-    headers: { 'Content-type': 'application/json' },
-    body: JSON.stringify(todo)
-  })
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.log(err));
+const postTodos = (content) => {
+  ajax.post('./todos', render, { id: findMaxId(), content, completed: false });
   $inputTodo.value = '';
 };
 
 const removeTodo = (id) => {
-  fetch(`/todos/${id}`, {
-    method: 'DELETE'
-  })
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.log(err));
+  ajax.delete(`./todos/${id}`, render);
 };
 
-const toggleTodo = (id) => {
-  const completed = !todos.find((todo) => todo.id === +id).completed;
-  fetch(`/todos/${id}`, {
-    method: 'PATCH',
-    headers: { 'Content-type': 'application/json' },
-    body: JSON.stringify({ completed })
-  })
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.log(err));
+// patch
+const checkTodo = (id, checked) => {
+  const completed = checked;
+  // const completed = !todos.find((todo) => todo.id === +id).completed;
+  ajax.patch(`./todos/${id}`, render, { completed });
 };
 
-const toggleAll = (completed) => {
-  fetch('./todos', {
-    method: 'PATCH',
-    headers: { 'Content-type': 'application/json' },
-    body: JSON.stringify({ completed })
-  })
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.error(err));
+const toggleAll = (checked) => {
+  const completed = checked;
+  ajax.patch('./todos', render, { completed });
 };
 
 const clearTodos = () => {
-  fetch('./completedTodos', {
-    method: 'DELETE'
-  })
-    .then((res) => res.json())
-    .then((_todos) => todos = _todos)
-    .then(render)
-    .catch((err) => console.error(err));
+  ajax.delete('./completedTodos', render);
 };
 
-const changeNav = (li) => {
+const changeNav = (target) => {
   [...$nav.children].forEach(($list) => {
-    $list.classList.toggle('active', $list === li);
+    $list.classList.toggle('active', $list == target);
+    navID = target.id;
   });
-  navId = li.id;
-  render();
+  ajax.get('./todos', render);
 };
 
-
-// 이벤트
+// 이벤트 핸들러
 window.onload = () => {
   getTodos();
-  console.log('fetch');
 };
 
 $inputTodo.onkeyup = ({ target, keyCode }) => {
-  if (keyCode !== 13 || target.value.trim() === '') return;
-  addTodos();
+  if (target.value.trim() === '' || keyCode !== 13) return;
+  postTodos(target.value.trim());
 };
 
 $todos.onclick = ({ target }) => {
@@ -564,7 +564,7 @@ $todos.onclick = ({ target }) => {
 };
 
 $todos.onchange = ({ target }) => {
-  toggleTodo(target.parentNode.id);
+  checkTodo(target.parentNode.id, target.checked);
 };
 
 $completeAll.onchange = ({ target }) => {
@@ -579,8 +579,6 @@ $nav.onclick = ({ target }) => {
   if (target.classList.contains('nav')) return;
   changeNav(target);
 };
-
 ~~~
 
 <br/>
-
