@@ -348,6 +348,18 @@ Today I Leaned...
 >
 >[20191112-Tabs UI](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_38.md)
 >
+>[20191113-TodoList XHR 분리](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_38_todo1.md)
+>
+>[20191114-TodoList XHR 결합](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_38_todo2.md)
+>
+>[20191115-TodoList XHR Promise](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_39_todo.md)
+>
+>[20191118-TodoList Fetch](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_40_todo.md)
+>
+>[20191120-TodoList Axios](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_41_todo.md)
+>
+>[20191122-TodoList Async/Await](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_42_todo.md)
+>
 >[20191126-위장](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_43.md)
 >
 >[20191127-정수 제곱근 판별](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_44.md)
