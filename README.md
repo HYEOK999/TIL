@@ -167,6 +167,18 @@ Today I Leaned...
 >[Symbol](https://github.com/HYEOK999/TIL/blob/master/javaScript/symbol.md)
 >
 >[iteration](https://github.com/HYEOK999/TIL/blob/master/javaScript/iteration.md)
+>
+>[TodoList XHR 분리](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_38_todo1.md)
+>
+>[TodoList XHR 결합](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_38_todo2.md)
+>
+>[TodoList XHR Promise](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_39_todo.md)
+>
+>[TodoList Fetch](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_40_todo.md)
+>
+>[TodoList Axios](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_41_todo.md)
+>
+>[TodoList Async/Await](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_42_todo.md)
 
 <br/>
 
@@ -335,14 +347,6 @@ Today I Leaned...
 >[20191111-올바른 괄호](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_37.md)
 >
 >[20191112-Tabs UI](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_38.md)
->
->[20191113-TodoList XHR Promise](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_39_todo.md)
->
->[20191114-TodoList Fetch](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_40_todo.md)
->
->[20191115-TodoList Axios](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_41_todo.md)
->
->[20191116-TodoList Async/Await](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_42_todo.md)
 >
 >[20191126-위장](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_43.md)
 >
