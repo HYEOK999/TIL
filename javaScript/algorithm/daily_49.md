@@ -4,45 +4,29 @@
 
 문제 출처 : 프로그래머스
 
-### 시저 암호
+### 문자열을 정수로 바꾸기
 
 ###### 문제 설명
 
-어떤 문장의 각 알파벳을 일정한 거리만큼 밀어서 다른 알파벳으로 바꾸는 암호화 방식을 시저 암호라고 합니다. 예를 들어 AB는 1만큼 밀면 BC가 되고, 3만큼 밀면 DE가 됩니다. z는 1만큼 밀면 a가 됩니다. 문자열 s와 거리 n을 입력받아 s를 n만큼 민 암호문을 만드는 함수, solution을 완성해 보세요.
+문자열 s를 숫자로 변환한 결과를 반환하는 함수, solution을 완성하세요.
 
 ##### 제한 조건
 
-- 공백은 아무리 밀어도 공백입니다.
-- s는 알파벳 소문자, 대문자, 공백으로만 이루어져 있습니다.
-- s의 길이는 8000이하입니다.
-- n은 1 이상, 25이하인 자연수입니다.
+- s의 길이는 1 이상 5이하입니다.
+- s의 맨앞에는 부호(+, -)가 올 수 있습니다.
+- s는 부호와 숫자로만 이루어져있습니다.
+- s는 0으로 시작하지 않습니다.
 
 ##### 입출력 예
 
-| s     | n    | result |
-| ----- | ---- | ------ |
-| AB    | 1    | BC     |
-| z     | 1    | a      |
-| a B z | 4    | e F d  |
+예를들어 str이 1234이면 1234를 반환하고, -1234이면 -1234를 반환하면 됩니다.
+str은 부호(+,-)와 숫자로만 구성되어 있고, 잘못된 값이 입력되는 경우는 없습니다.
 
 --------
 
 ~~~javascript
-function solution(s, n) {
-  const answer = s.split('');
-  let result = '';
-
-  answer.forEach((word) => {
-    let wordNum = word.charCodeAt() + n;
-    if (word === ' ') result += String.fromCharCode(word.charCodeAt()); // O
-    else if (wordNum > 122) result += String.fromCharCode(word.charCodeAt() + n - 26);
-    else if (word.charCodeAt() > 64 && word.charCodeAt() < 91) {
-      if (wordNum > 90) result += String.fromCharCode(word.charCodeAt() + n - 26);
-      else result += String.fromCharCode(word.charCodeAt() + n);
-    } else result += String.fromCharCode(word.charCodeAt() + n);
-  });
-
-  return result;
+function solution(s) {
+  return +s;
 }
 ~~~
 
