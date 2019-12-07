@@ -1,70 +1,79 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-
-// Stateless component
-const Img = props => {
-  console.log(props);
-  return <img src={logo} className={props.className} alt={props.alt}/>
-}
-
-const Header = props => <header className={props.className}>
-  <Img src={logo} className={props.className} alt="logo"/>
-</header>
-
+import Axios from 'axios';
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      counter: 0,
-      className: 'App-header-2'
+      list : [],
+      subList : [],
     }
-    this.adds = this.add.bind(this)
-    this.minus = this.minus.bind(this)
-    console.log(this)
-    // Object.keys(this).forEach((key) => {
-    //   console.log(this);
-    //   if (typeof this[key] === 'function') {
-    //     this[key] = this[key].bind(this);
-    //   }
-    // })
+
+    this.sort = this.sort.bind(this);
+    // Object.getOwnPropertyNames(App.prototype).forEach(key => this[key] = this[key].bind(this))
   }
 
-  // render 이후에 실행됨.
-  componentDidMount() {
-    //: this.state.counter = 1 이렇게사용하면 절대 안된다. 값을 바꾸고싶으면 setState이용 (아래 에졔)
-    //:
-    setInterval(() => this.setState({
-      counter : this.state.counter + 1
-    }),1000)
-    // this.setState({  counter: 1 }, () =>{
-    //   console.log(this.state.counter)
-    // })
-  }
-  add() {
-    console.log('answer : ' + this);
-    this.setState({counter: this.state.counter + 100})
-  }
-  minus() {
-    this.setState({counter: this.state.counter - 100})
-  }
-  // test(obj) {
-  //   console.log(obj);
-  // }
-  // calc(val) {
-  //   this.setState({counter: this.state.counter + val})
+  // async getYoutubeData(query) {
+  //   try {
+  //     const { data } = await Axios.get(`https://www.googleapis.com/youtube/v3/search?key=AIzaSyCT5YNj0WpEUrt_4K8b3GZ6NoBZTOImXMA&q=${query}&part=snippet`)
+  //     this.setState({list : data.items });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
   // }
 
-  render(){
-    return (
-      <div className="App">
-        {/* <button onClick = {this.test(this.state)}>aaa</button> */}
-        <button onClick={this.adds}>+</button>{this.state.counter}<button onClick={this.minus.bind(this)}>-</button>
-        {/* <button onClick={() => this.add(100)}>+</button>{this.state.counter}<button onClick={() => this.minus(-100)}>-</button> */}
+  async getYoutubes(target, keyCode) {
+    if(keyCode !== 13 || target.value.trim() === '') return;
+
+    try {
+      const { data } = await Axios.get(`https://www.googleapis.com/youtube/v3/search?key=AIzaSyCT5YNj0WpEUrt_4K8b3GZ6NoBZTOImXMA&q=${target.value.trim()}&part=snippet`)
+      this.setState({ subList : data.items });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  sort(){
+    this.setState( {subList : this.state.subList.reverse()})
+  }
+  /*
+  getYoutubeData(query) {
+    const data = '';
+    Axios.get(`https://www.googleapis.com/youtube/v3/search?key=AIzaSyCT5YNj0WpEUrt_4K8b3GZ6NoBZTOImXMA&q=${query}&part=snippet`)
+      .then((res) => data = res.data)
+      .catch((err) => console.log(err));
+    this.setState({ data })
+  }
+  // */
+  // componentDidMount() {
+  //   this.getYoutubeData('여행');
+  // }
+
+  render () {
+  return (
+      <div>
+        {/* <button onClick={() => this.getYoutubeData('여행')}>
+          렌더링
+        </button>
+        <div>
+          {this.state.list.map(item => {
+            console.log(item.id.videoId);
+            return <div key={item.id.videoId}>{item.snippet.title}</div>;
+          })}
+        </div> */}
+        <div>
+          <input type="text" onKeyDown={({target, keyCode}) => this.getYoutubes(target, keyCode)}></input>
+        </div>
+        <div>
+          {this.state.subList.map(item => {
+            console.log(item.id.videoId)
+            return <div key={item.id.videoId}>{item.snippet.title}</div>
+          })}
+        </div>
+        <button onClick={this.sort}>sort</button>
       </div>
     );
   }
 }
-
 export default App;
