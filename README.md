@@ -372,7 +372,7 @@ Today I Leaned...
 >
 >[20191206-시저암호](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_48.md)
 >
->[20191207-문자열을 정수로 바꾸기]()
+>[20191207-문자열을 정수로 바꾸기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_49.md)
 
 <br/>
 
