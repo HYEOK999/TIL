@@ -369,6 +369,10 @@ Today I Leaned...
 >[20191204-정수 내림차순으로 배치하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_46.md)
 >
 >[20191205-문자열 다루기 기본](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_47.md)
+>
+>[20191206-시저암호](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_48.md)
+>
+>[20191207-문자열을 정수로 바꾸기]()
 
 <br/>
 
