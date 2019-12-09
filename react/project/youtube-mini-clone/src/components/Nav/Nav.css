@@ -1,0 +1,19 @@
+.header {
+  height: 100px;
+  /* background-color: #ff9999; */
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+}
+
+.header a{
+  height: auto;
+  height: 50%;
+  flex-grow: 0;
+}
+
+.header-logo{
+  height: 100%;
+}
+

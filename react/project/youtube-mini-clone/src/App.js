@@ -1,77 +1,90 @@
 import React from 'react';
-import './App.css';
-import Axios from 'axios';
+import axios from 'axios';
+import Nav from './components/Nav/Nav';
+import SearchBar from './components/SearchBar/SearchBar'
+import { debounce } from 'lodash';
+import InfiniteScroll from 'react-infinite-scroller';
+import uuid from 'uuid';
+import spinner from './components/images/spinner.gif'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      list : [],
-      subList : [],
-    }
+      videos : [],
+      selectedVideo: null,
+      query: '',
+      nextPageToken: null
+    };
 
-    this.sort = this.sort.bind(this);
-    // Object.getOwnPropertyNames(App.prototype).forEach(key => this[key] = this[key].bind(this))
+    // 상태 백업본
+    this.defaultState = this.state;
+
+    Object.getOwnPropertyNames(App.prototype).forEach(key => this[key] = this[key].bind(this))
   }
 
-  // async getYoutubeData(query) {
-  //   try {
-  //     const { data } = await Axios.get(`https://www.googleapis.com/youtube/v3/search?key=AIzaSyCT5YNj0WpEUrt_4K8b3GZ6NoBZTOImXMA&q=${query}&part=snippet`)
-  //     this.setState({list : data.items });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+  async getYoutubeData(query) {
+    if (!query) return
+    if (this.state.query !== query) {
+      this.setState(this.defaultState); // 이유 : 검색어가 바뀔경우 UI부분도 초기화되야되기 때문
+    }
 
-  async getYoutubes(target, keyCode) {
-    if(keyCode !== 13 || target.value.trim() === '') return;
-
+    const { nextPageToken } = this.state;
+    const params = {
+      key : 'AIzaSyCXndE4mNdeCpXWm-7iSu2kUzWuSsliCmc',
+      q : query,
+      part : 'snippet',
+      maxResults: 10,
+      pageToken: nextPageToken
+    }
     try {
-      const { data } = await Axios.get(`https://www.googleapis.com/youtube/v3/search?key=AIzaSyCT5YNj0WpEUrt_4K8b3GZ6NoBZTOImXMA&q=${target.value.trim()}&part=snippet`)
-      this.setState({ subList : data.items });
+      const { data } = await axios.get('https://www.googleapis.com/youtube/v3/search', { params })
+      this.setState({
+        videos : [...this.state.videos, ...data.items],
+        query,
+        nextPageToken: data.nextPageToken
+      }, console.log(this.state.videos));
     } catch (error) {
       console.error(error);
     }
   }
 
-  sort(){
-    this.setState( {subList : this.state.subList.reverse()})
+  // 페이지가 render()되기 전에 실행한다.
+  // setState의 초기값을 별도로 지정하고싶을때 많이쓴다.
+  async componentWillMount(){
+    this.getYoutubeData('여행');
   }
-  /*
-  getYoutubeData(query) {
-    const data = '';
-    Axios.get(`https://www.googleapis.com/youtube/v3/search?key=AIzaSyCT5YNj0WpEUrt_4K8b3GZ6NoBZTOImXMA&q=${query}&part=snippet`)
-      .then((res) => data = res.data)
-      .catch((err) => console.log(err));
-    this.setState({ data })
+
+  // 상태를 업데이트 하기 위한 함수
+  setInput (input) {
+    this.setState({ input })
   }
-  // */
-  // componentDidMount() {
-  //   this.getYoutubeData('여행');
-  // }
 
   render () {
-  return (
-      <div>
-        {/* <button onClick={() => this.getYoutubeData('여행')}>
-          렌더링
-        </button>
-        <div>
-          {this.state.list.map(item => {
-            console.log(item.id.videoId);
-            return <div key={item.id.videoId}>{item.snippet.title}</div>;
-          })}
-        </div> */}
-        <div>
-          <input type="text" onKeyDown={({target, keyCode}) => this.getYoutubes(target, keyCode)}></input>
-        </div>
-        <div>
-          {this.state.subList.map(item => {
-            console.log(item.id.videoId)
-            return <div key={item.id.videoId}>{item.snippet.title}</div>
-          })}
-        </div>
-        <button onClick={this.sort}>sort</button>
+    const { input, selectedVideo } = this.state;
+    return (
+      <div className="App">
+        <Nav>
+          <SearchBar input={ input } setInput={ this.setInput } onSearchVideos={debounce(this.getYoutubeData, 500)}/>
+        </Nav>
+        {/* <InfiniteScroll
+          loadMore = {() => this.getYoutubeData(this.state.query)}
+          hasMore = {!!this.state.nextPageToken && !this.state.selectedVideo}
+          loader = {
+            <div key={this.uuid.v4()} className="loader">
+              <img src={spinner} alt="loading" />
+            </div>
+          }
+        > */}
+          {/* 무한로딩으로 렌더링될 모든 컴포넌트 */}
+          {/* <VideoList
+            video = this.state.video
+            {...this.state}
+            onVideoSelect = {selectedVideo => this.setState({ selectedVideo }
+            )}
+          />
+        </InfiniteScroll> */}
+        {/* <VideoList /> */}
       </div>
     );
   }
