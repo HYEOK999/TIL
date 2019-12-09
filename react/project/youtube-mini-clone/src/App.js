@@ -31,7 +31,7 @@ class App extends React.Component {
 
     const { nextPageToken } = this.state;
     const params = {
-      key : 'AIzaSyCXndE4mNdeCpXWm-7iSu2kUzWuSsliCmc',
+      key : '',
       q : query,
       part : 'snippet',
       maxResults: 10,
