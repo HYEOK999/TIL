@@ -258,15 +258,19 @@ Today I Leaned...
 >
 >[20191206-react](https://github.com/HYEOK999/TIL/blob/master/react/20191206-study-react.md)
 
-> 
-
-<br/>
-
 <br/>
 
 ### React (Velopert님 강의)
 
 >[React가 만들어진 이유 ( + Virtual DOM )](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-01.md)
+>
+>[JSX](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-02.md)
+
+<br/>
+
+### React 공식문서
+
+>[주요개념 : JSX 소개](https://github.com/HYEOK999/TIL/blob/master/react/react-official-01.md)
 
 <br/>
 
