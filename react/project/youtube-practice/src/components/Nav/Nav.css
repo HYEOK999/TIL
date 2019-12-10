@@ -1,0 +1,22 @@
+.Nav {
+  background-color: rgb(48, 48, 48);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 254px;
+}
+
+.Nav a{
+  position: absolute;
+  height: auto;
+  height: 50%;
+  left : 30px;
+  top : 50%;
+  transform: translateY(-50%);
+}
+
+.header-logo{
+  height: 100%;
+}
+

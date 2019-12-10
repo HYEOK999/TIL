@@ -1,7 +1,5 @@
 .search-wrapper {
-  flex-grow: 1;
-  text-align: center;
-  padding-right: 150px;
+  padding: 32px 0;
 }
 
 .search-bar{

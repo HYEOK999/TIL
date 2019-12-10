@@ -61,7 +61,7 @@ class App extends React.Component {
   }
 
   render () {
-    const { input, selectedVideo } = this.state;
+    const { input } = this.state;
     return (
       <div className="App">
         <Nav>
