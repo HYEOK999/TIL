@@ -259,6 +259,8 @@ Today I Leaned...
 >[20191206-react](https://github.com/HYEOK999/TIL/blob/master/react/20191206-study-react.md)
 >
 >[20191209-react](https://github.com/HYEOK999/TIL/blob/master/react/20191209-study-react.md)
+>
+>[20191211-react](https://github.com/HYEOK999/TIL/blob/master/react/20191211-study-react.md)
 
 <br/>
 
@@ -387,6 +389,8 @@ Today I Leaned...
 >[20191209-자릿수 더하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_50.md)
 >
 >[20191210-다트게임(2018 카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_51.md)
+>
+>[20191211-제일 작은 수 제거하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_52.md)
 
 <br/>
 
