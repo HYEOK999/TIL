@@ -10,17 +10,20 @@ const SearchBar = props => {
     }
   }
 
+  let input;
   return (
     <div className="search-wrapper">
       <input
-        type="text"
-        onChange={e => props.setInput(e.target.value)}
+        ref = {ref => (input = ref)}
+        type="search"
+        // onChange={e => props.setInput(e.target.value)}
         onKeyPress={handleEnter(props.onSearchVideos)}
+        // onKeyPress={e => e.key === 'Enter' ? props.onSearchVideos(e.target.value) : null}
         className="search-bar"
         placeholder="검색어를 입력하세요"
       />
 
-      <button className="btn-search" onClick={() => props.onSearch(props.input)}>
+      <button className="btn-search" onClick={() => props.onSearchVideos(input.value)}>
         <img className='search-icon' src={searchIcon} alt="검색"/>
       </button>
     </div>

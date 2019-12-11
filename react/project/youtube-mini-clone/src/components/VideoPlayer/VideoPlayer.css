@@ -1,0 +1,15 @@
+.video-detail {
+  display: flex;
+  width: 85%;
+  margin-left: calc(94px + 4.5em + 80px);
+}
+
+.video-player {
+  width: 100%;
+  height: 480px;
+  max-width: 854px;
+  max-height: 480px;
+  display: block;
+  margin: 2em auto;
+  border: none;
+}
