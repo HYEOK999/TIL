@@ -64,7 +64,6 @@ class App extends React.Component{
           <VideoContent
             {...this.state}
           >
-            {/* <VideoThumbnail></VideoThumbnail> */}
           </VideoContent>
         </main>
       </div>

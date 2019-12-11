@@ -8,7 +8,6 @@ const VideoContent = props => {
       {props.videoLists.map((item) => {
         return (
           <li key={uuid.v4()}>
-            {/* {props.children} */}
             <VideoThumbnail image={item}></VideoThumbnail>
             <div>{item.snippet.title}</div>
           </li>
