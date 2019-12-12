@@ -10,14 +10,20 @@ const SearchBar = props => {
     }
   }
 
+  let input = '';
+
   return (
     <div className="search-wrapper">
-      <input type="text" className="search-bar" placeholder="검색어를 입력하세요" autoFocus
+      <input
+       ref = {ref => input = ref}
+       type="search"
+       className="search-bar"
+       placeholder="검색어를 입력하세요"
+       autoFocus
        onKeyPress = { handleEnter(props.onSearch) }
-      //  onChange = {(e) => props.onSearch(e.target.value) }
-       onChange = {(e) => props.setInput(e.target.value) }
+       // onChange = {(e) => props.onSearch(e.target.value) }
       />
-      <button className="btn-search" onClick={() => props.onSearch(props.input)}>
+      <button className="btn-search" onClick={() => props.onSearch(input)}>
         <img className="search-icon" src={loupe} alt="검색" />
       </button>
     </div>

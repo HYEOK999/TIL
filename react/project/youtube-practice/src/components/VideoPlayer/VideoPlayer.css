@@ -1,0 +1,9 @@
+.video-player-wrap{
+  margin : 0 auto;
+  text-align: center;
+}
+
+.video-player{
+  width: 960px;
+  height: 640px;
+}

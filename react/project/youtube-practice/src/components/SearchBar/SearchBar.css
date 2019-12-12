@@ -1,11 +1,12 @@
 .search-wrapper {
   padding: 32px 0;
+  white-space: nowrap;
 }
 
 .search-bar{
-  width: 600px;
+  width: 450px;
   height: 36px;
-  padding: 0;
+  padding: 0 auto;
   border: 1px solid #828282;
   vertical-align: middle;
   display: inline-block;

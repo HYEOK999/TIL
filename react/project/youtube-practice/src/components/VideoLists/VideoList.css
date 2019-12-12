@@ -1,0 +1,30 @@
+.video-list {
+  margin : 30px 0;
+}
+
+.video-list figure{
+  display: flex;
+  align-items: flex-start;
+}
+
+.video-list figcaption{
+  width: 800px;
+  height: 300px;
+}
+
+.video-list figcaption span{
+  margin-bottom: 20px;
+}
+
+.video-list img {
+  margin-right: 30px;
+}
+
+.video-title {
+  font-size: 25px;
+}
+
+/*
+.video-list img , .video-list figcaption {
+  display: inline-block;
+} */

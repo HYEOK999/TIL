@@ -1,12 +1,16 @@
 import React from 'react';
 import axios from 'axios';
-import Nav from './components/Nav/Nav'
-import SearchBar from './components/SearchBar/SearchBar'
+import Nav from './components/Nav/Nav';
 import { debounce } from 'lodash';
-import VideoContent from './components/VideoContent/VideoContent'
-// import VideoThumbnail from './components/VideoContent/VideoThumbnail'
-import './App.css'
-import VideoThumbnail from './components/VideoContent/VideoThumbnail';
+import InfiniteScroll from 'react-infinite-scroller';
+import uuid from 'uuid';
+
+import './App.css';
+import SearchBar from './components/SearchBar/SearchBar';
+import VideoLists from './components/VideoLists/VideoLists';
+import VideoContent from './components/VideoLists/VideoContent';
+import spinner from './components/images/spinner.gif';
+import VideoPlayer from './components/VideoPlayer/VideoPlayer';
 
 const URL = 'https://www.googleapis.com/youtube/v3/search';
 class App extends React.Component{
@@ -14,13 +18,15 @@ class App extends React.Component{
     super(props);
     this.state = {
       videoLists : [],
-      query : null,
-      nextPageToken : null
+      query : '',
+      nextPageToken : '',
+      selectedVideo : null
     }
 
     this.defaultState = this.state;
     this.getYoutube = this.getYoutube.bind(this);
-    this.setInput = this.setInput.bind(this);
+    this.setVideoId = this.setVideoId.bind(this);
+    // this.setInput = this.setInput.bind(this);
   }
 
   async getYoutube(query) {
@@ -49,22 +55,45 @@ class App extends React.Component{
     }
   }
 
-  setInput(input) {
-    this.setState({ input })
+  async componentWillMount(){
+    await this.getYoutube('여행');
   }
 
+  setVideoId(id) {
+    this.setState({ selectedVideo : id })
+  }
+
+  // setInput(input) {
+  //   this.setState({ input })
+  // }
+
   render() {
-    const { input } = this.state;
+    const { selectedVideo } = this.state;
     return (
       <div className = 'App'>
         <Nav>
-          <SearchBar input={input} setInput={this.setInput} onSearch={debounce(this.getYoutube,500)} />
+          {/* <SearchBar input={input} setInput={this.setInput} onSearch={debounce(this.getYoutube,500)} /> */}
+          <SearchBar onSearch={debounce(this.getYoutube,500)} />
         </Nav>
         <main className = 'main-content'>
-          <VideoContent
-            {...this.state}
-          >
-          </VideoContent>
+          {selectedVideo
+          ? <VideoPlayer videoId = {selectedVideo} {...this.state}/>
+          : <InfiniteScroll
+              loadMore = {() => this.getYoutube(this.state.query)}
+              hasMore = {!!this.state.nextPageToken}
+              loader = {
+                <div key={uuid.v4()}>
+                  <img src={spinner} alt="로더"/>
+                </div>
+              }
+            >
+              <VideoLists>
+                <VideoContent
+                  onSelectVideo={this.setVideoId} {...this.state}
+                />
+              </VideoLists>
+            </InfiniteScroll>
+          }
         </main>
       </div>
     );
