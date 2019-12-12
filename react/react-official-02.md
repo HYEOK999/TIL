@@ -4,18 +4,12 @@
 
 ## React Official Document 
 
-### 주요개념 : JSX 소개
+### 주요개념 : 엘리먼트(요소) 렌더링
 
-- JSX 란?
-- JSX를 표현식에 포함하기
-  - 변수
-  - 함수 호출
-- JSX도 표현식
-- JSX 속성 정의 
-  - 경고
-- JSX 하위 요소 정의
-- JSX XSS 공격 방지
-- JSX는 객체를 표현한다. React element(요소)
+- React 엘리먼트(요소)란?
+- DOM에 요소 렌더링하기
+- 렌더링 된 요소 업데이트하기
+- React는 변경된 부분만 업데이트 한다.
 
 <br/>
 
@@ -25,228 +19,85 @@
 
 ## 주요개념
 
-## #1. JSX 소개
+## #2. 엘리먼트(요소) 렌더링
+
+### React 엘리먼트(요소)란? 
 
 <br/>
 
-### JSX 란 ? 
-
-````jsx
-const element = <h1>Hello, world!</h1>;
-````
-
-위 소스를 JSX라 하며 JavaScript를 확장한 문법이다. JavaScript의 모든 기능이 포함되어 있다.
-
-JSX는 React “엘리먼트(element)” 를 생성한다. 
-
-**JSX를 사용하려면 React 모듈을 import 해야한다.**
-
 ```jsx
-import React from 'react';
+const element = <h1>Hello, world</h1>;
 ```
 
-React에서는 이벤트 처리, 상태(state) 변화, 데이터가 준비되는 방식 등의 렌더링 로직이 본질적으로 다른 UI로직과 연결된다는 점을 받아들인다. 
+위와 같은 객체를 **React Element(하위 요소)라 한다.** 
 
-그리고 위와 같은 처리를 해주기 위해서 마크업(HTML) 과 JS코드를 분리하지않고, 둘 다 하나로 포함시켜서 사용하는 것을 '컴포넌트' 라 칭하며 컴포넌트를 분리하여 관리한다. 여기서 컴포넌트를 작성할 때 마크업(HTML) 과 JS코드를 합친 코드를 JSX라 한다.
+React Element(요소)는 컴포넌트의 구성 요소 이며, React 앱의 가장 작은 단위이다.
 
-React에서 JSX의 사용이 필수는 아니다.(React.createElement 로 구성해도 된다.)
+React는 React 요소를 읽은 후 DOM을 구성하고 최신으로 유지하는 데 React 요소를 사용한다.
 
-하지만, 가독성, 유지보수 측면에서 JSX가 훨씬 유리하고 React가 에러 및 경고 메시지를 표시하게 해준다. 
+일반 DOM 요소와 달리 React 요소는 일반 객체이며 React DOM은 React 요소와 일치하도록 DOM을 업데이트 한다.
 
 <br/>
 
-### JSX를 표현식에 포함하기
+### DOM에 요소 렌더링하기
 
-JSX의 중괄호 안에는 유효한 모든 JavaScript 표현식을 넣을 수 있다.
+HTML 파일에 `div` 태그가 있다고 가정해보자.
 
-#### 변수
+```html
+<div id="root"></div>
+```
+
+위 태그의 하위로 들어가는 모든 요소는 React DOM에 의해 관리되므로 위의  태그를 `"root" DOM 노드` 라고 부른다.
+
+- React로 구현된 애플리케이션은 일반적으로 하나의 루트 DOM 노드가 있다. 
+- React를 기존 앱에 통합하려는 경우 원하는 만큼 많은 수의 독립된 루트 DOM 노드를 만들 수 있다.
+
+<br/>
+
+React 요소를 루트 DOM 노드에 렌더링하려면 둘 다 `ReactDOM.render()`로 전달하면 된다.
 
 ```jsx
-const name = 'Josh Perez';
-const element = <h1>Hello, {name}</h1>;
-
-ReactDOM.render(
-  element,
-  document.getElementById('root')
-);
+const element = <h1>Hello, world</h1>;
+ReactDOM.render(element, document.getElementById('root'));
+// ReactDOM.render(리액트 요소, 삽입할 DOM 노드 요소를 선택하는 이벤트 객체 함수 호출);
 ```
 
 <br/>
 
-#### 함수 호출
+### 렌더링 된 요소 업데이트하기
 
-```jsx
-function formatName(user) {
-  return user.firstName + ' ' + user.lastName;
+React 요소는 불변객체다. 
+
+요소를 생성한 이후에는 해당 요소의 자식이나 속성을 변경할 수 없다. 
+
+요소는 영화에서 하나의 프레임과 같이 특정 시점의 UI를 보여준다.
+
+지금까지 내용을 바탕으로 하면 UI를 업데이트하는 유일한 방법은 새로운 요소를 생성하고 이를 바뀔때마다 `ReactDOM.render()`로 전달하는 것 뿐이다.
+
+~~~jsx
+function tick() {
+  const element = (
+    <div>
+      <h1>Hello, world!</h1>
+      <h2>It is {new Date().toLocaleTimeString()}.</h2>
+    </div>
+  );
+  ReactDOM.render(element, document.getElementById('root'));
 }
 
-const user = {
-  firstName: 'Harper',
-  lastName: 'Perez'
-};
+setInterval(tick, 1000);
+// 1초마다 새로운 시간을 반환한다.
+~~~
 
-const element = (
-  <h1>
-    Hello, {formatName(user)}!
-  </h1>
-);
-
-ReactDOM.render(
-  element,
-  document.getElementById('root')
-);
-```
-
- JSX 사용시 세미콜론 자동 삽입 기능을 방지하기 위해 `()` 소괄호로 감싸주는 것을 권장한다.
+**주의** : 실제로 대부분의 React 앱은 `ReactDOM.render()`를 한 번만 호출한다. 위는 단지 예시일 뿐 이다.
 
 <br/>
 
-### JSX도 표현식
+### React는 변경된 부분만 업데이트 한다.
 
-Babel 컴파일이 끝나면 JSX는 정규 JavaScript 함수로 호출이 된다. 즉, JSX는 JavaScript 객체로 인식된다.
+React DOM은 해당 요소와 그 하위 요소를 이전의 요소와 비교하고 DOM을 원하는 상태로 만드는데 필요한 경우에만 DOM을 업데이트한다.
 
-JSX는 제어문, 반복문 등 안에 사용될 수 있으며, 변수에 할당하고, 인자로 받아들이고, 함수로부터 반환을 할 수 있다.
+![React 공식사이트 출처 : DOM inspector showing granular updates](https://ko.reactjs.org/granular-dom-updates-c158617ed7cc0eac8f58330e49e48224.gif)
 
-```jsx
-function getGreeting(user) {
-  if (user) {
-    return <h1>Hello, {formatName(user)}!</h1>;
-  }
-  return <h1>Hello, Stranger.</h1>;
-}
-```
+위 그림을 보면 처음에만 전체가 렌더링 된 후 그 뒤 부터는 해당 텍스트부분만 지속적으로 바뀌는 것을 확인할 수 있다.
 
-<br/>
-
-### JSX 속성 정의 
-
-속성에 따옴표를 이용해 문자열 리터럴을 정의할 수 있다. tabIndex="0"
-
-```jsx
-const element = <div tabIndex="0"></div>;
-```
-
-중괄호를 사용하여 어트리뷰트에 JavaScript 표현식을 삽입할 수도 있다. src={user.avatarUrl}
-
-```jsx
-const element = <img src={user.avatarUrl}></img>;
-```
-
-단, 자바스크립트 표현식을 감싼 중괄호를 큰 따옴표로 감싸면 안된다.
-
-```jsx
-const element = <img src="{user.avatarUrl}"></img>;
-```
-
-<br/>
-
-#### 경고
-
-- JSX는 HTML보다는 JavaScript에 가깝기 때문에, React DOM은 HTML 어트리뷰트 이름 대신 `camelCase` 프로퍼티 명명 규칙을 사용한다.
-- 예를 들어, JSX에서 `class`는 [`className`](https://developer.mozilla.org/ko/docs/Web/API/Element/className)가 되고 tabindex는 [`tabIndex`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/tabIndex)가 된다.
-
-<br/>
-
-### JSX 하위 요소 정의
-
-만약, 태그 안에 텍스트 혹은 하위 요소가 존재하지 않는다면 XML 처럼 `/>`로 닫을 수 있다.
-
-```jsx
-const element = <img src={user.avatarUrl} />;
-```
-
-<br/>
-
-JSX 태그는 하위 요소를 포함할 수 있다.
-
-```jsx
-const element = (
-  <div>
-    <h1>Hello!</h1>
-    <h2>Good to see you here.</h2>
-  </div>
-);
-```
-
-<br/>
-
-### JSX XSS 공격 방지
-
-> XSS 란? **크로스 사이트 스크립트 공격** 의 약자로, 웹사이트에 스크립트 코드를 삽입하는 공격 기법을 의미.
->
-> DOM 트리에 접근, 쿠키와 세션 정보를 탈취해 사용자 인증을 수행 할 수 있다.
-
-이러한 XSS를 막을 수 있는 여러가지 방법들이 존재하는데 
-
-그 중 innerHTML 속성이 아닌 textContent 속성을 이용하여 이스케이프 처리된 텍스트 코드로 공격을 방지가 가능하다.
-
-
-이스케이프로 처리된 텍스트란 다음을 의미한다.
-
-| 문자 | 이스케이프 코드 |
-| ---- | --------------- |
-| &    | &amp            |
-| '    | &#x27           |
-| "    | &quot           |
-| <    | &lt             |
-| >    | &gt             |
-| /    | &#x2F           |
-
-즉 코드로써 작성될 수 있는 기호들을 이스케이프 처리한 텍스트로 작성하는 것이 XSS공격을 막는 방법이다.
-
-**본론으로 돌아가서 JSX는 XSS 공격을 방지 할 수 있다.**
-
-```jsx
-const title = response.potentiallyMaliciousInput;
-// 이것은 안전하다.
-const element = <h1>{title}</h1>;
-```
-
-기본적으로 React DOM은 JSX에 삽입된 모든 값을 렌더링하기 전에 이스케이프 하므로, 
-
-애플리케이션에서 명시적으로 작성되지 않은 내용은 주입되지 않는다.
-
-모든 항목은 렌더링 되기 전에 문자열로 변환된다.
-
-<br/>
-
-### JSX는 객체를 표현한다. React element(요소)
-
-Babel을 통해 JSX는  `React.createElement()` 호출로 컴파일한다.
-
-다음 두 예시는 동일하다.
-
-```jsx
-const element = (
-  <h1 className="greeting">
-    Hello, world!
-  </h1>
-);
-```
-
-```jsx
-const element = React.createElement(
-  'h1',
-  {className: 'greeting'},
-  'Hello, world!'
-);
-```
-
-`React.createElement()`는 버그가 없는 코드를 작성하는 데 도움이 되도록 몇 가지 검사를 수행하며, 기본적으로 다음과 같은 객체를 생성한다.
-
-```jsx
-// 주의: 다음 구조는 단순화되어있다
-const element = {
-  type: 'h1',
-  props: {
-    className: 'greeting',
-    children: 'Hello, world!'
-  }
-};
-```
-
-위와 같은 객체를 **React element(요소)라 한다.**
-
- React는 React 요소를 읽은 후 DOM을 구성하고 최신으로 유지하는 데 React 요소를 사용한다.
-
-<br/>
