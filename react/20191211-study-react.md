@@ -25,7 +25,6 @@
 - SearchBar
 - InfiniteScroll
 - debounce
-- 
 
 <br/>
 
