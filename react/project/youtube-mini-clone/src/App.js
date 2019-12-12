@@ -26,7 +26,7 @@ class App extends React.Component {
     Object.getOwnPropertyNames(App.prototype).forEach(key => this[key] = this[key].bind(this))
   }
 
-  async getYoutubeData(query = '여행') {
+  async getYoutubeData(query) {
     if (!query) return
     if (this.state.query !== query) {
       this.setState(this.defaultState); // 이유 : 검색어가 바뀔경우 UI부분도 초기화되야되기 때문
@@ -56,7 +56,7 @@ class App extends React.Component {
   // 페이지가 render()되기 전에 실행한다.
   // setState의 초기값을 별도로 지정하고싶을때 많이쓴다.
   async componentWillMount(){
-    this.getYoutubeData();
+    await this.getYoutube('여행');
   }
 
   // 상태를 업데이트 하기 위한 함수
