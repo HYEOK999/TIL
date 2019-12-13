@@ -30,14 +30,17 @@ class App extends React.Component{
   }
 
   async getYoutube(query) {
-    if (!query) return;
+    if (!query) {
+      this.setState(this.defaultState);
+      return;
+    }
     if (this.state.query !== query) {
       this.setState(this.defaultState); // 이유 : 검색어가 바뀔경우 UI부분도 초기화되야되기 때문
     }
 
     const { nextPageToken } = this.state;
     const params = {
-      key : '',
+      key : process.env.REACT_APP_YOUTUBE_API_KEY,
       q : query,
       part : 'snippet',
       pageToken : nextPageToken

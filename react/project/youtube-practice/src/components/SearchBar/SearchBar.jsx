@@ -20,8 +20,8 @@ const SearchBar = props => {
        className="search-bar"
        placeholder="검색어를 입력하세요"
        autoFocus
-       onKeyPress = { handleEnter(props.onSearch) }
-       // onChange = {(e) => props.onSearch(e.target.value) }
+      //  onKeyPress = { handleEnter(props.onSearch) }
+       onChange = {(e) => props.onSearch(e.target.value) }
       />
       <button className="btn-search" onClick={() => props.onSearch(input)}>
         <img className="search-icon" src={loupe} alt="검색" />
