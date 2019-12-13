@@ -895,3 +895,10 @@ App.js 의 `<main>`부분을 다음과 같이 수정한다.
 여기까지 하면 문제없이 잘 될 것이다.
 
 다음에는 Router 기능을 추가하도록 하겠다.
+
+현재 git .ignore로 설정을 해두어서 해당 프로젝트는 따로 관리를 해두지 않았다.
+
+단, 좀더 확장되고 정확한 소스는 아래 링크에서 확인이 가능하다.
+
+### [Youtube Mini Clone](https://github.com/HYEOK999/TIL/tree/master/react/project/youtube-practice)
+
