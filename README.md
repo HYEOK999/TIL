@@ -395,6 +395,8 @@ Today I Leaned...
 >[20191211-제일 작은 수 제거하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_52.md)
 >
 >[20191212-직사각형 별찍기 ,자연수 뒤집어 배열로 만들기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_53.md)
+>
+>[20191213-이상한 문자열 만들기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_54.md)
 
 <br/>
 
