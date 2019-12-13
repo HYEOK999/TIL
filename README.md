@@ -262,6 +262,8 @@ Today I Leaned...
 >
 >[20191211-react](https://github.com/HYEOK999/TIL/blob/master/react/20191211-study-react.md)
 >
+>[React - Youtube Mini Clone no Route](https://github.com/HYEOK999/TIL/blob/master/react/YoutubeMiniClone.md)
+>
 >[20191213-react](https://github.com/HYEOK999/TIL/blob/master/react/20191213-study-react.md)
 
 <br/>
