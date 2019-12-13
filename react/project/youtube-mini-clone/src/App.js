@@ -55,8 +55,8 @@ class App extends React.Component {
 
   // 페이지가 render()되기 전에 실행한다.
   // setState의 초기값을 별도로 지정하고싶을때 많이쓴다.
-  async componentWillMount(){
-    await this.getYoutube('여행');
+  async componentDidMount(){
+    await this.getYoutubeData('여행');
   }
 
   // 상태를 업데이트 하기 위한 함수
