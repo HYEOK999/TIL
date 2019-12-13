@@ -2,82 +2,46 @@
 
 ------
 
-### 직사각형 별찍기
+### 이상한 문자열 만들기
 
 ###### 문제 설명
 
-이 문제에는 표준 입력으로 두 개의 정수 n과 m이 주어집니다.
-별(*) 문자를 이용해 가로의 길이가 n, 세로의 길이가 m인 직사각형 형태를 출력해보세요.
+문자열 s는 한 개 이상의 단어로 구성되어 있습니다. 각 단어는 하나 이상의 공백문자로 구분되어 있습니다. 각 단어의 짝수번째 알파벳은 대문자로, 홀수번째 알파벳은 소문자로 바꾼 문자열을 리턴하는 함수, solution을 완성하세요.
 
-------
+##### 제한 사항
 
-##### 제한 조건
-
-- n과 m은 각각 1000 이하인 자연수입니다.
-
-------
-
-##### 예시
-
-입력
-
-```
-5 3
-```
-
-출력
-
-```
-*****
-*****
-*****
-```
-
------------
-
-```javascript
-process.stdin.setEncoding('utf8');
-process.stdin.on('data', data => {
-    const n = data.split(" ");
-    const row = '*'.repeat(Number(n[0]));
-    let answer = '';
-    
-    for(let i = 0; i < Number(n[1]); i++){
-          answer += row;
-          answer += '\n';
-    }
-    
-    console.log(answer);
-});
-```
-
-<br/>
-
-<br/>
-
-<br/>
-
-### 자연수 뒤집어 배열로 만들기
-
-###### 문제 설명
-
-자연수 n을 뒤집어 각 자리 숫자를 원소로 가지는 배열 형태로 리턴해주세요. 예를들어 n이 12345이면 [5,4,3,2,1]을 리턴합니다.
-
-##### 제한 조건
-
-- n은 10,000,000,000이하인 자연수입니다.
+- 문자열 전체의 짝/홀수 인덱스가 아니라, 단어(공백을 기준)별로 짝/홀수 인덱스를 판단해야합니다.
+- 첫 번째 글자는 0번째 인덱스로 보아 짝수번째 알파벳으로 처리해야 합니다.
 
 ##### 입출력 예
 
-| n     | return      |
-| ----- | ----------- |
-| 12345 | [5,4,3,2,1] |
+| s               | return          |
+| --------------- | --------------- |
+| try hello world | TrY HeLlO WoRlD |
 
---------------
+##### 입출력 예 설명
+
+try hello world는 세 단어 try, hello, world로 구성되어 있습니다. 각 단어의 짝수번째 문자를 대문자로, 홀수번째 문자를 소문자로 바꾸면 TrY, HeLlO, WoRlD입니다. 따라서 TrY HeLlO WoRlD 를 리턴합니다.
+
+---------------
 
 ```javascript
-function solution(n) {
-    return String(n).split('').reverse().map((item) => +item);
+function solution(s) {
+    var answer = '';
+    var str = s.split(' ');
+    for(let i = 0; i < str.length; i++){
+        for(let j = 0; j < str[i].length; j++){
+            if(!(j % 2)) {
+                answer += str[i][j].toUpperCase();
+            } else {
+                answer += str[i][j].toLowerCase();
+            }
+        }
+        if(i != str.length - 1 )
+        answer += ' ';
+    }
+    
+    return answer;
 }
 ```
 
