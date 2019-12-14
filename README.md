@@ -401,6 +401,8 @@ Today I Leaned...
 >[20191212-직사각형 별찍기 ,자연수 뒤집어 배열로 만들기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_53.md)
 >
 >[20191213-이상한 문자열 만들기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_54.md)
+>
+>[20191214-비밀지도(2018 카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_55.md)
 
 <br/>
 
