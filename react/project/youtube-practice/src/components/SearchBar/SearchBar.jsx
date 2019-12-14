@@ -15,7 +15,7 @@ const SearchBar = props => {
   return (
     <div className="search-wrapper">
       <input
-       ref = {ref => input = ref}
+       ref = {ref => (input = ref) || console.log('정답', ref)}
        type="search"
        className="search-bar"
        placeholder="검색어를 입력하세요"
