@@ -2,29 +2,23 @@
 
 --------------
 
-# React Study 06
+# React Study 07
 
-- 환경변수 정의하기
-  - .evn 파일 생성
-  - .gitignore에 .env 추가
-  - 번외 : .env 파일을 만들지 않고 npm start 할 때마다 키값 넘겨주기(권장하진 않음)
+- 한글 단어 처리
 - Router
-- 파라미터를 넘기는 방법 2가지
-  - 쿼리 스트링
-  - REST API
-- Switch
-  - 해결방법 1 : exact
-  - 해결방법 2 : 중요도가 높은 라우팅을 먼저 선언해준다.
-- 실습 라우팅해보기
-  - 쿼리 스트링 사용하기
-  - REST API 사용하기
-  - REST API 와 쿼리스트링 둘 다 사용하기
-- URL(주소가) 바뀐 것처럼 보여주기. 
-  - 리액트 DOM을 렌더링 해주기 위해서 `react-router-dom`을 설치한다.
-  - react-router-dom을 import 한다.
-  - URL history 추가하기
-- Call Stack 초과를 막는 법 -> 모든 것을 비동기 코드로 돌린다.
-  - setTimeout을 이용한다.
+- props.location
+- Redux
+  - Redux의 사용이유
+  - Redux를 배우는 시기
+  - Redux 주요 개념 3가지
+  - Redux 원칙
+  - Action { type : 타입명, 변수명 :  변수값 }
+  - Reducers
+  - ACTION을 REDUCER에게 전달해주는 행위 : 디스패치( DISPATCH )
+  - Store 
+  - Redux Data Flow
+- Redux 쉽게 이해해보기
+- [Redux 셋팅 하기](#a1)
 
 <br/>
 
@@ -34,458 +28,397 @@
 
 ### 용어 - ( 러버덕 )
 
-- 환경변수 정의하는 법
-- 쿼리스트링
-- REST API
-- history 작성
-- Call Stack 초과시 해결 요령
+- props.location
+- Redux
+- Reducer
+- Action
+- Store
 
 <br/>
 
 --------
 
-### 환경변수 정의 하기
+### 한글 단어 처리
 
-- 환경 변수는 process.env 라는 예약어를 통해서 만든다.
+한글은 encodeURIComponent로 변환되어 해석한다.
 
-- Node.js에서는 process.env까지 예약어고, React에서는 process.env.REACT_APP_ 까지 예약어이다. 
+```javascript
+encodeURIComponent('사과')
+```
 
-  그 후부터는 임의로 네이밍할 수 있는 변수.
+<br/>
 
--  변수는 최대한 자세하게 그리고 전부 대문자로 작성한다.
+### Router 
+
+라우터는 Route를 모아놓은 최상위 집합이다.
+
+Route는 path를 통해 실제 경로를 지정한다.
+
+Switch를 통해 default루트 혹은 어떤 경로도 해당 되지 못할경우 404페이지를 쉽게 설정할 수 있다.
+
+<br/>
+
+### props.location
+
+Youtube 프로젝트를 보면 다음과 같은 코드가 있다.
+
+props.location은 상위 Router를 통해서 내려온 프로퍼티다. (history, location, match등이 내려온다.)
+
+location 객체는 URL상의 ? 뒤에 나오는 쿼리의 내용을 저장하는데, 
+
+`if (props.location)`을 해준 이유는 해당 함수가 비동기로 돌기 떄문에, props.location이 정의가 되지 않을 시점에 `props.location.search`를 찾는다면 `undefind`를 유도한다. 따라서 이를 해결하기 위해 방어코드로 설정 해놓는다.
+
+```javascript
+  componentDidMount() {
+    const { props } = this
+    if (props.location) { // 방어코드. lacation이 주입되기까지 기다린다.
+      const { search_query } = qs.parse(props.location.search)
+      // this.setState({
+      //   query : search_query
+      // })
+      this.getYoutubeData(search_query || '여행')
+      // if (search_query) this.getYoutubeData(search_query)
+    }
+  }
+```
+
+<br/>
+
+### Redux
+
+JS의 상태 관리 라이브러리.
+
+React 혹은 Vue와 같은 라이브러리 에서 많이 사용된다.
+
+만약 순수 React소스로도 어플리케이션의 사용 문제가 없다면 Redux는 사용 고려 대상이 아니다.
+
+왜냐하면 Redux 설정하는 것 자체는 복잡하고 많은 규칙과 쳬계를 개발자에게 강요하기 때문이다.
+
+Redux는 모든 상태는 예측 가능해야한다는 모티브를 지니고있다.
+
+<br/>
+
+#### Redux의 사용이유
+
+React에서 Redux를 사용하는 가장 큰 이유는 독립적인 여러 컴포넌트들이 다 같이 사용할 유일한 단일 저장소를 필요로 하기 때문이다.
+
+Router 를 사용하지 않는다면 최상위 컴포넌트에서 props로 전부 뿌리를 내려주면 되지만 Router를 사용하면서 URL 별로 관리를 시작한다면 컴포넌트들은 점점 독립적으로 자리를 잡게 된다. 
+
+서로 독립된 컴포넌트들끼리 데이터를 주고 받으면서 상태를 유지하기 위해서 단일 저장소를 필요로 하게 되는데 그것이 Redux를 사용해야만 하는 가장 큰 이유이다.
+
+Youtube-Mini-Clone 프로젝트에서 특정 비디오를 검색하고 나오는 리스트들 중 하나를 클릭하였을 경우, 해당 리스트의 플레이어에서 Nav-SearchBar는 공백으로 초기화 되어있다. ( 상태가 유지가 되지 않았다는 것을 의미 ) 또한 브라우저의 뒤로가기를 누를 경우, 역시 상태가 유지가 되지 않았으므로 아까와 같은 리스트들을 보여주지 않고 그저 공백 화면 만 보여줄 것이다.
+
+<br/>
+
+#### Redux를 배우는 시기
+
+1. 데이터 흐름이 복잡해질 경우
+2. 같으 데이터를 여러곳에 중복 사용
+3. 많은 요청
+4. 컴포넌트 간 통신
+5. 비계층적 데이터
+
+<br/>
+
+#### Redux 주요 개념 3가지
+
+**Action**  : '어떠한 데이터 변경작업을 해주세요' 라는 것을 명시하는 곳. 데이터 요청을 하기 위한 데이터 객체
+
+**Reducers** : 요청한 Action을 처리하여 새로운 상태를 리턴 해준다. HOF들처럼 특정 배열로 처리를하여 새로운 배열을 반환하는 느낌.
+
+**Store** : Redux에서 사용되는 유일한 단일 저장소.
+
+<br/>
+
+#### Redux 원칙
+
+1. One immutable store : 기존의 상태에 직접적인 수정을 해서는 안된다. ( 예: a++ ) → 스프레드 등등
+2. Actions trigger changes : 변화를 야기시킨다.
+3. Reducers update state : Reducers는 상태를 업데이트한다.
+
+<br/>
+
+#### Action { type : 타입명, 변수명 :  변수값 }
+
+**type** : 요청할 액션에 대한 설명 - 변수 (임의로 지정 가능하다.)
+
+Redux는 우리가 작업한 코드가 순수함수라는 보장이 없기 때문에, 이러한 문제를 원천적으로 막고자 ACTION -> REDUCER -> STORE 라는 순서를 지키라고 강요한다.
+
+<br/>
+
+#### Reducers
+
+**상태는 읽기 전용 이다.** Reducers는 순수 함수를 지향한다. 기존의 상태를 변경하지 않고 새로운 상태를 return 한다.
 
 ```jsx
-const params = {
-  key: process.env.REACT_APP_YOUTUBE_API_KEY
-  ...
+export default function counter(state = INITIAL_STATE, action) {
+  switch(action.type) {
+    case ADD :
+      return {
+        ...state,
+        count: state.count + action.val
+      }
+    default:
+      return state;
+  }
 }
 ```
 
-**process.env는 리액트가 실행될때 가지고 오기 때문에 .env 설정이 끝나면 재 실행해야한다.**
+<br/>작업한 코드가 순수함수라는 보장이 없기 때문에 순수함수를 만들라는 강요, 이 강요는 리덕스 시스템을 유지하는데 굉장히 중요하다. 
+
+언제나 예측 가능한 상태를 만들기 위한 원천적으로 제한(Action, Reducers) 을 두고 있다. 
 
 <br/>
 
-#### .evn 파일 생성
+#### ACTION을 REDUCER에게 전달해주는 행위 : 디스패치( DISPATCH )
 
-.gitignore 와 같은 위치 .env 파일을 생성한다.
+상태를 바꾸고싶다면 상태 자체(객체 자체)를 바꾸어야만한다.
 
-그리고 다음과 같이 작성한다.
-
-```jsx
-REACT_APP_YOUTUBE_API_KEY=키 값 작성
-```
-
-**값을 작성할 때 규칙**
-
-- `''`의 형태로 문자열로 작성하면 안된다. 
-- `;`을 적으면 안된다.
-- 다음 환경 변수를 작성하고 싶다면 엔터를 쳐서 다음 라인으로 넘어간다.
-- 주석은 `//`로 시작한다. (예 : // 주석입니다. )
+이럴 경우, 바뀐 데이터에 대해 예측이 가능해진다.
 
 <br/>
 
-#### .gitignore에 .env 추가
+#### Store 
 
-```javascript
-# misc
-.env // 여기 추가
-.DS_Store
-.env.local // 개발자가 보는 환경
-.env.development.local  // 개발자가 보는 환경
-.env.test.local // 아래는 테스팅 환경
-.env.production.local // 실제 배포 환경
-```
+앱의 전체 상태 트리를 가지고 있다.
 
-<br/>
+상태를 변경하는 유일한 방법은 액션을 보내는 것 뿐이다.
 
-#### 번외 : .env 파일을 만들지 않고 npm start 할 때마다 키값 넘겨주기(권장하진 않음)
+스토어는 클래스가 아니며, 몇가지 메서드가 속해있는 객체이고, `createStore`를 통해 생성할 수 있다.
 
-맥 , 리눅스 (유닉스 기반 OS)
+##### Store 메서드
 
-````
-REACT_APP_KEY= 키내용 npm start
-````
-
-윈도우
-
-```
-($env:REACT_APP_key = "키내용") -and (npm start)
-```
+- [`getState()`](https://deminoth.github.io/redux/api/Store.html#getState)
+- [`dispatch(action)`](https://deminoth.github.io/redux/api/Store.html#dispatch)
+- [`subscribe(listener)`](https://deminoth.github.io/redux/api/Store.html#subscribe)
+- [`replaceReducer(nextReducer)`](https://deminoth.github.io/redux/api/Store.html#replaceReducer)
 
 <br/>
 
-### Router
+Redux는 모든 상태는 예측 가능해야만 하는 것을 강조한다. 곧 순수함수를 사용하라는 이야기다. 
 
-라우터는 다음과 같은 이유로 사용한다.
-
-- URL이 바뀌지 않아 특정 페이지를 공유할 수 없다.
-- 새로고침하면 상태를 유지하지 못해 처음 화면으로 돌아간다.
-- 각각의 페이지에 고유한 데이터를 넣을 수 있다.
-
-<br/>
-
-URL 주소를 컴포넌트 단위로 분리시키고 주소에 해당되는 컴포넌트를 뿌려준다.
-
-```bash
-npm i react-router-dom --save        
-```
-
-<br/>
-
-App.js
-
-```jsx
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from 'react-router-dom'
-```
-
-<br/>
-
-```jsx
-const App = () => {
-  return (
-    <Router>
-      <Switch>
-        {/* 쿼리스트링 */}
-        <Route path='/watch'></Route>  
-        {/* REST API 전달 */}
-        <Route path='/watch/:id' component={VideoPlayer} />
-      </Switch> 
-    </Router>
-  )
-}
-```
-
-`<Router>` : `Route` 를 하기위한 모든 컴포넌트들을 모아놓은 집합 태그.
-
-`<Switch></Switch>` 자바스크립트의 조건 switch와 같다. (path가 조건이다. 조건에 해당되면 자동으로 break)
-
-`<Route path='/watch'></Route>` :  실질적으로 Component를 지정해주는 태그. path가 비교조건
-
-<br/>
-
-### 파라미터를 넘기는 방법 2가지
-
-#### 쿼리 스트링
-
-Query String 이란 ? 
-
-예시 : `https://www.youtube.com/watch?v=hHW1oY26kxQ`
-
-`https://www.youtube.com/watch`는 유튜브측에서 정의한 주소. 즉, 고정된 것.
-
-`?뒤 부터는 변수명=변수값`이다. 이어줄때는 &를 사용한다.
-
-?뒤부터 나오는 값들을 queryString이라 한다.
-
-변수 `&`를 통해서 데이터를 연달아 보내는 것이 가능하다.
-
-사용자에게 쿼리를 설정하는 것이기 떄문에 라우팅 설정을 줄일 수 있다.
-
-```javascript
-// 쿼리 스트링 전달
-https://www.youtube.com/watch?v=hHW1oY26kxQ
-// 여러개 전달
-https://www.youtube.com/watch?v=hHW1oY26kxQ&custume=data&key=keykey
-```
-
-<br/>
-
-#### REST API
-
-오직 1개의 데이터를 보낼 수 있다. 여러개를 연달아 보낼 수 없다. 
-
-REST API의 경우 엄격하게 규칙을 지정하고 있다.
-
-하나하나 라우팅 설정을 모두 해야한다.
-
-```javascript
-// 일반적인 REST API 규격 정의
-https://www.youtube.com/watch/hHW1oY26kxQ
-```
-
-<br/>
-
-### Switch
-
-Switch에서 라우팅의 path가 일치한다면 바로 실행하고 끝낸다.
-
-`path`가 `https://www.youtube.com/watch?id=hHW1oY26kxQ` 라고 가정하자.
-
-그리고 Switch가 이렇게 정의가 되어있다.
-
-```jsx
-<Router>
-  <Switch>
-    <Route path='/watch' component={VideoPlayer} />
-    <Route path='/watch/:id' component={VideoPlayer} />
-  </Switch>
-</Router>
-```
-
-문제는 이렇게 될 경우 전체 path를 비교하는 데 부분으로 일치한다면 바로 실행하고 끝내버린다.
-
-즉, 1번째 ` <Route path='/watch' component={VideoPlayer} />` 의 `path='/watch'` 는 일치한다. 뒷부분은 무시하고 이 부분이 일치를 하기 때문에 바로 실행해버린다.
-
-따라서 2번째 ` <Route path='/watch/:id' component={VideoPlayer} />`는 절대로 실행할 수 없게된다.
-
-<br/>
-
-#### 해결방법 1 : exact
-
-`path` 앞에 exact를 명시 해준다면 전체 다 비교를 한다.
-
-단, exact는 100%일치해야되기 때문에 값이 변하는 변수를 사용할 수 없다. 
-
-id값이 게속 고정된다면 문제가 없지만 id값이 변한다면 `<Route path='/watch/:id' component={VideoPlayer} />`는 사용할 수 없다.
-
-```jsx
-<Switch>
-  <Route exact path='/watch' component={VideoPlayer} />
-	<Route path='/watch/:id' component={VideoPlayer} />
-</Switch>
-```
-
-<br/>
-
-#### 해결방법 2 : 중요도가 높은 라우팅을 먼저 선언해준다.
-
-```jsx
-<Switch>
-	<Route path='/watch/:id' component={VideoPlayer} />
-  <Route path='/watch' component={VideoPlayer} />
-</Switch>
-```
-
-<br/>
-
-### 실습 라우팅해보기
-
-전제 : 특정 버튼이나 링크를 클릭해서 URL 주소가 바뀌었다고 가정하자. (실제로는 바뀌지 않고 변경된 것처럼 보이는 것.)
-
-라우트 지정해주고, `<Route>` 에 component에 적어주기.
-
-App.js
-
-```jsx
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from 'react-router-dom'
-
-import VideoPlayer from './VideoPlayer';
-
-const App = () => {
-  return (
-    <Router>
-      <Switch>
-        <Route path='/watch/:id' component={VideoPlayer} />
-        <Route path='/watch' component={VideoPlayer} />
-      </Switch>
-    </Router>
-  )
-}
-```
-
-<br/>
-
-#### 쿼리 스트링 사용하기
-
-1. npm 설치
-
-```bash
-npm i query-string --save 
-```
-
-<br/>
-
-2. 사용하고자 하는 `.jsx` 컴포넌트 파일에 접근한다.
-
-  VideoPlayer.jsx
-
-쿼리스트링을 import 한다.
-
-```javascript
-import qs from 'query-string'
-```
-
-<br/>
-
-3. 쿼리 스트링 사용하기
-
-```javascript
-qs.parse(props.location.search)
-```
-
-`props.location.search`는 URL의 QueryString(? 뒤 내용) 들을 객체로 변환해준다.
-
-예를들어, `https://www.youtube.com/watch?id=hHW1oY26kxQ?custom=aaaa` 라는 URL이라 가정하면
-
-`qs.parse(props.location.search)`로 객체화 되면
-
-```javascript
-{
-  id : hHW1oY26kxQ,
-  custom : aaaa
-}
-```
-
-이렇게 된다.
-
-이것을 상수로 받아준다.
-
-```jsx
-const VideoDetail = props => {
-  // Query String
-  const {v} = qs.parse(props.location.search)
-
-  return (
-    <div className="video-detail">
-    </div>
-  );
-};
-export default VideoDetail;
-```
-
-<br/>
-
-#### REST API 사용하기
-
-사용하고자 하는 `.jsx` 컴포넌트 파일에 접근한다.
-
-  VideoPlayer.jsx
-
-```jsx
-const VideoDetail = props => {
-  // REST API
-  const { id } = props.match.params.id;
-  // const id = props.match.params.id;
-
-  return (
-    <div className="video-detail">
-    </div>
-  );
-};
-export default VideoDetail;
-```
-
-<br/>
-
-```jsx
-const id = props.match.params.id;
-```
-
-`props.match.params` 뒤부터 적은 프로퍼티는 라우트에서 적은 값들을 적어준다.
-
- ` path='/watch/:id'`== `props.match.params.id`
-
-<br/>
-
-#### REST API 와 쿼리스트링 둘 다 사용하기
-
-  VideoPlayer.jsx
+**잘못된 상태변경.** `role`은 더 이상 숫수함수가 아니다.
 
 ````jsx
-import React from "react";
-import "./VideoPlayer.css";
-import qs from 'query-string'
+state = {
+	name : 'KIM',
+	role : 'developer'
+}
 
-const VideoDetail = props => {
-  // REST API
-  const { id } = props.match.params.id;
-  // const id = props.match.params.id;
-
-  // Query String
-  const {v} = qs.parse(props.location.search)
-
-  const _id = id || v;
-  if (!_id) return null;
-  
-  const url = `https://youtube.com/embed/${_id}`;
-  return (
-    <div className="video-detail">
-      <iframe src={url} title={videoId} className="video-player" />
-    </div>
-  );
-};
-export default VideoDetail;
+state.role = 'admin';
+return state;
 ````
 
-REST로 받은 `id` 와 쿼리스트링으로 받은 `v` 모두 사용해서 넘겨준다.
-
-```javascript
-const url = `https://youtube.com/embed/${id || v}`;
-```
-
 <br/>
 
-### URL(주소가) 바뀐 것처럼 보여주기. 
-
-URL이 바뀌는 것처럼 보여지나 브라우저 히스토리만 추가를 해서 실제로 바뀌지는 않는다. 
-
-또한 히스토리를 추가해주면 브라우저의 `뒤로가기` 버튼도 사용이 가능해진다.
-
-#### 1. 리액트 DOM을 렌더링 해주기 위해서 `react-router-dom`을 설치한다.
-
-```bash
-npm i react-router-dom --save
-```
-
-<br/>
-
-#### 2. react-router-dom을 import 한다.
-
-Main.js
-
-```javascript
-import { withRouter }from "react-router-dom";
-/*
-	소스 - 기존의 App.js 소스들 카피/페이스트
-*/
-export default withRouter(App);
-```
-
-<br/>
-
-#### 3. URL history 추가하기
-
-**SPA에서는 새로고침/페이지 이동은 금지시 한다.** 따라서 `history`키워드를 통해서 URL에 쿼리나 REST API 값 전달이 가능하다.
-
-이제는 `this.setState`가 아니라 `this.props.history.push` 키워드를 통해 url을 변경한다.
+**리덕스에서 제안하는 상태변경.** 객체 자체를 리턴한다.
 
 ```jsx
-this.props.history.push(`/watch?v=${selectedVideo}`)
-```
+state = {
+	name : 'KIM',
+	role : 'developer'
+}
 
-- SPA는 위와같이 url을 변경하여도 새로고침이 발생하지 않는다. 
-  - 여기서 single page는 주소가 single이 아니라 페이지가 single - 페이지 이동이 없는 것.
-  - 리액트 라우터의 히스토리 푸시는 주소창에 주소만 바꿔줄뿐 페이지의 이동은 없기 때문에 console.log도 그대로 남고 모든 상태가 그대로 남음.
-
-- `<a href="http://">` 하이퍼링크는 클릭하면 새 탭을 여는 역할 - 완전한 초기상태로 새로운 브라우저 탭을 만드는 것과 같다.
-
-```javascript
-// 진짜 주소 이동
-window.location.href
-
-// 주소를 추가 - 페이지변경X
-this.props.history.push
+return state = {
+	name : 'KIM',
+	role = 'admin';
+}
 ```
 
 <br/>
 
-### Call Stack 초과를 막는 법 -> 모든 것을 비동기 코드로 돌린다.
+#### Redux Data Flow
 
-#### setTimeout을 이용한다.
+상태 변화는 오직 Reducer만 가능하다.
 
-콜스택 초과 오류날 때 setTimeout을 이용하면 대부분 해결된다.
+State -> UI -> ACTION -> REDUX -> STORE -> State
 
-````javascript
-setTimeout(() => this.props.history.push(`/results?search_query=${query}`), 0)
+![](https://user-images.githubusercontent.com/31315644/70904387-8e91b480-2044-11ea-843e-e18d01033ebe.jpeg)
+
+<br/>
+
+------------
+
+### Redux 쉽게 이해해보기
+
+실제 우리가 생활에서 사용하는 은행(인터넷뱅킹X, 전자거래X, 반드시 은행 창구를 직접 이용해야만 한다.)이 있다고 가정하자.
+
+**Redux는 은행**이다.
+
+**React.state는 지갑**이다.
+
+ 우린 **지갑을 마음대로 사용할 수 있고, 돈만 들어 있다면 어떠한 절차없이 바로 사용하는 것이 가능**하다.
+
+**은행 역시 우리 마음대로 사용할 수는 있지만, 절차와 체계 그리고 시스템을 지니고 있다.** 은행에 가서 통장에서 돈을 얼마나 꺼낼것인지 출금 명세표를 작성하고 은행직원에게 전달하면 은행직원이 처리를 하고 돈을 준다. 
+
+여기서 **Redux의 Store는 은행 통장** 이다. (통장은 무조건 1개이다. 유일성 강조)
+
+출금 명세표, 입금 명세표 등등의 은행에서 하고자 하는 업무를 작성해서 은행원에게 줘야하는데 **Redux의 Action이 명세표들**이다.
+
+**Redux의 Reducer은 은행원**이다. 명세표를 받아 처리를 하기 때문이다. 
+
+따라서 **명세표를 은행원에게 주는 행위는 Redux의 Dispatch다.**
+
+자 이제, 통장을 보자 은행업무를 보고나면 통장에 입금 혹은 출금 등등을 했다면 통장에 기록이 남을텐데 통장기록은 한줄 한줄 쌓여간다.
+
+기록을 지우고 다시 쓴 것이 아닌 한줄 한줄 쌓아서 적어놓은 것인데 이것은 **Redux로 치면 순수함수와 불변성을 대변한다.**
+
+다시 정리하면,
+
+1. 은행(Redux)에 가서 100원을 입금 해달라는 명세표(Action)을 작성해서 은행원(Reducer)에게 준다.(주는 행위 : Dispatch)
+2. 은행원(Reducer)은 요청받은 명세표(Action)을 처리해서 통장(Store)에 기록한다.
+3. 통장(Store)에는 총 300원이 있는데 기록이 300원으로 있는게 아닌, 100원, 200원, 방금 넣은 300원으로 차례차례 기록 되어 있다.( 순수함수, 불변성 )
+
+--------
+
+### Redux 셋팅 하기 <a id="a1"></a>
+
+```bash
+npx create-react-app redux-study
+
+VSCode로 해당 폴더 오픈
+```
+
+<br/>
+
+```bash
+npm i redux --save
+npm i react-redux --save
+```
+
+react-redux는 react에 redux를 적용하기 위해서 설치한다.
+
+<br/>
+
+#### 폴더 2개 생성
+
+src 하위
+
+#### src/actions
+
+#### src/reducers
+
+store는 redux에 포함되어 있기 때문에 만들 필욘 없다.
+
+![redux-repo01](https://user-images.githubusercontent.com/31315644/70904390-905b7800-2044-11ea-8ddf-2b931c3a0911.jpeg)
+
+<br/>
+
+#### import 추가
+
+src/App.js
+
+```jsx
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+```
+
+`createStore` = `store`를 만든다. (은행 통장을 개설한다.)
+
+`Provider`는 하위 컴포넌트에게 `store`를 접근할 방법을 제공해준다.
+
+store를 사용하고자 하는 최상위 컴포넌트에게 다음 코드를 추가한다.
+
+<br/>
+
+#### Provider 랩핑
+
+src/App.js
+
+최상위 컴포넌트에서 `Provider`를 랩핑시켜준다.
+
+```jsx
+function App() {
+  return (
+    	<Provider store={createStore(reducers)}>
+     		 ...
+      </Provider>
+    );
+}
+
+```
+
+`store`를 만들 때는 `createStore`함수를 통해야 하고 `reducers`를 걸쳐야만 한다.
+
+은행 통장을 만들 때는, 은행원(`reducers`)을 걸쳐야 하는 것과 같다.
+
+<br/>
+
+#### reducers 파일 생성
+
+src/reducers/counter.js
+
+src/reducers/index.js
+
+<br/>
+
+#### App.js reducers import
+
+src/App.js
+
+````jsx
+import reducers from './reducers'
+
 ````
 
 <br/>
+
+#### actions 파일 생성 및 정의
+
+src/actions/index.js
+
+```jsx
+export const ADD = 'ADD';
+
+export function add(val) {
+  return ({ type : ADD, val })
+}
+
+```
+
+`Action` : ` { type : ADD, val }`
+
+`type` : 수행하고자 하는 변수명 ,
+
+`val` : 실제 데이터 명, 값
+
+`Dispatch` : `return ({ type : ADD, val })`
+
+<br/>
+
+#### reducers 정의
+
+src/reducers/counter.js
+
+위에 정의한 actions를 import하고 초기 상태를 정의해준다.
+
+```jsx
+import { ADD } from '../actions'
+
+const INITIAL_STATE = {
+  count: 0 
+}
+
+```
+
+<br/>
+
+`reducer`를 정의한다.
+
+```jsx
+export default function counter(state = INITIAL_STATE, action) {
+  switch(action.type) {
+    case ADD :
+      return {
+        ...state,
+        count: state.count + action.val
+      }
+    default:
+      return state;
+  }
+}
+
+```
+
+<br/>
+
