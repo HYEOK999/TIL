@@ -1,4 +1,3 @@
-
 function transMap(n, num) {
   let res = 0;
   let arr = '';
