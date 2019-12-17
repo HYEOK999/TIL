@@ -5,14 +5,10 @@ function solution(nums) {
   const len = Math.floor(nums.length / 2);
   let count = 0;
 
-  console.log(answer);
-  console.log();
+  // console.log(answer);
+  // console.log();
 
-  answer.forEach((item, index) => {
-    console.log(item);
-    console.log(answer[index - 1]);
-    return item !== answer[index - 1] ? count++ : ' ';
-  });
+  answer.forEach((item, index) => (item !== answer[index - 1] ? count++ : ' '));
 
   return count >= len ? len : count;
 }

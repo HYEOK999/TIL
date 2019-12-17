@@ -265,6 +265,8 @@ Today I Leaned...
 >[React - Youtube Mini Clone no Route](https://github.com/HYEOK999/TIL/blob/master/react/YoutubeMiniClone.md)
 >
 >[20191213-react](https://github.com/HYEOK999/TIL/blob/master/react/20191213-study-react.md)
+>
+>[20191216-react](https://github.com/HYEOK999/TIL/blob/master/react/20191216-study-react.md)
 
 <br/>
 
@@ -405,6 +407,8 @@ Today I Leaned...
 >[20191213-이상한 문자열 만들기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_54.md)
 >
 >[20191214-비밀지도(2018 카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_55.md)
+>
+>[20191216-행렬의 덧셈](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_56.md)
 
 <br/>
 
