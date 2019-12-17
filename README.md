@@ -275,6 +275,8 @@ Today I Leaned...
 >[React가 만들어진 이유 ( + Virtual DOM )](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-01.md)
 >
 >[JSX](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-02.md)
+>
+>[props 를 통해 컴포넌트에게 값 전달하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-03.md)
 
 <br/>
 
@@ -409,6 +411,8 @@ Today I Leaned...
 >[20191214-비밀지도(2018 카카오)](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_55.md)
 >
 >[20191216-행렬의 덧셈](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_56.md)
+>
+>[20191217-폰켓몬](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_57.md)
 
 <br/>
 
