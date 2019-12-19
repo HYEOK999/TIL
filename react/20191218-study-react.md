@@ -372,3 +372,68 @@ const getDistcount = function (rate) {
 
 - Redux의 단일 저장소(store)를 정의한다. (은행 통장을 개설한다.)
 - 하위 컴포넌트에게 `dispatch` , `state`(reducers에서 combineReducers로 합쳐진 단일 state)를 뿌려준다.
+
+<br/>
+
+`function mapDispatchToProps(dispatch)` 
+
+- 리덕스의 `dispatch`는 원래 액션이 리듀서에게 전달하기 위해서는  `store.dispatch({type: ~~~~})`라고 적어야하는데 이 과정이 불편하기 때문에 리액트에서 편리하게 디스패치를 실행하는것처럼 보여주는 함수.
+- `bindActionCreators()` 와 같이 사용되며 액션크리에이터를 이 함수 내부에 작성한다.
+- `connect()` 의 2번쨰 인자로 사용한다.
+- props에서 `bindActionCreators()` 에 적혀진 함수를 사용하게 해준다.
+
+<br/>
+
+`function mapStateToProps(state)` 
+
+- Redux저장소에 저장된 값을 반환하여 props에서 사용하게끔 도와주는 함수.
+
+- `connect()` 의 1번쨰 인자로 사용한다.
+
+- 복합 리듀서에서 정의한 리듀서의 내부에서 사용되는 값을 명시해주면 된다.
+
+  `count : state.counter.count` 
+
+- state : 리덕스의 state , counter : 리듀서(은행직원 이름), count : 변수
+
+<br/>
+
+#### 실행 순서
+
+- Provider는 `createStore(reducers`) 함수를 통해 리덕스 내부에 스토어를 생성한다.
+
+  ( 은행에서 은행원(reducers)을 통해 통장(store)을 만드는 것처럼 )
+
+- Provider는 하위 컴포넌트에게 state와 dispatch를 전달해준다.
+
+- Counter.js컴포넌트에서 props만 받을 수 있다. 단, 아직 `state`와 `dispatch`를 받은건 아니다.
+
+- `state`(리덕스에 있는 상태)와 `dispatch`는 
+
+  `connect(mapStateToProps, mapDispatchToProps)(Counter);`
+
+  를 이용하여 Counter컴포넌트의 props로 넘겨준다.
+
+  (`state`와 `dispatch`가 필요 없는 경우 빈 함수를 리턴해주면 된다. )
+
+- Couter가 렌더링되면 Redux 저장소에 저장된 변수에 접근이 가능하게 되었으므로 `+` 혹은 `-` 버튼을 누를경우 `dispatch` 를 통해 Redux 저장소에 저장된 변수에 값이 변화되고 화면에 출력된다.
+
+<br/>
+
+### Redux Dev Tools
+
+- 구글 크롬에서 리덕스를 디버깅에 필요한 툴 ( 구글 크롬 확장 프로그램 설치 )
+
+  [Redux Dev Tools 제작 GitHub](https://github.com/zalmoxisus/redux-devtools-extension)
+
+- 매우 직관적이라 사용하기 편리하다. 또한 특정 시간대로 이동하여 데이터의 변화를 확인할 수 있다.
+
+- 사용하려면 아래와 같이 , `creatStore()` 의 2번째 인자로 명시를 해주어야한다.
+
+- 이 툴을 이용하여 리덕스는 데이터에 대하여 언제나 UNDO, REDO가 가능하다.
+
+```
+<Provider store={createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
+```
+
+<br/>
