@@ -2,23 +2,29 @@
 
 --------------
 
-# React Study 07
+# React Study 08
 
-- 한글 단어 처리
-- Router
-- props.location
+- React에서 input 태그 value 와 defaultvalue 차이
 - Redux
-  - Redux의 사용이유
-  - Redux를 배우는 시기
-  - Redux 주요 개념 3가지
-  - Redux 원칙
-  - Action { type : 타입명, 변수명 :  변수값 }
-  - Reducers
-  - ACTION을 REDUCER에게 전달해주는 행위 : 디스패치( DISPATCH )
-  - Store 
-  - Redux Data Flow
-- Redux 쉽게 이해해보기
-- [Redux 셋팅 하기](#a1)
+  - 리덕스 사용 이유
+  - 카운터 실습
+    - 폴더 구조
+    - Actions 설정
+      - src/actions/index.js
+    - reducers 설정
+      - 카운터 리듀서 설정하기
+        - src/reducers/counter.js
+      - reducers 합치기
+        - src/reducers/index.js
+    - App.js 설정
+    - Counter.js 컴포넌트 구현
+      - function mapStateToProps(state)
+      - function mapDispatchToProps(dispatch)
+      - connect(mapStateToProps, mapDispatchToProps)(Counter)
+        - HOC
+    - 정리
+    - 실행 순서
+- Redux Dev Tools
 
 <br/>
 
@@ -28,397 +34,341 @@
 
 ### 용어 - ( 러버덕 )
 
-- props.location
 - Redux
-- Reducer
-- Action
-- Store
+- Actions
+- Reducers
+- Provider
+- mapStateToProps(state)
+- mapDispatchToProps(dispatch)
+- HOC
+- Redux Dev Tools
 
 <br/>
 
 --------
 
-### 한글 단어 처리
+### React에서 input 태그 value 와 defaultvalue 차이
 
-한글은 encodeURIComponent로 변환되어 해석한다.
-
-```javascript
-encodeURIComponent('사과')
-```
-
-<br/>
-
-### Router 
-
-라우터는 Route를 모아놓은 최상위 집합이다.
-
-Route는 path를 통해 실제 경로를 지정한다.
-
-Switch를 통해 default루트 혹은 어떤 경로도 해당 되지 못할경우 404페이지를 쉽게 설정할 수 있다.
-
-<br/>
-
-### props.location
-
-Youtube 프로젝트를 보면 다음과 같은 코드가 있다.
-
-props.location은 상위 Router를 통해서 내려온 프로퍼티다. (history, location, match등이 내려온다.)
-
-location 객체는 URL상의 ? 뒤에 나오는 쿼리의 내용을 저장하는데, 
-
-`if (props.location)`을 해준 이유는 해당 함수가 비동기로 돌기 떄문에, props.location이 정의가 되지 않을 시점에 `props.location.search`를 찾는다면 `undefind`를 유도한다. 따라서 이를 해결하기 위해 방어코드로 설정 해놓는다.
+기본 html에서 `<input id='test' value='hello'>` 라고 정의 했을 때, 여기에 'bye'라고 입력하여 value 값을 변경했다고 가정하자.
 
 ```javascript
-  componentDidMount() {
-    const { props } = this
-    if (props.location) { // 방어코드. lacation이 주입되기까지 기다린다.
-      const { search_query } = qs.parse(props.location.search)
-      // this.setState({
-      //   query : search_query
-      // })
-      this.getYoutubeData(search_query || '여행')
-      // if (search_query) this.getYoutubeData(search_query)
-    }
-  }
+// input 값을 hello -> bye 로 변환시
+var test = document.querySelector('#test');
+test.value // bye
+test.getAttribute('value'); // hello 
 ```
 
-<br/>
-
-### Redux
-
-JS의 상태 관리 라이브러리.
-
-React 혹은 Vue와 같은 라이브러리 에서 많이 사용된다.
-
-만약 순수 React소스로도 어플리케이션의 사용 문제가 없다면 Redux는 사용 고려 대상이 아니다.
-
-왜냐하면 Redux 설정하는 것 자체는 복잡하고 많은 규칙과 쳬계를 개발자에게 강요하기 때문이다.
-
-Redux는 모든 상태는 예측 가능해야한다는 모티브를 지니고있다.
+`test.getAttribute('value');`를 찍었을 경우 초기값 `hello`가 나오게 된다.
 
 <br/>
 
-#### Redux의 사용이유
+**반면에 리액트에서는 다음과 같은 상태를 유지한다.**
 
-React에서 Redux를 사용하는 가장 큰 이유는 독립적인 여러 컴포넌트들이 다 같이 사용할 유일한 단일 저장소를 필요로 하기 때문이다.
+`value` : 항상 최신의 값
 
-Router 를 사용하지 않는다면 최상위 컴포넌트에서 props로 전부 뿌리를 내려주면 되지만 Router를 사용하면서 URL 별로 관리를 시작한다면 컴포넌트들은 점점 독립적으로 자리를 잡게 된다. 
-
-서로 독립된 컴포넌트들끼리 데이터를 주고 받으면서 상태를 유지하기 위해서 단일 저장소를 필요로 하게 되는데 그것이 Redux를 사용해야만 하는 가장 큰 이유이다.
-
-Youtube-Mini-Clone 프로젝트에서 특정 비디오를 검색하고 나오는 리스트들 중 하나를 클릭하였을 경우, 해당 리스트의 플레이어에서 Nav-SearchBar는 공백으로 초기화 되어있다. ( 상태가 유지가 되지 않았다는 것을 의미 ) 또한 브라우저의 뒤로가기를 누를 경우, 역시 상태가 유지가 되지 않았으므로 아까와 같은 리스트들을 보여주지 않고 그저 공백 화면 만 보여줄 것이다.
+`defaultValue` : 변경되기 전 최초의 값
 
 <br/>
 
-#### Redux를 배우는 시기
+## Redux
 
-1. 데이터 흐름이 복잡해질 경우
-2. 같으 데이터를 여러곳에 중복 사용
-3. 많은 요청
-4. 컴포넌트 간 통신
-5. 비계층적 데이터
+### 리덕스 사용 이유
 
-<br/>
+컴포넌트 간의 데이터 교환의 필요성이 생김. 
 
-#### Redux 주요 개념 3가지
+따라서 리덕스라는 독립되어 있는 저장소(Redux)를 사용하기 위함.
 
-**Action**  : '어떠한 데이터 변경작업을 해주세요' 라는 것을 명시하는 곳. 데이터 요청을 하기 위한 데이터 객체
+리덕스는 순수함수를 지향하기 때문에 Reducer라는 함수를 통해 순수함수를 유지하고자 함.
 
-**Reducers** : 요청한 Action을 처리하여 새로운 상태를 리턴 해준다. HOF들처럼 특정 배열로 처리를하여 새로운 배열을 반환하는 느낌.
-
-**Store** : Redux에서 사용되는 유일한 단일 저장소.
+스프레드 문법을 사용하여 기존의 상태를 유지한다.
 
 <br/>
 
-#### Redux 원칙
+### 카운터 실습
 
-1. One immutable store : 기존의 상태에 직접적인 수정을 해서는 안된다. ( 예: a++ ) → 스프레드 등등
-2. Actions trigger changes : 변화를 야기시킨다.
-3. Reducers update state : Reducers는 상태를 업데이트한다.
+#### 폴더구조
 
-<br/>
+<img src="https://user-images.githubusercontent.com/31315644/71091816-3b0c9b80-21e9-11ea-881d-70b696d9bd1d.jpeg" alt="redux 폴더 구조" style="zoom:50%;" />
 
-#### Action { type : 타입명, 변수명 :  변수값 }
+#### Actions 설정
 
-**type** : 요청할 액션에 대한 설명 - 변수 (임의로 지정 가능하다.)
+> 은행으로 가정했을 경우 입금명세표 등 할 일을 적어놓는 역할을 하는 Actions을 작성한다.
 
-Redux는 우리가 작업한 코드가 순수함수라는 보장이 없기 때문에, 이러한 문제를 원천적으로 막고자 ACTION -> REDUCER -> STORE 라는 순서를 지키라고 강요한다.
+App.js에서 실제로 사용하는 것은 리듀서가 아닌 리액트이다.
 
-<br/>
+##### src/actions/index.js
 
-#### Reducers
-
-**상태는 읽기 전용 이다.** Reducers는 순수 함수를 지향한다. 기존의 상태를 변경하지 않고 새로운 상태를 return 한다.
-
-```jsx
-export default function counter(state = INITIAL_STATE, action) {
-  switch(action.type) {
-    case ADD :
-      return {
-        ...state,
-        count: state.count + action.val
-      }
-    default:
-      return state;
-  }
-}
-```
-
-<br/>작업한 코드가 순수함수라는 보장이 없기 때문에 순수함수를 만들라는 강요, 이 강요는 리덕스 시스템을 유지하는데 굉장히 중요하다. 
-
-언제나 예측 가능한 상태를 만들기 위한 원천적으로 제한(Action, Reducers) 을 두고 있다. 
-
-<br/>
-
-#### ACTION을 REDUCER에게 전달해주는 행위 : 디스패치( DISPATCH )
-
-상태를 바꾸고싶다면 상태 자체(객체 자체)를 바꾸어야만한다.
-
-이럴 경우, 바뀐 데이터에 대해 예측이 가능해진다.
-
-<br/>
-
-#### Store 
-
-앱의 전체 상태 트리를 가지고 있다.
-
-상태를 변경하는 유일한 방법은 액션을 보내는 것 뿐이다.
-
-스토어는 클래스가 아니며, 몇가지 메서드가 속해있는 객체이고, `createStore`를 통해 생성할 수 있다.
-
-##### Store 메서드
-
-- [`getState()`](https://deminoth.github.io/redux/api/Store.html#getState)
-- [`dispatch(action)`](https://deminoth.github.io/redux/api/Store.html#dispatch)
-- [`subscribe(listener)`](https://deminoth.github.io/redux/api/Store.html#subscribe)
-- [`replaceReducer(nextReducer)`](https://deminoth.github.io/redux/api/Store.html#replaceReducer)
-
-<br/>
-
-Redux는 모든 상태는 예측 가능해야만 하는 것을 강조한다. 곧 순수함수를 사용하라는 이야기다. 
-
-**잘못된 상태변경.** `role`은 더 이상 숫수함수가 아니다.
-
-````jsx
-state = {
-	name : 'KIM',
-	role : 'developer'
-}
-
-state.role = 'admin';
-return state;
-````
-
-<br/>
-
-**리덕스에서 제안하는 상태변경.** 객체 자체를 리턴한다.
-
-```jsx
-state = {
-	name : 'KIM',
-	role : 'developer'
-}
-
-return state = {
-	name : 'KIM',
-	role = 'admin';
-}
-```
-
-<br/>
-
-#### Redux Data Flow
-
-상태 변화는 오직 Reducer만 가능하다.
-
-State -> UI -> ACTION -> REDUX -> STORE -> State
-
-![](https://user-images.githubusercontent.com/31315644/70904387-8e91b480-2044-11ea-843e-e18d01033ebe.jpeg)
-
-<br/>
-
-------------
-
-### Redux 쉽게 이해해보기
-
-실제 우리가 생활에서 사용하는 은행(인터넷뱅킹X, 전자거래X, 반드시 은행 창구를 직접 이용해야만 한다.)이 있다고 가정하자.
-
-**Redux는 은행**이다.
-
-**React.state는 지갑**이다.
-
- 우린 **지갑을 마음대로 사용할 수 있고, 돈만 들어 있다면 어떠한 절차없이 바로 사용하는 것이 가능**하다.
-
-**은행 역시 우리 마음대로 사용할 수는 있지만, 절차와 체계 그리고 시스템을 지니고 있다.** 은행에 가서 통장에서 돈을 얼마나 꺼낼것인지 출금 명세표를 작성하고 은행직원에게 전달하면 은행직원이 처리를 하고 돈을 준다. 
-
-여기서 **Redux의 Store는 은행 통장** 이다. (통장은 무조건 1개이다. 유일성 강조)
-
-출금 명세표, 입금 명세표 등등의 은행에서 하고자 하는 업무를 작성해서 은행원에게 줘야하는데 **Redux의 Action이 명세표들**이다.
-
-**Redux의 Reducer은 은행원**이다. 명세표를 받아 처리를 하기 때문이다. 
-
-따라서 **명세표를 은행원에게 주는 행위는 Redux의 Dispatch다.**
-
-자 이제, 통장을 보자 은행업무를 보고나면 통장에 입금 혹은 출금 등등을 했다면 통장에 기록이 남을텐데 통장기록은 한줄 한줄 쌓여간다.
-
-기록을 지우고 다시 쓴 것이 아닌 한줄 한줄 쌓아서 적어놓은 것인데 이것은 **Redux로 치면 순수함수와 불변성을 대변한다.**
-
-다시 정리하면,
-
-1. 은행(Redux)에 가서 100원을 입금 해달라는 명세표(Action)을 작성해서 은행원(Reducer)에게 준다.(주는 행위 : Dispatch)
-2. 은행원(Reducer)은 요청받은 명세표(Action)을 처리해서 통장(Store)에 기록한다.
-3. 통장(Store)에는 총 300원이 있는데 기록이 300원으로 있는게 아닌, 100원, 200원, 방금 넣은 300원으로 차례차례 기록 되어 있다.( 순수함수, 불변성 )
-
---------
-
-### Redux 셋팅 하기 <a id="a1"></a>
-
-```bash
-npx create-react-app redux-study
-
-VSCode로 해당 폴더 오픈
-```
-
-<br/>
-
-```bash
-npm i redux --save
-npm i react-redux --save
-```
-
-react-redux는 react에 redux를 적용하기 위해서 설치한다.
-
-<br/>
-
-#### 폴더 2개 생성
-
-src 하위
-
-#### src/actions
-
-#### src/reducers
-
-store는 redux에 포함되어 있기 때문에 만들 필욘 없다.
-
-![redux-repo01](https://user-images.githubusercontent.com/31315644/70904390-905b7800-2044-11ea-8ddf-2b931c3a0911.jpeg)
-
-<br/>
-
-#### import 추가
-
-src/App.js
-
-```jsx
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-```
-
-`createStore` = `store`를 만든다. (은행 통장을 개설한다.)
-
-`Provider`는 하위 컴포넌트에게 `store`를 접근할 방법을 제공해준다.
-
-store를 사용하고자 하는 최상위 컴포넌트에게 다음 코드를 추가한다.
-
-<br/>
-
-#### Provider 랩핑
-
-src/App.js
-
-최상위 컴포넌트에서 `Provider`를 랩핑시켜준다.
-
-```jsx
-function App() {
-  return (
-    	<Provider store={createStore(reducers)}>
-     		 ...
-      </Provider>
-    );
-}
-
-```
-
-`store`를 만들 때는 `createStore`함수를 통해야 하고 `reducers`를 걸쳐야만 한다.
-
-은행 통장을 만들 때는, 은행원(`reducers`)을 걸쳐야 하는 것과 같다.
-
-<br/>
-
-#### reducers 파일 생성
-
-src/reducers/counter.js
-
-src/reducers/index.js
-
-<br/>
-
-#### App.js reducers import
-
-src/App.js
-
-````jsx
-import reducers from './reducers'
-
-````
-
-<br/>
-
-#### actions 파일 생성 및 정의
-
-src/actions/index.js
-
-```jsx
+```javascript
+// 리듀서에서 사용하기 위함.
 export const ADD = 'ADD';
 
+// 함수자체는 Action Creator, 실제로 사용하는 건 reducer가 아니라 특정 컴포넌트다. (예제 : counter)
 export function add(val) {
-  return ({ type : ADD, val })
+  return ({ type : ADD, val }) // { type ~~~~~~ }가 Action.
 }
-
 ```
 
-`Action` : ` { type : ADD, val }`
+`export const ADD = 'ADD';`는 Reducer에서 사용하기 위함이다. 이와같이 따로 export를 해두고 정의를 해주는 이유는 유지보수를 편하게 하기 위함이다.
 
-`type` : 수행하고자 하는 변수명 ,
-
-`val` : 실제 데이터 명, 값
-
-`Dispatch` : `return ({ type : ADD, val })`
+예를들어 `ADD` 가 변경될 경우 모든 곳에서 변경한다면 정말로 불편할 것이다. 따라서 action에서 정의만 바꿔주면 쉽게 유지보수할 수 있다.
 
 <br/>
 
-#### reducers 정의
+#### reducers 설정
 
-src/reducers/counter.js
+> 은행으로 가정했을 경우 Actions(입금 명세표)를 받아 일을 처리할 은행직원인 Reducers를 작성한다.
 
-위에 정의한 actions를 import하고 초기 상태를 정의해준다.
+<br/>
+
+##### 카운터 리듀서 설정하기
+
+###### src/reducers/counter.js
+
+본격적으로 액션을 받아 데이터를 처리하는 카운팅 리듀서를 설정한다.
 
 ```jsx
-import { ADD } from '../actions'
+import { ADD } from '../actions' // 액션을 받아옴.
 
 const INITIAL_STATE = {
-  count: 0 
+  count: 0, // 초기값
 }
 
-```
-
-<br/>
-
-`reducer`를 정의한다.
-
-```jsx
 export default function counter(state = INITIAL_STATE, action) {
   switch(action.type) {
     case ADD :
       return {
         ...state,
         count: state.count + action.val
-      }
+      } 
     default:
       return state;
   }
 }
+```
+
+특정 컴포넌트에서 `dispatch` 를 보내 받을 카운터 리듀서를 설정한다.
+
+<br/>
+
+##### reducers 합치기
+
+###### src/reducers/index.js
+
+Reducers를 통합적으로 사용하기 위해 하나의 리듀서로 묶어서 사용한다. 즉, 통합된 리듀서들을 export해주기 위함이다.
+
+Reducers마다 불러내는 것을 방지하기 위해서 사용한다.
+
+```jsx
+import { combineReducers } from 'redux'
+
+import counter from './counter'
+// import video from './video'
+
+// 리듀서가 통합된다.
+export default combineReducers({
+  counter, // 리듀서명
+})
+```
+
+`combineReducers`은 redux에서 제공된다. 
+
+리듀서들을 모아 하나의 리듀서로 통합시킨다.
+
+<br/>
+
+#### App.js 설정
+
+```jsx
+import React from 'react';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducers from './reducers';
+
+import Counter from './Counter';
+
+function App() {
+  return (
+    <Provider store={createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())}>
+      <Counter />
+    </Provider>
+  );
+}
+
+export default App;
+```
+
+우선 Redux를 사용하기 앞서 Redux를 사용하기 위해 명시를 해주어야 한다. 
+
+`import { Provider } from 'react-redux';`
+`import { createStore } from 'redux';`
+
+`Provider`는 하위 컴포넌트에게 Redux의 단일 저장소 store와 dispatch를 사용할 수 있게 해주는 `react-redux`라이브러리의 모듈이다. 
+
+그리고 `redux`에서 제공하는 `createStore`함수를 통해 단일 저장소(Store)를 만들고 Store에 접근하기 위한 리듀서를 명시해준다. (은행으로 치면 통장개설)
+
+```javascript
+ createStore(
+   리듀서명, 
+   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+ )
+```
+
+2번째 인자는 크롬 개발자도구의 Redux Dev Tools를 사용하기 위해 반드시 넣어줘야 한다.
+
+리듀서 명은 위에서 설정한 합쳐놓은 리듀서를 `import`하면 된다. ( 다른 리듀서를 해도 되지만, 유지보수가 힘듬 )
+
+통합된 리듀서는 다음과 같이 `import`한다.
+
+`import reducers from './reducers';`
+
+reducers는 폴더명 이므로 자동으로 index.js를 가지고 온다.
+
+마지막으로 실제로 구현할 `Counter.js`를 `import`하고 `<Provider>`태그 사이에 넣는다.
+
+<br/>
+
+#### Counter.js 컴포넌트 구현
+
+```jsx
+import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators} from 'redux';
+
+import { add } from './actions'
+
+const Counter = (props) => {
+
+  return (
+    <div>
+      {/* <button onClick={() => props.dispatch.add(1)}> + </button> */}
+      {/* 위와 같이 적을 필요가 없다. 밑에서 함수로 props에게 전달해주었기 때문 */}
+      <button onClick={() => props.add(1)}> + </button>
+      { props.count }
+      <button onClick={() => props.add(-1)}> - </button>
+    </div>
+  );
+}
+
+// 리덕스에 접근하기 위해서 사용한다.
+// 리덕스 안에 있는 데이터를 Props로 맵핑해주는 함수.
+// state는 Provider가 내려줌.
+function mapStateToProps(state) {
+  return {
+    // state.리듀서명.해당변수
+    // state : 리덕스의 state , counter : 리듀서(은행직원 이름), count : 변수
+    count : state.counter.count
+    // 여기서 선언한 count는 위에 있는 props.count와 동일해야한다.
+    // 즉, countaa = state.counter.count = props.countaa
+  }
+}
+
+// dispatch는 Provider가 내려줌.
+// 리덕스의 dispatch는 원래 액션이 리듀서에게
+// 전달하기 위해 store.dispatch({type: ~~~~})라고 적어야하는데
+// 이 과정이 불편하기 때문에
+// 리액트에서 편리하게 디스패치를 실행하는것처럼 보여주는 함수.
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ // bindActionCreators : 액션크리에이터를 여기에 나열해준다.
+    // ++ actions의 add함수가 여기에 바인딩 되어야한다.
+    add
+  }, dispatch)
+}
+
+// 순서중요 connect(mapStateToProps, mapDispatchToProps)(상태 전달 컴포넌트)
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);
+```
+
+리액트의 컴포넌트는 기본적으로 하위 컴포넌트들에게 `props` 외에는 다른 것을 전달해줄 수 없다.
+
+따라서, 특정 방법을 이용해 상위 컴포넌트로부터 props 외의 데이터를 받아먄한다. 
+
+`App.js`에서 설정했던 `<Provider>`는 하위 컴포넌트에게 `dispatch` 와 `state(단일 - 복합리듀서)`를 전달 해준다.
+
+2개의 데이터를 전달 받아 사용하려면 아래처럼 2개의 함수를 정의하도록 하자. (커스텀이지만 기본적으로 이렇게 쓰인다.)
+
+<br/>
+
+##### function mapStateToProps(state)
+
+→ Provider, Redux의 스토어에 저장되어있는 상태들, 프로퍼티를 컴포넌트의 props로 전달해주기 위한 함수.
+
+```jsx
+function mapStateToProps(state) {
+  return {
+    // state.리듀서명.해당변수
+    // state : 리덕스의 state , counter : 리듀서(은행직원 이름), count : 변수
+    count : state.counter.count
+    // 여기서 선언한 count는 위에 있는 props.count와 동일해야한다.
+    // 즉, countaa 는 state.counter.count = props.countaa
+  }
+}
+```
+
+<br/>
+
+##### function mapDispatchToProps(dispatch)
+
+→ Provider, Redux에서 사용되는 Action(상태를 변화시키기 위한 명세-함수)를 컴포넌트의 props로 전달해주기 위한 함수
+
+→ 리액트에서 편리하게 `dispatch` 할 수 있도록 지원해주는 함수다. (원래는 store.dispatch~~)
+
+→ `bindActionCreators({ 액션크레이어터명 }, dispatch)` 해당 액션크리에이터를 dispatch를 통해 리듀서에게 넘겨준다.
+
+```jsx
+// 리덕스의 dispatch는 원래 액션이 리듀서에게 전달하기 위해 store.dispatch({type: ~~~~})라고 적어야하는데 이 과정이 불편하기 때문에 리액트에서 편리하게 디스패치를 실행하는것처럼 보여주는 함수.
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ // bindActionCreators : 액션 크리에이터를 여기에 나열해준다.
+    // ++ actions의 add함수가 여기에 바인딩 되어야한다.
+    add
+  }, dispatch)
+} // dispatch는 Provider가 내려주었다.
 
 ```
 
 <br/>
 
+##### connect(mapStateToProps, mapDispatchToProps)(Counter)
+
+위 2개의 함수 를 `connect()`에 인자로 차례대로 정의하면 props에 `state` 와 `dispatch`로 내린 함수(`add`)를 가질수 있게 된다. 즉, `connect`함수 최초 실행 시 두 인자를 통해 리턴된 결과물로 Counter를 실행시켜 최종값을 리턴한다.
+
+````javascript
+// 순서중요 connect(mapStateToProps, mapDispatchToProps)(상태 전달 컴포넌트)
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);
+
+````
+
+위와 같이 작성이 완료되고 `npm start` 를 해보면 작동이 될 것이다.
+
+<br/>
+
+###### HOC
+
+위 `connect()` 함수가 어색하게 느껴질 수 있다.
+
+이는 HOC에 대한 이해가 필요하다.
+
+이러한 느낌이다.
+
+```javascript
+// HOC
+const getDiscount = rate => price => (1 - rate) * price;
+getDiscount(0.1)(1000);
+
+const getDistcount = function (rate) {
+  return function (price) {
+    return (1 - rate) * price
+  }
+}
+// 첫 리턴은 rate를 받아 price => (1 - 0.1) * price을 실행한다.
+// 2번째 리턴에서 price에 1000 이므로 리턴되는 값은 (1 - 0.1) * 1000
+
+```
+
+<br/>
+
+#### 정리 
+
+`<Provider store='store={createStore(reducers)'>`하는 역할 
+
+- Redux의 단일 저장소(store)를 정의한다. (은행 통장을 개설한다.)
+- 하위 컴포넌트에게 `dispatch` , `state`(reducers에서 combineReducers로 합쳐진 단일 state)를 뿌려준다.
