@@ -415,6 +415,8 @@ Today I Leaned...
 >[20191217-폰켓몬](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_57.md)
 >
 >[20191218-짝수와 홀수 / 평균 구하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_58.md)
+>
+>[20191219-탑](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_59.md)
 
 <br/>
 
