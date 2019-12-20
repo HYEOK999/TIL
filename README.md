@@ -419,6 +419,8 @@ Today I Leaned...
 >[20191218-짝수와 홀수 / 평균 구하기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_58.md)
 >
 >[20191219-탑](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_59.md)
+>
+>[20191220-하샤드 수](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_60.md)
 
 <br/>
 
