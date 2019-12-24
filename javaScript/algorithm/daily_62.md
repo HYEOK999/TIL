@@ -2,39 +2,52 @@
 
 ------
 
-### 핸드폰 번호 가리기
+### 최대공약수와 최소공배수
 
 ###### 문제 설명
 
-프로그래머스 모바일은 개인정보 보호를 위해 고지서를 보낼 때 고객들의 전화번호의 일부를 가립니다.
-전화번호가 문자열 phone_number로 주어졌을 때, 전화번호의 뒷 4자리를 제외한 나머지 숫자를 전부 `*`으로 가린 문자열을 리턴하는 함수, solution을 완성해주세요.
+두 수를 입력받아 두 수의 최대공약수와 최소공배수를 반환하는 함수, solution을 완성해 보세요. 배열의 맨 앞에 최대공약수, 그다음 최소공배수를 넣어 반환하면 됩니다. 예를 들어 두 수 3, 12의 최대공약수는 3, 최소공배수는 12이므로 solution(3, 12)는 [3, 12]를 반환해야 합니다.
 
-##### 제한 조건
+##### 제한 사항
 
-- s는 길이 4 이상, 20이하인 문자열입니다.
+- 두 수는 1이상 1000000이하의 자연수입니다.
 
 ##### 입출력 예
 
-| phone_number | return      |
-| ------------ | ----------- |
-| 01033334444  | *******4444 |
-| 027778888    | *****8888   |
+| n    | m    | return  |
+| ---- | ---- | ------- |
+| 3    | 12   | [3, 12] |
+| 2    | 5    | [1, 10] |
 
--------
+##### 입출력 예 설명
 
-```javascript
-function solution(phone_number) {
- let answer = '';
-  for (let i = 0; i < phone_number.length - 4; i++) {
-    answer += '*';
+입출력 예 #1
+위의 설명과 같습니다.
+
+입출력 예 #2
+자연수 2와 5의 최대공약수는 1, 최소공배수는 10이므로 [1, 10]을 리턴해야 합니다.
+
+------------
+
+```` javascript
+function GCD(a, b) {
+  while (b != 0) {
+    const r = a % b;
+    a = b;
+    b = r;
   }
+  return a;
+}
 
-  for (let i = phone_number.length - 4; i < phone_number.length; i++) {
-    answer += phone_number[i];
-  }
+function LCM(a, b) {
+  return (a * b) / GCD(a, b);
+} // 두수를 곱하고 최대공약수를 빼준다.
 
-  console.log(answer);
+function solution(n, m) {
+  const answer = [GCD(n, m), LCM(n, m)];
   return answer;
 }
-```
+
+console.log(solution(12, 3));
+````
 
