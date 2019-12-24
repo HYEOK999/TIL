@@ -4,25 +4,16 @@
 
 ## React Official Document 
 
-### 주요개념 : 이벤트 처리하기
+### 주요개념 : 조건부 렌더링
 
-- React 이벤트 문법
-
-  - [기본동작 방지 ( preventDefault )](#a3)
-
-- 이벤트 리스너 
-
-  - [예제 : Toggle 컴포넌트 만들기](#a1)
-
-- React this
-
-  - constructor 내부에서 this 바인딩
-  - public class field 문법
-  - 콜백에 화살표 함수 사용
-
-  - [constructor 내부에서 this 바인딩 편리하게 사용하기](#a2)
-
-- 이벤트 핸들러에 인자 전달하기
+- 조건 연산자 이용
+- 엘리먼트(요소)를 변수에 저장하기
+- 인라인으로 IF를 표현하기
+- [논리 && 연산자로 if를 인라인으로 표현하기](#a1)
+  - [삼항 연산자로 If-Else구문 인라인으로 표현하기](#a2)
+- 컴포넌트 렌더링 막기
+- [setState 일괄처리](#a3)
+  - [setState 일괄처리 해결](#a4)
 
 <br/>
 
@@ -32,236 +23,314 @@
 
 ## 주요개념
 
-## #5. 이벤트 처리하기
+## #6. 조건부 렌더링
 
- React 앨리먼트에서 이벤트를 처리하는 방식은 DOM 엘리먼트에서 이벤트를 처리하는 방식과 유사하다.
+React에서는 원하는 동작을 캡슐화하는 컴포넌트를 만들 수 있다. 
 
-몇 가지 문법차이를 설명한다.
+이렇게 하면 애플리케이션의 상태에 따라서 컴포넌트 중 몇 개만을 렌더링 할 수 있다.
 
 <br/>
 
-### React 이벤트 문법
+### 조건 연산자 이용
 
-- React의 이벤트는 소문자 대신 대문자로 시작하는 카멜 케이스(camelCase)를 이용한다. (이벤트-카멜, 컴포넌트명-파스칼)
-- JSX를 사용하여 문자열이 아닌 함수로 이벤트 핸들러를 전달한다.
+`if` 나 `삼항연산자`를 이용해서 현재 상태를 나타내는 엘리먼트를 만드는 데에 사용할 수 있다. 
+
+예제) 아래 두 컴포넌트가 있다고 가정한다.
 
 ```jsx
-// JavaScript
-<button onclick="activateLasers()">
-  Activate Lasers
-</button>
+function UserGreeting(props) {
+  return <h1>Welcome back!</h1>;
+}
 
-// React
-<button onClick={activateLasers}>
-  Activate Lasers
-</button>
+function GuestGreeting(props) {
+  return <h1>Please sign up.</h1>;
+}
 ```
 
-<br/>
-
-#### 기본동작 방지 ( preventDefault ) <a id="a3"></a>
-
-React에서는 `false`를 반환해도 기본 동작을 방지할 수 없다. 
-
-반드시 `preventDefault`를 명시적으로 호출해야 한다. 
+사용자의 로그인 상태에 맞게 위 두 컴포넌트 중 하나만 보여주도록 하는 `Greering 컴포넌트`를 생성 해보자.
 
 ```jsx
-// 일반 HTML에서는 새 페이지를 여는 링크의 기본 동작을 방지하기 위해 다음과 같은 코드를 작성한다.
-<a href="#" onclick="console.log('The link was clicked.'); return false">
-  Click me
-</a>
+function Greeting(props) {
+  const isLoggedIn = props.isLoggedIn;
+  if (isLoggedIn) {
+    return <UserGreeting />;
+  }
+  return <GuestGreeting />;
+}
 
-// React에서는 다음과 같이 작성
-function ActionLink() {
-  function handleClick(e) {
-    e.preventDefault();
-    console.log('The link was clicked.');
+ReactDOM.render(
+  // Try changing to isLoggedIn={true}:
+  <Greeting isLoggedIn={false} />,
+  document.getElementById('root')
+);
+
+```
+
+
+ `isLoggedIn`의 값 에 따라서 다른 인사말을 렌더링 한다.
+
+<br/>
+
+### 엘리먼트(요소)를 변수에 저장하기
+
+엘리먼트를 저장하기 위해 변수를 사용할 수 있다. 
+
+즉, 엘리먼트도 하나의 값으로 표현할수 있는 표현식이다.
+
+출력의 다른 부분은 변하지 않은 채로 컴포넌트의 일부를 조건부로 렌더링 할 수 있다.
+
+로그인 과 로그아웃 버튼을 나타내는 두 컴포넌트가 있다고 가정해 보자.
+
+```jsx
+function LoginButton(props) {
+  return (
+    <button onClick={props.onClick}>
+      Login
+    </button>
+  );
+}
+
+function LogoutButton(props) {
+  return (
+    <button onClick={props.onClick}>
+      Logout
+    </button>
+  );
+}
+```
+
+```jsx
+class LoginControl extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
+    this.state = {isLoggedIn: false};
   }
 
+  handleLoginClick() {
+    this.setState({isLoggedIn: true});
+  }
+
+  handleLogoutClick() {
+    this.setState({isLoggedIn: false});
+  }
+
+  render() {
+    const isLoggedIn = this.state.isLoggedIn;
+    let button;
+
+    if (isLoggedIn) {
+      button = <LogoutButton onClick={this.handleLogoutClick} />;
+    } else {
+      button = <LoginButton onClick={this.handleLoginClick} />;
+    }
+
+    return (
+      <div>
+        <Greeting isLoggedIn={isLoggedIn} />
+        {button}
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <LoginControl />,
+  document.getElementById('root')
+);
+```
+
+​    `this.state.isLoggedIn`에 따라서 각 버튼을 보여주고 로그인 상태일 때는 로그아웃 버튼과 Greeting을 로그아웃 상태일때는 로그인 버튼과 Greeting을 보여주고 있다.
+
+<br/>
+
+### 인라인으로 IF를 표현하기
+
+변수를 선언하고 `if`를 사용해서 조건부로 렌더링 하는 것은 좋은 방법이지만 더 짧은 구문을 사용하고 싶을 때가 있을 수 있다. 
+
+여러 조건을 JSX 안에서 인라인(inline)으로 처리할 방법 몇 가지를 알아 보자.
+
+<br/>
+
+#### 논리 && 연산자로 if를 인라인으로 표현하기 <a id="a1"></a>
+
+JSX 안에는 중괄호를 이용해서 표현식을 포함 할 수 있다. 
+
+그 안에 JavaScript의 논리 연산자 `&&`를 사용하면 쉽게 엘리먼트를 조건으로 사용 할 수 있다.
+
+```jsx
+function Mailbox(props) {
+  const unreadMessages = props.unreadMessages;
   return (
-    <a href="#" onClick={handleClick}>
-      Click me
-    </a>
+    <div>
+      <h1>Hello!</h1>
+      {unreadMessages.length > 0 &&
+        <h2>
+          You have {unreadMessages.length} unread messages.
+        </h2>
+      }
+    </div>
+  );
+}
+
+const messages = ['React', 'Re: React', 'Re:Re: React'];
+ReactDOM.render(
+  <Mailbox unreadMessages={messages} />,
+  document.getElementById('root')
+);
+```
+
+위 예제는 `unreadMessages.length`가 0 이상 일 때, `<h2>You have {unreadMessages.length} unread messages.</h2>`를 보여주는 예제이다. (단축평가)
+
+<br/>
+
+#### 삼항 연산자로 If-Else구문 인라인으로 표현하기 <a id="a2"></a>
+
+엘리먼트를 조건부로 렌더링하는 다른 방법은 삼항 연산자인 `condition ? true: false`를 사용하는 것 이다.
+
+```jsx
+render() {
+  const isLoggedIn = this.state.isLoggedIn;
+  return (
+    <div>
+      The user is <b>{isLoggedIn ? 'currently' : 'not'}</b> logged in.
+    </div>
   );
 }
 ```
 
 <br/>
 
-### 이벤트 리스너 
-
-> React를 사용할 때 DOM 엘리먼트가 생성된 후 리스너를 추가하기 위해 `addEventListener`를 호출할 필요가 없다. 
->
-> 단, 엘리먼트가 처음 렌더링될 때 리스너를 제공하면 된다.
-
-ES6 클래스를 사용하여 컴포넌트를 정의할 때, 일반적인 패턴은 이벤트 핸들러를 클래스의 메서드로 만드는 것이다. 
-
-예를 들어, 다음 `Toggle 예제` 컴포넌트는 사용자가 “ON”과 “OFF” 상태를 토글 할 수 있는 버튼을 렌더링한다.
+```jsx
+render() {
+  const isLoggedIn = this.state.isLoggedIn;
+  return (
+    <div>
+      {isLoggedIn ? (
+        <LogoutButton onClick={this.handleLogoutClick} />
+      ) : (
+        <LoginButton onClick={this.handleLoginClick} />
+      )}
+    </div>
+  );
+}
+```
 
 <br/>
 
-#### 예제 : Toggle 컴포넌트 만들기 <a id="a1"></a>
+이렇게 JSX 내부에 인라인으로 조건들을 이용하여 표현할 수 있다. 
+
+너무 많은 조건으로 가독성이 많이 저하된다면 컴포넌트를 분리하여 해결할 수도 있으니 참고하자.
+
+<br/>
+
+### 컴포넌트 렌더링 막기
+
+가끔 다른 컴포넌트에 의해 렌더링될 때 컴포넌트 자체를 숨기고 싶을 때가 있을 수 있다. 
+
+이때는 렌더링 결과를 출력하는 대신 `null`을 반환하면 해결할 수 있다.
+
+아래의 예시에서는 `<WarningBanner />`가 `warn` prop의 값에 의해서 렌더링된다. 
+
+prop이 `false`라면 컴포넌트는 렌더링하지 않게 된다.
 
 ```jsx
-class Toggle extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {isToggleOn: true};
-
-    // 콜백에서 `this`가 작동하려면 아래와 같이 바인딩 해주어야 한다.
-    this.handleClick = this.handleClick.bind(this);
+function WarningBanner(props) {
+  if (!props.warn) {
+    return null;
   }
 
-  handleClick() {
+  return (
+    <div className="warning">
+      Warning!
+    </div>
+  );
+}
+
+// 상위 컴포넌트
+class Page extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {showWarning: true};
+    this.handleToggleClick = this.handleToggleClick.bind(this);
+  }
+
+  handleToggleClick() {
     this.setState(state => ({
-      isToggleOn: !state.isToggleOn
+      showWarning: !state.showWarning
     }));
   }
 
   render() {
     return (
-      <button onClick={this.handleClick}>
-        {this.state.isToggleOn ? 'ON' : 'OFF'}
-      </button>
+      <div>
+        <WarningBanner warn={this.state.showWarning} />
+        <button onClick={this.handleToggleClick}>
+          {this.state.showWarning ? 'Hide' : 'Show'}
+        </button>
+      </div>
     );
   }
 }
 
 ReactDOM.render(
-  <Toggle />,
+  <Page />,
   document.getElementById('root')
 );
 ```
 
-<br/>
+컴포넌트의 `render` 메서드로부터 `null`을 반환하는 것은 생명주기 메서드 호출에 영향을 주지 않는다. 
 
-### React this
-
-**JSX 내부의 this는 JavaScript에서 클래스 머세더처럼 기본 바인딩이 되어 있지 않다.**
-
-따라서 이벤트 전달을 위해서는 this를 반드시 바인딩 해주어야만 한다.
-
-위 토글 예제에서는 `this.handleClick`을 바인딩하지 않고 `onClick`을 사용한다면 undefinde를 표시한다.
+그 예로 `componentDidUpdate`는 계속해서 호출되게 된다.
 
 <br/>
 
-undefined 를 피하는 방법은 대표적으로 3가지가 존재한다.
+### setState 일괄처리 <a id="a3"></a>
 
-- #### constructor 내부에서 this 바인딩
+> `setState` 는 비동기로 state를 업데이트 한다.
+>
+> `setState(updater, [callback])`
 
-~~~jsx
-constructor(props) {
-  super(props);
- 
-  // 콜백에서 `this`가 작동하려면 아래와 같이 바인딩 해주어야 한다.
-  this.handleClick = this.handleClick.bind(this);
+`setState`메소드는 즉시 실행되는 (동기적으로 실행되는) 것이 아니므로 `setState`를 통해 상태를 변경하더라도 해당 메소드가 실행된 직후에 변경된 상태가 적용되는 것이 아니다.
+
+`setState`를 호출한 직후에 `this.state`에 접근하는 것은 올바른 방법이 아니며 그렇게 접근 시 잘못된 상태를 만들 수도 있다.
+
+아래 예제를 보자.
+
+```javascript
+state = {
+   count: 0
 }
-~~~
+updateCount = () => {
+    this.setState({ count: this.state.count + 1});
+    this.setState({ count: this.state.count + 1});
+    this.setState({ count: this.state.count + 1});
+    this.setState({ count: this.state.count + 1});
+}
 
-- #### public class field 문법
+```
 
-~~~jsx
-class LoggingButton extends React.Component {
-  // 이 문법은 `this`가 handleClick 내에서 바인딩되도록 한다.
-  // 주의: 이 문법은 *실험적인* 문법.
-  handleClick = () => {
-    console.log('this is:', this);
-  }
-~~~
+위 예제에서 최종 `count`의 값은 '4'라고 생각할 수 있지만, **여러 setState가 동일한 상태를 업데이트 하는 경우 setState에 대한 마지막 호출은 일괄 처리 중 이전 값을 무시하므로 `count`는 '1'이 된다.**
 
-- #### 콜백에 화살표 함수 사용
+<br/>
+
+#### setState 일괄처리 해결 <a id="a4"></a>
+
+만약 이전의 상태에 더해서 상태를 변경해야 한다면 가장 좋은 방법 중 하나는 `updater` 함수를 사용하는 것 이다.
+
+ `updater`함수를 `setState` 메소드의 첫번째 인자로 넘기는 방식으로 사용할 수 있다.
+
+`setState(updater, [callback])`
 
 ```jsx
-class LoggingButton extends React.Component {
-  handleClick() {
-    console.log('this is:', this);
-  }
-
-  render() {
-    // 이 문법은 `this`가 handleClick 내에서 바인딩되도록 한다.
-    return (
-      <button onClick={(e) => this.handleClick(e)}>
-        Click me
-      </button>
-    );
-  }
-}
-```
-
-<br/>
-
-3가지다 전부 작동되는 문법이다. 
-
-3번째 문법( 콜백에 화살표 함수 사용 )의 경우에는 `LoggingButton`이 렌더링될 떄마다 다른 콜백이 생성된다는 것인데, 보통의 경우 문제가 없으나 콜백이 하위 컴포넌트에 props로 전달된다면 그 컴포넌트들은 추가로 다시 렌더링을 수행할 수도 있다. 
-
-이러한 문제를 피하고 싶다면 1번째(constructor 내부에서 this 바인딩) 와 2번째 (public class field 문법) 를 주로 이용한다.
-
-<br/>
-
-#### constructor 내부에서 this 바인딩 편리하게 사용하기 <a id="a2"></a>
-
-```jsx
-constructor(props) {
-  super(props)
-  Object.getOwnPropertyNames(App.prototype).forEach(key => this[key] = this[key].bind(this))
-}
-```
-
-` Object.getOwnPropertyNames(App.prototype).forEach(key => this[key] = this[key].bind(this))`
-
-`Object.getOwnPropetyNames(App.prototype)`은 App.prototype에 존재하는 모든 프로퍼티 명(key)을 모아서 하나의 배열을 반환한다.
-
-```javascript
-var a = {
-	a : 1,
-	b : 2,
-	c : 3,
-	d : 4
-}
-Object.getOwnPropertyNames(a); // ['a','b','c','d']
-```
-
-그 후 해당 배열을 `forEach 고차함수`를 사용해 순회를 돌리고 각각의 키를 각각 바인드 시킨다.
-
-위 코드를 통해서 명시적으로 다음처럼 하나하나 이벤트 바인딩을 하지 않아도 된다. 
-
-```javascript
-// 개별적인 constructor 바인딩
-constructor(props) {
-	super(props)
-  this.add = this.add.bind(this)
-  this.minus = this.minus.bind(this)
-  this.click = this.click.bind(this)
-  this.gogo = this.gogo.bind(this)
+updateCount = () => {
+    this.setState(prevstate => ({ count: prevstate.count + 1}));
+    this.setState(prevstate => ({ count: prevstate.count + 1}));
+    this.setState(prevstate => ({ count: prevstate.count + 1}));
+    this.setState(prevstate => ({ count: prevstate.count + 1}));
 }
 
 ```
 
-```javascript
-// 위처럼 바인딩을 하나하나 해주지 않아도 된다.
-constructor(props) {
-	super(props)
-  Object.getOwnPropertyNames(App.prototype).forEach(key => this[key] = this[key].bind(this))
-}
-
-```
-
-<br/>
-
-### 이벤트 핸들러에 인자 전달하기
-
-> 루프 내부에서는 이벤트 핸들러에 추가적인 매개변수를 전달하는 것이 일반적이다.
-
-예를들면 `id`가 행의 ID일 경우 다음 코드가 모두 작동된다.
-
-```
-<button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
-<button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
-
-```
-
-두 경우 모두 React 이벤트를 나타내는 `e` 인자가 ID 뒤에 두 번째 인자로 전달된다. 
-
-**화살표 함수를 사용하면 명시적으로 인자를 전달해야 하지만 `bind`를 사용할 경우 추가 인자가 자동으로 전달된다.**
-
-<br/>
+여기서 `[callback]`은 옵션 인자로서 `setState`의 실행이 완료된 후 실행되며 해당 `callback`이 실행된 후에 해당 컴포넌트의 재 렌더링이 이루어진다.
