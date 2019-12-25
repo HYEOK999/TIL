@@ -4,16 +4,16 @@
 
 ## React Official Document 
 
-### 주요개념 : 조건부 렌더링
+### 주요개념 : 리스트와 Key
 
-- 조건 연산자 이용
-- 엘리먼트(요소)를 변수에 저장하기
-- 인라인으로 IF를 표현하기
-- [논리 && 연산자로 if를 인라인으로 표현하기](#a1)
-  - [삼항 연산자로 If-Else구문 인라인으로 표현하기](#a2)
-- 컴포넌트 렌더링 막기
-- [setState 일괄처리](#a3)
-  - [setState 일괄처리 해결](#a4)
+- 자바스크립트에서 리스트 변환
+- 리액트에서 여러개의 컴포넌트 렌더링 하기
+- 기본 리스트 컴포넌트
+- Key
+- Key로 컴포넌트 추출하기
+  - Key는 주변 배열의 context에서만 의미를 지니고 있다.
+  - Key는 형제 사이에서만 고유한 값을 지녀야 한다.
+  - React에서 Key는 컴포넌트로 전달되지는 않는다.
 
 <br/>
 
@@ -23,314 +23,231 @@
 
 ## 주요개념
 
-## #6. 조건부 렌더링
+## #7. 리스트와 Key
 
-React에서는 원하는 동작을 캡슐화하는 컴포넌트를 만들 수 있다. 
+### 자바스크립트에서 리스트 변환
 
-이렇게 하면 애플리케이션의 상태에 따라서 컴포넌트 중 몇 개만을 렌더링 할 수 있다.
+아래는 map()함수를 이용하여 numbers 배열의 값을 두배로 만든 후 map()에서 반환하는 새 배열을 doubled 변수에 할당하고 로그를 확인하는 코드다.
+
+```jsx
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map((number) => number * 2);
+console.log(doubled);
+```
+
+이 코드는 콘솔에 [2, 4, 6, 8, 10] 을 출력한다.
+
+React에서 배열을 요소(앨리먼트) 리스트로 만드는 방식은 위 방식과 거의 동일하다.
 
 <br/>
 
-### 조건 연산자 이용
+### 리액트에서 여러개의 컴포넌트 렌더링 하기
 
-`if` 나 `삼항연산자`를 이용해서 현재 상태를 나타내는 엘리먼트를 만드는 데에 사용할 수 있다. 
+리액트는 요소들을 집합을 만들고 중괄호`{}`를 이용하여 JSX에 포함시킬 수 있다.
 
-예제) 아래 두 컴포넌트가 있다고 가정한다.
-
-```jsx
-function UserGreeting(props) {
-  return <h1>Welcome back!</h1>;
-}
-
-function GuestGreeting(props) {
-  return <h1>Please sign up.</h1>;
-}
-```
-
-사용자의 로그인 상태에 맞게 위 두 컴포넌트 중 하나만 보여주도록 하는 `Greering 컴포넌트`를 생성 해보자.
+예) JS의 `map()` 함수를 이용해 numbers 배열을 반복 실행한다.
 
 ```jsx
-function Greeting(props) {
-  const isLoggedIn = props.isLoggedIn;
-  if (isLoggedIn) {
-    return <UserGreeting />;
-  }
-  return <GuestGreeting />;
-}
-
-ReactDOM.render(
-  // Try changing to isLoggedIn={true}:
-  <Greeting isLoggedIn={false} />,
-  document.getElementById('root')
+const numbers = [1, 2, 3, 4, 5];
+const listItems = numbers.map((number) =>
+  <li>{number}</li>
 );
-
 ```
 
+각 항목에 대해서 `<li>` 요소들을 반환하고 배열의 결과를 새로운 변수에 저장한다.
 
- `isLoggedIn`의 값 에 따라서 다른 인사말을 렌더링 한다.
+`listItems` 배열을 `<ul>`엘리먼트 안에 포함하고 DOM에 렌더링 한다.
+
+```jsx
+ReactDOM.render(
+	<ul>{listItems}</ul>,
+	document.getElementById('root')
+);
+```
+
+`<li>1</li>` ~ `<li>5</li>` 의 요소가 `<ul>` 태그안에 들어가 있다.
 
 <br/>
 
-### 엘리먼트(요소)를 변수에 저장하기
+### 기본 리스트 컴포넌트
 
-엘리먼트를 저장하기 위해 변수를 사용할 수 있다. 
+일반적으로는 컴포넌트 내에서 리스트를 렌더링한다.
 
-즉, 엘리먼트도 하나의 값으로 표현할수 있는 표현식이다.
-
-출력의 다른 부분은 변하지 않은 채로 컴포넌트의 일부를 조건부로 렌더링 할 수 있다.
-
-로그인 과 로그아웃 버튼을 나타내는 두 컴포넌트가 있다고 가정해 보자.
+다음과 같이 배열자체를 할당 받고 리스트 전체를  렌더링한 값을 반환하는 컴퍼넌트를 작성할 수도 있다.
 
 ```jsx
-function LoginButton(props) {
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((number) =>
+    <li>{number}</li>
+  );
   return (
-    <button onClick={props.onClick}>
-      Login
-    </button>
+    <ul>{listItems}</ul>
   );
 }
 
-function LogoutButton(props) {
-  return (
-    <button onClick={props.onClick}>
-      Logout
-    </button>
-  );
-}
-```
-
-```jsx
-class LoginControl extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleLoginClick = this.handleLoginClick.bind(this);
-    this.handleLogoutClick = this.handleLogoutClick.bind(this);
-    this.state = {isLoggedIn: false};
-  }
-
-  handleLoginClick() {
-    this.setState({isLoggedIn: true});
-  }
-
-  handleLogoutClick() {
-    this.setState({isLoggedIn: false});
-  }
-
-  render() {
-    const isLoggedIn = this.state.isLoggedIn;
-    let button;
-
-    if (isLoggedIn) {
-      button = <LogoutButton onClick={this.handleLogoutClick} />;
-    } else {
-      button = <LoginButton onClick={this.handleLoginClick} />;
-    }
-
-    return (
-      <div>
-        <Greeting isLoggedIn={isLoggedIn} />
-        {button}
-      </div>
-    );
-  }
-}
-
+const numbers = [1, 2, 3, 4, 5];
 ReactDOM.render(
-  <LoginControl />,
+  <NumberList numbers={numbers} />,
   document.getElementById('root')
 );
 ```
 
-​    `this.state.isLoggedIn`에 따라서 각 버튼을 보여주고 로그인 상태일 때는 로그아웃 버튼과 Greeting을 로그아웃 상태일때는 로그인 버튼과 Greeting을 보여주고 있다.
+문제는 위와 같은 코드를 실행 시 리액트에서 **Key에 대한 경고를 표시한다.**
 
-<br/>
+`key`는 앨리먼트 리스트를 만들 때 포함시켜야 하는 특수한 문자열 속성이다.
 
-### 인라인으로 IF를 표현하기
-
-변수를 선언하고 `if`를 사용해서 조건부로 렌더링 하는 것은 좋은 방법이지만 더 짧은 구문을 사용하고 싶을 때가 있을 수 있다. 
-
-여러 조건을 JSX 안에서 인라인(inline)으로 처리할 방법 몇 가지를 알아 보자.
-
-<br/>
-
-#### 논리 && 연산자로 if를 인라인으로 표현하기 <a id="a1"></a>
-
-JSX 안에는 중괄호를 이용해서 표현식을 포함 할 수 있다. 
-
-그 안에 JavaScript의 논리 연산자 `&&`를 사용하면 쉽게 엘리먼트를 조건으로 사용 할 수 있다.
+따라서 `numbers.map()`안에서 리스트의 각 항목에 `key`를 할당하여 해당 경고를 해결한다.
 
 ```jsx
-function Mailbox(props) {
-  const unreadMessages = props.unreadMessages;
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((number) =>
+    <li key={number.toString()} /* 이 부분 추가 */> 
+      {number}
+    </li>
+  );
   return (
-    <div>
-      <h1>Hello!</h1>
-      {unreadMessages.length > 0 &&
-        <h2>
-          You have {unreadMessages.length} unread messages.
-        </h2>
-      }
-    </div>
+    <ul>{listItems}</ul>
   );
 }
 
-const messages = ['React', 'Re: React', 'Re:Re: React'];
+const numbers = [1, 2, 3, 4, 5];
 ReactDOM.render(
-  <Mailbox unreadMessages={messages} />,
+  <NumberList numbers={numbers} />,
   document.getElementById('root')
 );
 ```
 
-위 예제는 `unreadMessages.length`가 0 이상 일 때, `<h2>You have {unreadMessages.length} unread messages.</h2>`를 보여주는 예제이다. (단축평가)
+<br/>
+
+### Key
+
+키는 React가 어떤 항목을 변경, 추가 또는 삭제할지 식별하는 것을 도와준다.
+
+`Key`는 엘리먼트에 안정적인 고유성을 부여하기 위해 배열 내부의 엘리먼트에 지정해야만 한다.
+
+`Key`는 고유한 문자열이어야 하기 때문에 보통 데이터의 ID를 많이 이용한다.
+
+그런데 만약 렌더링한 항목에 넣어줄 특정 값(ID)등이 떠오르지 않는다면 고차함수의 `index`를 사용할 수 도 있다.
+
+```jsx
+const todoItems = todos.map((todo, index) =>
+  // Only do this if items have no stable IDs
+  <li key={index}>
+    {todo.text}
+  </li>
+);
+```
+
+**여기서 `index`는 가능한 사용하지 말아야 한다.**
+
+항목의 순서가 바뀔 경우 index는 state와 관련 문제를 일으킬 수도 있다.
+
+따라서 이럴 경우, **uuid라는 랜덤 문자열 값을 지정하는 노드 패키지 모듈(NPM)을 이용하도록 한다**.
 
 <br/>
 
-#### 삼항 연산자로 If-Else구문 인라인으로 표현하기 <a id="a2"></a>
+### Key로 컴포넌트 추출하기
 
-엘리먼트를 조건부로 렌더링하는 다른 방법은 삼항 연산자인 `condition ? true: false`를 사용하는 것 이다.
+#### Key는 주변 배열의 context에서만 의미를 지니고 있다.
+
+ `Key`의 설정은 엘리먼트 리스트를 만들때 리스트 자체에게 주는 것이 아닌, 리스트를 불러오는 `map()`함수의 최상위 요소에 넣어주어야한다.
+
+예를들면,
+
+`ListItem` 컴포넌트를 추출한 경우 `ListItem` 안에 있는 `<li>`엘리먼트가 아니라 배열의 `<ListItem/>`엘리먼트가 `key`를 가져야 한다.
 
 ```jsx
-render() {
-  const isLoggedIn = this.state.isLoggedIn;
+function ListItem(props) {
+  // X, 여기에는 key를 지정할 필요가 없다.
+  return <li>{props.value}</li>;
+}
+
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((number) =>
+    // O, map 함수내부 안의 요소에 key를 지정해야 한다.
+    <ListItem key={number.toString()}
+              value={number} />
+  );
   return (
-    <div>
-      The user is <b>{isLoggedIn ? 'currently' : 'not'}</b> logged in.
-    </div>
+    <ul>
+      {listItems}
+    </ul>
   );
 }
+
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('root')
+);
 ```
 
 <br/>
 
+#### Key는 형제 사이에서만 고유한 값을 지녀야 한다.
+
+Key는 배열 안에서 형제 사이에서 고유해야 하고 전체 범위에서 고유할 필요는 없다. 
+
+두 개의 다른 배열을 만들 때 동일한 key를 사용할 수 있다.
+
 ```jsx
-render() {
-  const isLoggedIn = this.state.isLoggedIn;
-  return (
-    <div>
-      {isLoggedIn ? (
-        <LogoutButton onClick={this.handleLogoutClick} />
-      ) : (
-        <LoginButton onClick={this.handleLoginClick} />
+function Blog(props) {
+  const sidebar = (
+    <ul>
+      {props.posts.map((post) =>
+        <li key={post.id} /*같은 키를 쓰고 있다.*/>
+          {post.title}
+        </li>
       )}
+    </ul>
+  );
+  const content = props.posts.map((post) =>
+    <div key={post.id} /*같은 키를 쓰고 있다.*/>
+      <h3>{post.title}</h3>
+      <p>{post.content}</p>
     </div>
   );
-}
-```
-
-<br/>
-
-이렇게 JSX 내부에 인라인으로 조건들을 이용하여 표현할 수 있다. 
-
-너무 많은 조건으로 가독성이 많이 저하된다면 컴포넌트를 분리하여 해결할 수도 있으니 참고하자.
-
-<br/>
-
-### 컴포넌트 렌더링 막기
-
-가끔 다른 컴포넌트에 의해 렌더링될 때 컴포넌트 자체를 숨기고 싶을 때가 있을 수 있다. 
-
-이때는 렌더링 결과를 출력하는 대신 `null`을 반환하면 해결할 수 있다.
-
-아래의 예시에서는 `<WarningBanner />`가 `warn` prop의 값에 의해서 렌더링된다. 
-
-prop이 `false`라면 컴포넌트는 렌더링하지 않게 된다.
-
-```jsx
-function WarningBanner(props) {
-  if (!props.warn) {
-    return null;
-  }
-
   return (
-    <div className="warning">
-      Warning!
+    <div>
+      {sidebar}
+      <hr />
+      {content}
     </div>
   );
 }
 
-// 상위 컴포넌트
-class Page extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {showWarning: true};
-    this.handleToggleClick = this.handleToggleClick.bind(this);
-  }
-
-  handleToggleClick() {
-    this.setState(state => ({
-      showWarning: !state.showWarning
-    }));
-  }
-
-  render() {
-    return (
-      <div>
-        <WarningBanner warn={this.state.showWarning} />
-        <button onClick={this.handleToggleClick}>
-          {this.state.showWarning ? 'Hide' : 'Show'}
-        </button>
-      </div>
-    );
-  }
-}
-
+const posts = [
+  {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
+  {id: 2, title: 'Installation', content: 'You can install React from npm.'}
+];
 ReactDOM.render(
-  <Page />,
+  <Blog posts={posts} />,
   document.getElementById('root')
 );
 ```
 
-컴포넌트의 `render` 메서드로부터 `null`을 반환하는 것은 생명주기 메서드 호출에 영향을 주지 않는다. 
-
-그 예로 `componentDidUpdate`는 계속해서 호출되게 된다.
-
 <br/>
 
-### setState 일괄처리 <a id="a3"></a>
+#### React에서 Key는 컴포넌트로 전달되지는 않는다.
 
-> `setState` 는 비동기로 state를 업데이트 한다.
->
-> `setState(updater, [callback])`
+`Key`는 연속적이 리스트 엘리먼트에 대한 힌트일 뿐이다.
 
-`setState`메소드는 즉시 실행되는 (동기적으로 실행되는) 것이 아니므로 `setState`를 통해 상태를 변경하더라도 해당 메소드가 실행된 직후에 변경된 상태가 적용되는 것이 아니다.
-
-`setState`를 호출한 직후에 `this.state`에 접근하는 것은 올바른 방법이 아니며 그렇게 접근 시 잘못된 상태를 만들 수도 있다.
-
-아래 예제를 보자.
-
-```javascript
-state = {
-   count: 0
-}
-updateCount = () => {
-    this.setState({ count: this.state.count + 1});
-    this.setState({ count: this.state.count + 1});
-    this.setState({ count: this.state.count + 1});
-    this.setState({ count: this.state.count + 1});
-}
-
-```
-
-위 예제에서 최종 `count`의 값은 '4'라고 생각할 수 있지만, **여러 setState가 동일한 상태를 업데이트 하는 경우 setState에 대한 마지막 호출은 일괄 처리 중 이전 값을 무시하므로 `count`는 '1'이 된다.**
-
-<br/>
-
-#### setState 일괄처리 해결 <a id="a4"></a>
-
-만약 이전의 상태에 더해서 상태를 변경해야 한다면 가장 좋은 방법 중 하나는 `updater` 함수를 사용하는 것 이다.
-
- `updater`함수를 `setState` 메소드의 첫번째 인자로 넘기는 방식으로 사용할 수 있다.
-
-`setState(updater, [callback])`
+컴포넌트에서 key와 동일한 값이 필요하면 다른 이름의 prop으로 명시적으로 전달한다.
 
 ```jsx
-updateCount = () => {
-    this.setState(prevstate => ({ count: prevstate.count + 1}));
-    this.setState(prevstate => ({ count: prevstate.count + 1}));
-    this.setState(prevstate => ({ count: prevstate.count + 1}));
-    this.setState(prevstate => ({ count: prevstate.count + 1}));
-}
+const content = posts.map((post) =>
+  <Post
+    key={post.id}
+    id={post.id}
+    title={post.title} />
+);
 
 ```
 
-여기서 `[callback]`은 옵션 인자로서 `setState`의 실행이 완료된 후 실행되며 해당 `callback`이 실행된 후에 해당 컴포넌트의 재 렌더링이 이루어진다.
+Post 컴포넌트에서는 `props.id`는 읽을 수 있지만, `props.key`는 읽을 수 없다.
+
+<br/>
+
