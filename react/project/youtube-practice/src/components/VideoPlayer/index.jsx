@@ -122,17 +122,26 @@ const VideoPlayer = (props) => {
         <br/>
         {/* <input type='text' onKeyPress={handleEnter(props.comment)} /> */}
 
-        <textarea className="comment-text" ref={ref => text = ref}></textarea>
-        <button onClick={() => props.comment(id, text.value)}>확인</button>
+        <textarea placeholder="공개 댓글 추가..." className="comment-text" ref={ref => text = ref}></textarea>
+
+        <div className="submit-box">
+          <button className="cancle">취소</button>
+          <button className="submit" onClick={() => {
+              props.comment(id, text.value)
+              text.value = '';
+            }
+          }>확인</button>
+        </div>
+
         <div>
           {
             props.data[id] &&
             props.data[id].comments &&
             props.data[id].comments.map((comment) =>
-              <h1 key={uuid.v4()}>
+              <div className="content" key={uuid.v4()}>
                 {comment.text}
-                <button onClick={() => props.deleteComment(id, comment.cid)}>삭제</button>
-              </h1>
+                <button className="content-delete"onClick={() => props.deleteComment(id, comment.cid)}>삭제</button>
+              </div>
             )
           }
         </div>
