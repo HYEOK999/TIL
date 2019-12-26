@@ -1,4 +1,4 @@
 .main-content {
-  width: 1600px;
-  margin: 25px auto;
+  width: 1260px;
+  margin: 0 auto; /* auto는 남은영역을 계산해서 잘 나누어줌. */
 }
