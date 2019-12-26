@@ -38,9 +38,14 @@
   align-items: center;
   width: 100px;
   height: 20px;
-  font-size: 22px;
+  font-size: 15px;
+  color: gray;
   border: 0;
   outline: none;
+  cursor: pointer;
+}
+.like {
+  margin-right: 10px;
 }
 
 .video-tags{
@@ -48,4 +53,50 @@
   line-height: 1.5rem;
   font-size: 0.8rem;
   color: #065fd4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.comment-text {
+  display: block;
+  width: 960px;
+  border: 0;
+  border-bottom: .5px solid gray;
+}
+
+.comment-text:focus{
+  outline: none;
+  border-bottom: 1px solid black;
+}
+
+.submit-box{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit, .cancle, .content-delete {
+  border: none;
+  padding : 15px;
+  cursor: pointer;
+}
+
+.cancle{
+  margin-right: 10px;
+}
+
+.submit {
+  border-radius: 3px;
+  background-color: #065fd4;
+  color: #fff
+}
+.content {
+  display: flex;
+  margin: 20px 0;
+  justify-content: space-between;
+}
+
+.content-delete{
+  background-color: gray;
+  color: #fff;
 }
