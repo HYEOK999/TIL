@@ -61,7 +61,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-	line-height: 1;
+  line-height: 1;
 }
 ol, ul {
 	list-style: none;

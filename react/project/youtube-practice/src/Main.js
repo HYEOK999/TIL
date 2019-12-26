@@ -25,7 +25,6 @@ class Main extends React.Component{
     super(props);
     this.state = {
       videoLists : [],
-      query : '',
       nextPageToken : '',
       // selectedVideo : null
     }
@@ -34,7 +33,7 @@ class Main extends React.Component{
       key => (this[key] = this[key].bind(this))
     );
 
-    // this.defaultState = this.state;
+    this.defaultState = this.state;
     // this.getYoutube = this.getYoutube.bind(this);
     // this.setVideoId = this.setVideoId.bind(this);
     // this.setInput = this.setInput.bind(this);
@@ -50,6 +49,7 @@ class Main extends React.Component{
       key : process.env.REACT_APP_YOUTUBE_API_KEY,
       q : query,
       part : 'snippet',
+      maxResults: 10,
       pageToken : nextPageToken
     }
 
@@ -81,7 +81,7 @@ class Main extends React.Component{
     const { props } = this;
     if (props.location) { // 방어코드. lacation이 주입되기까지 기다린다.
       const { search_query } = qs.parse(props.location.search);
-      if(search_query) this.getYoutubeData(search_query);
+      if(search_query) this.getYoutubeData(search_query || '');
     }
   }
 
@@ -120,7 +120,7 @@ class Main extends React.Component{
         </Nav>
         <main className = 'main-content'>
           <InfiniteScroll
-              loadMore = {() => this.getYoutubeData(this.state.query)}
+              loadMore = {() => this.getYoutubeData(this.props.query)}
               hasMore = {!!this.state.nextPageToken}
               loader = {
                 <div key={uuid.v4()}>
