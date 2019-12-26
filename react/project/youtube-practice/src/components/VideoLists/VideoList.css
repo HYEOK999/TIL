@@ -1,5 +1,6 @@
 .video-list {
   margin : 30px 0;
+  line-height: 1.5;
 }
 
 .video-list figure{
@@ -9,7 +10,7 @@
 
 .video-list figcaption{
   width: 800px;
-  height: 300px;
+  height: auto;
 }
 
 .video-list figcaption span{
