@@ -4,16 +4,16 @@
 
 ## React Official Document 
 
-### 주요개념 : 리스트와 Key
+### 주요개념 : 폼
 
-- 자바스크립트에서 리스트 변환
-- [리액트에서 여러개의 컴포넌트 렌더링 하기](#a1)
-- [기본 리스트 컴포넌트](#a2)
-- [Key](#a3)
-- Key로 컴포넌트 추출하기
-  - [Key는 주변 배열의 context에서만 의미를 지니고 있다.](#a4)
-  - [Key는 형제 사이에서만 고유한 값을 지녀야 한다.](#a5)
-  - [React에서 Key는 컴포넌트로 전달되지는 않는다.](#a6)
+- HTML 에서의 Form
+- React에서의 Form
+  - [제어 컴포넌트(Controlled Components)](#a1)
+  - [textarea 태그](#a2)
+  - [select 태그](#a3)
+  - [file input 태그](#a4)
+  - [다중 입력 제어하기](#a5)
+  - [제어되는 Input Null 값](#a6)
 
 <br/>
 
@@ -23,231 +23,269 @@
 
 ## 주요개념
 
-## #7. 리스트와 Key
+## #8. 폼
 
-### 자바스크립트에서 리스트 변환
+### HTML 에서의 Form
 
-아래는 `map()`함수를 이용하여 numbers 배열의 값을 두배로 만든 후 `map()`에서 반환하는 새 배열을 doubled 변수에 할당하고 로그를 확인하는 코드다.
-
-```jsx
-const numbers = [1, 2, 3, 4, 5];
-const doubled = numbers.map((number) => number * 2);
-console.log(doubled);
+```html
+<form>
+  <label>
+    Name:
+    <input type="text" name="name" />
+  </label>
+  <input type="submit" value="Submit" />
+</form>
 ```
 
-이 코드는 콘솔에 [2, 4, 6, 8, 10] 을 출력한다.
+위와 같이 HTML에서의 Form은 타 페이지로 이동을 한다.
 
-React에서 배열을 요소(앨리먼트) 리스트로 만드는 방식은 위 방식과 거의 동일하다.
+React에서도 위와같이 작성을 해도 문제는 없으나, 대부분 JavaScript 함수로 Form의 제출을 처리하고 사용자가 입력한 데이터에 접근하도록 하는 것이 편리하다.
+
+이를 위한 표준 방식 기술을 '제어 컴포넌트(Controlled Components)' 라고 한다.
 
 <br/>
 
-### 리액트에서 여러개의 컴포넌트 렌더링 하기 <a id="a1"></a>
+### React에서의 Form
 
-리액트는 요소들을 집합을 만들고 중괄호`{}`를 이용하여 JSX에 포함시킬 수 있다.
+#### 제어 컴포넌트(Controlled Components) <a id="a1"></a>
 
-예) JS의 `map()` 함수를 이용해 numbers 배열을 반복 실행한다.
+HTML에서 `<input>`, `<textarea>`, `<select>`와 같은 Form 요소는 일반적으로 사용자의 입력을 기반으로 자신의 `state`를 관리하고 업데이트 한다.
 
-```jsx
-const numbers = [1, 2, 3, 4, 5];
-const listItems = numbers.map((number) =>
-  <li>{number}</li>
-);
-```
+React에서는 변경할 수 있는 state가 일반적으로 컴포넌트의 state속성에 유지되며 `setState()` 함수를 통해 업데이트 된다.
 
-각 항목에 대해서 `<li>` 요소들을 반환하고 배열의 결과를 새로운 변수에 저장한다.
+React의 state는 **신뢰 가능한 단일 출처 (single source of truth)**로 만들어 두 요소를 결합할 수 있다. 
 
-`listItems` 배열을 `<ul>`엘리먼트 안에 포함하고 DOM에 렌더링 한다.
+먼저 Form을 렌더링하는 React 컴포넌트에서 Form에 발생하는 사용자 입력값을 제어한다.
 
-```jsx
-ReactDOM.render(
-	<ul>{listItems}</ul>,
-	document.getElementById('root')
-);
-```
-
-`<li>1</li>` ~ `<li>5</li>` 의 요소가 `<ul>` 태그안에 들어가 있다.
+이런식으로 **React에 의해 값이 제어되는 입력 Form 요소를 제어 컴포넌트**라 칭한다.
 
 <br/>
 
-### 기본 리스트 컴포넌트 <a id="a2"></a>
-
-일반적으로는 컴포넌트 내에서 리스트를 렌더링한다.
-
-다음과 같이 배열자체를 할당 받고 리스트 전체를  렌더링한 값을 반환하는 컴퍼넌트를 작성할 수도 있다.
+이름을 기록하는 Form 제어 컴포넌트를 작성해보자
 
 ```jsx
-function NumberList(props) {
-  const numbers = props.numbers;
-  const listItems = numbers.map((number) =>
-    <li>{number}</li>
-  );
-  return (
-    <ul>{listItems}</ul>
-  );
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('A name was submitted: ' + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name:
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+```
+
+여기서 `render()`의 `<input>`태그의 `value`값은 항상 `this.state.value`가 되고 React state는 신뢰 가능한 단일 출처가 된다.
+
+React state를 업데이트하기 위해 모든 키 입력에서 `handleChange`가 동작하기 때문에 사용자가 입력할 때 보여지는 값이 업데이트된다.
+
+제어 컴포넌트로 사용하면 **모든 state 변화는 연관된 핸들러를 가진다.**
+
+이것을 통하여 입력 수정, 유효성 검사등이 간편해진다.
+
+예, 입력받은 값을 전부 대문자로 변환하는 예제
+
+```jsx
+handleChange(event) {
+  this.setState({value: event.target.value.toUpperCase()});
+}
+```
+
+<br/>
+
+#### textarea 태그 <a id="a2"></a>
+
+HTML에서는 `<textarea>`는 텍스트를 자식요소로 정의한다.
+
+React에서 `<textarea>`에서 텍스트 대신 `value` 어트리뷰트를 대신 사용한다. (소스 량이 줄어듬)
+
+```jsx
+class EssayForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: 'Please write an essay about your favorite DOM element.'
+    };
+  }
+
+  render() {
+    return (
+		...
+        <textarea value={this.state.value} onChange={this.handleChange} />
+     );
+  }
+}
+```
+
+<br/>
+
+#### select 태그 <a id="a3"></a>
+
+HTML에서 `<select>`은 드롭다운 목록을 만든다. 
+
+```html
+<select>
+  <option value="grapefruit">Grapefruit</option>
+  <option value="lime">Lime</option>
+  <option selected value="coconut">Coconut</option>
+  <option value="mango">Mango</option>
+</select>
+```
+
+여기서 `coconut` 옵션이 초기값이 된다.
+
+<br/>
+
+React에서는 `selected` 속성 대신 최상단 `select`태그에 `value` 속성을 사용한다.
+
+한 곳에서 업데이트만 하면 되기 떄문에 제어 컴포넌트에서 사용하기가 더 편리하기 떄문이다.
+
+```jsx
+class FlavorForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: 'coconut'};
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  render() {
+    return (
+		 ...
+          <select value={this.state.value} onChange={this.handleChange}>
+            <option value="grapefruit">Grapefruit</option>
+            <option value="lime">Lime</option>
+            <option value="coconut">Coconut</option>
+            <option value="mango">Mango</option>
+          </select>
+        ...
+    );
+  }
+}
+```
+
+추가로 `select`태그에 multiple 옵션을 허용한다면 `value` 속성에 배열을 전달할 수 도 있다.
+
+```jsx
+<select multiple={true} value={['B', 'C']}>
+```
+
+<br/>
+
+#### file input 태그 <a id="a4"></a>
+
+HTML에서 `<input type="file">`는 사용자가 하나 이상의 파일을 자신의 장치 저장소에서 서버로 업로드하거나 [File API](https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications)를 통해 JavaScript로 조작할 수 있다.
+
+```javascript
+<input type="file" />
+```
+
+값이 읽기 전용이라서 React에서는 비제어 컴포넌트다.
+
+<br/>
+
+#### 다중 입력 제어하기 <a id="a5"></a>
+
+여러 `input` 엘리먼트를 제어해야할 때, 각 엘리먼트에 `name` 어트리뷰트를 추가하고 `event.target.name` 값을 통해 핸들러가 어떤 작업을 할 지 선택할 수 있게 해줄 수 있다.
+
+```jsx
+class Reservation extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isGoing: true,
+      numberOfGuests: 2
+    };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value
+    });
+  }
+
+  render() {
+    return (
+      <form>
+        <label>
+          Is going:
+          <input
+            name="isGoing"
+            type="checkbox"
+            checked={this.state.isGoing}
+            onChange={this.handleInputChange} />
+        </label>
+        <br />
+        <label>
+          Number of guests:
+          <input
+            name="numberOfGuests"
+            type="number"
+            value={this.state.numberOfGuests}
+            onChange={this.handleInputChange} />
+        </label>
+      </form>
+    );
+  }
 }
 
-const numbers = [1, 2, 3, 4, 5];
-ReactDOM.render(
-  <NumberList numbers={numbers} />,
-  document.getElementById('root')
-);
+
 ```
 
-문제는 위와 같은 코드를 실행 시 리액트에서 **Key에 대한 경고를 표시한다.**
-
-`key`는 앨리먼트 리스트를 만들 때 포함시켜야 하는 특수한 문자열 속성이다.
-
-따라서 `numbers.map()`안에서 리스트의 각 항목에 `key`를 할당하여 해당 경고를 해결한다.
-
-```jsx
-function NumberList(props) {
-  const numbers = props.numbers;
-  const listItems = numbers.map((number) =>
-    <li key={number.toString()} /* 이 부분 추가 */> 
-      {number}
-    </li>
-  );
-  return (
-    <ul>{listItems}</ul>
-  );
-}
-
-const numbers = [1, 2, 3, 4, 5];
-ReactDOM.render(
-  <NumberList numbers={numbers} />,
-  document.getElementById('root')
-);
-```
+`name`값이 무엇으로 바뀔지 모르기 때문에 `[name]: value`라고 작성했다.
 
 <br/>
 
-### Key <a id="a3"></a>
+#### 제어되는 Input Null 값 <a id="a6"></a>
 
-키는 React가 어떤 항목을 변경, 추가 또는 삭제할지 식별하는 것을 도와준다.
+[제어 컴포넌트](https://ko.reactjs.org/docs/forms.html#controlled-components)에 value prop을 지정하면 의도하지 않는 한 사용자가 변경할 수 없다. 
 
-`Key`는 엘리먼트에 안정적인 고유성을 부여하기 위해 배열 내부의 엘리먼트에 지정해야만 한다.
+`value`를 설정했는데 여전히 수정할 수 있다면 실수로 `value`를 `undefined`나 `null`로 설정했을 수 있다.
 
-`Key`는 고유한 문자열이어야 하기 때문에 보통 데이터의 ID를 많이 이용한다.
-
-그런데 만약 렌더링한 항목에 넣어줄 특정 값(ID)등이 떠오르지 않는다면 고차함수의 `index`를 사용할 수 도 있다.
+예, 처음 입력은 잠겨있지만 잠시 후 입력이 가능해진다.
 
 ```jsx
-const todoItems = todos.map((todo, index) =>
-  // Only do this if items have no stable IDs
-  <li key={index}>
-    {todo.text}
-  </li>
-);
-```
+ReactDOM.render(<input value="hi" />, mountNode);
 
-**여기서 `index`는 가능한 사용하지 말아야 한다.**
+setTimeout(function() {
+  ReactDOM.render(<input value={null} />, mountNode);
+}, 1000);
 
-항목의 순서가 바뀔 경우 index는 state와 관련 문제를 일으킬 수도 있다.
-
-따라서 이럴 경우, **uuid라는 랜덤 문자열 값을 지정하는 노드 패키지 모듈(NPM)을 이용하도록 한다**.
-
-<br/>
-
-### Key로 컴포넌트 추출하기 <a id="a4"></a>
-
-#### Key는 주변 배열의 context에서만 의미를 지니고 있다. 
-
- `Key`의 설정은 엘리먼트 리스트를 만들때 리스트 자체에게 주는 것이 아닌, 리스트를 불러오는 `map()`함수의 최상위 요소에 넣어주어야한다.
-
-예를들면,
-
-`ListItem` 컴포넌트를 추출한 경우 `ListItem` 안에 있는 `<li>`엘리먼트가 아니라 배열의 `<ListItem/>`엘리먼트가 `key`를 가져야 한다.
-
-```jsx
-function ListItem(props) {
-  // X, 여기에는 key를 지정할 필요가 없다.
-  return <li>{props.value}</li>;
-}
-
-function NumberList(props) {
-  const numbers = props.numbers;
-  const listItems = numbers.map((number) =>
-    // O, map 함수내부 안의 요소에 key를 지정해야 한다.
-    <ListItem key={number.toString()}
-              value={number} />
-  );
-  return (
-    <ul>
-      {listItems}
-    </ul>
-  );
-}
-
-const numbers = [1, 2, 3, 4, 5];
-ReactDOM.render(
-  <NumberList numbers={numbers} />,
-  document.getElementById('root')
-);
-```
-
-<br/>
-
-#### Key는 형제 사이에서만 고유한 값을 지녀야 한다. <a id="a5"></a>
-
-Key는 배열 안에서 형제 사이에서 고유해야 하고 전체 범위에서 고유할 필요는 없다. 
-
-두 개의 다른 배열을 만들 때 동일한 key를 사용할 수 있다.
-
-```jsx
-function Blog(props) {
-  const sidebar = (
-    <ul>
-      {props.posts.map((post) =>
-        <li key={post.id} /*같은 키를 쓰고 있다.*/>
-          {post.title}
-        </li>
-      )}
-    </ul>
-  );
-  const content = props.posts.map((post) =>
-    <div key={post.id} /*같은 키를 쓰고 있다.*/>
-      <h3>{post.title}</h3>
-      <p>{post.content}</p>
-    </div>
-  );
-  return (
-    <div>
-      {sidebar}
-      <hr />
-      {content}
-    </div>
-  );
-}
-
-const posts = [
-  {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
-  {id: 2, title: 'Installation', content: 'You can install React from npm.'}
-];
-ReactDOM.render(
-  <Blog posts={posts} />,
-  document.getElementById('root')
-);
-```
-
-<br/>
-
-#### React에서 Key는 컴포넌트로 전달되지는 않는다. <a id="a6"></a>
-
-`Key`는 연속적이 리스트 엘리먼트에 대한 힌트일 뿐이다.
-
-컴포넌트에서 key와 동일한 값이 필요하면 다른 이름의 prop으로 명시적으로 전달한다.
-
-```jsx
-const content = posts.map((post) =>
-  <Post
-    key={post.id}
-    id={post.id}
-    title={post.title} />
-);
 
 ```
 
-Post 컴포넌트에서는 `props.id`는 읽을 수 있지만, `props.key`는 읽을 수 없다.
+`value`는 초기값을 기억하기 때문이다. 따라서 React에서는 `defaultValue`를 이용한다.
 
 <br/>
 
