@@ -55,7 +55,7 @@
   color: #065fd4;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 
 .comment-text {
