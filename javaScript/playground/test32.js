@@ -1,5 +1,6 @@
 
 function solution(number, k) {
+  if(number.charAt(0) == '0') return "0"
   let num = number.split('');
   let stCount = 0;
   let count = number.length - k;
@@ -41,7 +42,8 @@ function solution(number, k) {
   return answer;
 }
 
-console.log(solution('10000', 2));
-// 1924	2	94
-// 1231234	3	3234
-// 4177252841	4	775841
+console.log(solution("1924", 2))
+// console.log(solution("1231234",3))
+// console.log(solution("4177252841",4))
+// console.log(solution("4177252841",1))
+// console.log(solution("321",1))
