@@ -9,6 +9,8 @@ function solution(number, k) {
       if (max < number[j]) {
         index = j;
         max = number[j];
+        console.log(max);
+        if (max === '9') break;
       }
     }
     answer += max;
