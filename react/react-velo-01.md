@@ -1,4 +1,4 @@
-![atom](https://user-images.githubusercontent.com/31315644/70208176-328b7e00-1770-11ea-80d4-4658832d5d5f.jpg)
+![React01](https://user-images.githubusercontent.com/31315644/71559895-d7b32100-2aa6-11ea-87ea-52f6a92de21a.png)
 
 ------
 
@@ -12,9 +12,6 @@
 
     - React 렌더링 과정
   - Component
-
-
-  ​    
 
 - React 시작하기
   
