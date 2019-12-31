@@ -2,18 +2,19 @@
 
 --------------
 
-# React Study 10
+# React Study 12
 
-- 객체의 접근 방법
-- YouTube 프로젝트 변경점
-  - 좋아요, 싫어요 기능 추가
-- 댓글 추가 / 삭제 기능 추가
-- Stale closure problem
-  - 결과를 변경하기 위한 해결점 1 : 함수를 만들고 함수로 호출
-  - 결과를 변경하기 위한 해결점 2 : 즉시실행함수를 사용한다.
-- React Hook
-  - useState
-  - useEffect
+- 예제 : 로그인 기능 만들기
+  1. 새로운 프로젝트 생성
+  2. 백엔드 추가
+  3. lib폴더 생성하고 Axios API 작성 해주기
+  4. SignUp 코드 작성 - input 유효성 검사하기
+  5. SignIn 코드 작성 - [쿠키](#a1) 이용하기
+- [쿠키](#a1)
+- [로컬스토리지](#a2)
+- [쿠키 vs 로컬스토리지](#a3)
+- [세션](#a4)
+- [토큰 기반 인증 방식 (JWT)](#a5)
 
 <br/>
 
@@ -23,453 +24,418 @@
 
 ### 용어 - ( 러버덕 )
 
-- 객체의 접근 방법
-- React Hook
-- useState
-- useEffect
-- Stale closure problem
+- 쿠키
+- 로컬스토리지
+- 세션
+- JWT
+- 쿠키 vs 로컬스토리지
 
 <br/>
 
 --------
 
-### 객체의 접근 방법
+### 예제 : 로그인 기능 만들기
 
-````javascript
-const state = { id : 'abc', pwd : '1234' }
-state.id; // abc
-state['id'] // abc
+<img src="https://user-images.githubusercontent.com/31315644/71588586-61c1bf00-2b65-11ea-961c-3ac94f4ccb23.jpeg" alt="file-structure" style="zoom:50%;" />
 
-cont pwd = 'pwd'
-state[pwd] // 1234
-state['pwd'] // 1234
-state.pwd //1234
+#### 1. 새로운 프로젝트 생성
 
-state.id === state[id]; // true
-````
+App.js에 리액트 라우터를 활용.
 
-<br/>
-
-### YouTube 프로젝트 변경점
-
-#### 좋아요, 싫어요 기능 추가
-
-**Action 구성하기**
-
-액션의 내용은 현재 좋아요와 싫어요를 기본적으로 저장할 `id`와 좋아요인지 싫어요인지 구별하기 위한 `toggle_like`를 구별한다.
-
-```javascript
-export const LIKE = 'LIKE';
-
-export function like(id, toggle_like) {
-  return ({type:LIKE, id, toggle_like})
-}	
+```bash
+npm i react-router-dom --save
 ```
 
-<br/>
-
-**Reducer 구성하기**
-
-Action 구성을 했다면 `toggle_like`를 구성해준다.
-
-toggle은 true인지 false인지만 구분하면 되므로 `if ... else`로 구분해준다.
-
-`data && data.likeCount` 에서 `&&`  연산자의 의미는 
-
-첫번째, 자바스크립트에게 객체 내부로 접근하기 전에 상위 레벨부터 접근해야만 한다.
-
-바로 `data.likeCount`로 접근했을 경우, data가 존재하지 않는다면, 
-
-`undefined.likeCount`가 될 수도 있기 때문이다. 
-
-두번째, 해당 소스는 `likeCount` 와 `disLikeCount`로 총 2개가 나뉘어져 있다.
-
-만약 2개중 한개라도 사용되었다면 이미 `data`는 존재하는 것이기 때문에 항상 참이게 된다.
-
-그럴경우 초기화가 되어있지 않은 `data.likeCount`는 null 상태인데 여기서 +1을 아무리 해도 NULL이다.
-
-따라서 2개의 비교가 필요하다.
-
-```javascript
-  case LIKE :
-      if(action.toggle_like) {
-        return {
-          ...state, // 쿼리를 보존하기위해서
-          data: {
-            ...state.data, // 나중에 추가될 데이터를 보존하기위해서
-            [action.id]: {
-              ...data, // Comment의 데이터를 보존하기 위해서 나열해주엇음.
-              likeCount: data && data.likeCount
-                ? data.likeCount + 1
-                : 1,
-            }
-          }
-        }
-      } else {
-        return {
-          ...state, // 쿼리를 보존하기위해서
-          data: {
-            ...state.data, // 나중에 추가될 데이터를 보존하기위해서
-            [action.id]: {
-              ...data, // Comment의 데이터를 보존하기 위해서 나열해주엇음.
-              disLikeCount: data && data.disLikeCount
-                ? data.disLikeCount + -1
-                : -1,
-            }
-          }
-        }
-      };
-```
+- `/signin` - 회원 로그인 폼 : 이메일, 패스워드, 로그인버튼
+- `/signup` - 회원가입 폼 : 이메일, 패스워드, 가입버튼
+- `/user` - 빈페이지 작성 ( User )
+- `/` - 빈페이지 작성 ( Main )
 
 <br/>
 
-**VideoPlayer Redux 추가하기**
-
-VideoPlayer에 Redux를 추가한다. 
+**App.js**
 
 ```jsx
-<button onClick={() => props.like(_id, true)}>좋아요</button>
-{ props.data[_id] &&
-props.data[_id].likeCount ? props.data[_id].likeCount : 0}
-<button onClick={() => props.like(_id, false)}>싫아요</button>
-{ props.data[_id] &&
-props.data[_id].disLikeCount ? props.data[_id].disLikeCount : 0}
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from 'react-router-dom';
 
-...
-};
+import Signin from './components/SignIn';
+import Signup from './components/SignUp';
+import User from './components/User';
+import Main from './components/Main';
 
-function mapStateToProps(state) {
-...
+import './App.css';
+
+function App() {
+  return (
+    <Router>
+      <Switch>
+        <Route path='/signin' component={ Signin } />
+        <Route path='/signup' component={ Signup }/>
+        <Route path='/user' component={ User }/>
+        <Route path='/' component={ Main }/>
+      </Switch>
+    </Router>
+    // </Provider>
+  );
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    like,
-  }, dispatch)
-}
+export default App;
 
-export default connect(mapStateToProps,mapDispatchToProps)(VideoPlayer);
 ```
 
 <br/>
 
-#### 댓글 추가 / 삭제 기능 추가
+#### 2. 백엔드 추가
 
-**Action 구성하기**
+백엔드는 보내준 압축 파일을 현재 진행중인 프로젝트 말고 다른 위치에서 압축을 풀고 해당 명령어를 입력해준다.
 
-댓글 추가 및 삭제기능 전부 `id`객체 내부따라서 저장이 되야하므로 2개를 전부 받는다.
+```bash
+npm i
+npm start
+```
 
-댓글 추가 기능은 텍스트 값을 입력 받아야하므로 `val` 를 인자로 받고
+백엔드의 포트번호를 3001번대로 변경해준다.
 
-댓글 삭제 기능은 각 댓글마다 있는 `commentId` 를 가지고 삭제해야 한다. 
+**검색 - 3000 : 1개뜸**
 
 ```javascript
-export const COMMENT = 'COMMENT';
-export const DELETECOMMENT = 'DELETECOMMENT';
-
-export function comment(id, val) {
-  return ({type:COMMENT, id, val})
-}
-
-export function deleteComment(id, commentId) {
-  return ({type:DELETECOMMENT, id, commentId})
-}
-
+var port = normalizePort(process.env.PORT || '3001');
+app.set('port', port);	
 ```
 
 <br/>
 
-**Reducer 구성하기**
+##### 포스트맨(Post Man) 테스트하기
 
-먼저 댓글 추가 기능을 작성하자.
+포스트맨으로 데이터가 잘 흘러가는지 테스트를 해본다.
 
-댓글을 추가할 때 중복이 되어야 하므로 **배열**로 받는다.
+1. 회원가입 부분에서 `POST`메소드를 통해 회원가입을 요청했을 때의 결과이다.
 
-`data` 객체와 `comments` 배열이 둘다 존재 하지 않을 경우
+![token-signup](https://user-images.githubusercontent.com/31315644/71582889-65e2e200-2b4f-11ea-80a1-36a9839d7c04.jpeg)
 
-배열 내부에 객체로 `text(댓글 내용)` 과 `cid(댓글 아이디)`를 추가한다.
+<br/>
 
-여기서, `cid(댓글 아이디)`는 여러가지 방법이 있지만, 새로 추가된 댓글과 중복되어서는 안된다.
+2. 회원가입 후 로그인을 할 때 `POST`로 데이터를 보냈을 때의 결과이다.
 
-나는 여기서 1씩 늘어나는 방식을 사용한다.
+   여기서 데이터 조회를 해야할텐데 어째서 `GET` 이 아닌 `POST` 를 사용한 것은 우선 해당 프로젝트에서 데이터를 요청을 하는 방식은 `<form>`태그를 이용했다는 것이고 `GET`을 사용할 경우 ID, PASSWORD가 모두 URL로 노출되기 때문에 `POST`를 이용한다.
 
-`cid : Math.max(-1, ...data.comments.map((id) => id.cid)) + 1 `
+![token-signin](https://user-images.githubusercontent.com/31315644/71582807-17cdde80-2b4f-11ea-9859-7bc0976d5fb9.jpeg)
 
-는 댓글이 존재할 경우 해당 댓글아이디만을 `map()`함수를 이용해 뽑아낸뒤 `Math.max`를 이용해 최고값을 갱신하다.
+<br/>
 
-그 후 1을 더해준다. 
+#### 3. lib폴더 생성하고 Axios API 작성 해주기
 
-여기서 `Math.max(-1)`을 기본으로 두어 만약 댓글이 전부 삭제하고 다시 추가할 경우, 다시 0부터 시작하게끔 설정한다.
+2번에서 했던 데이터들을 불러오기 위해서 2개의 API를 작성해준다.
+
+**lib/api.js**
 
 ```javascript
-case COMMENT :
-  return {
-		...state,
-		data : {
-			...state.data,
-			[action.id]: {
-          ...data,
-          comments: data && data.comments
-  				? [ 
-               {  
-            		text: action.val, 
-            		cid : Math.max(-1, ...data.comments.map((id) => id.cid)) + 1 
-               }, 
-  							...data.comments 
-            ]
-          : [{ text: action.val, cid : 0 }],
-     }
-  }
-};
+import axios from 'axios';
+
+export const signUp = async ({ username, password1 : password }) => {
+  const { data } = await axios.post('http://localhost:3001/api/signup', {
+    username,
+    password
+  })
+  console.log(data);
+  return data;
+}
+
+export const signIn = async ({ username, password }) => {
+  const { data } = await axios.post('http://localhost:3001/api/signin', {
+    username,
+    password
+  })
+  console.log(data);
+  return data;
+}
+
 ```
 
 <br/>
 
-삭제기능은 `VideoPlayer` 에서 `선택한 비디오의 cid`와 `filter()`를 돌리면서 뽑아내 `cid` 를 비교하여 삭제하는 방식을 사용한다.
+#### 4. SignUp 코드 작성 - input 유효성 검사하기
 
-```javascript
-    case DELETECOMMENT :
-      return {
-        ...state,
-        data : {
-          [action.id]: {
-            comments: data && data.comments.filter((comment) => {
-              return comment.cid !== action.commentId
-            })
-          }
-        }
-      };
+우선, 회원가입 폼(/signup)에서는 ID와 PW를 2개받고 입력된 이메일과 비밀번호에 대해 유효검사를 해주어야한다.
+
+직접적으로 작성해도 되지만 react에서는 hook을 포함한 유효검사 라이브러리를 제공한다.
+
+[React-Hook-Form](https://react-hook-form.com/)
+
+```bash
+npm i react-hook-form --save
 ```
 
 <br/>
 
-**VideoPlayer Redux 추가하기**
+3번에서 진행한 api를 불러오고 async/await를 이용하여 POST를 요청하도록 하자.
 
-`props.data[_id] && props.data[_id].comments && props.data[_id].comments.map((comment)` 의 의미는
+성공적으로 요청이 돌아왔다면 `./signin`으로 URL을 라우팅하도록 한다.
 
-자바스크립트에서는 객체에 접근하기 위해서는 상위부터 접근해야만 한다.
-
-`props.data[_id].comments`에 접근할 때, 만약 `props.data[_id]`가 없다면 javascript는 `props.data[_id].comments`가
-
-`undefined.comments`로 인식을 하기 때문이다. 따라서 방어코드 최상위부터 접근을 해야하는데 해당 객체의 최상위는 props다.
-
-그런데 props는 Router 컴포넌트를 통해 뿌려지기 때문에 절대 없을 수가 없으므로 검사를 할 필요가 없다. 따라서 다음 단계인
-
-`props.data[_id]`부터 검사하기 시작한다.
-
-삭제는 선택한 요소의 `cid`를 보내주어야 하므로 해당 객체를 선택할 당시의 `comment.cid`를 클릭의 인자값으로 넘겨준다.
+**components/SignUp/index.jsx**
 
 ```jsx
-  const handleEnter = (k) => (e) => {
-    if(e.key === 'Enter') {
-        k(_id, e.target.value);
-      }
-  }
+import React, { useState } from 'react';
+import { useForm } from "react-hook-form";
+import { signUp } from '../../lib/api';
+
+const SignUp = (props) => {
+  const { handleSubmit, register, watch, errors } = useForm();
+  const [ alreadyExist, setAlreadyExist ] = useState(false);
+  const onSubmit = async values => {
+    const { success , msg } = await signUp(values);
+    if (success) {
+      props.history.push('./signin');
+    } else if ( msg === 'Username already exists.') {
+      setAlreadyExist(true);
+    }
+  };
 
   return (
-			...
-      <input type='text' onKeyPress={handleEnter(props.comment)} />
-      <div>
-        {
-          props.data[_id] &&
-          props.data[_id].comments &&
-          props.data[_id].comments.map((comment) =>
-            <h1 key={uuid.v4()}>
-              {comment.text}
-              <button onClick={() => props.deleteComment(_id, comment.cid)}>삭제</button>
-            </h1>
-          )
-        }
-      </div>
-    </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <label htmlFor="email">
+        Email :
+        <input
+          id="email"
+          name="username"
+          type="text"
+          ref={register({
+            required: 'Required',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+              message: "invalid email address"
+            }
+          })}
+        />
+        {errors.email && errors.email.message}
+      </label>
+      <br/>
+      <label htmlFor="pwd1">
+        Password :
+        <input
+          id="pwd1"
+          name="password1"
+          type="password"
+          ref={register({
+            required: 'Required'
+          })}
+        />
+      </label>
+      <br/>
+      <label htmlFor="pwd2">
+        Password 재확인 :
+        <input
+          id="pwd2"
+          name="password2"
+          type="password"
+          ref={register({
+            required: 'Required',
+            validate: (value) => {
+              return value === watch('password1');
+            }
+          })}
+        />
+      </label>
+      <br/>
+      { errors.password2 && '비밀번호가 일치하지 않습니다.' }
+      { alreadyExist && '이미 존재하는 아이디 입니다.'}
+      <br/>
+      <button type="submit">회원가입</button>
+    </form>
   );
-};
-
-function mapStateToProps(state) {
-...
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    like,
-    comment,
-    deleteComment
-  }, dispatch)
-}
-
-export default connect(mapStateToProps,mapDispatchToProps)(VideoPlayer);
+export default SignUp;
 ```
 
 <br/>
 
-### Stale closure problem
+#### 5.  SignIn 코드 작성 - [쿠키](#a1) 이용하기
 
-```javascript
-function useState(init) {
-  let _val = init;
+로그인 시 로그인 지속시간 과 [JWT](#a5) 데이터를 임시로 저장하기 위한 저장소가 필요한데 그것을 클라이언트 브라우저의 [쿠키](#a1)에 저장하도록 한다.
 
-  function setState(newVal) {
-    _val = newVal
-  }
+쿠키는 그냥 사용할 경우 난잡하므로 특정 라이브러리를 이용하도록 하자.
 
-  return [_val, setState];
-}
+[JS-Cookie](https://github.com/js-cookie/js-cookie)
 
-const [query, setQuery] = useState('여행')
-console.log(query)
-setQuery('크리스마스')
-console.log(query)	
-
-// 여행, 여행
+```bash
+ npm i js-cookie --save
 ```
 
-값을 리턴할 경우, 상위 렉시컬환경의 값이 업데이트 되지않는다.
+```bash
+Cookie.set('session',JWT토큰값)
 
-<br/>
-
-#### 결과를 변경하기 위한 해결점 1 : 함수를 만들고 함수로 호출
-
-함수 내부에서만 작동하는 변수일 경우 앞에 `_`를 붙여주는 경우가 많다.
-
-```javascript
-function useState(init) {
-  let _val = init;
-
-  function useState () {
-    return _val
-  }
-
-  function setState(newVal) {
-    _val = newVal
-  }
-
-  return [useState, setState];
-}
-
-const [query, setQuery] = useState('여행')
-console.log(query())
-setQuery('크리스마스')
-console.log(query())	
-
-// 여행, 크리스마스
 ```
 
 <br/>
 
-#### 결과를 변경하기 위한 해결점 2 : 즉시실행함수를 사용한다.
+추가로 4번에서 했던 유효성 검사를 여기서도 해줘야하기 때문에 `react-hook-form`을 여기서도 작성해준다.
 
-- 외부에서 접근하지 못하도록 변수를 보호할 수 있다.
-- 기존의 함수에서 변수 리턴 시 업데이트가 되지 않는 문제를 해결.
+그리고 3번에서 진행한 api를 불러오고 async/await를 이용하여 POST를 요청해 토큰(JWT)을 받아가지고 온다.
 
-```javascript
-const React = (function() {
-  let _val
-  return {
-    render(Component) {
-      const Comp = Component()
-      Comp.render()
-      return Comp
-    },
-    useState(init) {
-      _val = _val || init
-      function setState(newVal) {
-        _val = newVal
-      }
-      return [_val, setState]
-    }
-  }
-})();
-```
+성공적으로 요청이 돌아왔다면 쿠키에 `session`이라는 키에 토큰을 값으로 하여 저장하고 `/ (Main.js)`으로 URL을 라우팅하도록 한다.
 
-<br/>
-
-### React Hook
-
-리액트에서는 Hook을 IIFE(즉시실행함수) 형태로 폴리필 해보자.
-
-많은 함수가 있게지만 useState는 다음과 같이 작성한다.
-
-리액트 훅은 **무조건 최상위에서만 사용한다.(for문, if문 등의 중첩 내에서 리액트 훅 사용 X)**
-
-리액트 훅 내부에서 for, if문등의 사용은 가능하다.
-
-```javascript
-const React = (function() {
-  let _val
-  return {
-    render(Component) {
-      const Comp = Component()
-      Comp.render()
-      return Comp
-    },
-    useState(init) {
-      _val = _val || init
-      function setState(newVal) {
-        _val = newVal
-      }
-      return [_val, setState]
-    }
-  }
-})()
-
-const { useState } = React
-function Counter() {
-  const [count, setCount] = useState(0)
-  return {
-    click : () => setCount(count + 1),
-    render : () => console.log('render', {count})
-  }
-} // 개발자가 작성한 코드 : 리액트 훅
-
-let App
-App = React.render(Counter)
-App.click()
-App = React.render(Counter)
-```
-
-<br/>
-
-#### useState
+**components/SignIn/index.jsx**
 
 ```jsx
-const { useState } = React
-function Counter() {
-  const [count, setCount] = useState(0)
-  return {
-    click : () => setCount(count + 1),
-    render : () => console.log('render', {count})
-  }
-} // 개발자가 작성한 코드 : 리액트 훅
+import React, { useState } from 'react';
+import { useForm } from "react-hook-form";
+import { signIn } from '../../lib/api';
+import Cookies from 'js-cookie';
+
+const SignIn = (props) => {
+  const { handleSubmit, register, watch, errors } = useForm();
+  const [ alreadyExist, setAlreadyExist ] = useState(false);
+  const onSubmit = async values => {
+    const { success , token } = await signIn(values);
+    if (success) {
+      Cookies.set('session', token.split(' ')[1]);
+      props.history.push('/');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <label htmlFor="email">
+        Email :
+        <input
+          id="email"
+          name="username"
+          type="text"
+          ref={register({
+            required: 'Required',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+              message: "invalid email address"
+            }
+          })}
+        />
+        {errors.email && errors.email.message}
+      </label>
+      <br/>
+      <label htmlFor="pwd">
+        Password :
+        <input
+          id="pwd"
+          name="password"
+          type="password"
+          ref={register({
+            required: 'Required'
+          })}
+        />
+      </label>
+      <br/>
+      { alreadyExist && '이미 존재하는 아이디 입니다.'}
+      <br/>
+      <button type="submit">로그인</button>
+    </form>
+  );
+}
+
+export default SignIn;
+
 ```
-
-리액트 훅에서는, `this.setState`를 사용하지 않는다. 
-
-`useState`는 `변수와 변수를 업데이트하기 위한 함수를 정의`한다.
 
 <br/>
 
-#### useEffect
+---------
 
-`componentDidMount`, `componentDidUpdate`를 합쳐놓은 느낌.
+### 쿠키 <a id="a1"></a>
 
-`componentDidUpdate`와 동일하게 는 모든 변화에 대해 업데이트 하기 때문에 모니터 조건이 필요하다.
+**쿠키** : 서버에 보내기 위한 데이터를 임시 저장하기 위한 클라이언트 브라우저 저장소. 
 
-`useEffect` 역시 모니터 조건이 반드시 필요하다.
+**쿠키를 사용하는 이유** : 서버에 전송할 데이터를 클라이언트에 저장하기 위해서 + [JWT(JS WEB TOKEN)](#a5) 저장하기 위해서.
 
-- (옵션) 조건식으로 쓸 변수들을 Array로 작성시킨다.
+- expires를 작성 안해줄 경우 즉시 삭제된다. (UTC 스트링)
+- path를 설정하면 설정된 url에서만 쿠키를 접근하게 해준다. (쿠키를 사용하는 사이트에서만 읽고 쓸수 있다.)
+
+쿠키 폴리필
 
 ```javascript
-useEffect(() => {
-  console.log(count);
-}) // 기본 : 모든 업데이트에 대해 변화를 감지한다. ( 반드시 조건식을 작성해야만 한다. )
+// 쿠키의 기본 표현식 (Document의 쿠키)
+document.cookie = "key=value; expires=Thu, 01 JAN 1970 00:00:00 UTC; path=/;";
 
-useEffect(() => {
-  console.log(count);
-}, [count]) // 조건쓸 변수를 배열에 작성 :  [count] 요소의 변화가 있을 경우에만 감지.
+// 위 쿠키 기본 표현식을 함수로 표현해서 쉽게 사용할 때 만들어본 함수
+function setCookie(cname, cvalue, exdays) {
+  // Expiration days
+  let d = new Date()
+  d.setTime(d.getTime() + (exdays*60*60*24*1000))
+  const expires = "expires" + d.toUTCString()
+  document.cookie = cname + "=" + cvalue + ";" + expires + "path=/" 
+  //path는 특정한 페이지에서만 쿠키를 쓰고 싶을때 사용한다.
+}
 
-useEffect(() => {
-  console.log(count);
-}, []) // 빈 배열 : 빈배열로 작성 시 단 한번만 실행된다.
+setCookie("username", "react", 1); // 하루 뒤에는 이 쿠키가 자동으로 삭제된다. - 이름 , 해당값, 만료기간 설정
+
 ```
+
+**브라우저 쿠키 메소드를 이용하는 것보다는 Node Package Manager를 **
+**통한 쿠키라이브러리를 쓰는것을 추천한다. [JS-Cookie](https://github.com/js-cookie/js-cookie)**
+
+<br/>
+
+### 로컬스토리지 <a id="a2"></a>
+
+**로컬스토리지** : 쿠키로 쓸 데이터는 서버에 전송을 하겠다는 전제, 반대로 서버로 전송할 필요가 없는 데이터는 로컬 스토리지를 이용.
+
+값으로 JSON 데이터를 넣을 때는 JSON.stringfy(넣을 값) 을 이용한다.
+
+```javascript
+//데이터 저장
+window.localStorage.setItem('test','123');
+
+//데이터 조회
+window.localStorage.getItem('test');
+
+//데이터 1개 삭제
+window.localStorage.removeItem('test');
+
+//데이터 전체 삭제
+window.localStorage.clear();
+
+```
+
+<br/>
+
+### 로컬스토리지 vs 쿠키 <a id="a3"></a>
+
+쿠키는 초창기부터 만들어진 브라우저 저장소이기 때문에 사용방법이 난잡하다. (물론 쓰기 쉽게 개발된 라이브러리가 있다.)
+
+로컬스토리지는 비교적으로 쉽게 사용할 수 있도록 정의가 되어있는 편인데, 복잡한 표현식을 가진 **쿠키를 쓰는 이유는 오로지 서버에게 전송할 데이터를 클라이언트에게 저장하고 싶을 때** 사용한다.
+
+쿠키의 저장소는 4000kb(Chrome 기준)로 매우 작기 때문에 모든 데이터를 쿠키에 저장해서는 안된다. 반드시 서버와 주고받을 데이터만 저장한다.
+
+로컬스토리지의 저장소는 10mb(Chrome 기준)이다. Redux를 통해 저장할 데이터는 비교적 용량이 큰 로컬스토리지에 저장하는 것이 좋다.
+
+`json web token`의 경우 쿠키에 넣는 것이 바람직하다.
+
+<br/>
+
+### 세션 <a id="a4"></a>
+
+**세션** : 서버에서 저장하고 있는 데이터(정보). 
+
+**세션을 사용하는 이유** : 쿠키는 세션 저장소에 담긴 데이터를 얻기 위한 열쇠 정도로 생각하면 편하다. 쿠키를 통하여 세션의 정보를 열람할 수 있다.
+
+<br/>
+
+### 토큰 기반 인증 방식 (JWT) <a id="a5"></a>
+
+기존 서버의 인증 기반 방식은 서버에게 데이터를 몰아주는 식의 방식을 사용했다. 따라서 서버에게 자연스럽게 과부하가 걸리는등의 문제를 야기했는데 이를 토큰이라는 매개체를 통해서 해결한다.
+
+JWT는 세션/쿠키와 함께 모바일과 웹의 인증을 다루는 가장 많이 사용되는 표준 중 하나이다.
+
+WEB상에서 안정하게 사용할 수 있는 식별자이며 Json Web Token의 약자로 인증에 필요한 정보들을 암호화시킨 토큰을 뜻하는데 위의 세션/쿠키 방식과 유사하게 사용자는 Access Token(JWT 토큰)을 HTTP 헤더에 실어 서버로 보내게 된다.
+
+JWT는 다음과 같은 경우에 많이 사용된다.
+
+- **회원 인증:** JWT 를 사용하는 가장 흔한 시나리오 이다. 유저가 로그인을 하면, 서버는 유저의 정보에 기반한 토큰을 발급하여 유저에게 전달해줍니다. 그 후, 유저가 서버에 요청을 할 때 마다 JWT를 포함하여 전달한다. 서버가 클라이언트에게서 요청을 받을때 마다, 해당 토큰이 유효하고 인증됐는지 검증을 하고, 유저가 요청한 작업에 권한이 있는지 확인하여 작업을 처리한다.
+  서버측에서는 유저의 세션을 유지 할 필요가 없다. 즉 유저가 로그인되어있는지 안되어있는지 신경 쓸 필요가 없고, 유저가 요청을 했을때 토큰만 확인하면 되니, 세션 관리가 필요 없어서 서버 자원을 많이 아낄 수 있다.
+- **정보 교류**: JWT는 두 개체 사이에서 안정성있게 정보를 교환하기에 좋은 방법이다. 그 이유는, 정보가 sign 이 되어있기 때문에 정보를 보낸이가 바뀌진 않았는지, 또 정보가 도중에 조작되지는 않았는지 검증할 수 있다.
 
 <br/>
