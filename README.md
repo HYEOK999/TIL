@@ -275,6 +275,8 @@ Today I Leaned...
 >[20191223-react](https://github.com/HYEOK999/TIL/blob/master/react/20191223-study-react.md)
 >
 >[20191227-react](https://github.com/HYEOK999/TIL/blob/master/react/20191227-study-react.md)
+>
+>[20191230-react](https://github.com/HYEOK999/TIL/blob/master/react/20191230-study-react.md)
 
 <br/>
 
@@ -443,6 +445,8 @@ Today I Leaned...
 >[20191221-핸드폰 번호 가리기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_61.md)
 >
 >[20191224-최대공약수와 최소공배수](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_62.md)
+>
+>[20191230-큰 수 만들기](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_63.md)
 
 <br/>
 
