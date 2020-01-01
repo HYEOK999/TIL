@@ -309,6 +309,8 @@ Today I Leaned...
 >[주요개념 : 폼](https://github.com/HYEOK999/TIL/blob/master/react/react-official-08.md)
 >
 >[주요개념 : State 끌어올리기](https://github.com/HYEOK999/TIL/blob/master/react/react-official-09.md)
+>
+>[주요개념 :  합성(Composition) vs 상속(Inheritance)](https://github.com/HYEOK999/TIL/blob/master/react/react-official-10.md)
 
 <br/>
 
