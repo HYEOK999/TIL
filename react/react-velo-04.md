@@ -1,266 +1,39 @@
-![React03](https://user-images.githubusercontent.com/31315644/71559897-d7b32100-2aa6-11ea-8ac0-c0170212a497.png)
+![React04](https://user-images.githubusercontent.com/31315644/71559898-d7b32100-2aa6-11ea-87c9-bf337b9df693.png)
 
 ------
 
-## React with Velopert - 03 -
+## React with Velopert - 04 -
 
-- props 를 통해 컴포넌트에게 값 전달하기
-
-  - props 란 ?
-
-    - [props의 기본 사용법](#b1)
-    - [여러개의 props, 비구조화 할당(디스트럭처링)](#b2)
-    - [defaultProps 로 기본값 설정](#b3)
-    - [props.children](#b4)
 - 조건부 렌더링
-  - [예제 : 특정 props의 값이 true 또는 false 에 따라서 컴포넌트의 좌측에 *표시하기.](#a0)
-  - [props 값 설정을 생략하면 ={true}](#a1)
+  - 예제
+    - App.js
+    - Hello.js
+  - React에서 연산자의 쓰임처
+    - Hello.js
+  - props 값 설정을 생략하면 ={true}
+    - App.js
 
 <br/>
 
 ------
 
-# Chap 3. props , 조건부 렌더링
-
-## props 를 통해 컴포넌트에게 값 전달하기
-
-<br/>
-
-### props 란 ? 
-
-> properties의 줄임말 
->
-> 어떠한 값을 컴포넌트에게 전달할 때 사용.
-
-<br/>
-
-#### props의 기본 사용법 <a id="#b1"></b>
-
-`name` 속성 값 전달하기.
-
-App 컴포넌트 ⇢ Hello 컴포넌트 
-
-src > App.js
-
-~~~jsx
-import React from 'react';
-import Hello from './Hello';
-
-function App() {
-  return (
-    <Hello name="react" />
-  );
-}
-
-export default App;
-~~~
-
-<br/>
-
-src > Hello.js
-
-~~~jsx
-import React from 'react';
-
-function Hello(props) {
-  return <div>안녕하세요 {props.name}</div>
-}
-
-export default Hello;
-~~~
-
-컴포넌트에게 전달되는 props 는 파라미터를 통하여 조회 할 수 있다. 
-
-**props 는 객체 형태로 전달**되며, 만약 `name` 값을 조회하고 싶다면 `props.name` 을 조회하면 된다.
-
-![결과](https://user-images.githubusercontent.com/31315644/70218498-6e314280-1786-11ea-81af-3977c884a99d.jpeg)
-
-<br/>
-
-#### 여러개의 props, 비구조화 할당(디스트럭처링) <a id="#b2"></b>
-
-App 컴포넌트 ⇢ Hello 컴포넌트 
-
-src > App.js
-
-~~~jsx
-import React from 'react';
-import Hello from './Hello';
-
-function App() {
-  return (
-    <Hello name="react" color="red"/>
-  );
-}
-
-export default App;
-~~~
-
-<br/>
-
-src > Hello.js
-
-~~~jsx
-import React from 'react';
-
-function Hello({color, name}) {
-  {/* 기본
-  return <div style={{ color: props.color }}>안녕하세요 {props.name}</div>  
-  */}
-  return <div style={{ color }}>안녕하세요 {name}</div> {/* 비구조화 할당 디스트럭처링 */}
-}
-
-export default Hello;
-~~~
-
-<br/>
-
-#### defaultProps 로 기본값 설정 <a id="#b3"></b>
-
-App 컴포넌트 ⇢ Hello 컴포넌트 
-
-src > App.js
-
-~~~jsx
-import React from 'react';
-import Hello from './Hello';
-
-function App() {
-  return (
-    <>
-      <Hello name="react" color="red"/>
-      <Hello color="pink"/>
-    </>
-  );
-}
-
-export default App;
-~~~
-
-<br/>
-
-src > Hello.js
-
-~~~jsx
-import React from 'react';
-
-function Hello({ color, name }) {
-  return <div style={{ color }}>안녕하세요 {name}</div>
-}
-
-Hello.defaultProps = {
-  name: '이름없음'
-}
-
-export default Hello;
-~~~
-
-![결과](https://user-images.githubusercontent.com/31315644/70218495-6d98ac00-1786-11ea-9c6e-ea7a5f5d1186.jpeg)
-
-<br/>
-
-#### props.children <a id="#b4"></b>
-
-컴포넌트 태그 사이에 넣은 값을 조회하고 싶을 땐, `props.children` 을 조회하면 된다.
-
-**먼저 아래와 같이 작성했을 경우 Hello Component가 보이지 않는다.**
-
-App 컴포넌트 ⇢ Hello 컴포넌트 
-
-src > Wrapper.js
-
-~~~jsx
-import React from 'react';
-
-function Wrapper({ children }) {
-  const style = {
-    border: '2px solid black',
-    padding: '16px',
-  };
-  return (
-    <div style={style}>
-    </div>
-  )
-}
-
-export default Wrapper;
-~~~
-
-src > App.js
-
-~~~jsx
-import React from 'react';
-import Hello from './Hello';
-import Wrapper from './Wrapper';
-
-function App() {
-  return (
-    <Wrapper>
-      <Hello name="react" color="red"/>
-      <Hello color="pink"/>
-    </Wrapper>
-  );
-}
-
-export default App;
-~~~
-
-<br/>
-
-내부의 내용이 보여지게 하기 위해서는 Wrapper 에서 `props.children` 을 렌더링 해야만 한다.
-
-src > Wrapper.js
-
-~~~jsx
-import React from 'react';
-
-function Wrapper({ children }) {
-  const style = {
-    border: '2px solid black',
-    padding: '16px',
-  };
-  return (
-    <div style={style}>
-   		{children}
-    </div>
-  )
-}
-
-export default Wrapper;
-
-~~~
-
-src > App.js
-
-~~~jsx
-import React from 'react';
-import Hello from './Hello';
-import Wrapper from './Wrapper';
-
-function App() {
-  return (
-    <Wrapper>
-      <Hello name="react" color="red"/>
-      <Hello color="pink"/>
-    </Wrapper>
-  );
-}
-
-export default App;
-
-~~~
-
-<br/>
+# Chap 4. 조건부 렌더링
 
 ## 조건부 렌더링
 
-> 특정 조건에 따라 다른 결과물을 렌더링 하는 것.
+> 조건을 이용하여 렌더링 결과를 결정할 수 있다.
 
-#### 예제 : 특정 props의 값이 true 또는 false 에 따라서 컴포넌트의 좌측에 *표시하기.<a id="a0"></a>
+### 예제
 
-src > App.js
+App.js / Hello.js 2가지 파일이 있다.
 
-~~~jsx
+Hello 컴포넌트에서는 `isSpecial` 이 `true` 이냐 `false` 이냐에 따라서 컴포넌트의 좌측에 * 표시를 보여주는 예제를 작성하자.
+
+<br/>
+
+#### App.js
+
+```jsx
 import React from 'react';
 import Hello from './Hello';
 import Wrapper from './Wrapper';
@@ -274,20 +47,15 @@ function App() {
     </Wrapper>
   )
 }
-
+	
 export default App;
+```
 
-~~~
+<br/>
 
-<br/>
+#### Hello.js
 
-src > Hello.js
-
-Hello 컴포넌트에서는 isSpecial 이 `true` 이냐 `false` 이냐에 따라서 컴포넌트의 좌측에 * 표시한다.
-
-참고로 JSX 에서 null, false, undefined 를 렌더링하게 된다면 아무것도 나타나지 않게 된다.
-
-~~~jsx
+```jsx
 import React from 'react';
 
 function Hello({ color, name, isSpecial }) {
@@ -299,29 +67,61 @@ function Hello({ color, name, isSpecial }) {
   );
 }
 
-~~~
+Hello.defaultProps = {
+  name: '이름없음'
+}
 
-**보통 삼항연산자를 사용한 조건부 렌더링을 주로 특정 조건에 따라 보여줘야 하는 내용이 다를 때 사용**
+export default Hello;
+```
 
-아래처럼 `&&`를 사용한 단축평가를 활용 할 수 도 있다.
+`isSpecial` 값이 `true` 라면 `*` 를, 그렇지 않다면 `null` 을 보여주도록 했다. 
 
-~~~jsx
-<div style={{ color }}>
-  {isSpecial && <b>*</b>}
-  안녕하세요 {name}
-</div>
+리액트의 JSX에서는 `null` , `false`, `udefined` 를 렌더링하게 될 경우 렌더링을 하지 않게된다.
 
-~~~
+주의할 점은 JS에서 0은 조건상 `false`로서 인식을 하지만, JSX에서는 0을 그대로 렌더링하는 것에 주의해야한다.
 
 <br/>
 
-#### props 값 설정을 생략하면 ={true} <a id="a1"></a>
+### React에서 연산자의 쓰임처
+
+해당 연산자들은 JS의 단축평가를 기준으로 한다.
+
+- 삼항연산자 :  특정 조건에 따라 보여줘야 하는 내용이 다를 때
+- &&연산자 : 특정 조건이 `true` 이면 보여주고, `false`라면 숨길때
+- `||` 연산자 : 둘중 하나라도 보여줘야 할때
+
+#### Hello.js
+
+```javascript
+import React from 'react';
+
+function Hello({ color, name, isSpecial }) {
+  return (
+    <div style={{ color }}>
+      {isSpecial && <b>*</b>}
+      안녕하세요 {name}
+    </div>
+  );
+}
+
+Hello.defaultProps = {
+  name: '이름없음'
+}
+
+export default Hello;
+```
+
+<br/>
+
+### props 값 설정을 생략하면 ={true}
 
 컴포넌트의 props 값을 설정하게 될 때 만약 props 이름만 작성하고 값 설정을 생략한다면, 이를 `true` 로 설정한 것으로 간주한다.
 
-src > App.js
+예를 들자면,
 
-~~~jsx
+#### App.js
+
+```javascript
 import React from 'react';
 import Hello from './Hello';
 import Wrapper from './Wrapper';
@@ -336,6 +136,9 @@ function App() {
 }
 
 export default App;
+```
 
-~~~
+**이렇게 `isSpecial` 이름만 넣어주면 `isSpecial={true}` 와 동일한 의미이다.**
+
+<br/>
 
