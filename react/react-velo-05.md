@@ -1,144 +1,267 @@
-![React04](https://user-images.githubusercontent.com/31315644/71559898-d7b32100-2aa6-11ea-87c9-bf337b9df693.png)
+![React05](https://user-images.githubusercontent.com/31315644/71559899-d84bb780-2aa6-11ea-9f44-1e87b42ebcfb.png)
 
 ------
 
-## React with Velopert - 04 -
+## React with Velopert - 05 -
 
-- 조건부 렌더링
-  - 예제
+- useState
+  - 예제 : 버튼을 누르면 숫자가 바뀌는 Counter 컴포넌트
     - App.js
-    - Hello.js
-  - React에서 연산자의 쓰임처
-    - Hello.js
-  - props 값 설정을 생략하면 ={true}
-    - App.js
+    - Counter.js
+    - [이벤트 설정하기](#a1)
+  - [동적인 값 끼얹기, useState](#a2)
+    - 예제 : Counter.js에 Hook 사용해서 상태 관리해보기
+  - [정리](#a3)
+    - 정리 - useReact  사용방법1 : 모듈 import 하기. 
+    - 정리 - useReact  사용방법2 : 함수 호출하여 사용하기.
+    - 정리 - useReact  사용방법3 : 상태 변경 및 조회하기.
+  - [함수형 업데이트](#a4)
+    - Counter.js
 
 <br/>
 
 ------
 
-# Chap 4. 조건부 렌더링
+# Chap 5. useState를 통해 컴포넌트에서 바뀌는 값 관리하기
 
-## 조건부 렌더링
+## useState
 
-> 조건을 이용하여 렌더링 결과를 결정할 수 있다.
-
-### 예제
-
-App.js / Hello.js 2가지 파일이 있다.
-
-Hello 컴포넌트에서는 `isSpecial` 이 `true` 이냐 `false` 이냐에 따라서 컴포넌트의 좌측에 * 표시를 보여주는 예제를 작성하자.
+> 리액트 16.8 이전 버전에서는 함수형 컴포넌트에서는 상태를 관리할 수 없었다. 하지만, 리액트 16.8 에서 Hooks 라는 기능이 도입되면서 함수형 컴포넌트에서도 상태를 관리할 수 있게 되었다. 
+>
+> 이번에는 useState 라는 함수를 사용해보게 되는데, 이게 바로 리액트의 Hooks 중 하나이다.
 
 <br/>
+
+### 예제 : 버튼을 누르면 숫자가 바뀌는 Counter 컴포넌트
 
 #### App.js
 
 ```jsx
 import React from 'react';
-import Hello from './Hello';
-import Wrapper from './Wrapper';
-
+import Counter from './Counter';
 
 function App() {
   return (
-    <Wrapper>
-      <Hello name="react" color="red" isSpecial={true}/>
-      <Hello color="pink" />
-    </Wrapper>
-  )
-}
-	
-export default App;
-```
-
-<br/>
-
-#### Hello.js
-
-```jsx
-import React from 'react';
-
-function Hello({ color, name, isSpecial }) {
-  return (
-    <div style={{ color }}>
-      { isSpecial ? <b>*</b> : null }
-      안녕하세요 {name}
-    </div>
-  );
-}
-
-Hello.defaultProps = {
-  name: '이름없음'
-}
-
-export default Hello;
-```
-
-`isSpecial` 값이 `true` 라면 `*` 를, 그렇지 않다면 `null` 을 보여주도록 했다. 
-
-리액트의 JSX에서는 `null` , `false`, `udefined` 를 렌더링하게 될 경우 렌더링을 하지 않게된다.
-
-주의할 점은 JS에서 0은 조건상 `false`로서 인식을 하지만, JSX에서는 0을 그대로 렌더링하는 것에 주의해야한다.
-
-<br/>
-
-### React에서 연산자의 쓰임처
-
-해당 연산자들은 JS의 단축평가를 기준으로 한다.
-
-- 삼항연산자 :  특정 조건에 따라 보여줘야 하는 내용이 다를 때
-- &&연산자 : 특정 조건이 `true` 이면 보여주고, `false`라면 숨길때
-- `||` 연산자 : 둘중 하나라도 보여줘야 할때
-
-#### Hello.js
-
-```javascript
-import React from 'react';
-
-function Hello({ color, name, isSpecial }) {
-  return (
-    <div style={{ color }}>
-      {isSpecial && <b>*</b>}
-      안녕하세요 {name}
-    </div>
-  );
-}
-
-Hello.defaultProps = {
-  name: '이름없음'
-}
-
-export default Hello;
-```
-
-<br/>
-
-### props 값 설정을 생략하면 ={true}
-
-컴포넌트의 props 값을 설정하게 될 때 만약 props 이름만 작성하고 값 설정을 생략한다면, 이를 `true` 로 설정한 것으로 간주한다.
-
-예를 들자면,
-
-#### App.js
-
-```javascript
-import React from 'react';
-import Hello from './Hello';
-import Wrapper from './Wrapper';
-
-function App() {
-  return (
-    <Wrapper>
-      <Hello name="react" color="red" isSpecial />
-      <Hello color="pink"/>
-    </Wrapper>
+    <Counter />
   );
 }
 
 export default App;
 ```
 
-**이렇게 `isSpecial` 이름만 넣어주면 `isSpecial={true}` 와 동일한 의미이다.**
+<br/>
+
+#### Counter.js
+
+`Counter`에서 버튼이 클릭되는 이벤트가 발생 했을 때, 특정 함수가 호출되도록 설정을 해보자.
+
+```jsx
+import React from 'react';
+
+function Counter() {
+  const onIncrease = () => {
+    console.log('+1')
+  }
+  const onDecrease = () => {
+    console.log('-1');
+  }
+  return (
+    <div>
+      <h1>0</h1>
+      <button onClick={onIncrease}>+1</button>
+      <button onClick={onDecrease}>-1</button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+`onIncrease` 와 `onDecrease`라는 함수를 각각 만들고 이벤트를 설정 해주자.
 
 <br/>
 
+#### 이벤트 설정하기 <a id="a1"></a>
+
+리액트에서 엘리먼트에 이벤트를 설정해줄때에는 `on이벤트이름={실행하고싶은함수}` 형태로 설정해야 한다.
+
+**함수형태를 넣어주어야 하지, 함수를 다음과 같이 실행하면 안된다.**
+
+이유는 렌더링되는 시점에서 함수가 호출되버리기 때문이다.
+
+이벤트를 설정할때에는 함수타입의 값을 넣어주어야 한다는 것, 주의하자.
+
+```jsx
+// 틀린방식
+<button onClick={onIncrease()}>+1</button>
+<button onClick={onDecrease()}>-1</button>
+      
+// 올바른 방식1
+<button onClick={onIncrease}>+1</button>
+<button onClick={onDecrease}>-1</button>
+
+// 올바른 방식2 : 직접 Click 내부 화살표 함수로 구현해도 된다.
+<button onClick={() => {console.log('+1')}}>+1</button>
+<button onClick={() => {console.log('-1')}}>-1</button>
+```
+
+<img src="https://i.imgur.com/534RyIz.png" alt="img" style="zoom:50%;" />
+
+<br/>
+
+### 동적인 값 끼얹기, useState <a id="a2"></a>
+
+컴포넌트에서 동적인 값을 상태(state)라고 칭한다.
+
+리액트에는 useState라는 함수가 있는데 컴포넌트에서 상태를 관리할 수 있게하는 함수다.
+
+**리액트 훅 함수를 사용할 때 훅을 포함하는 함수명에 주의를 해야만한다.**
+
+**Hook 함수는 자신을 포함하고 있는 함수가 컴포넌트인지 판별하는 기준은 첫글자가 대문자로 시작하는지 안하는지의 차이다.**
+
+**따라서 컴포넌트를 작성할 때는 반드시 대문자 네이밍인 파스칼케이스를 지키도록하자.**
+
+```jsx
+// 틀린 방법
+function counter() {
+  const [number, setNumber] = useState(0);
+ 
+  return ...
+}
+
+// 올바른 방법
+function Counter() {
+  const [number, setNumber] = useState(0);
+ 
+  return ...
+}
+```
+
+<br/>
+
+#### 예제 : Counter.js에 Hook 사용해서 상태 관리해보기
+
+```jsx
+import React, { useState } from 'react';
+
+function Counter() {
+  const [number, setNumber] = useState(0);
+
+  const onIncrease = () => {
+    setNumber(number + 1);
+  }
+
+  const onDecrease = () => {
+    setNumber(number - 1);
+  }
+
+  return (
+    <div>
+      <h1>{number}</h1>
+      <button onClick={onIncrease}>+1</button>
+      <button onClick={onDecrease}>-1</button>
+    </div>
+  );
+}
+
+export default Counter;
+```
+
+위와 같이 작성했다면 숫자가 변경이 될 것이다.
+
+<img src="https://i.imgur.com/8LxuRm1.png" alt="img" style="zoom:50%;" />
+
+<br/>
+
+### 정리 <a id="a3"></a>
+
+#### 정리 - useReact  사용방법1 : 모듈 import 하기. 
+
+사용하고자하는 파일에서 import 해준다.
+
+```jsx
+import React, { useState } from 'react';
+```
+
+<br/>
+
+#### 정리 - useReact  사용방법2 : 함수 호출하여 사용하기.
+
+useReact는 호출 시 배열을 반환하는 것을 이용하여 배열 비구조화 할당을 이용할 수 있다.
+
+첫번째 요소는 현재상태, 2번째 요소는 Setter함수이다.
+
+```jsx
+// 기본적인 사용방법
+const numberState = useState(0);
+const number = numberState[0];
+const setNumber = numberState[1];
+
+// 배열 비구조화 할당을 이용하여 쉽게 이용하기.
+const [number, setNumber] = useState(0);
+```
+
+<br/>
+
+#### 정리 - useReact  사용방법3 : 상태 변경 및 조회하기.
+
+```jsx
+ // 상태 변경 하기
+ const onIncrease = () => {
+   setNumber(number + 1);
+ }
+
+ const onDecrease = () => {
+   setNumber(number - 1);
+ }
+ 
+ // 상태 조회하기
+return (
+  <div>
+    <h1>{number}</h1>
+    <button onClick={onIncrease}>+1</button>
+    <button onClick={onDecrease}>-1</button>
+  </div>
+);
+```
+
+<br/>
+
+### 함수형 업데이트 <a id="a4"></a>
+
+Setter 함수를 사용 할 때, 업데이트 하고 싶은 새로운 값을 파라미터로 넣어주고 있다, 다른 방법으로는 기존 값을 어떻게 업데이트 할 지에 대한 함수를 등록하는 방식으로도 값을 업데이트 할 수 있다.
+
+#### Counter.js
+
+```jsx
+import React, { useState } from 'react';
+
+function Counter() {
+  const [number, setNumber] = useState(0);
+
+  const onIncrease = () => {
+    setNumber(prevNumber => prevNumber + 1);
+  }
+
+  const onDecrease = () => {
+    setNumber(prevNumber => prevNumber - 1);
+  }
+
+  return (
+    <div>
+      <h1>{number}</h1>
+      <button onClick={onIncrease}>+1</button>
+      <button onClick={onDecrease}>-1</button>
+    </div>
+  );
+}
+
+export default Counter;
+
+```
+
+`onIncrease` 와 `onDecrease` 에서 `setNumber` 를 사용 할 때 그 다음 상태를 파라미터로 넣어준것이 아니라, 값을 업데이트 하는 함수를 파라미터로 넣어주었다.
+
+함수형 업데이트는 주로 나중에 컴포넌트를 최적화를 하게 될 때 사용하게 된다.
+
+<br/>
