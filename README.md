@@ -295,6 +295,8 @@ Today I Leaned...
 >[useState를 통해 컴포넌트에서 바뀌는 값 관리하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-05.md)
 >
 >[input 상태 관리하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-06.md)
+>
+>[여러개 input 상태 관리하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-07.md)
 
 <br/>
 
