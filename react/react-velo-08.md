@@ -1,64 +1,62 @@
-![React07](https://user-images.githubusercontent.com/31315644/71559901-d84bb780-2aa6-11ea-83cd-9a50a853e25f.png)
+![React08](https://user-images.githubusercontent.com/31315644/71559902-d84bb780-2aa6-11ea-97ea-0bbc18465b47.png)
 
 ------
 
-## React with Velopert - 07 -
+## React with Velopert - 08 -
 
-- 여러개 input 상태 관리하기
-  - 예제 : 여러 input 박스 입력 및 초기화 버튼 만들기 (상태 관리하기)
-    - App.js
-    - InputSample.js
-    - [주의점-불변성](#a1)
+- useRef
+
+  - [예제 : 초기화 버튼을 클릭했을 때 이름 input 에 포커스가 잡히도록 `useRef` 를 사용하여 기능을 구현](#a1)
+    - [InputSample.js](#a2)
+  
+  
 
 <br/>
 
 ------
 
-# Chap 7. 여러개의 input 상태 관리하기
+# Chap 8. useRef 로 특정 DOM 선택하기
 
-## 여러개 input 상태 관리하기
-
-> input 상태가 다수 일 경우 관리를 하는 방법을 알아보자.
+## useRef
 
 <br/>
 
-### 예제 : 여러 input 박스 입력 및 초기화 버튼 만들기 (상태 관리하기)
+JavaScript 를 이용하여 특정 DOM을 선택하는 상황에서 우리는 `getElementById`, `querySelector` 같은 DOM Selector 함수를 사용해서 DOM을 선택하고는 했다.
 
-#### App.js
+- 엘리먼트의 크기 필요 
+- 스크롤바 위치 설정
+- 포커스를 지정
+- Video.js, JWPlayer 같은 HTML Video 관련 라이브러리
+- D3, chart.js 같은 그래프 관련 라이브러리 등의 외부 라이브러리
+- etc...
 
-```jsx
-import React from 'react';
-import InputSample from './InputSample';
+위와 같은 여러가지 복잡한 상황 속에서는 리액트도 직접적으로 DOM을 선택해야만 한다.
 
-function App() {
-  return (
-    <InputSample />
-  );
-}
+여기서 리액트는 `ref` 를 사용한다.
 
-export default App;
-```
+- 함수형 컴포넌트에서 `ref` 를 사용 할 때에는 `useRef` 라는 Hook 함수를 이용한다.
+- 클래스형 컴포넌트에서는 콜백함수, `React.createRef` 라는 함수를 이용한다.
 
 <br/>
 
-#### InputSample.js
+### 예제 : 초기화 버튼을 클릭했을 때 이름 input 에 포커스가 잡히도록 `useRef` 를 사용하여 기능을 구현 <a id="a1"></a>
 
-input 의 개수가 여러개가 됐을때는, 단순히 `useState` 를 여러번 사용하고 `onChange` 도 여러개 만들어서 구현 할 수 있다. 
+전에 만든 InputSample.js 에서는 초기화 버튼을 누르면 포커스가 초기화 버튼에 그대로 남아있게 되었다.
 
-하지만 그 방법은 가장 좋은 방법은 아니다. 더 좋은 방법은, input 에 `name` 을 설정하고 이벤트가 발생했을 때 이 값을 참조하는 것이다. 
+이번에는 초기화 버튼을 클릭 시 input에 포커스가 잡히는 기능을 구현해본다.
 
-그리고, `useState` 에서는 문자열이 아니라 객체 형태의 상태를 관리해주어야 한다.
-
-기존의 InputSample 컴포넌트를 다음과 같이 수정해보자.
+#### InputSample.js <a id="a2"></a>
 
 ```jsx
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 function InputSample() {
   const [inputs, setInputs] = useState({
     name: '',
     nickname: ''
   });
+
+  const nameInput = useRef();
 
   const { name, nickname } = inputs; // 비구조화 할당을 통해 값 추출
 
@@ -74,14 +72,26 @@ function InputSample() {
     setInputs({
       name: '',
       nickname: '',
-    })
+    });
+    nameInput.current.focus();
   };
 
 
   return (
     <div>
-      <input name="name" placeholder="이름" onChange={onChange} value={name} />
-      <input name="nickname" placeholder="닉네임" onChange={onChange} value={nickname}/>
+      <input
+        name="name"
+        placeholder="이름"
+        onChange={onChange}
+        value={name}
+        ref={nameInput}
+      />
+      <input
+        name="nickname"
+        placeholder="닉네임"
+        onChange={onChange}
+        value={nickname}
+      />
       <button onClick={onReset}>초기화</button>
       <div>
         <b>값: </b>
@@ -94,35 +104,12 @@ function InputSample() {
 export default InputSample;
 ```
 
-<br/>
+`useRef()` 를 사용하여 Ref 객체를 만들고, 이 객체를 선택하고 싶은 DOM 에 `ref` 값으로 설정해주어야 한다. 
 
-#### 주의점-불변성 <a id="a1"></a>
+그러면, Ref 객체의 `.current` 값은 우리가 원하는 DOM 을 가르키게 된다.
 
-React에서 객체 상태를 수정할 때는 다음과 같이 직접적으로 값을 할당해서는 안된다.
+위 예제에서는 `onReset` 함수에서 input 에 포커스를 하는 `focus()` DOM API 를 호출해주었다.
 
-```javascript
-inputs[name] = value;	
-```
-
-`inputs[name] = value` 이런식으로 기존 상태를 직접 수정하게 되면, 값을 바꿔도 리렌더링이 되지 않는다.
+이제 input 에 포커스가 잘 잡힐 것 이다.
 
 <br/>
-
-React에서는 객체 내용을 수정할 때, 반드시 객체로 반환해야한다.
-
-여기서 주의점은 **객체로 반환시 기존의 객체에 덮어씌우는 꼴이기 때문에 전의 내용은 유지를 할 수가 없다. **
-
-**전의 내용을 유지하고 싶다면 반드시 Spread(...)문법이나 Object.assign 함수등을 이용해 복사해야만 한다.** 
-
-```jsx
-setInputs({
-  ...inputs,
-  [name]: value
-});
-```
-
-이러한 작업들은 '불변성'을 지키기 위함인데 리액트가 컴포넌트에서 상태가 업데이트가 됬음을 감지하고 이에 따라 필요한 렌더링을 진행할 수 있다.
-
-리액트에서는 불변성을 지켜주어야만 컴포넌트 업데이트 성능 최적화를 제대로 할 수 있다. 
-
-참고로, Redux에서도 위와 같은 이유로 반드시 새로운 객체를 반환해야만 한다.
