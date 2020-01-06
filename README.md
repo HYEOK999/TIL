@@ -299,6 +299,8 @@ Today I Leaned...
 >[여러개 input 상태 관리하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-07.md)
 >
 >[useRef](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-08.md)
+>
+>[배열 렌더링하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-09.md)
 
 <br/>
 
