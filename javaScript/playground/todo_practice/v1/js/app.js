@@ -56,7 +56,6 @@ $todos.addEventListener('click', function (e) {
 $completeAllBtn.addEventListener('click', function () {
   todos = todos.map((todo) => ($completeAllBtn.checked
     ? { ...todo, completed: true } : { ...todo, completed: false }));
-
   render();
 });
 
