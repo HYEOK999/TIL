@@ -9,7 +9,6 @@ class App extends Component {
       navId : 'all'
     };
     this.nav = createRef();
-    // this.cleanTodos = this.cleanTodos.bind(this);
   }
 
   componentDidMount() {
@@ -30,9 +29,9 @@ class App extends Component {
   addTodo(key, target) {
     if (target.value.trim() === '' || key !== 'Enter') return;
     let todo = { id: this.generateId() , content: target.value, completed: false};
-    this.setState(() => ({
+    this.setState({
       todos : [...this.state.todos, todo]
-    }))
+    })
     target.value = '';
   }
 
@@ -111,7 +110,7 @@ class App extends Component {
             <label htmlFor="ck-complete-all">Mark all as complete</label>
           </div>
           <div className="clear-completed">
-            <button className="btn" onClick={() => this.cleanTodos}>Clear completed (<span className="completed-todos">{completedCount}</span>)</button>
+            <button className="btn" onClick={this.cleanTodos}>Clear completed (<span className="completed-todos">{completedCount}</span>)</button>
             <strong className="active-todos">{activeCount}</strong> items left
           </div>
         </div>
