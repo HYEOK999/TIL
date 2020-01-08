@@ -312,6 +312,12 @@ body {
 
 #### MainView.js
 
+**최상위 컴포넌트**
+
+수정사항 : `Navigation`컴포넌트에서 상태를 받아가지고 오기 위해서 사용한 `all`을 상태 객체로 관리한다. 이렇게 한 이유는 굳이 DOM요소를 조작하지 않고 상태만으로 렌더링이 가능할 것이라고 판단하였기 때문이다. 따라서 기존의 `주석 TODO: v1,2`는 주석처리하고 `주석 TODO: v3`를 사용한다.
+
+전반적으로 `Todo Version 1`과 비교했을 때 훨씬 더 자바스크립트의 모양새에 탈피한 느낌이며, 리액트의 특징 답게 UI를 신경쓰지 않고 상태만 관리를 해주면 되었기에 훨씬 더 간편하고 직관적이며 유지보수가 용이한 코드를 작성할 수 있었다.
+
 ```jsx
 import React, { useState, useEffect } from 'react'
 import './MainView.css';
@@ -420,6 +426,12 @@ export default MainView;
 
 #### components/Input/index.jsx
 
+**하위 컴포넌트**
+
+`input`  태그를 별도로 분리하여 관리한다. 해당 태그에서 추가 이벤트가 일어나야 하므로 `onKeyPress`이벤트를 이용하였고 상위 컴포넌트로부터 내려받은 이벤트와 연결시켜주었다.
+
+태그를 하나만 쓰면 되고 기존의 마크업을 변경시키지 않기 위해서 Fragments(`<>  </>`)을 이용하였다.
+
 ```jsx
 import React from 'react'
 
@@ -437,6 +449,12 @@ export default InputTodo;
 <br/>
 
 #### components/Navigation/index.jsx
+
+**하위 컴포넌트**
+
+`Navigation`  을 분리하여 관리한다. 해당 태그에서 탭 변경 이벤트가 일어나야 하므로 `onClick`이벤트를 이용하였고 상위 컴포넌트로부터 내려받은 이벤트와 연결시켜주었다.
+
+수정사항 : 기존에는 DOM을 조작하는 방식으로 이용을 하였으나 상위 컴포넌트에서 관리하는 상태를 이용하여 DOM을 조작하는 방식이 아닌 상태에 의존하여 DOM을 렌더링하는 방식으로 변경하였다.
 
 ```jsx
 import React, { useRef } from 'react'
@@ -482,7 +500,15 @@ export default Navigation;
 
 <br/>
 
-####components/TodoList/index.jsx 
+#### components/TodoList/index.jsx 
+
+**하위 컴포넌트**
+
+`Todos List`  를 별도로 분리하여 관리한다. 해당 태그에서는 실질적으로 Todo를 렌더링해야 한다.
+
+중간의 `input`태그에서는 `checked` 속성이 이용되었는데 이 속성은 해당 태그 내의 속성 중 `onChange` 이벤트가 작성이 안되어 있으면 `defaultChecked`를 사용하라는 에러를 내뿜는다. 이점을 참고할 것.
+
+삭제 버튼이 이쪽에 구현되야 하므로 `<i></i>`태그에 `onClick` 이벤트를 걸어주었다.
 
 ```jsx
 import React from 'react'
@@ -510,6 +536,15 @@ export default Todos;
 
 #### components/Footer/index.jsx
 
+**하위 컴포넌트**
+
+`Footer`  를 별도로 분리하여 관리한다. 
+
+`Footer`에서는 폴더를 쉽게 관리하기 위해서 내부적으로 2개의 하위 컴포넌트로 더 나누었다.
+
+- CompleteAll
+- ClearCompleted
+
 ```jsx
 import React from 'react'
 import CompleteAll from './CompleteAll'
@@ -531,6 +566,12 @@ export default Footer;
 
 #### components/Footer/ClearCompleted.jsx
 
+**Footer의 하위 컴포넌트**
+
+완료된 할 일들을 목록에서 모두 제거해버리는 로직을 구현한다.
+
+추가로, 현재 완료된 할 일 목록의 카운팅 수 와 완료되지 않은 할 일 목록의 카운팅 수를 화면에 렌더링한다.
+
 ```jsx
 import React from 'react'
 
@@ -549,6 +590,12 @@ export default ClearCompleted;
 <br/>
 
 #### components/Footer/CompleteAll.jsx
+
+**Footer의 하위 컴포넌트**
+
+모든 목록에 대하여 클릭 시 모든 목록을 토글 시켜주는 기능을 구현한다.
+
+따라서 버튼을 클릭해야 하므로 `onClick`으로 구현을 하며, 최상위 MainView - 상위 Footer - 현재 CompleteAll순으로 props를 통해 내려받는다.
 
 ```jsx
 import React from 'react'

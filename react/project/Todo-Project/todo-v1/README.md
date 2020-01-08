@@ -298,6 +298,12 @@ body {
 
 ### Todo V1 전체 코드
 
+`JavaScript`로 구현한 것보다 확실히 `Render`를 별도로 구현하지 않아서 훨씬 더 간편하였다.
+
+상태만 관리해주면 되었기 때문에 직접적인 UI를 고려하지 않아도 되는 편리함을 느꼈다.
+
+반대로, render되는 시점에 대한 이해가 더 필요할 것으로 생각된다. 처음 구현시 화면 렌더링 순서에 대한 오해가 개발하는 데 있어서 오류를 발생시키는 원인이 되었다.
+
 ```jsx
 import React, { createRef, Component } from 'react'
 import './App.css';
