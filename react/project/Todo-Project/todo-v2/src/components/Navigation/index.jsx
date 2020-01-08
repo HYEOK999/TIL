@@ -1,15 +1,33 @@
 import React, { useRef } from 'react'
 
-const Navigation = ({changeNavigation}) => {
+const Navigation = ({navLists, changeNavigation}) => {
   const nav = useRef();
+  console.log(navLists);
   return (
-    <ul className="nav" ref={nav} onClick={({target}) => changeNavigation(nav, target)}>
-      <li id="all" className="active">All</li>
-      <li id="active">Active</li>
-      <li id="completed">Completed</li>
+    //TODO: v3
+    <ul className="nav" ref={nav}>
+      {
+      navLists.map((navItem) => (
+          <li
+            key={navItem.id}
+            id={navItem.navId}
+            className={navItem.toggle ? 'active' : null}
+            onClick={() => changeNavigation(navItem.id)}
+          >
+            {navItem.navId}
+          </li>
+        ))
+      }
     </ul>
 
-    //TODO: 다른 버전
+    //TODO: v1
+    // <ul className="nav" ref={nav} onClick={({target}) => changeNavigation(nav, target)}>
+    //   <li id="all" className="active" >All</li>
+    //   <li id="active">Active</li>
+    //   <li id="completed">Completed</li>
+    // </ul>
+
+    //TODO: v2
     // <ul className="nav" ref={nav}>
     //   <li id="all" onClick={({target}) => changeNavigation(nav, target)} className="active" >All</li>
     //   <li id="active" onClick={({target}) => changeNavigation(nav, target)}>Active</li>
