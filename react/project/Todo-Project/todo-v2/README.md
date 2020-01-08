@@ -10,7 +10,7 @@
 2. Todo 삭제
 3. Todo 체크
 4. 전체 Todos 완료 / 미완료 토글
-5. 체크된 Todo들 삭제
+5. 체크된 Todos 삭제
 6. 체크된 Todos 카운팅
 7. 체크되지 않은 Todos 카운팅
 8. 탭에 따라 Todo 분류 (전체 Todo, 체크된 Todo, 체크되지 않은 Todo)
