@@ -4,7 +4,7 @@
 
 # Todo Version 1
 
-목차
+## 기능
 
 1. Todo 추가
 2. Todo 삭제
