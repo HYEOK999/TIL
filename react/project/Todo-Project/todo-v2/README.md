@@ -1,68 +1,567 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![todo-react-v2](https://user-images.githubusercontent.com/31315644/71952612-a95de000-3222-11ea-8a65-3c94aa73e055.png)
 
-## Available Scripts
+-----------
 
-In the project directory, you can run:
+# Todo Version 2
 
-### `npm start`
+목차
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Todo 추가
+2. Todo 삭제
+3. Todo 체크
+4. 전체 Todos 완료 / 미완료 토글
+5. 체크된 Todo들 삭제
+6. 체크된 Todos 카운팅
+7. 체크되지 않은 Todos 카운팅
+8. 탭에 따라 Todo 분류 (전체 Todo, 체크된 Todo, 체크되지 않은 Todo)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+-----------
 
-### `npm test`
+## Todo Version 2 구축하기
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> 컴포넌트를 분류한다. 
+>
+> 함수형 컴포넌트(Hook)으로 구축해본다.
 
-### `npm run build`
+<br/>
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 컴포넌트 분류
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+최상위 컴포넌트: MainView 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+하위 컴포넌트 : Input, Navigation, TodoList, Footer
 
-### `npm run eject`
+<img src="https://user-images.githubusercontent.com/31315644/72003712-481f2680-328d-11ea-9670-9618227dddb3.png" alt="Todo Component Classify" style="zoom:50%;" />
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<br/>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 마크업
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Todos 2.0</title>
+  <link href="css/style.css" rel="stylesheet">
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Todos</h1>
+    <div class="ver">2.0</div>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+    <input class="input-todo" placeholder="What needs to be done?" autofocus>
+    <ul class="nav">
+      <li id="all" class="active">All</li>
+      <li id="active">Active</li>
+      <li id="completed">Completed</li>
+    </ul>
 
-## Learn More
+    <ul class="todos">
+      <li id="myId" class="todo-item">
+        <input class="custom-checkbox" type="checkbox" id="ck-myId">
+        <label for="ck-myId">HTML</label>
+        <i class="remove-todo far fa-times-circle"></i>
+      </li>
+    </ul>
+    <div class="footer">
+      <div class="complete-all">
+        <input class="custom-checkbox" type="checkbox" id="ck-complete-all">
+        <label for="ck-complete-all">Mark all as complete</label>
+      </div>
+      <div class="clear-completed">
+        <button class="btn">Clear completed (<span class="completed-todos">0</span>)</button>
+        <strong class="active-todos">0</strong> items left
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+<br/>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 초기화 데이터
 
-### Code Splitting
+```jsx
+let todos = [
+    { id: 1, content: 'HTML', completed: false },
+    { id: 2, content: 'CSS', completed: true },
+    { id: 3, content: 'Javascript', completed: false }
+  ]
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+<br/>
 
-### Analyzing the Bundle Size
+### CSS
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```css
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700|Noto+Sans+KR');
+@import url('https://use.fontawesome.com/releases/v5.5.0/css/all.css');
 
-### Making a Progressive Web App
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+body {
+  font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+  /* font-size: 16px; */
+  font-size: 0.9em;
+  color: #58666e;
+  background-color: #f0f3f4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-### Advanced Configuration
+.container {
+  max-width: 750px;
+  min-width: 450px;
+  margin: 0 auto;
+  padding: 15px;
+}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+.title {
+  /* margin: 10px 0; */
+  font-size: 4.5em;
+  font-weight: 100;
+  text-align: center;
+  color: #23b7e5;
+}
 
-### Deployment
+.ver {
+  font-weight: 100;
+  text-align: center;
+  color: #23b7e5;
+  margin-bottom: 30px;
+}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+/* .input-todo  */
+.input-todo {
+  display: block;
+  width: 100%;
+  height: 45px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  color: #555;
+  border: 1px solid #ccc;
+  border-color: #e7ecee;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
 
-### `npm run build` fails to minify
+.input-todo:focus {
+  border-color: #23b7e5;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+.input-todo::-webkit-input-placeholder {
+  color: #999;
+}
+
+/* .nav */
+.nav {
+  display: flex;
+  margin: 15px;
+  list-style: none;
+}
+
+.nav > li {
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.nav > li.active {
+  color: #fff;
+  background-color: #23b7e5;
+}
+
+.todo-list {}
+
+/* .todo-item */
+.todo-item {
+  position: relative;
+  /* display: block; */
+  height: 50px;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-color: #e7ecee;
+  list-style: none;
+}
+
+.todo-item:first-child {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.todo-item:last-child {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/*
+  .custom-checkbox
+  custom-checkbox 바로 뒤에 위치한 label의 before와 after를 사용해
+  custom-checkbox의 외부 박스와 내부 박스를 생성한다.
+
+  <input class="custom-checkbox" type="checkbox" id="myId">
+  <label for="myId">Content</label>
+*/
+
+.custom-checkbox {
+  display: none;
+}
+
+.custom-checkbox + label {
+  position: absolute; /* 부모 위치를 기준으로 */
+  top: 50%;
+  left: 15px;
+  transform: translate3d(0, -50%, 0);
+  display: inline-block;
+  width: 90%;
+  line-height: 2em;
+  padding-left: 35px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox + label:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate3d(0, -50%, 0);
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 1px solid #cfdadd;
+}
+
+.custom-checkbox:checked + label:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  transform: translate3d(0, -50%, 0);
+  width: 10px;
+  height: 10px;
+  background-color: #23b7e5;
+}
+
+/* .remove-todo button */
+.remove-todo {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  cursor: pointer;
+  transform: translate3d(0, -50%, 0);
+}
+
+/* todo-item이 호버 상태이면 삭제 버튼을 활성화 */
+.todo-item:hover > .remove-todo {
+  display: block;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.complete-all, .clear-completed {
+  position: relative;
+  flex-basis: 50%;
+}
+
+.clear-completed {
+  text-align: right;
+  padding-right: 15px;
+}
+
+.btn {
+  padding: 1px 5px;
+  font-size: .8em;
+  line-height: 1.5;
+  border-radius: 3px;
+  outline: none;
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+  cursor: pointer;
+}
+
+.btn:hover {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+```
+
+<br/>
+
+### Todo V2 전체 코드
+
+#### MainView.js
+
+```jsx
+import React, { useState, useEffect } from 'react'
+import './MainView.css';
+import InputTodo from './components/Input';
+import Navigation from './components/Navigation';
+import TodoList from './components/TodoList';
+import Footer from './components/Footer';
+
+const MainView = () => {
+  const [todos, setTodos] = useState([]);
+  //TODO: v1,v2
+  // const [navId, setNavId] = useState('all');
+
+  //TODO: v3
+  const [navLists, setNavLists] = useState([
+    {id: 1, navId:'All', toggle: true},
+    {id: 2, navId:'Active', toggle: false},
+    {id: 3, navId:'Completed', toggle: false}
+  ]);
+
+  useEffect(() => {
+    setTodos([
+      { id: 1, content: 'HTML', completed: false },
+      { id: 2, content: 'CSS', completed: true },
+      { id: 3, content: 'Javascript', completed: false }
+    ])
+  }, [])
+
+  const generatedId = () => {
+    return Math.max(0, ...todos.map((todo) => todo.id)) + 1;
+  }
+
+  const addTodo = (key, target) => {
+    if(key !== 'Enter' || target.value.trim() === '') return;
+    setTodos([
+      ...todos,
+      { id : generatedId(), content: target.value, completed: false }
+    ])
+    target.value = '';
+  }
+
+  const checkedTodo = (id) => {
+    setTodos(todos.map((todo) => (todo.id === id ? {...todo, completed: !todo.completed} : todo)))
+  }
+
+  const removeTodo = (target, id) => {
+    if(!target.classList.contains('remove-todo')) return;
+    setTodos(todos.filter((todo) => (todo.id !== id)))
+  }
+
+  const allToggleTodo = (target) => {
+    setTodos(todos.map((todo) => ({...todo, completed: target.checked})))
+  }
+
+  const completedAllTodo = () => {
+    setTodos(todos.filter(({completed}) => (!completed)))
+  }
+
+  //TODO: v1
+  // const changeNavigation = ($nav, target) => {
+  //   if (target.classList.contains('nav')) return;
+  //   [...$nav.current.children].forEach(($navList) => {
+  //     $navList.classList.toggle('active', $navList.id === target.id);
+  //     setNavId(target.id);
+  //   });
+  // }
+
+  //TODO: v2
+  // const changeNavigation = ($nav, target) => {
+  //   [...$nav.current.children].forEach(($navList) => {
+  //     $navList.classList.toggle('active', $navList.id === target.id);
+  //     setNavId(target.id);
+  //   });
+  // }
+
+  //TODO: v3
+  const changeNavigation = (id) => {
+    setNavLists(navLists.map((navList) => id === navList.id ? {...navList, toggle:true} : {...navList, toggle:false}))
+  }
+
+  //TODO: v1,v2
+  // const _todos = todos.filter((todo) => navId === 'all' ? todo : navId === 'active' ? !todo.completed : todo.completed)
+
+  //TODO: v3
+  const _todos = todos.filter((todo) => navLists[0].toggle ? todo : navLists[1].toggle ? !todo.completed : todo.completed)
+  const completedCount = _todos.filter(({completed}) => completed).length
+  const activeCount = _todos.filter(({completed}) => !completed).length
+
+  return (
+    <div className="container">
+      <h1 className="title">Todos</h1>
+      <div className="ver">2.0</div>
+      <InputTodo addTodo={addTodo}/>
+      <Navigation changeNavigation={changeNavigation} navLists={navLists}/>
+      <TodoList todos={_todos} checkedTodo={checkedTodo} removeTodo={removeTodo}/>
+      <Footer allToggleTodo={allToggleTodo} completedAllTodo={completedAllTodo} completedCount={completedCount} activeCount={activeCount}/>
+    </div>
+  );
+}
+
+export default MainView;
+
+```
+
+<br/>
+
+#### components/Input/index.jsx
+
+```jsx
+import React from 'react'
+
+const InputTodo = ({addTodo}) => {
+  return (
+    <>
+      <input className="input-todo" placeholder="What needs to be done?" autoFocus onKeyPress={({key, target}) => addTodo(key, target)}/>
+    </>
+  );
+}
+
+export default InputTodo;
+```
+
+<br/>
+
+#### components/Navigation/index.jsx
+
+```jsx
+import React, { useRef } from 'react'
+
+const Navigation = ({navLists, changeNavigation}) => {
+  const nav = useRef();
+  console.log(navLists);
+  return (
+    //TODO: v3
+    <ul className="nav" ref={nav}>
+      {
+      navLists.map((navItem) => (
+          <li
+            key={navItem.id}
+            id={navItem.navId}
+            className={navItem.toggle ? 'active' : null}
+            onClick={() => changeNavigation(navItem.id)}
+          >
+            {navItem.navId}
+          </li>
+        ))
+      }
+    </ul>
+
+    //TODO: v1
+    // <ul className="nav" ref={nav} onClick={({target}) => changeNavigation(nav, target)}>
+    //   <li id="all" className="active" >All</li>
+    //   <li id="active">Active</li>
+    //   <li id="completed">Completed</li>
+    // </ul>
+
+    //TODO: v2
+    // <ul className="nav" ref={nav}>
+    //   <li id="all" onClick={({target}) => changeNavigation(nav, target)} className="active" >All</li>
+    //   <li id="active" onClick={({target}) => changeNavigation(nav, target)}>Active</li>
+    //   <li id="completed" onClick={({target}) => changeNavigation(nav, target)}>Completed</li>
+    // </ul>
+  );
+}
+
+export default Navigation;
+```
+
+<br/>
+
+####components/TodoList/index.jsx 
+
+```jsx
+import React from 'react'
+
+const Todos = ({todos, checkedTodo, removeTodo}) => {
+  return (
+    <ul className="todos">
+      {
+        todos.map((todo) => (
+          <li id={todos.id} className="todo-item" key={todo.id}>
+            <input className="custom-checkbox" type="checkbox" id={`ck-${todo.id}`} onChange={() => checkedTodo(todo.id)} checked={todo.completed} />
+            <label htmlFor={`ck-${todo.id}`}>{todo.content}</label>
+            <i className="remove-todo far fa-times-circle" onClick={({target}) => removeTodo(target, todo.id)}></i>
+          </li>
+        ))
+      }
+    </ul>
+  );
+}
+
+export default Todos;
+```
+
+<br/>
+
+#### components/Footer/index.jsx
+
+```jsx
+import React from 'react'
+import CompleteAll from './CompleteAll'
+import ClearCompleted from './ClearCompleted';
+
+const Footer = ({allToggleTodo, completedAllTodo, completedCount, activeCount}) => {
+  return (
+    <div className="footer">
+      <CompleteAll allToggleTodo={allToggleTodo}></CompleteAll>
+      <ClearCompleted completedAllTodo={completedAllTodo} completedCount={completedCount} activeCount={activeCount}></ClearCompleted>
+    </div>
+  );
+}
+
+export default Footer;
+```
+
+<br/>
+
+#### components/Footer/ClearCompleted.jsx
+
+```jsx
+import React from 'react'
+
+const ClearCompleted = ({completedAllTodo, completedCount, activeCount}) => {
+  return (
+    <div className="clear-completed">
+      <button className="btn"  onClick={() => completedAllTodo()} >Clear completed (<span className="completed-todos">{completedCount}</span>)</button>
+      <strong className="active-todos">{activeCount}</strong> items left
+    </div>
+  );
+}
+
+export default ClearCompleted;
+```
+
+<br/>
+
+#### components/Footer/CompleteAll.jsx
+
+```jsx
+import React from 'react'
+
+const CompleteAll = ({allToggleTodo}) => {
+  return (
+    <div className="complete-all">
+      <input className="custom-checkbox" type="checkbox" id="ck-complete-all" onClick={({target}) => allToggleTodo(target)} />
+      <label htmlFor="ck-complete-all">Mark all as complete</label>
+    </div>
+  );
+}
+
+export default CompleteAll;
+```
+
