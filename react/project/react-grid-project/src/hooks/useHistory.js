@@ -15,7 +15,6 @@ const reducer = (state, action) => {
 
       if (action.toggle === present) return state;
 
-
       return {
         past : [...past, present],
         present : action.toggle,
@@ -40,6 +39,7 @@ const reducer = (state, action) => {
         future : newFuture
       };
     case 'CLEAN' : return initialState;
+    default : return initialState;
   }
 }
 
