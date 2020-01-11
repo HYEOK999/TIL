@@ -1,86 +1,140 @@
-![React10](https://user-images.githubusercontent.com/31315644/71559904-d8e44e00-2aa6-11ea-9801-87c58a6b08ae.png)
+![React11](https://user-images.githubusercontent.com/31315644/71559905-d8e44e00-2aa6-11ea-8e02-c5675c78f523.png)
 
 ------
 
-## React with Velopert - 10 -
+## React with Velopert - 11 -
 
-- useRef 로 컴포넌트 안의 변수 만들기
+- 배열에 항목 추가하기
 
-  - 예제 : `useRef` 를 사용하여 변수를 만들기
+  - 예제 : 배열에 새로운 항목을 추가하기
 
-    - UserList.js
-
-    - App.js
+    - [새로운 컴포넌트 작성 : CreateUser.js](#a0)
+  - 상태관리 추가 : App.js
+      - [1차 최종 코드 : App.js](#a1)
+  
+    - [배열 상태관리 추가 : App.js](#a2)
+      1. [Spread 연산자 이용 최종 코드: App.js](#a3)
+      2. [concat 함수 이용 최종 코드: App.js](#a4)
 
 <br/>
 
 ------
 
-# Chap 10. useRef 로 컴포넌트 안의 변수 만들기
+# Chap 11. 배열에 항목 추가하기
 
-## useRef 로 컴포넌트 안의 변수 만들기
-
-<br/>
-
-컴포넌트에서 특정 DOM 을 선택해야 할 때, `ref` 를 사용해야 한다. 
-
-그리고, 함수형 컴포넌트에서 이를 설정 할 때 `useRef` 를 사용하여 설정해야 한다.
-
-여기서 사용된 `useRef` Hook은 **DOM을 선택하는 용도 외에도, 컴포넌트 안에서 조회 및 수정 할 수 있는 변수를 관리할 수 있다.**
-
-`useRef`로 관리하는 변수는 값이 바뀐다고 해서 리렌더링 되지 않는다. 리액트 컴포넌트에서의 상태는 상태를 바꾸는 함수를 호출하고 나서 그 다음 렌더링 이후로 업데이트 된 상태를 조회 할 수 있는 반면에 `useRef`로 관리하고 있는 변수는 설정 후 바로 조회가 가능하다.
-
-이 변수를 사용하여 다음과 같은 값을 관리 할 수 있다.
-
-- `setTimeout`, `setInterval` 을 통해서 만들어진 `id`
-- 외부 라이브러리를 사용하여 생성된 인스턴스
-- scroll 위치
-
-우리는, App 컴포넌트에서 `useRef` 를 사용하여 변수를 관리해보자, 용도는 우리가 앞으로 배열에 새 항목을 추가할건데, 새 항목에서 사용 할 고유 `id` 를 관리하는 용도이다.
-
-`useRef` 를 사용하여 변수를 관리하기 전에 해야 할 작업이 있다.
-
-지금은 우리가 UserList 컴포넌트 내부에서 배열을 직접 선언해서 사용을 하고 있는데, 이렇게 UserList 에서 선언해서 사용하는 대신에, 이 배열을 App 에서 선언하고 UserList 에게 `props` 로 전달 해주자.
+## 배열에 항목 추가하기
 
 <br/>
 
-### 예제 : `useRef` 를 사용하여 변수를 만들기
+배열에 새로운 항목을 추가하는 방법에 대해서 알아보자.
 
-#### UserList.js
+우선 src폴더에 `input` 와 `button` 이 하나루 이루어진 컴포넌트, `CreateUser.js` 를 만들어보자. 
+
+<br/>
+
+### 예제 : 배열에 새로운 항목을 추가하기
+
+#### 새로운 컴포넌트 작성 : CreateUser.js <a id="a0"></a>
 
 ```jsx
 import React from 'react';
 
-function User({ user }) {
+function CreateUser({ username, email, onChange, onCreate }) {
   return (
     <div>
-      <b>{user.username}</b> <span>({user.email})</span>
+      <input
+        name="username"
+        placeholder="계정명"
+        onChange={onChange}
+        value={username}
+      />
+      <input
+        name="email"
+        placeholder="이메일"
+        onChange={onChange}
+        value={email}
+      />
+      <button onClick={onCreate}>등록</button>
     </div>
   );
 }
 
-function UserList({ users }) {
-  return (
-    <div>
-      {users.map(user => (
-        <User user={user} key={user.id} />
-      ))}
-    </div>
-  );
-}
+export default CreateUser;
+```
 
-export default UserList;
+이번에는 상태 관리를 `CreateUser` 에서 하지 않고 부모 컴포넌트인 App에서 하게 하고, input 의 값 및 이벤트로 등록할 함수들을 props로 넘겨받아서 사용하도록 하자.
+
+<br/>
+
+#### 상태관리 추가 : App.js
+
+먼저 App.js에서 상태를 관리해주기 위해서 `useState` Hook을 사용하도록 한다.
+
+```javascript
+import React, { useState ,useRef } from 'react';
 ```
 
 <br/>
 
-#### App.js
+추가로 `function App()` 내부에 `CreateUser` 컴포넌트에게 넘겨줄 상태 변수들을 정의하구 값을 할당한다.
+
+```javascript
+// 상태 설정
+const [inputs, setInputs] = useState({
+  username: '',
+  email: ''
+});
+  
+const { username, email } = inputs; // 객체 비구조화(디스트럭처링) 할당
+const onChange = e => {
+  const { name, value } = e.target;
+  setInputs({
+    ...inputs,
+    [name]: value
+  });
+}; 
+```
+
+<br/>
+
+여기에 등록 버튼이 눌릴 경우 `input` 박스들을 비워주는 초기화 작업을 해주어야 하기 때문에 onCreate 내부에 상태를 관리함수를 추가한다.
+
+```javascript
+  const onCreate = () => {
+    // 나중에 구현 할 배열에 항목 추가하는 로직
+    // ...
+    setInputs({
+      username: '',
+      email: ''
+    });
+    nextId.current += 1; // current : 5
+  };
+```
+
+<br/>
+
+##### 1차 최종 소스 : App.js  <a id="a1"></a>
+
+마지막으로  `return`에 CreateUser 컴포넌트를 작성해주고 지금까지 작성한 상태와 함수들을 속성으로 전달한다.
 
 ```jsx
-import React, { useRef } from 'react';
+import React, { useState ,useRef } from 'react';
 import UserList from './UserList';
+import CreateUser from './CreateUser';
 
 function App() {
+  const [inputs, setInputs] = useState({
+    username: '',
+    email: ''
+  });
+  const { username, email } = inputs;
+  const onChange = e => {
+    const { name, value } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value
+    });
+  };
   const users = [
     {
       id: 1,
@@ -106,18 +160,199 @@ function App() {
 
     nextId.current += 1; // current : 5
   };
-  return <UserList users={users} />;
+  return (
+    <>
+      <CreateUser
+        username={username}
+        email={email}
+        onChange={onChange}
+        onCreate={onCreate}
+      />
+      <UserList users={users} />;
+    </>
+  )
 }
 
 export default App;
 ```
 
-**여기서 알수 있는 것**
+<br/>
 
-`useRef()` 를 사용 할 때 파라미터를 넣어주면, 이 값이 `.current` 값의 기본값이 된다.
+#### 배열 상태관리 추가 : App.js   <a id="a2"></a>
 
-수정 할때에는 `.current` 값을 수정하면 되고 
+```jsx
+  const users = [ // 이부분을 아래처럼 수정 하기
+    
+  const [users, setUsers] = useState([  // useState로 관리시작
+    {
+      id: 1,
+      username: 'velopert',
+      email: 'public.velopert@gmail.com'
+    },
+    {
+      id: 2,
+      username: 'tester',
+      email: 'tester@example.com'
+    },
+    {
+      id: 3,
+      username: 'liz',
+      email: 'liz@example.com'
+    }
+  ]);
+```
 
-조회 할 때에는 `.current` 를 조회하면 된다.
+배열의 변화를 주기 위해서 상태로 관리하기 시작한다.
+
+배열에 변화를 줄 때에는 객체와 마찬가지로, 불변성을 지켜주어야 한다. 
+
+그렇기 때문에, 배열의 `push`, `splice`, `sort` 등의 함수를 사용하면 안된다. 만약에 사용해야 한다면, 기존의 배열을 한번 복사하고 나서 사용해야한다.
+
+**불변성을 지키면서 배열에 새 항목을 추가 할 때에는 spread 연산자를 사용하거나, `concat` 함수를 사용하면 된다.**
 
 <br/>
+
+##### 1. Spread 연산자 이용 최종 코드: App.js  <a id="a3"></a>
+
+```jsx
+import React, { useState, useRef } from 'react';
+import UserList from './UserList';
+import CreateUser from './CreateUser';
+
+function App() {
+  const [inputs, setInputs] = useState({
+    username: '',
+    email: ''
+  });
+
+  const { username, email } = inputs;
+  const onChange = e => {
+    const {name, value} = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value
+    });
+  };
+
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      username: 'velopert',
+      email: 'public.velopert@gmail.com'
+    },
+    {
+      id: 2,
+      username: 'tester',
+      email: 'tester@example.com'
+    },
+    {
+      id: 3,
+      username: 'liz',
+      email: 'liz@example.com'
+    }
+  ]);
+
+  const nextId = useRef(4); // current : 4
+  const onCreate = () => {
+    const user = { // 이부분 추가
+      id: nextId.current,
+      username,
+      email
+    };
+    setUsers([...users, user]); // spread를 이용하여 기존의 users 데이터와 함꼐 추가하고 있다.
+
+    setInputs({
+      username: '',
+      email: ''
+    });
+    nextId.current += 1; // current : 5
+  };
+  return (
+    <>
+      <CreateUser
+        username={username}
+        email={email}
+        onChange={onChange}
+        onCreate={onCreate}
+      />
+      <UserList users={users} />
+    </>
+  )
+}
+
+export default App;
+```
+
+<br/>
+
+##### 2. concat 함수 이용 최종 코드: App.js  <a id="a4"></a>
+
+````jsx
+import React, { useRef, useState } from 'react';
+import UserList from './UserList';
+import CreateUser from './CreateUser';
+
+function App() {
+  const [inputs, setInputs] = useState({
+    username: '',
+    email: ''
+  });
+  const { username, email } = inputs;
+  const onChange = e => {
+    const { name, value } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value
+    });
+  };
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      username: 'velopert',
+      email: 'public.velopert@gmail.com'
+    },
+    {
+      id: 2,
+      username: 'tester',
+      email: 'tester@example.com'
+    },
+    {
+      id: 3,
+      username: 'liz',
+      email: 'liz@example.com'
+    }
+  ]);
+
+  const nextId = useRef(4);
+  const onCreate = () => {
+    const user = {  // 이부분 추가
+      id: nextId.current,
+      username,
+      email
+    };
+    setUsers(users.concat(user));  // 기존의 users데이터에 함수를 덮붙이는 기능을 하는 concat함수를 이용했다.
+
+    setInputs({
+      username: '',
+      email: ''
+    });
+    nextId.current += 1;
+  };
+  return (
+    <>
+      <CreateUser
+        username={username}
+        email={email}
+        onChange={onChange}
+        onCreate={onCreate}
+      />
+      <UserList users={users} />
+    </>
+  );
+}
+
+export default App;
+````
+
+<br/>
+
