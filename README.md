@@ -315,6 +315,8 @@ Today I Leaned...
 >[useRef 로 컴포넌트 안의 변수 만들기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-10.md)
 >
 >[배열에 항목 추가하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-11.md)
+>
+>[배열에 항목 제거하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-12.md)
 
 <br/>
 
