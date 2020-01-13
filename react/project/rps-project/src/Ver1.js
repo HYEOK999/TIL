@@ -12,7 +12,6 @@ const App = (props) => {
     const randomIndex = Math.floor(Math.random() * items.length);
     setPick(items[randomIndex]);
     setMyPick(value);
-
     // 여기서는 승패의 여부에 대한 로직을 구현할 수 없다.
   }
 
@@ -51,6 +50,7 @@ const App = (props) => {
 
   return (
     <>
+      {winner}
       <button onClick={() => runGame('가위')}>가위</button>
       <button onClick={() => runGame('바위')}>바위</button>
       <button onClick={() => runGame('보')}>보</button>
