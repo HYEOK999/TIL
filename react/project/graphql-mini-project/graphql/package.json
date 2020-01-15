@@ -1,0 +1,22 @@
+{
+  "name": "r",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js --exec babel-node"
+  },
+  "dependencies": {
+    "apollo-server-express": "^1.3.2",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "graphql": "^0.13.0",
+    "graphql-tools": "^2.20.2",
+    "merge-graphql-schemas": "^1.4.0",
+    "mongoose": "^5.0.4",
+    "path": "^0.12.7"
+  }
+}
