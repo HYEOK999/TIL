@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { createUser as CREATE_USER } from './graphql/mutations';
+import { useMutation, useQuery } from 'react-apollo';
 
-function App() {
+const cache = new InMemoryCache();
+const link = new HttpLink({ uri: 'http://localhost:3000/graphql' });
+
+const client = new ApolloClient({
+  link,
+  cache,
+});
+
+function App(...payload) {
+  const [createUser, { data }] = useMutation(CREATE_USER);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <button
+        onClick={() =>
+          createUser({
+            variables: { ...payload },
+          })
+        }
+      >
+        가입
+      </button>
+    </ApolloProvider>
   );
 }
 
