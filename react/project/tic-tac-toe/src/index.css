@@ -3,6 +3,10 @@ body {
   margin: 20px;
 }
 
+button:disabled {
+  color: black;
+}
+
 ol,
 ul {
   padding-left: 30px;
