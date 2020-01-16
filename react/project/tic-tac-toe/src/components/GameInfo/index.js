@@ -1,4 +1,5 @@
 import React from "react";
+import uuid from "uuid";
 
 const GameInfo = ({ winner, turn, history, jump }) => {
   let status;
@@ -14,7 +15,7 @@ const GameInfo = ({ winner, turn, history, jump }) => {
       <ol>
         {history.map((item, index) => {
           return (
-            <li key={index}>
+            <li key={uuid.v4()}>
               {!index ? (
                 <button onClick={() => jump(index)}>Go to game start</button>
               ) : (
