@@ -323,6 +323,8 @@ Today I Leaned...
 >[배열에 항목 추가하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-11.md)
 >
 >[배열에 항목 제거하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-12.md)
+>
+>[배열에 항목 수정하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-13.md)
 
 <br/>
 
