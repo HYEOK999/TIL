@@ -333,6 +333,8 @@ Today I Leaned...
 >[useMemo 연산한 값 재사용하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-15.md)
 >
 >[useCallback 을 사용하여 함수 재사용하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-16.md)
+>
+>[React.memo 를 사용한 컴포넌트 리렌더링 방지](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-17.md)
 
 <br/>
 
