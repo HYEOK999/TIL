@@ -1,100 +1,163 @@
-![React16](https://user-images.githubusercontent.com/31315644/71559910-da157b00-2aa6-11ea-9b75-78ad46142a30.png)
+![React17](https://user-images.githubusercontent.com/31315644/71559911-da157b00-2aa6-11ea-9426-96cf77fb95b8.png)
 
 ------
 
-## React with Velopert - 16 -
+## React with Velopert - 17 -
 
-- useCallback 을 사용하여 함수 재사용하기
-  - [useCallback 사용 규칙](#a1)
-    - 주의 할 점
-  - [App.js](#a2)
+- React.memo 를 사용한 컴포넌트 리렌더링 방지
+  - [CreateUser.js](#a1)
+  - [UserList.js](#a2)
+  - [함수형 업데이트](#a3)
+    - [기본 파라미터 방식](#a4)
+    - [함수형 업데이트 방식](#a5)
+    - [App.js](#a6)
 
 <br/>
 
 ------
 
-# Chap 16. useCallback 을 사용하여 함수 재사용하기
+# Chap 17. React.memo 를 사용한 컴포넌트 리렌더링 방지
 
-## useCallback 을 사용하여 함수 재사용하기
+> 컴포넌트의 props 가 바뀌지 않았다면, 리렌더링을 방지하여 컴포넌트의 리렌더링 성능 최적화를 해줄 수 있는 React.memo 라는 함수에 대해서 알아본다.
 
-> `useMemo` 는 특정 결과 값을 재사용 할 때 사용하는 반면, `useCallback` 은 특정 함수를 새로 만들지 않고 재사용하고 싶을때 사용한다.
+**React.memo를 사용하면 컴포넌트에서 리렌더링이 필요한 상황에서만 리렌더링을 하도록 설정해줄 수 있다.**
 
-<br/>
-
-### useCallback 사용 규칙 <a id="a1"></a>
-
-useCallback은 결과 값이 아니라 함수를 반환한다는 것을 잊지말자.
-
-- 첫번째 파라미터 - 어떻게 연산할지 정의하는 함수를 넣어준다.
-- 두번째 파라미터 - deps 배열을 넣어주면 되는데, 이 배열 안에 넣은 내용이 바뀌면, 등록한 함수를 호출해서 값을 연산해주고, 만약에 내용이 바뀌지 않았다면 이전에 연산한 값을 재사용하게 된다.
-
-##### 주의 할 점
-
-함수 안에서 사용하는 상태 혹은 props 가 있다면 꼭, `deps` 배열안에 포함시켜야 된다는 것.
-만약에 `deps` 배열 안에 함수에서 사용하는 값을 넣지 않게 된다면, 함수 내에서 해당 값들을 참조할때 가장 최신 값을 참조 할 것이라고 보장 할 수 없다. props 로 받아온 함수가 있다면, 이 또한 `deps` 에  넣어야 한다.
-
-```javascript
-useCallback( fn , [deps] )
-useCallback( () => {},[deps] )
-```
+사용법은 굉장히 쉽다. 그냥, 감싸주면 된다.
 
 <br/>
 
-`useCallback`은 사실 `useMemo`를 기반으로 만들어져서 `useMemo`를 다음과 같이 쓸 경우 `useCallback`과 동일한 역할을 한다.
+### CreateUser.js <a id="a1"></a>
 
 ```jsx
-const onToggle = useMemo(
-  () => () => {
-    /* ... */
-  },
-  [users]
-);
-```
+import React from 'react';
 
-<br/>
-
-예전에 App.js에서 작성했던  `onCreate`, `onRemove`, `onToggle` 함수를 확인해보자.
-
-```javascript
-const onCreate = () => {
-  const user = {
-    id: nextId.current,
-    username,
-    email
-  };
-  setUsers(users.concat(user));
-
-  setInputs({
-    username: '',
-    email: ''
-  });
-  nextId.current += 1;
-};
-
-const onRemove = id => {
-  setUsers(users.filter(user => user.id !== id));
-};
-
-const onToggle = id => {
-  setUsers(
-    users.map(user =>
-      user.id === id ? { ...user, active: !user.active } : user
-    )
+const CreateUser = ({ username, email, onChange, onCreate }) => {
+  return (
+    <div>
+      <input
+        name="username"
+        placeholder="계정명"
+        onChange={onChange}
+        value={username}
+      />
+      <input
+        name="email"
+        placeholder="이메일"
+        onChange={onChange}
+        value={email}
+      />
+      <button onClick={onCreate}>등록</button>
+    </div>
   );
 };
+
+export default React.memo(CreateUser); // 추가
 ```
-
-  위 함수들은 컴포넌트가 리렌더링 될 때 마다 새로 만들어진다. 
-
-함수를 선언하는 것 자체는 사실 메모리도, CPU 도 리소스를 많이 차지 하는 작업은 아니기 때문에 함수를 새로 선언한다고 해서 그 자체 만으로 큰 부하가 생길일은 없지만, 한번 만든 함수를 필요할때만 새로 만들고 재사용하는 것은 중요하다.
-
-그 이유는, 나중에 컴포넌트에서 `props` 가 바뀌지 않았으면 Virtual DOM 에 새로 렌더링하는 것 조차 하지 않고 컴포넌트의 결과물을 재사용 하는 최적화 작업을 할텐데, 이 작업을 하려면, 함수를 재사용하는것이 필수다.
 
 <br/>
 
-### App.js <a id="a2"></a>
+### UserList.js <a id="a2"></a>
 
-useCallback 을 추가해보자 각각 `onChange` , `onCreate`, `onRemove`, `onToggle` 에 추가하면 된다.
+```jsx
+import React, { useEffect } from 'react';
+
+const User = React.memo(function User({ user, onRemove, onToggle }) { // 추가
+  useEffect(() => {
+    console.log('user 값이 설정됨');
+    console.log(user);
+    return () => {
+      console.log('user 가 바뀌기 전..');
+      console.log(user);
+    };
+  }, [user]);
+  return (
+    <div>
+      <b
+        style={{
+          cursor: 'pointer',
+          color: user.active ? 'green' : 'black'
+        }}
+        onClick = {() => onToggle(user.id)}
+        >
+        {user.username}
+      </b>
+
+      <span>({user.email})</span>
+      <button onClick={() => onRemove(user.id)}> 삭제 </button>
+    </div>
+  );
+});
+
+function UserList({ users, onRemove, onToggle }) {
+  return (
+    <div>
+      {users.map(user => (
+        <User user={user} key={user.id} onRemove={onRemove} onToggle={onToggle} />
+      ))}
+    </div>
+  );
+}
+
+export default React.Memo(UserList); // 추가
+```
+
+<br/>
+
+### 함수형 업데이트  <a id="a3"></a>
+
+여기까지 적용이 완료되면 `input`박스의 내용을 추가하거나 수정해도 UserList가 리렌더링 되지 않는다.(오직 Input박스만 리렌더링)
+
+하지만, 추가적인 문제로는 User 중 하나라도 수정(user.active 변경)이 된다면 모든 User들이 리렌더링 되고 CreateUser도 리렌더링 된다는것이다. 
+
+**왜 리렌더링이 될까?** 그 이유는 아래처럼 `useCallback`을 사용할 때 2번째 파라미터로 넣어준 의존성 배열 `deps` 에 `users` 가 들어가 있기 때문이다. `users` 중 1개라도 변경이 된다면 `onCreate`, `onToggle`, `onRemove` 가 새로 만들어지므로 전부 리렌더링 되는 것이다.
+
+```javascript
+const onCreate = useCallback(() => {
+...
+}, [users, username, email]);
+
+const onRemove = useCallback(
+id => { ...
+},  [users]);
+
+const onToggle = useCallback(
+id => { ...
+},  [users]);
+```
+
+<br/>
+
+**이 부분에서 사용할 수 있는 것이 바로 함수형 업데이트 이다.**
+
+예전(useState)를 잠깐 배웠을 때를 생각해보자.
+
+#### 기본 파라미터 방식  <a id="a4"></a>
+
+````jsx
+const [number, setNumber] = useState(0);
+
+const onIncrease = () => { setNumber(number + 1); }
+const onDecrease = () => { setNumber(number - 1); }
+````
+
+<br/>
+
+#### 함수형 업데이트 방식  <a id="a5"></a>
+
+```jsx
+const [number, setNumber] = useState(0);
+
+const onIncrease = () => { setNumber(prevNumber => prevNumber + 1); }
+const onDecrease = () => { setNumber(prevNumber => prevNumber - 1); }
+```
+
+<br/>
+
+함수형 업데이트를 하게 되면, `setUsers` 에 등록하는 콜백함수의 파라미터에서 최신 `users` 를 참조 할 수 있기 때문에 `deps` 에 `users` 를 넣지 않아도 된다. ( onChange 의 경우엔 함수형 업데이트를 해도 영향은 가지 않는다 ).
+
+<br/>
+
+#### App.js  <a id="a6"></a>
 
 ```jsx
 import React, { useRef, useState, useMemo, useCallback } from 'react';
@@ -112,16 +175,13 @@ function App() {
     email: ''
   });
   const { username, email } = inputs;
-  const onChange = useCallback( // useCallback 추가
-    e => {
-      const { name, value } = e.target;
-      setInputs({
-        ...inputs,
-        [name]: value
-      });
-    },
-    [inputs]
-  );
+  const onChange = useCallback(e => {
+    const { name, value } = e.target;
+    setInputs(inputs => ({
+      ...inputs,
+      [name]: value
+    }));
+  }, []);
   const [users, setUsers] = useState([
     {
       id: 1,
@@ -144,41 +204,34 @@ function App() {
   ]);
 
   const nextId = useRef(4);
-  const onCreate = useCallback(() => { // useCallback 추가
+  const onCreate = useCallback(() => {
     const user = {
       id: nextId.current,
       username,
       email
     };
-    setUsers(users.concat(user));
+    setUsers(users => users.concat(user));
 
     setInputs({
       username: '',
       email: ''
     });
     nextId.current += 1;
-  }, [users, username, email]);
+  }, [username, email]);
 
-  const onRemove = useCallback( // useCallback 추가
-    id => {
-      setUsers(users.filter(user => user.id !== id));
-    },
-    [users]
-  );
-  
-  const onToggle = useCallback( // useCallback 추가
-    id => {
-      setUsers(
-        users.map(user =>
-          user.id === id ? { ...user, active: !user.active } : user
-        )
-      );
-    },
-    [users]
-  );
-  
+  const onRemove = useCallback(id => {
+    // user.id 가 파라미터로 일치하지 않는 원소만 추출해서 새로운 배열을 만듬
+    // = user.id 가 id 인 것을 제거함
+    setUsers(users => users.filter(user => user.id !== id));
+  }, []);
+  const onToggle = useCallback(id => {
+    setUsers(users =>
+      users.map(user =>
+        user.id === id ? { ...user, active: !user.active } : user
+      )
+    );
+  }, []);
   const count = useMemo(() => countActiveUsers(users), [users]);
-  
   return (
     <>
       <CreateUser
@@ -195,3 +248,28 @@ function App() {
 
 export default App;
 ```
+
+여기까지 완료하면, 해당 항목만 리렌더링 될 것이다.
+
+`deps`에 users를 넣었을 때는 users 값이 변경될 때 마다 함수가 재선언되어서 props가 변경되었다고 CreateUser 컴포넌트가 인지를 했기에 리렌더링이 되었었다. 
+
+하지만 함수형 업데이트를 사용할 경우 users의 최신값이 보존되기 때문에 `deps`엔 따로 안넣어도 되니 함수가 재선언되지 않고 CreateUser 컴포넌트가 props가 변경되었다고 인지를 못한다. 
+
+UserList와 User 컴포넌트는 users가 변함을 인지하고 리렌더링 되는 것이다.
+
+<br/>
+
+리액트 개발을 할 때, `useCallback`, `useMemo`, `React.memo` 는 컴포넌트의 성능을 실제로 개선할수있는 상황에서만 진행하자.
+
+예를 들어서, User 컴포넌트에 `b` 와 `button` 에 `onClick` 으로 설정해준 함수들은, 해당 함수들을 `useCallback` 으로 재사용한다고 해서 리렌더링을 막을 수 있는것은 아니다.
+
+추가적으로, 렌더링 최적화 하지 않을 컴포넌트에 React.memo 를 사용하는것은, 불필요한 props 비교만 하는 것이기 때문에 실제로 렌더링을 방지할수있는 상황이 있는 경우에만 사용하자. React.memo 에서 두번째 파라미터에 `propsAreEqual` 이라는 함수를 사용하여 특정 값들만 비교를 하는 것도 가능하다.
+
+```javascript
+export default React.memo(
+  UserList,
+  (prevProps, nextProps) => prevProps.users === nextProps.users
+);
+```
+
+하지만, 이걸 잘못사용한다면 오히려 의도치 않은 버그들이 발생하기 쉽다. 예를 들어, 함수형 업데이트로 전환을 안했는데 이렇게 users 만 비교를 하게 된다면, `onToggle` 과 `onRemove` 에서 최신 users 배열을 참조하지 않으므로 심각한 오류가 발생 할 수 있다.
