@@ -1,347 +1,84 @@
-![React18](https://user-images.githubusercontent.com/31315644/71559912-da157b00-2aa6-11ea-9b83-229223f06ff3.png)
+![React19](https://user-images.githubusercontent.com/31315644/71559913-daae1180-2aa6-11ea-874c-b578ef8719e8.png)
 
 ------
 
-## React with Velopert - 18 -
+## React with Velopert - 19 -
 
-- [useReducer 이해하기](#a1)
-  - [reducer 란?](#a2)
-  - [useReducer 사용 방법](#a3)
-    - [useReducer 파라미터](#a4)
-- [연습 : Counter.js](#a5)
-- [App 컴포넌트를 useReducer로 구현하기 ( App.js )](#a6)
-  1. [초기값 설정, useReducer 변수(비구조화) 할당, rudecer 만들기](#a7)
-  2. [onChange 구현 ( App.js )](#a8)
-  3. [onCreate 구현 ( App.js )](#a9)
-  4. [onToggle 과 onRemove 구현 ( App.js )](#a10)
-  5. [활성 사용자 수 구현 ( App.js )](#a11)
-- [useReducer vs useState](#a12)
+- [커스텀 Hooks 만들기](#a1)
+  - 폴더 및 파일 생성
+  - [커스텀 Hook 만들기 - useInputs.js](#a2)
+    - useCallback 복습
+  - [커스텀 Hook 불러오기 - App.js](#a3)
+  - [커스텀 Hook에서 Reducer 사용하기 - useInputs.js](#a4)
 
 <br/>
 
 ------
 
-# Chap 18. useReducer 를 사용하여 상태 업데이트 로직 분리하기
+# Chap 19. 커스텀 Hooks 만들기
 
-### useReducer 이해하기 <a id="a1"></a>
+### 커스텀 Hooks 만들기 <a id="a1"></a>
 
-이전에 만든 사용자 리스트 기능에서의 주요 상태 업데이트 로직은 App 컴포넌트 내부에서 이루어졌다.
+컴포넌트를 만들다보면, 반복되는 로직이 자주 발생한다. 
 
-상태를 업데이트 할 때에는 `useState`를 사용해서 새로운 상태를 설정하고, 상태를 관리하게 될 때는 `useState`를 사용하는 것 말고는 다른 방법이 없었다. 여기서 상태를 관리하는 추가적인 방법이 바로 `useReducer`이다.
+예를 들어서 input 을 관리하는 코드는 관리 할 때마다 꽤나 비슷한 코드가 반복되죠.
 
-이 Hook 함수를 사용하면 컴포넌트의 상태 업데이트 로직을 컴포넌트에서 분리시킬 수 있다. 
-
-상태 업데이트 로직을 컴포넌트 바깥에 작성 할 수도 있고, 심지어 다른 파일에 작성 후 불러와서 사용 할 수도 있다.
+이번에는 그러한 상황에 커스텀 Hooks 를 만들어서 반복되는 로직을 쉽게 재사용하는 방법을 알아보자.
 
 <br/>
 
-#### reducer 란? <a id="a2"></a>
+####폴더 및 파일 생성
 
->  reducer 는 현재 상태와 Action 객체를 파라미터로 받아와서 새로운 상태를 반환해주는 함수.
+src/hooks 디렉터리를 만들고, 그 안에 useInputs.js 라는 파일을 만들자.
 
-```javascript
-function reducer(state, action) {
-  // 새로운 상태를 만드는 로직
-  // const nextState = ...
-  return nextState;
-}
-```
-
-reducer 에서 반환하는 상태는 곧 컴포넌트가 지닐 새로운 상태가 된다.
-
-여기서 `action` 은 업데이트를 위한 정보를 가지고 있다. 
-주로 `type` 값을 지닌 객체 형태로 사용하지만, 꼭 따라야 할 규칙은 따로 없다.
-
-action의 객체의 형태는 자유이다. `type`값을 대문자와 `_`로 구성하는 케이스가 존재하긴 하지만, 필수는 아니다.
-
-다음은 action의 예시이다.
-
-```javascript
-// 카운터에 1을 더하는 액션
-{
-  type: 'INCREMENT'
-}
-// 카운터에 1을 빼는 액션
-{
-  type: 'DECREMENT'
-}
-// input 값을 바꾸는 액션
-{
-  type: 'CHANGE_INPUT',
-  key: 'email',
-  value: 'tester@react.com'
-}
-// 새 할 일을 등록하는 액션
-{
-  type: 'ADD_TODO',
-  todo: {
-    id: 1,
-    text: 'useReducer 배우기',
-    done: false,
-  }
-}
-```
+- 커스텀 Hooks 를 만들 때, 보통 `use` 라는 키워드로 시작하는 파일을 만들고 그 안에 함수를 작성한다.
+- 커스텀 Hooks 를 만드는 방법은 간단하다. 그냥, 그 안에서 `useState`, `useEffect`, `useReducer`, `useCallback` 등 Hooks 를 사용하여 원하는 기능을 구현해주고, 컴포넌트에서 사용하고 싶은 값들을 반환해주면 된다.
 
 <br/>
 
-#### useReducer 사용 방법 <a id="a3"></a>
+#### 커스텀 Hook 만들기 - useInputs.js <a id="a2"></a>
 
 ```jsx
-const [state, dispatch] = useReducer(reducer, initialState);
-```
-- `state` : 앞으로 컴포넌트에서 사용 할 수 있는 상태
-- `dispatch`는 action을 발생시키는 함수
+import { useState, useCallback } from 'react';
 
-이 함수는 다음과 같이 사용할 수 있다. 
-
-```jsx
-dispatch({ type: 'INCREMENT' })
-```
-
-##### useReducer 파라미터  <a id="a4"></a>
-
-- 첫번째 파라미터는 reducer 함수
-- 두번째 파라미터는 초기 상태
-
-<br/>
-
-### 연습 : Counter.js <a id="a5"></a>
-
-먼저 바로 App.js에 적용하지 않고 Counter.js 에 적용해보자.
-
-**기존의 Counter.js** 
-
-```jsx
-import React, {useState} from 'react'
-
-const Counter = (props) => {
-  const [number, setNumber] = useState(0);
-
-  const onIncrease = () => {
-    setNumber(preveNumber => preveNumber + 1);
-  }
-
-  const onDecrease = () => {
-    setNumber(preveNumber => preveNumber - 1);
-  }
-
-  return (
-    <div>
-      <button onClick={onIncrease}>+1</button>
-      <button onClick={onDecrease}>-1</button>
-      <h1>{number}</h1>
-    </div>
-  );
-}
-
-export default Counter;
-```
-
-<br/>
-
-**Reducer를 적용한 Counter.js** 
-
-```jsx
-import React, { useReducer } from 'react';
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'INCREMENT':
-      return state + 1;
-    case 'DECREMENT':
-      return state - 1;
-    default:
-      return state;
-  }
-}
-
-function Counter() {
-  const [number, dispatch] = useReducer(reducer, 0);
-
-  const onIncrease = () => {
-    dispatch({ type: 'INCREMENT' });
-  };
-
-  const onDecrease = () => {
-    dispatch({ type: 'DECREMENT' });
-  };
-
-  return (
-    <div>
-      <h1>{number}</h1>
-      <button onClick={onIncrease}>+1</button>
-      <button onClick={onDecrease}>-1</button>
-    </div>
-  );
-}
-
-export default Counter;
-```
-
-<br/>
-
-### App 컴포넌트를 useReducer로 구현하기 ( App.js )  <a id="a6"></a>
-
-App 컴포넌트에 있던 상태 업데이트 로직들을 `useState` 가 아닌 `useReducer` 를 사용하여 구현해보자. 
-
-우선, App 에서 사용 할 초기 상태를 컴포넌트 바깥으로 분리해주고, App 내부의 로직들을 모두 제거해야한다. 
-
-<br/>
-
-#### 1. 초기값 설정, useReducer 변수(비구조화) 할당, rudecer 만들기. <a id="a7"></a>
-
-```jsx
-import React, { useReducer, useRef, useState, useMemo, useCallback } from 'react';
-import UserList from './UserList';
-import CreateUser from './CreateUser';
-
-function countActiveUsers(users) {
-  console.log('활성 사용자 수를 세는중...');
-  return users.filter(user => user.active).length;
-}
-
-const initialState = {
-  inputs: {
-    username: '',
-    email: ''
-  },
-  users: [
-    {
-      id: 1,
-      username: 'velopert',
-      email: 'public.velopert@gmail.com',
-      active: true
-    },
-    {
-      id: 2,
-      username: 'tester',
-      email: 'tester@example.com',
-      active: false
-    },
-    {
-      id: 3,
-      username: 'liz',
-      email: 'liz@example.com',
-      active: false
-    }
-  ]
-};
-
-function reducer(state, action) {
-  return state;
-}
-
-function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { users } = state;
-  const { username, email } = state.inputs;
-  
-  return (
-    <>
-      <CreateUser />
-      <UserList users={[]} />
-      <div>활성사용자 수 : 0</div>
-    </>
-  );
-}
-
-export default App;
-```
-
-<br/>
-
-#### 2. onChange 구현 ( App.js )  <a id="a8"></a>
-
- `App()` 함수내부에 `onChange`이벤트와 action을 작성한다. 변화 되는 value 값과 선택된 input 박스 name을 비구조화 할당하여 변수로 만들고 dispatch를 통해 리듀서에게 전달한다.
-
- 리듀서에서는 `CHANGE_INPUT` 이라는 action 객체를 사용하여 `inputs` 상태를 업데이트해주었다. `reducer` 함수에서 새로운 상태를 만들 때에는 불변성을 지켜주어야 하기 때문에 위 형태와 같이 `spread` 연산자를 사용해주었다.
-
-```jsx
-import React, { useRef, useReducer, useMemo, useCallback } from 'react';
-import UserList from './UserList';
-import CreateUser from './CreateUser';
-
-function countActiveUsers(users) {
-  console.log('활성 사용자 수를 세는중...');
-  return users.filter(user => user.active).length;
-}
-
-const initialState = {
-  inputs: {
-    username: '',
-    email: ''
-  },
-  users: [
-    {
-      id: 1,
-      username: 'velopert',
-      email: 'public.velopert@gmail.com',
-      active: true
-    },
-    {
-      id: 2,
-      username: 'tester',
-      email: 'tester@example.com',
-      active: false
-    },
-    {
-      id: 3,
-      username: 'liz',
-      email: 'liz@example.com',
-      active: false
-    }
-  ]
-};
-
-function reducer(state, action) { // 추가
-  switch (action.type) {
-    case 'CHANGE_INPUT':
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [action.name]: action.value
-        }
-      };
-    default:
-      return state;
-  }
-}
-
-function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { users } = state;
-  const { username, email } = state.inputs;
-
-  const onChange = useCallback(e => {  // 추가
+function useInputs(initialForm) {
+  const [form, setForm] = useState(initialForm);
+  // change
+  const onChange = useCallback(e => {
     const { name, value } = e.target;
-    dispatch({
-      type: 'CHANGE_INPUT',
-      name,
-      value
-    });
+    setForm(form => ({ ...form, [name]: value }));
   }, []);
-
-  return (
-    <>
-      <CreateUser username={username} email={email} onChange={onChange} /> // 추가
-      <UserList users={users} />
-      <div>활성사용자 수 : 0</div>
-    </>
-  );
+  const reset = useCallback(() => setForm(initialForm), [initialForm]);
+  return [form, onChange, reset];
 }
 
-export default App;
+export default useInputs;
 ```
+
+##### useCallback 복습
+
+`useCallback` 은 특정 함수를 새로 만들지 않고 재사용하고 싶을때 사용한다.
+
+```jsx
+useCallback( fn , [deps] )
+useCallback( () => {},[deps] )
+```
+
+`useCallback` 은 첫번째 파라미터로 함수를(호출X) 받고, 두번쨰 파라미터로 의존성 배열을 받는다.
 
 <br/>
 
-#### 3. onCreate 구현 ( App.js )  <a id="a9"></a>
+#### 커스텀 Hook 불러오기 - App.js <a id="a3"></a>
+
+useReducer` 쪽에서 사용하는 `inputs` 를 없애고 이에 관련된 작업을 `useInputs` 를 대체해주자.
+
+새로운 항목을 추가 할 때 input 값을 초기화해야 하므로 데이터 등록 후 `reset()` 을 호출해야한다.
 
 ```jsx
 import React, { useRef, useReducer, useMemo, useCallback } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
+import useInputs from './src/hooks/useInputs';
 
 function countActiveUsers(users) {
   console.log('활성 사용자 수를 세는중...');
@@ -349,10 +86,10 @@ function countActiveUsers(users) {
 }
 
 const initialState = {
-  inputs: {
-    username: '',
-    email: ''
-  },
+  // inputs: {
+  //   username: '',
+  //   email: ''
+  // }, // 제거
   users: [
     {
       id: 1,
@@ -377,18 +114,30 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'CHANGE_INPUT':
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [action.name]: action.value
-        }
-      };
-    case 'CREATE_USER': // 추가
+    // case 'CHANGE_INPUT':
+    //   return {
+    //     ...state,
+    //     inputs: {
+    //       ...state.inputs,
+    //       [action.name]: action.value
+    //     }
+    //   }; // 제거
+    case 'CREATE_USER' :
       return {
         inputs: initialState.inputs,
         users: state.users.concat(action.user)
+      };
+    case 'TOGGLE_USER' :
+      return {
+        ...state,
+        users: state.users.map(user =>
+          user.id === action.id ? {...user, active: !user.active} : user
+        )
+      };
+    case 'REMOVE_USER' :
+      return {
+        ...state,
+        users : state.users.filter(user => user.id !== action.id)
       };
     default:
       return state;
@@ -399,137 +148,24 @@ function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const nextId = useRef(4);
 
+
   const { users } = state;
-  const { username, email } = state.inputs;
-
-  const onChange = useCallback(e => {
-    const { name, value } = e.target;
-    dispatch({
-      type: 'CHANGE_INPUT',
-      name,
-      value
-    });
-  }, []);
-
-  const onCreate = useCallback(() => { // cㅜ가
-    dispatch({
-      type: 'CREATE_USER',
-      user: {
-        id: nextId.current,
-        username,
-        email
-      }
-    });
-    nextId.current += 1;
-  }, [username, email]);
-
-  return (
-    <>
-      <CreateUser  // 추가
-        username={username}
-        email={email}
-        onChange={onChange}
-        onCreate={onCreate}
-      />
-      <UserList users={users} />
-      <div>활성사용자 수 : 0</div>
-    </>
-  );
-}
-
-export default App;
-```
-
-여기까지 진행했으면 수정 및 데이터 등록이 잘 될 것이다.
-
-<br/>
-
-#### 4. onToggle 과 onRemove 구현 ( App.js )  <a id="a10"></a>
-
-```jsx
-import React, { useRef, useReducer, useMemo, useCallback } from 'react';
-import UserList from './UserList';
-import CreateUser from './CreateUser';
-
-function countActiveUsers(users) {
-  console.log('활성 사용자 수를 세는중...');
-  return users.filter(user => user.active).length;
-}
-
-const initialState = {
-  inputs: {
+  const [{ username, email}, onChange, reset] = useInputs({
     username: '',
     email: ''
-  },
-  users: [
-    {
-      id: 1,
-      username: 'velopert',
-      email: 'public.velopert@gmail.com',
-      active: true
-    },
-    {
-      id: 2,
-      username: 'tester',
-      email: 'tester@example.com',
-      active: false
-    },
-    {
-      id: 3,
-      username: 'liz',
-      email: 'liz@example.com',
-      active: false
-    }
-  ]
-};
+  }); // 추가
 
-function reducer(state, action) {
-  switch (action.type) {
-    case 'CHANGE_INPUT':
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [action.name]: action.value
-        }
-      };
-    case 'CREATE_USER':
-      return {
-        inputs: initialState.inputs,
-        users: state.users.concat(action.user)
-      };
-    case 'TOGGLE_USER': // 추가
-      return { 
-        ...state,
-        users: state.users.map(user =>
-          user.id === action.id ? { ...user, active: !user.active } : user
-        )
-      };
-    case 'REMOVE_USER': // 추가
-      return {
-        ...state,
-        users: state.users.filter(user => user.id !== action.id)
-      };
-    default:
-      return state;
-  }
-}
+  // const { username, email } = state.inputs;
 
-function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const nextId = useRef(4); // 추가
+  // const onChange = useCallback(e => {
+  //   const { name, value } = e.target;
+  //   dispatch({
+  //     type: 'CHANGE_INPUT',
+  //     name,
+  //     value
+  //   });
+  // }, []); //제거
 
-  const { users } = state;
-  const { username, email } = state.inputs;
-
-  const onChange = useCallback(e => {
-    const { name, value } = e.target;
-    dispatch({
-      type: 'CHANGE_INPUT',
-      name,
-      value
-    });
-  }, []);
 
   const onCreate = useCallback(() => {
     dispatch({
@@ -540,142 +176,11 @@ function App() {
         email
       }
     });
+    reset(); // 추가
     nextId.current += 1;
   }, [username, email]);
 
-  const onToggle = useCallback(id => { // 추가
-    dispatch({
-      type: 'TOGGLE_USER',
-      id
-    });
-  }, []);
-
-  const onRemove = useCallback(id => { // 추가
-    dispatch({
-      type: 'REMOVE_USER',
-      id
-    });
-  }, []);
-
-  return (
-    <>
-      <CreateUser
-        username={username}
-        email={email}
-        onChange={onChange}
-        onCreate={onCreate}
-      />
-      <UserList users={users} onToggle={onToggle} onRemove={onRemove} /> // 추가
-      <div>활성사용자 수 : 0</div>
-    </>
-  );
-}
-
-export default App;
-```
-
-<br/>
-
-#### 5. 활성 사용자 수 구현 ( App.js )  <a id="a11"></a>
-
-```jsx
-import React, { useRef, useReducer, useMemo, useCallback } from 'react';
-import UserList from './UserList';
-import CreateUser from './CreateUser';
-
-function countActiveUsers(users) {
-  console.log('활성 사용자 수를 세는중...');
-  return users.filter(user => user.active).length;
-}
-
-const initialState = {
-  inputs: {
-    username: '',
-    email: ''
-  },
-  users: [
-    {
-      id: 1,
-      username: 'velopert',
-      email: 'public.velopert@gmail.com',
-      active: true
-    },
-    {
-      id: 2,
-      username: 'tester',
-      email: 'tester@example.com',
-      active: false
-    },
-    {
-      id: 3,
-      username: 'liz',
-      email: 'liz@example.com',
-      active: false
-    }
-  ]
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'CHANGE_INPUT':
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [action.name]: action.value
-        }
-      };
-    case 'CREATE_USER':
-      return {
-        inputs: initialState.inputs,
-        users: state.users.concat(action.user)
-      };
-    case 'TOGGLE_USER':
-      return {
-        ...state,
-        users: state.users.map(user =>
-          user.id === action.id ? { ...user, active: !user.active } : user
-        )
-      };
-    case 'REMOVE_USER':
-      return {
-        ...state,
-        users: state.users.filter(user => user.id !== action.id)
-      };
-    default:
-      return state;
-  }
-}
-
-function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const nextId = useRef(4);
-
-  const { users } = state;
-  const { username, email } = state.inputs;
-
-  const onChange = useCallback(e => {
-    const { name, value } = e.target;
-    dispatch({
-      type: 'CHANGE_INPUT',
-      name,
-      value
-    });
-  }, []);
-
-  const onCreate = useCallback(() => {
-    dispatch({
-      type: 'CREATE_USER',
-      user: {
-        id: nextId.current,
-        username,
-        email
-      }
-    });
-    nextId.current += 1;
-  }, [username, email]);
-
-  const onToggle = useCallback(id => { 
+  const onToggle = useCallback(id => {
     dispatch({
       type: 'TOGGLE_USER',
       id
@@ -689,17 +194,12 @@ function App() {
     });
   }, []);
 
-  const count = useMemo(() => countActiveUsers(users), [users]); // 추가
+  const count = useMemo(() => countActiveUsers(users), [users]);
   return (
     <>
-      <CreateUser
-        username={username}
-        email={email}
-        onChange={onChange}
-        onCreate={onCreate}
-      />
+      <CreateUser username={username} email={email} onChange={onChange} onCreate={onCreate} />
       <UserList users={users} onToggle={onToggle} onRemove={onRemove} />
-      <div>활성사용자 수 : {count}</div> // 변경
+      <div>활성사용자 수 : {count}</div>
     </>
   );
 }
@@ -707,37 +207,51 @@ function App() {
 export default App;
 ```
 
-여기까지 완료 시 모든 기능들이 `useReducer` 를 사용하여 구현되었다.
-
 <br/>
 
-### useReducer vs useState   <a id="a12"></a>
+#### 커스텀 Hook에서 Reducer 사용하기 - useInputs.js <a id="a4"></a>
 
-> 어떨 때 `useReducer` 를 쓰고 어떨 때 `useState` 를 써야 하는가? 
+```jsx
+import { useReducer, useCallback } from 'react'
 
-정해진 답은 없다. 어떤 것을 사용하든 상황에 따라 불편할 때 도 있고 편할 때도 있다.
+const reducer = (state, action) => {
+  switch(action.type) {
+    case 'CHANGE_INPUT' :
+      return {
+        ...state,
+        [action.name] : action.value
+      }
+    case 'RESET' :
+      return Object.keys(state).reduce((acc,current) => {
+        acc[current] = '';
+        return acc;
+      } ,{});
+    default :
+      return state;
+  }
+}
 
-예를 들어서 컴포넌트에서 관리하는 값이 딱 하나고, 그 값이 단순한 숫자, 문자열 또는 boolean 값이라면 확실히 `useState` 로 관리하는게 편할 것이다.
+const useInputs = (initForm) => {
+  const [form , dispatch] = useReducer(reducer, initForm);
 
-```javascript
-const [value, setValue] = useState(true);
+  const onChange = useCallback(e => {
+    const {name, value} = e.target;
+    dispatch({
+      type : 'CHANGE_INPUT',
+      name,
+      value
+    })
+  }, []);
+
+  const reset = useCallback(() => {
+    dispatch({
+      type : 'RESET'
+    })
+  }, []);
+
+  return [form, onChange, reset]
+}
+
+export default useInputs;
 ```
 
-하지만, 만약에 컴포넌트에서 관리하는 값이 여러개가 되어서 상태의 구조가 복잡해진다면 `useReducer`로 관리하는 것이 편해질 수도 있다.
-
-따라서 `useState`, `useReducer` 를 자주 사용해보고 맘에 드는 방식을 선택한다.
-
-`setter(setState)` 를 한 함수에서 여러번 사용해야 하는 일이 발생한다면 그 때부터 `useReducer` 를 쓸까? 에 대한 고민을 시작해보 것도 좋을 것이다.
-
-```javascript
-// setter를 여러번 이용한 예제
-setUsers(users => users.concat(user));
-setInputs({
-  username: '',
-  email: ''
-});
-```
-
-`useReducer` 를 썼을때 편해질 것 같으면 `useReducer` 를 쓰고, 딱히 그럴것같지 않으면 `useState` 를 유지하면 된다.
-
-<br/>
