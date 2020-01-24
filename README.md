@@ -371,6 +371,8 @@ Today I Leaned...
 ### Graph QL
 
 > [GraphQL Query & Mutation](https://github.com/HYEOK999/TIL/blob/master/react/GraphQL_Front.md)
+>
+> [GraphQL Schema & Type](https://github.com/HYEOK999/TIL/blob/master/react/GraphQL_SCHEMA.md)
 
 <br/>
 
