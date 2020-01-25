@@ -342,17 +342,15 @@ Today I Leaned...
 
 <br/>
 
-### React ( Mark님 강의 )
+### React Re-Study ( Mark님 강의 )
 
 >[Re-Study : 1](https://github.com/HYEOK999/TIL/blob/master/react/React-Study-01.md)
 
 <br/>
 
-### React Router
+### React Router (Velopert님 강의)
 
->[React가 만들어진 이유 ( + Virtual DOM )](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-01.md)
->
->[JSX](
+>[SPA 와 react-router](https://github.com/HYEOK999/TIL/blob/master/react/react-Router01.md)
 
 <br/>
 
