@@ -2,485 +2,760 @@
 
 --------------
 
-# React Re-Study : 1
+# React Re-Study : 2
 
-- 리액트를 위한 JS 문법정리
-  - 에러는 에러 객체를 상속받아서 throw 한다. (`throw new Error`)
-  - let 은 변경 가능, const 는 불가능
-  - arrow function
-  - 함수.bind(this)
-  - 디스트럭처링
-  - callback
-  - Promise 객체
-  - Generator 객체
-- React 프로젝트
-  - 프로젝트 구성 지식
-  - 프록젝트 구성하기
-- React 짧은 리뷰
-  - React 핵심 모듈
-  - React Component 만드는 법
-  - props와 state
-  - Event Handling
-    - 인라인 함수를 작성하면 안되는 이유 
-    - 해결방안
+- Component Lifecycle
+
+- 변경 전 (< v16.3)
+
+  - [Component 생성 및 마운트](#a1)
+  - [Component props, state 변경](#a2)
+    - [componentWillReceiveProps](#a3)
+    - [shouldComponentUpdate (✸)](#a4)
+    - [componentWillUpdate](#a5)
+    - [componentDidUpdate](#a6)
+  - [Component 언마운트](#a7)
+
+- 변경 후  (> v16.3)
+
+  - Component 라이프사이클 변경
+  - [목록](#b1)
+  - [Component 생성 및 마운트 v16.3](#b2)
+  - [Component props, state 변경 v16.3](#b3)
+  - [Component 언마운트 (v16.3)](#b4)
+  - [Component 에러 캐치](#b5)
+    - [react-error-boundary ](#b6)
+
+
+<br/>
+
+- React의 라우팅 이해하기
+- SPA 라우팅 과정
+- Router 실습해보기
+
+  - 특정 경로에서 보여줄 컴포넌트를 준비한다.
+  - App.js 설정하기
+  - exact
+- 동적 라우팅
+  - 동적 라우팅 - Params (의무)
+  - 동적 라우팅 - 쿼리스트링 (옵셔널 - 있어도 되고, 없어도된다.)
+    1. URLSearchParams
+    2. query-string (라이브러리)
+- Switch
+  - Link 태그
+  - NavLink
+- JS로 라우팅 이동하기
+- HOC(High Order Component) - withRouter()
+- Redirect
+
+<br/>
+
+- Route Hooks
+
+  - useHistory
+
+  - useLocation
+
+  - useParams
+
+  - useRouteMatch
+
+  - BrouserRouter의 내려주기.
+
+- React developer tools
 
 <br/>
 
 -----
 
-## React Study with Mark - 리액트를 위한 JS 문법정리 -
+## React Study with Mark - React Router -
 
 <br/>
 
-### 리액트를 위한 JS 문법정리
+### Component Lifecycle
 
-> 이 정도의 개념은 알고 있어야 최소한의 React 개발이 가능하다....
+> 리액트 컴포넌트는 탄생 (Mount) 부터 죽음 (Unmount) 까지 여러 지점에서 개발자가 작업을 할 수 있도록 Class Component 의 라이프사이클 메서드를 **"오버라이딩"** 할 수 있게 해준다.
 
-- 에러
-- const let
-- template string
-- arrow function
-- .bind(this)
-- const {children} = this.props;
-- ...props
-- Promise
-- async await
-- Generator
+`render`함수는 반드시 덮어씌워야 한다. (안할 시, 에러 유발 -> 다른 함수는 상관없다.)
 
-<br/>
+Declarative 디클레러티브, 선언적인 프로그래밍을 한다. 필요한 부분만 오버라이딩을 하여 사용한다.
 
-#### 에러는 에러 객체를 상속받아서 throw 한다. (`throw new Error`)
+--------------------------
 
-- SyntaxError : 코드를 분석하는 중 잘못된 구문을 만났음을 나타내는 오류 
-- ReferenceError : 잘못된 참조를 했음을 나타내는 오류
-- TypeError : 변수나 매개변수가 유효한 자료형이 아님을 나타내는 오류
-- RangeError : 숫자 변수나 매개변수가 유효한 범위를 벗어났음을 나타내는 오류 
+### 변경 전 (< v16.3)
 
-등등...
+#### Component 생성 및 마운트 <a id="a1"></a>
 
-<br/>
+> 컴포넌트를 사용하면 언제 마운트 되는지 알 수 있다.
 
-#### let 은 변경 가능, const 는 불가능
-
-- *Primitive* : 원시값 
-- *Reference* : 객체값
-
-<br/>
-
-#### arrow function
-
-- 자신의 this 를 만들지 않는다.
-- 생성자로 사용할 수 없다.
-- 항상 익명 함수
-- 리턴만 있으면, {} 생략
-- 인자가 하나면, () 생략
-
-```javascript
-// arrow.js
-
-function Foo() {
-  this.name = 'Mark';
-
-  setTimeout(function() {
-    console.log(this.name); // undefined
-  }, 1000);
-
-  setTimeout(() => {
-    console.log(this.name); // Mark
-  }, 1000);
-}
-
-const foo = new Foo();
-```
-
-<br/>
-
-#### 함수.bind(this)
-
-- 함수가 가르키는 this를 인자에 적히 this로 변경한다. 
-- 호출은 하지 않는다. (호출 - apply, call)
-
-```javascript
-function hello() {
-  console.log(`안녕하세요 ${this.name}`);
-}
-
-const mark = {
-  name: 'Mark',
-};
-
-const helloMark = hello.bind(mark);
-helloMark();  // 안녕하세요 Mark
-
-const anna = {
-  name: 'Anna',
-};
-
-const helloAnna = hello.bind(anna);
-helloAnna(); // 안녕하세요 Anna
-```
-
-<br/>
-
-#### 디스트럭처링
-
-- 구조 분해 할당 (객체 , 배열)
-- 디스트럭처링은 1레벨 깊이까지만 변화시킨다.
-- 딥카피의 제일 쉬운 방법은 json.stringify를 이용하여 문자열로 변환시켜 복사하는 방법이다. (단, 엄청 느리다.)
+1. constructor
+2. componentWillMount
+3. **render (최초 랜더)**
+4. componentDidMount
 
 ```jsx
-const obj1 = { a: { b: 100 } };
-const obj1Cloned = { ...obj1 };
-obj1Cloned.a.b = 200;
-console.log(obj1, obj1Cloned); // 1레벨
-// { a: {b: 200} } { a: {b: 200} } // {b : 200}으로 같이 변경되었음.
+class App extends React.Component {
+  _interval;
 
-const obj2 = { a: { b: 100 } };
-const obj2Cloned = { ...obj2, a: { ...obj2.a } };
-obj2Cloned.a.b = 200; // 2레벨 깊이까지 복사했기 때문에 독리접이다.
-console.log(obj2, obj2Cloned); // 2레벨
-// { a: {b: 100} } { a: {b: 200} }
-```
+  constructor(props) {
+    console.log('App constructor'); //1번
+    super(props);
+    this.state = {
+      age: 37,
+    };
+  }
 
-<br/>
+  componentWillMount() {
+    console.log('App componentWillMount'); //2번
+  }
 
-#### callback
-
-- 비동기 처리를 위한 선택
-- 고차 함수 내부에서 호출하는 함수
-
-```jsx
-// callback.js
-
-function foo(callback) { // foo는 고차함수다.
-  setTimeout(() => {
-    // 로직
-    callback();
-  }, 1000);
-}
-
-foo(() => {
-  console.log('end');
-});
-console.log('이것이 먼저 실행');
-// 이것이 먼저 실행
-// undefined : 실행결과임
-// end
-```
-
-<br/>
-
-#### Promise 객체
-
-- Promise 객체를 만들고, 로직 처리 후 성공과 실패를 알려준다.
-- then 과 catch 를 통해 메인 로직에 전달한다.
-- Promise는 3가지 상태를 지닌다.
-  - Pending(대기) : 비동기 처리 로직이 아직 완료되지 않은 상태
-  - Fulfilled(이행) : 비동기 처리가 완료되어 프로미스가 결과 값을 반환해준 상태 (`resolve`)
-  - Rejected(실패) : 비동기 처리가 실패하거나 오류가 발생한 상태 (`reject`)
-- `new Promise()` 호출 시 Pending 상태가 된다.
-- `new Promise()` 메서드 호출 시 콜백함수의 인자로  `resolve` 혹은 `reject` 에 접근할 수 있다.
-
-```javascript
-// Promise
-function foo() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve();
+  componentDidMount() {
+    console.log('App componentDidMount'); // 3번
+    this._interval = window.setInterval(() => {
+      this.setState({
+        age: this.state.age + 1,
+      });
     }, 1000);
-  });
-}
+  }
 
-foo().then(() => {
-  console.log('end');
-});
-console.log('이것이 먼저 실행');
-// 이것이 먼저 실행
-// undefined : 실행결과임
-// end
+  componentWillUnmount() {
+    console.log('App componentWillUnmount'); // 4번
+    clearInterval(this._interval);
+  }
+
+  render() {
+    console.log('App render'); //3번
+    return (
+      <div>
+        <h2>
+          Hello {this.props.name} - {this.state.age}
+        </h2>
+      </div>
+    );
+  }
+}
 ```
 
 <br/>
 
-#### Generator 객체
+#### Component props, state 변경 <a id="a2"></a>
 
-- `function`키워드 뒤에 `*`이 적혀진 함수를 호출해서 반환되는 객체다. ( Generator객체(표준 내장 객체) )
-- `function*` 에서` yield` 를 호출하여, 다시 제어권을 넘겨준다.
-- 제너레이터 객체에 `next()` 함수를 호출하면, 다음 `yield` 지점까지 간다.
-
-```javascript
-// generator.js
-function* foo() {
-  console.log(0.5);
-  yield 1;
-  console.log(1.5);
-  yield 2;
-  console.log(2.5);
-  yield 3;
-  console.log(3.5);
-}
-
-const g = foo(); // g는 Generate 객체이다.
-console.log(g.next().value); // 0.5 1
-console.log(g.next().value); // 1.5 2
-console.log(g.next().value); // 3 3.5
-console.log(g.next().value); // undefined
-console.log(g.next().value); // undefined
-```
-
-- `next()`는 두 개의 프로퍼티를 가진 객체를 반환한다.
-  - done (boolean)
-    - Iterator(반복자)가 마지막 반복 작업을 마쳤을 경우 `true`. 만약 iterator(반복자)에 *return 값*이 있다면 `value`의 값으로 지정된다.
-    - Iterator(반복자)의 작업이 남아있을 경우 `false`. Iterator(반복자)에 `done` 프로퍼티 자체를 특정짓지 않은 것과 동일하다.
-  - `value` 
-    -  Iterator(반복자)으로부터 반환되는 모든 자바스크립트 값이며 `done`이 `true`일 경우 생략될 수 있다.
-
-```javascript
-// generator.js
-// 핸들
-let handle = null;
-
-// 비동기 함수
-function bar() {
-  setTimeout(() => {
-    handle.next('hello');
-  }, 1000);
-}
-
-// 핸들을 통해 컨트롤을 넘기는 제너레이터 함수
-function* baz() {
-  const text = yield bar();
-  console.log(text); // hello
-}
-
-handle = baz();
-handle.next(); // {value: undefined, done: false}
-```
+1. componentWillReceiveProps - **props**, **부모의 컴포넌트**가 바뀌거나  **forceUpdate(강제)** 시 여기부터 시작.
+2. shouldComponentUpdate - state가 바뀌면 여기부터 시작.
+3. componentWillUpdate
+4. render
+5. componentDidUpdate 
+   - **여기서 setState X - 렌더 후 재실행 되므로 무한 업데이트에 빠질 수 있다. (if로 방어코드를 쓰지말고 하지말자!)**
+   - 리액트 애플리케이션이 호출할 때 인자를 넣어줌
 
 <br/>
 
-----------------------------
+##### - componentWillReceiveProps <a id="a3"></a>
 
-### React 프로젝트
-
-#### 프로젝트 구성 지식
-
-- `npm run build` : 실제 배포를 위한 명령어. (build 폴더를 만든다.)
-
-- `npm install serve -g` : 파일들을 서버로 올릴 수 있도록 하는 패키지([ZEIT](https://zeit.co/))
-  `serve -s build` : `-s`는 Singlepage Application 의 약자로 어떠한 라우팅에도 index.html을 응답함
-
-- `npm test`: 테스트 파일 생성
-
-- `npm run eject` : npx를 해제하여 수많은 패키지들이 나온다. 
-
-  예전에 SASS가 안될 때 사용했고, 세부적인 설정을 작업할 때 사용한다. 한번 실행 시 돌이킬 수 없다.
-
-- webpack은 bundler /  babel은 transfiler
-
-- 이미지 파일 로딩 방법 2가지(퍼블릭 폴더에 넣는 방식, import로 불러오는 방식)
-
-- `package-lock.json` 은 개발했던 마지막 상태를 의미한다. 
-
-  따라서 마지막 개발 상황을 똑같이 재현해야한다면 `npm i` 가 아니라 `npm ci`를 해야한다.
-
-- CRA : `npx create-react-app` 정말 간편하게 react프로젝트를 만들어준다.
-
-- ESLint : JS 혹은 JSX에서 플러그 가능한 Linting 유틸리티.( 문법검사를 더불어  코드 작성 추천 제시 )
-
-- Prettier : 코드 자동 정리 Formatter ( Beutify와 충돌이 난다. 1개만 선택할 것 )
-
-- husky : Git hooks 을 사용하기 쉽게 만들어주는 툴 (커밋시, ESLint와 Prettier를 적용시켜 올리게할 수 있다.)
+- props 를 새로 지정했을 때 바로 호출된다.
+- 여기는 state 의 변경에 반응하지 않는다.
+  - 여기서 props 의 값에 따라 state 를 변경해야 한다면,
+    - setState 를 이용해 state 를 변경한다.
+    - **그러면 다음 이벤트로 각각 가는것이 아니라 한번에 변경된다.**
 
 <br/>
 
-#### 프록젝트 구성하기
+##### - shouldComponentUpdate (✸)  <a id="a4"></a>
 
-1. npx create-react-app 프로젝트명 (ESLint 포함 설치됨)
+> 이 메서드는 오직 **성능 최적화**만을 위한 것. 렌더링을 방지하는 목적으로 사용할 경우 버그로 이어질 수 있다. 
 
-2. npm i prettier -D
-
-3. .prettierrc 파일 생성 및 설정
-
-   ````json
-   // .prettierrc
-   {
-     "trailingComma": "all",
-     "tabWidth": 2,
-     "semi": true,
-     "singleQuote": true
-   }
-   ````
-
-4. npm i huskey -D
-
-5. npm i lint-staged -D
-
-6. package.json 파일 설정 추가
-
-   ```json
-   // package.json 의 scripts 객체 아래에 작성
-   "husky": {
-     "hooks": {
-       "pre-commit": "lint-staged"
-     }
-   },
-   "lint-staged": {
-     "**/*.js": [
-       "eslint --fix",
-       "prettier --write",
-       "git add"
-     ]
-   }
-   ```
-
--------
-
-### React 짧은 리뷰
-
-- View 라이브러리 (오직 렌더링 및 업데이트만 진행)
-
-- 컴포넌트 단위 개발 : JS에 [웹 컴포넌트](https://developer.mozilla.org/ko/docs/Web/Web_Components)가 정의되어 있다.
-
-- Virtual DOM을 이용한 개발 (반대 : Svelte)
-
-  State Chage → Compute Diff → Re-Render
-
-- JSX ( Templates은 String형태로 바뀌는 것. / JSX는 하나의 표기법, JS의 트랜스파일 )
-
-- CSR & SSR (상황에 맞게 골라서 사용한다.)
-
-  - CSR(Client Side Rendering)
-    - html, js파일을 전부 내려받을 때까지 loading상태.
-    - loading 완료 시 react가 execute후 보여진다. (JS작동 동시 실행)
-  - SSR(Server Side Rendering)
-    - html요청시 서버에 있는 리액트 앱이 컴포넌트들을 String으로 해서 html로 내려주고, 이게 html에 바로 보여짐(JS 작동은 내려받는 중이므로 동작은 되지 않는다.)
-    - JS 다운 완료 후 react가 execute된 후부터 작동 가능.
+- props 만 변경되어도
+- state 만 변경되어도
+- props & state 둘다 변경되어도 (componentWillReceiveProps)
+- newProps 와 new State 를 인자로 해서 호출
+- return type 이 boolean 이다.
+  - true 면 render
+  - false 면 render 가 호출되지 않는다.
+  - 이 함수를 구현하지 않으면, 디폴트는 true
 
 <br/>
 
-### React 핵심 모듈
+##### - componentWillUpdate <a id="a5"></a>
 
-- 'react' : JSX문법을 쓸 수 있도록 지원해준다.
-- 'react-dom' : 만들어진 리액트 컴포넌트를 실제 DOM 에 연결할 때 사용한다.
+- 컴포넌트가 재 랜더링 되기 직전에 불립니다.
+- 여기선 setState 같은 것을 쓰면 아니됩니다.
 
 <br/>
 
-### React Component 만드는 법
+##### - componentDidUpdate <a id="a6"></a>
 
-- class : 기존에 있는 메소드 render를 오버라이드 해서 사용 하는 것.
-  - 컴포넌트 내부 상태가 있다면 - class
-  - 컴포넌트 내부 상태가 없지만 라이프사이클을 사용 - class
-  - 컴포넌트 내부 상태가 없고 라이프사이클과 관련X - function
+- 컴포넌트가 재 랜더링을 마치면 불립니다.
+
+<br/>
+
+#### Component 언마운트  <a id="a7"></a>
+
+- componentWillUnmount ( 타임을 걸어놓고 해제를 할 경우 많이 씀. )
+
+<br/>
+
+------------
+
+### 변경 후  (> v16.3)
+
+#### Component 라이프사이클 변경
+
+#### 목록 <a id="b1"></a>
+
+- constructor
+- ~~componentWillMount~~ → **getDerivedStateFromProps**
+  - static Method
+- render
+- componentDidMount
+
+<br/>
+
+- ~~componentWillReceiveProps~~ → **getDerivedStateFromProps** 
+  - Props로부터 state를 만들어냄. (리턴이 생김)
+- shouldComponentUpdate
+- render
+- ~~componentWillUpdate~~ → **getSnapshotBeforeUpdate** 
+- v16.3 이전에는 render보다 먼저 실행되었지만, v16.3부터는 렌더 이후 실행됨.
+  - 실제로 렌더링 되기 전과 후에 비교해서 처리해야 될 상황에 사용. ( componentDidUpdate가 필요 )
+  - **리턴의 형태는 state와 같아야 한다.**
+  - Ex) 리스트가 10개에서 15개가 되었는데 기존 10개 위치에 머물러 있어야 한다면 필요가 없지만 15개의 위치로 내려가야하는 **스크롤탑 위치가 조정되어야 할 경우에 필요함**
+
+(dom 에 적용)
+
+- componentDidUpdate
+
+<br/>
+
+- componentWillUnmount
+
+<br/>
+
+#### Component 생성 및 마운트 v16.3  <a id="b2"></a>
+
+- constructor
+- static getDerivedStateFromProps
+- render (최초 랜더)
+- componentDidMount
+
+<br/>
+
+#### Component props, state 변경 v16.3  <a id="b3"></a>
+
+- static getDerivedStateFromProps (props 변경)
+- shouldComponentUpdate (state 변경)
+- render
+- getSnapshotBeforeUpdate (componentDidUpdate 와 함께 사용)
+
+(dom 에 적용)
+
+- componentDidUpdate
+
+<br/>
+
+#### Component 언마운트 (v16.3)  <a id="b4"></a>
+
+- componentWillUnmount
+
+<br/>
+
+#### Component 에러 캐치  <a id="b5"></a>
+
+> React는 하나의 앱형태로 되어 있기 때문에, 한 곳의 에러가 발생할 경우 모든 곳에 영향을 주기 때문에 어플리케이션이 망가질수 있다.
+
+- componentDidCatch : 가장 상위에 `componentDidCatch`를 두어야한다.(여기선 App) 
+  - 문제가 발생할 것 같은 컴포넌트의 상위 컴포넌트에 작성해주어야 한다.
+- 라이브러리도 존재한다. `react-error-boundary`
 
 ```jsx
-// class
 import React from 'react';
 
-class ClassComponent extends React.Component {
+class Button extends React.Component {
   render() {
-    return (<div>Hello</div>);
+    test(); // 말도 안되는 코드. test함수가 존재하지않는다.
+    return <div>hello</div>;
   }
 }
 
-// 사용
-<ClassComponent />
+class App extends React.Component {
+  state = {
+    hasError: false,
+  };
 
+  componentDidCatch(error, info) {
+    // Display fallback UI
+    this.setState({ hasError: true });
+    // You can also log the error to an error reporting service
+    // logErrorToMyService(error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <div>에러 화면</div>;
+    }
+    return (
+      <div>
+        <Button />
+      </div>
+    );
+  }
+}
+
+export default App;
 ```
 
-- hooks : 새로 도입된 React 패러다임. (All - function)
+<br/>
+
+##### - react-error-boundary ([라이브러리](https://github.com/bvaughn/react-error-boundary))  <a id="b6"></a>
 
 ```jsx
-// hooks
+<ErrorBoundary FallbackComponent={MyFallbackComponent}>
+  <ComponentThatMayError />
+</ErrorBoundary>
+```
+
+에러가 발생할 경우, `FallbackComponent={MyFallbackComponent}` 으로 연결해준 컴포넌트를 보여준다. (즉 에러처리 화면)
+
+---------------------------
+
+### React의 라우팅 이해하기
+
+> SPA : Single Page Application
+
+- react-router-dom
+- 처음 진입점 : React App
+
+<img src="https://user-images.githubusercontent.com/31315644/72519464-bd48b800-389a-11ea-9aec-cad4b1e48b2a.jpeg" alt="router01img" style="zoom:50%;" />
+
+<br/>
+
+### SPA 라우팅 과정
+
+1. 브라우저에서 최초에 '/' 경로로 요청을 하면,
+
+2. React Web App 을 내려준다.
+
+3. 내려받은 React App 에서 '/' 경로에 맞는 컴포넌트를 보여준다.
+
+4. React App 에서 다른 페이지로 이동하는 동작을 수행하면,
+
+5. 새로운 경로에 맞는 컴포넌트를 보여준다.
+
+6. 매치 옵션이 존재한다.
+
+   매치 알고리즘 : 브라우저의 주소창에 적혀진 주소와 `route path`,` <Link to>`에 적혀있는 것을 비교하는 것. 
+
+   ( 여러가지 매치방법이 있는데 ( sensitive, strict 등등) )
+
+   ![MatchOption](https://user-images.githubusercontent.com/31315644/72577250-67652600-3915-11ea-838f-3b894936e21a.jpeg)
+
+<br/>
+
+### Router 실습해보기
+
+```bash
+npm i react-router-dom
+```
+
+- cra 에 기본 내장된 패키지가 아니다. ( 아마, 지원안해줄 확률이 매우 높다. 리액트는 단순히 View만 신경쓰기 때문 )
+- react-router-dom 은 Facebook 의 공식 패키지는 아니다.
+- 가장 대표적인 라우팅 패키지.
+
+<br/>
+
+#### 특정 경로에서 보여줄 컴포넌트를 준비한다.
+
+- *'**/**' → **Home** 컴포넌트*
+- *'**/profile**' → **Profile** 컴포넌트*
+- *'**/about**' → **About** 컴포넌트*
+
+<br/>
+
+#### App.js 설정하기
+
+```jsx
+// src/App.js
+import React from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Profile from './pages/Profile';
+import About from './pages/About';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Route path="/" component={Home} />
+      <Route path="/profile" component={Profile} />
+      <Route path="/about" component={About} />
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+- Route 컴포넌트에 경로(path) 와 컴포넌트(component) 를 설정하여 나열해준다.
+
+- BrowserRouter 로 Route 들을 감싸준다. (브라우저 라우팅을 위한 react-router-dom에서 지원해주는 jsx 태그)
+
+- 브라우저에서 요청한 경로에 Route 의 path 가 들어있으면(매치가 되면) 해당 component 를 보여준다.
+
+  ![router-img02](https://user-images.githubusercontent.com/31315644/72520534-fc780880-389c-11ea-8cc8-caa781556305.jpeg)
+
+<br/>
+
+#### exact
+
+<img src="https://user-images.githubusercontent.com/31315644/72520534-fc780880-389c-11ea-8cc8-caa781556305.jpeg" alt="router-img02" />
+
+>  exact는 100%일치해야되기 때문에 값이 변하는 변수를 사용할 수 없다.
+
+위 상황을 해결하기 위해서 `exact`키워드를 사용한다.
+
+```jsx
+<Route path="/" exact component={Home} />
+```
+
+<br/>
+
+### 동적 라우팅
+
+>  `<BrouserRouter>` 의 하위 `<Route>` 컴포넌트들에게 `history`,  `location`,` match`로 이루어진 props 객체를 내려준다.
+
+- `history` 는 url을 변경시켜 다른 컴포넌트로 이동하는 역할
+- `match`는  Params 데이터를 가지고있다.
+- `loacation`은 query-string(?로 시작하는 키=값) 을 가지고 있다.
+
+<br/>
+
+#### 동적 라우팅 - Params (의무)
+
+```jsx
+<Route path="/profile/:id" component={Profile} />
+```
+
+- `/profile/1` 이 주소에서 1은 Params 라고 부른다.
+- Params는 [String] Type이다.
+- Params를 가지고 오는 방법. 
+- `match`는 위에서 언급한 매치 알고리즘을 의미한다.
+
+```jsx
+import React from "react";
+
+export default function Profile(props) {
+  console.log(props.match.params);
+  return (
+    <div>
+      <h2>Profile</h2>
+    </div>
+  );
+}
+```
+
+![router-img03](https://user-images.githubusercontent.com/31315644/72521214-5f1dd400-389e-11ea-9642-8784eadd3c07.jpeg)
+
+<br/>
+
+#### 동적 라우팅 - 쿼리스트링 (옵셔널 - 있어도 되고, 없어도된다.)
+
+```jsx
+<Route path="/about" component={About} />
+```
+
+위 처럼 설정을 해두고, 검색창에 `/about?name=mark`라고 검색해서 props를 찍어보면 `location.search`에 들어있다.
+
+`Params` 처럼 별도의 설정이 `path="/about/:id"`같이 적어줄 필요가 없다.
+
+<br/>
+
+##### 1. URLSearchParams
+
+- IE 사용불가능... (IE 🤬)
+
+```jsx
 import React from 'react';
 
-const FunctionComponent = () => (<div>Hello</div>);
+const About = props => {
+  const searchParams = new URLSearchParams(props.location.search);
 
-// 사용
-<HooksComponent />
+  const name = searchParams.get('name');
+  console.log(searchParams);
+  return (
+    <div>
+      <h1>About</h1>
+      {name && <p>name 는 {name} 입니다.</p>}
+    </div>
+  );
+};
+
+export default About;
 ```
 
 <br/>
 
-### props와 state
+##### 2. query-string ([라이브러리](https://github.com/sindresorhus/query-string/blob/master/readme.md))
 
-- Props 와 State는 를 바탕으로 컴포넌트를 그림
-- Props 와 State 가 변경되면, 컴포넌트를 다시 그림
-- 컴포넌트를 그리는 방법을 기술하는 함수가 랜더 함수
-- 외부에서 보내는 데이터가 변화를 일으킬 경우에만 Props 사용.
-- Props는 객체
-- **State를 바로 변경하지 못하게 한 이유는?** 스테이트가 변경되면 렌더를 다시해줘야 하므로 객체를 바로 변경하게(state.s = Apple) 하지 않고 this.setState를 통해 여기서 state가 바뀌니까 **명시적으로 다시 렌더하라고 알려주는 것**
-
-<br/>
-
-### Event Handling
-
-- *HTML DOM 에 클릭하면 이벤트가 발생하고, 발생하면 그에 맞는 변경이 일어나도록 해야함.*
-
-- *JSX 에 이벤트를 설정할 수 있다.*
-
-- **이벤트 핸들링시 인라인 함수를 작성해서는 안된다.**
-
-  ```jsx
-  <button onClick={() => console.log('abc')}>test</button> // X
-  ```
-
-- 인라인 함수로 작성했을 경우, DOM에는 크게 문제가 없다.
-
-<br/>
-
-#### 인라인 함수를 작성하면 안되는 이유 
-
-> 인라인 함수로 작성했을 경우, DOM에는 크게 문제가 없다.
+- `URLSearchParams`의 단점을 상쇄하고자 사용함.
 
 ```jsx
-<button onClick={() => console.log('abc')}>test</button> // X
+import React from 'react';
+import queryString from 'query-string';
+
+const About = props => {
+  console.log(props);
+  const query = queryString.parse(props.location.search);
+
+  console.log(query);
+  const { name } = query;
+  return (
+    <div>
+      <h1>About</h1>
+      {name && <p>name 는 {name} 입니다.</p>}
+    </div>
+  );
+};
+
+export default About;
 ```
-
-1. 위와 같은 인라인 함수를 작성하게 될 경우 매 렌더링 시 새로운 익명함수를 만들어서 반환한다. (즉, 참조값이 달라진다.)
-
-2. 당장의 해당 컴포넌트에서 사용하기에는 전혀 문제가 없지만 props를 통해 자식 컴포넌트에게 내려주게 될 경우 큰 문제가 발생한다.
-
-   - **PureComponent 최적화 문제**
-
-     기본적인 `React.Component` 의 경우 `props` 혹은 `state` 가 바뀔 때 마다, 하위 컴포넌트 역시 새롭게 렌더링한다.`React.PureComponent` 의 경우 내부에서 `props`와 `state`를 shallow level 안에서 비교 하여, 변경된 값이 있을 시에만 리렌더링 하도록 되어 있다. 문제는 새롭게 참조값을 매번 반환하므로 `PureComponent`의 의미가 전혀 없다.
-
-   - **React.memo 최적화 문제**
-
-     `React.memo` 역시 동일한 문제를 가지고 있다. 컴퍼넌트를 렌더링(rendering) 한 뒤, 이전 렌더된 결과와 비교하여 DOM 업데이트를 결정한다. 여기서 결과상으로 같은 값을 props로 준 것 임에도 참조값이 다르므로 `React.memo` 역시 사용된 의미가 전혀없게 된다.
-
-   ```jsx
-   // App.js
-   <Person {...p} key={p.id} onClick={() => {}} />
-   
-   // Person.js - PureComponent 최적화 문제
-   class Person extends React.PureComponent {
-     render() {
-       console.log("Person render");
-       const { name, age } = this.props;
-       return (
-         <ul>
-           {name} / {age}
-         </ul>
-       );
-     }
-   }
-   
-   // Person.js - React.memo 최적화 문제
-   const Person = React.memo(props => {
-     console.log("Person render");
-     const { name, age } = props;
-     return (
-       <ul>
-         {name} / {age}
-       </ul>
-     );
-   });
-   ```
 
 <br/>
 
-#### 해결방안
+#### Switch
 
-1. `useCallback` 이용
-2. 인라인 함수 말고 클래스면 맴버 함수를, 펑셔널이면 내부에 함수를 만들어서 넘겨준다.
+> 여러 Route 중 순서대로 먼저 맞는 하나만 보여준다.
+
+- `exact` 를 뺄 수 있는 로직을 만들 수 있다.
+- 가장 작은 단위의 컴포넌트를 상단으로 작성한다.
+- 가장 마지막에 어디 path 에도 맞지 않으면 보여지는 컴포넌트를 설정해서, `Not Found` 페이지를 만들 수 있다.
+
+```jsx
+import React from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import About from "./pages/About";
+import NotFound from "./pages/NotFound";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path="/profile/:id" component={Profile} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/about" component={About} />
+        <Route path="/" component={Home} />
+        <Route component={NotFound} />
+      </Switch>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+```
+
+<br/>
+
+#### Link 태그
+
+- `<a>` 태그를 쓰면 Reload(서버와의 통신)가 발생하므로 `<Link>`태그를 이용해서 단순히 컴포넌트만을 변경하는 방식을 이용함.
+  - 내부적으로는 `<a>`태그이므로 css에서 `<a>`태그에 속성을 추가하면 `<Link>`태그에도 추가된다.
+
+```jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+function Links() {
+  return (
+    <ul>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/profile">Profile</Link>
+      </li>
+      <li>
+        <Link to="/profile/1">Profile/1</Link>
+      </li>
+      <li>
+        <Link to="/about">About</Link>
+      </li>
+      <li>
+        <Link to="/about?name=mark">About?name=mark</Link>
+      </li>
+    </ul>
+  );
+}
+
+export default Links;
+```
+
+<br/>
+
+#### NavLink
+
+- `<NavLink>`를 이용해서 스타일을 사용할 수 있음.
+- 기본값으로 `className="active"`가 설정되어 있다. ( defaultprops )
+- activeClassName, activeStyle 처럼 active 상태에 대한 스타일 지정이 가능하다.
+- Route 의 path 처럼 동작하기 때문에 exact 가 있다.
+
+![NavLink](https://user-images.githubusercontent.com/31315644/72578646-04c25900-391a-11ea-89b3-9b66cc54411c.jpeg)
+
+```jsx
+<li>
+	<NavLink
+		to="/"
+		exact
+		activeStyle={{
+		color: "green"
+	}}>Home</NavLink>
+</li>
+```
+
+<br/>
+
+위 소스대로 설정할 경우, QueryString으로 보내는 주소는 같은 Active 스타일이 적용 된다. (/about , /about?name=mark)
+
+이를 방지하기 위해 아래처럼 작성한다.
+
+- `isActive`할 때 pathname이 맞아야 match객체가 들어온다.
+- `location.search`가 비워있는지 안비웠는지 판단한다.
+
+```jsx
+<li>
+  <NavLink to="/about" isActive={(match, location) => {
+      console.log(match, location); // 다른데 누를 때 마다 계속 찍히는데 라우팅이 바뀔때마다 체크한다는 뜻
+      if (match === null) {
+        return false;
+      }
+      console.log(location.search);
+      return location.search === '' ? true : false;
+    }}>
+    About
+  </NavLink>
+</li>
+<li>
+  <NavLink to="/about?name=mark" isActive={(match, location) => {
+    if (match === null) {
+      return false;
+    }
+    return location.search === '?name=mark';
+    }}>
+      About?name=mark
+  </NavLink>
+</li>
+```
+
+<br/>
+
+### JS로 라우팅 이동하기
+
+`props.history.push("/");`
+
+- `history`는 url을 바꿀때, 읽어올 때 사용.
+- `props`에 `history`가 포함되어 있다.
+
+<br/>
+
+### HOC(High Order Component) - withRouter()
+
+시나리오 : 만약, `<Route>` 에 있는 `path` 속성에 적혀진 `component`가 아니라면 
+
+> 훅 때문에 잘 사용하지 않음
+
+```
+import { withRouter } from 'react-router-dom';
+...
+export default withRouter(LoginButton);
+```
+
+- Login에서 history를 props로 보내주지 않아도 LoginButton에서 알아서 받아다 씀!
+- 그냥 함수인데 input을 컴포넌트로 받고 output을 새로운 컴포넌트로
+- 강제된 라이브러리가 아니라 룰이 있음 - 만들 때 룰에 주의하며 만들어야 함 - 다다음 시간에 배울 것
+- withRouter라고 이름을 붙여서 넣어준 것
+- connect도 HOC - 리덕스 연결에 사용 - 컴포넌트를 받아 컴포넌트를 리턴
+- relay 라이브러리에 createFragmentContainer도 HOC
+
+<br/>
+
+### Redirect
+
+- path가 로그인인데, 이미 로그인 되었을 경우 redirect를 렌더하게 끔 할 때 사용.
+- 특정 페이지에 접속했을 때 조건에 따라 다른 페이지로 바로 넘어가는 것.
+
+-----------
+
+### Route Hooks
+
+- useHistory
+- useLocation
+- useParams
+- useRouteMatch
+
+<br/>
+
+#### useHistory
+
+- withRouter없이 사용 가능하다.
+
+```jsx
+const history = useHistory();
+```
+
+![history](https://user-images.githubusercontent.com/31315644/72660933-e80c4b00-3a17-11ea-9be3-9cd0c282b002.jpeg)
+
+<br/>
+
+#### useLocation
+
+```jsx
+const location = useLocation();
+const { name } = queryString.parse(location.search);
+```
+
+![location](https://user-images.githubusercontent.com/31315644/72662845-455fc680-3a2f-11ea-9422-87c14c1c639e.jpeg)
+<br/>
+
+#### useParams
+
+```jsx
+const { id } = useParams();
+```
+
+![params](https://user-images.githubusercontent.com/31315644/72662847-455fc680-3a2f-11ea-9415-480887bfabfd.jpeg)
+
+<br/>
+
+#### useRouteMatch
+
+- 현재 url과 기준이 되는 url을 비교해야만 한다.
+  - 방법1) `string`으로 던지기
+  - 방법2) `object`로 던지기
+
+```jsx
+  const match = useRouteMatch({
+    path: '/book/:id',
+    strict: true, // 매치 옵션
+    sensitive: true // 매치 옵션
+  });
+```
+
+<br/>
+
+#### BrouserRouter의 내려주기.
+
+```jsx
+<BrowserRouter>
+...
+</BrowserRouter>
+```
+
+- `<BrowserRouter>`로 감싸면 위의 hooks들을 전역에 들고 있는 것과 같음 - 가져다 쓸 수 있도록 하는 것.
+
+<br/>
+
+### React developer tools
+
+- Google Chrome 에 설치하는 익스텐션
+- F12 개발자도구 - Profiler 에서 렌더링 되는 시간들을 알아볼 수 있다. - 퍼포먼스 최적화에 유용
+- F12 개발자도구 - Component 에서 트리를 볼 수 있다.
+
+<br/>
