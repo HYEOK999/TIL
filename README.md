@@ -353,6 +353,8 @@ Today I Leaned...
 ### React Router (Velopert님 강의)
 
 >[SPA 와 react-router](https://github.com/HYEOK999/TIL/blob/master/react/react-Router01.md)
+>
+>[파라미터와 쿼리](https://github.com/HYEOK999/TIL/blob/master/react/react-Router02.md)
 
 <br/>
 
