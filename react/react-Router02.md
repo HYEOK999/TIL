@@ -1,166 +1,226 @@
-![React-Router01](https://user-images.githubusercontent.com/31315644/71559787-b43ba680-2aa5-11ea-822a-b8a1660c923d.png)
+![React-Router02](https://user-images.githubusercontent.com/31315644/71559788-b43ba680-2aa5-11ea-880f-cf46861a5f75.png)
 
 ----------------
 
-## React Router with Velopert - 01 -
+## React Router with Velopert - 02 -
 
-- SPA
-  - SPA 란?
-  - non-SPA
-  - SPA 장점
-  - SPA 단점
-  - 주로 사용되는 리액트 라우터 라이브러리
-    - 리액트 라우터 react-router
-    - next
-- 리액트 라우터 react-router
-  - BrowserRouter
-  - HashRouter
-  - MemoryRouter
-  - StaticRouter
-  - Route
-  - Link
+- 파라미터와 쿼리
+- URL Parameter
+  - Parameter 받아오기
+- Query
+  - QueryString 받아오기
 
 <br/>
 
 ------
 
-# Chap 1. SPA 와 react-router
+# Chap 2. 파라미터와 쿼리
 
 <br/>
 
-## SPA
+### 파라미터와 쿼리
 
-### SPA 란?
+**Parameter : `/profiles/:username`**
 
-Single Page Application의 html 페이지가 1개인것을 의미한다. (화면이 한개라는 의미는 아니다.)
+**파라미터는 `match 객체의 params` 를 사용한다.**
 
-SPA에서는 **라우팅**을 클라이언트가 담당한다.
+```javascript
+const { username } = match.params;
+```
 
-여기서 **라우팅**은 어떤 주소에 어떤 UI를 보여줄지 에 규칙을 정하는 작업이다.
-
-<br/>
-
-### non-SPA
-
-non-SPA에서는 서버에서 라우팅 작업을 담당했다.
-
-non-SPA, 즉 정통적인 웹 어플리케이션은 특정 데이터의 처리에 대한 응답을 하기 위해서 반드시 html 페이지를 반환해야 되기 때문에 자연스럽게 웹페이지가 많아지게 되었고, 새로고침을 지속적으로 일으켜야만 했다. 
-
-이러한 서버측의 처리는 서버자원을 많이 소비하게 되었고, 불필요한 트래픽도 낭비하게 되었다.
+**`match` 는 라우트 컴포넌트에서 물려받는다.**
 
 <br/>
 
-### SPA 장점
+**Query : `/about?detail=true`**
 
-SPA에서는 어떤 주소에서 어떤 UI를 보여줄지는 클라이언트가 담당한다.
+**쿼리는 `location 객체의 search` 를 사용한다.**
 
-서버는 그저 클라이언트가 선택한 페이지에 필요한 데이터만 응답해주면 되기 떄문에, 서버쪽은 서버자원을 많이 아끼고 사용자는 UX가 향상될 수 있다.
+`location.search` 는 그냥 사용하지는 못하고 문자열을 객체로 변환시켜야 하는데
 
-<br/>
+그것은 qs라는 npm모듈을 이용한다.
 
-### SPA 단점
+```bash
+npm i query-string --save
+```
 
-1. 앱의 규모가 커지면 JS파일의 크기가 커질 수 있다. (Code Splitting 으로 해결가능)
+다음과 같이 사용할 수 있다.
 
-   Code Splitting : 각 기능별로 파일을 나누어놓고 필요한 시점에 해당 파일을 불러올 수 있다.
+```
+  const query = qs.parse(location && location.search);
+  const detail = query.detail === 'true'; // 쿼리의 파싱결과값은 문자열입니다.
+```
 
-2. 브라우저에서 JS가 구동되지 않으면 UI를 볼 수 없다. -> 검색엔진에서 크롤링이 불가능해진다.( Server Side Rendering으로 해결 )
-
-<br/>
-
-### 주로 사용되는 리액트 라우터 라이브러리
-
-1. react-router
-2. next
+**`location` 는 라우트 컴포넌트에서 물려받는다.**
 
 <br/>
 
-#### 리액트 라우터
+### URL Parameter
 
-> 컴포넌트 기반 라우팅
->
-> 라우터 컴포넌트를 만들고 라우터 컴포넌트의 props에 컴포넌트를 렌더링하는 방식
+ID, 유저 네임등의 특정 데이터 조회하기 위해 사용한다.
 
-<br/>
+```bash
+/profiles/kim
+```
 
-#### next
-
-> 서버 사이드 렌더링을 쉽게 구현 가능하다.
->
-> 파일 경로, 이름을 기반으로 라우팅을 한다.
+`kim` 프로파일을 달라.
 
 <br/>
 
-## 리액트 라우터 react-router
+#### Parameter 받아오기
 
-> 써드 파티 라이브러리, 라우팅으로 가장 많이 사용되고 있는 라이브러리.
+Profile 이라는 컴포넌트를 만들어서 파라미터를 받아오는 예제 코드.
 
-클라이언트 사이드에서 이뤄지는 라우팅을 간단하게 해준다.
+src/Profile.js
 
-주요 컴포넌트 : `<BrowserRouter>` , `<HashRouter>`, `<MemoryRouter>`, `<StaticRouter>`, `<Route>`, `<Link>`
+```jsx
+import React from 'react';
 
-<br/>
+// 프로필에서 사용 할 데이터
+const profileData = {
+  hyeok999: {
+    name: '혁999',
+    description:
+      'Frontend Student'
+  },
+  homer: {
+    name: '호머 심슨',
+    description: '호머 심슨'
+  }
+};
 
-### 1. BrowserRouter
+const Profile = ({ match }) => {
+  // 파라미터를 받아올 땐 match 안에 들어있는 params 값을 참조합니다.
+  const { username } = match.params;
+  const profile = profileData[username];
+  if (!profile) {
+    return <div>존재하지 않는 유저입니다.</div>;
+  }
+  return (
+    <div>
+      <h3>
+        {username}({profile.name})
+      </h3>
+      <p>{profile.description}</p>
+    </div>
+  );
+};
 
-<img src="https://user-images.githubusercontent.com/31315644/70965484-263de400-20d3-11ea-8851-a915fa07a14c.jpeg" alt="BrowserRouter" style="zoom:50%;" />
+export default Profile;
+```
 
-가장 많이 사용되는 컴포넌트.
+**파라미터를 받아올 땐 match 안에 들어있는 params 값을 참조한다.**
 
-HTML5에는 History API라는 것이 있다. 
+ match 객체안에는 현재의 주소가 `Route` 컴포넌트에서 정한 규칙과 어떻게 일치하는지에 대한 정보가 들어있다.
 
-위 API는 브라우저의 주소표시줄에 나타나는 경로를 바꿀 수 있다.
-
-여기서, 주소만 바꾸는 것이고 서버에 요청을 하지않는다. 즉, 페이지를 새로 로드하지는 않는다.
-
-<br/>
-
-### 2. HashRouter
-
-<img src="https://user-images.githubusercontent.com/31315644/70965491-28a03e00-20d3-11ea-9ddc-1c97afab37fc.jpeg" alt="HashRouter" style="zoom:50%;" />
-
-엣날에 자주 쓰이던 라우팅 방식. 
-
-주소 뒤에 `#` 태그를 넣는 방법을 이용한다. ( `example.com/#/path/to/route` )
-
-엣날 브라우저에서도 작동하는 장점이 있다. (`BrowserRouter`는 IE 6 ~ 9 에서 사용 할 수 없다.)
-
-<br/>
-
-### 3. MemoryRouter
-
-<img src="https://user-images.githubusercontent.com/31315644/70965486-26d67a80-20d3-11ea-8b77-a0ed15c0f2e6.jpeg" alt="MemoryRouter" style="zoom:50%;" />
-
-브라우저의 주소와는 전혀 관계가 없다. 
-
-브라우저가 아닌 환경에 사용하기 좋다.
-
-테스트 환경, 임베디드 웹앱 ( 웹 어플리케이션이 전부 리액트가 아니라 일부분만 리액트 일 경우 ), 리액트 네이티브에서 사용한다.
-
-<br/>
-
-#### 4. StaticRouter
-
-<img src="https://user-images.githubusercontent.com/31315644/70965488-2807a780-20d3-11ea-84a9-d5269a4472f1.jpeg" alt="StaticRouter" style="zoom:50%;" />
-
-서버 사이드 렌더링에 이용
+path 규칙에는 `/profiles/:username` 으로 적용시키면 Profile 컴포넌트에서 match props를 통해 전달받을 수 있다.
 
 <br/>
 
-#### 5. Route
+src/App.js
 
-![Route](https://user-images.githubusercontent.com/31315644/70965498-2b029800-20d3-11ea-93f1-1269c1476267.jpeg)
+```jsx
+import React from 'react';
+import { Route, Link } from 'react-router-dom';
+import About from './About';
+import Home from './Home';
+import Profile from './Profile';
 
-라우트를 정의할 때 사용하는 컴포넌트. 
+const App = () => {
+  return (
+    <div>
+      <ul>
+        <li>
+          <Link to="/">홈</Link>
+        </li>
+        <li>
+          <Link to="/about">소개</Link>
+        </li>
+      </ul>
+      <hr />
+      
+      <Route path="/" exact={true} component={Home} />
+      <Route path="/about" component={About} />
+      <Route path="/profiles/:username" component={Profile} />
+    </div>
+  );
+};
 
-어떤 경로로 들어왔을 때, 어떤 컴포넌트를 보여줄것인지 설정할 수 있다.(`path`)
+export default App;
+```
+
+이제 `/profiles/hyeok999` 경로로 들어가보자.
+
+</br>
+
+### Query
+
+다양한 옵션을 주어서 검색할 때 많이 사용한다.
+
+```javascript
+/filter?type=book&sort_by=date
+```
+
+`book` 이라는 타입을 가진 데이터를 date로 정렬해서 보여달라.
 
 <br/>
 
-#### 6. Link
+쿼리는 라우트 컴포넌트에게 props 전달되는 location 객체에 있는 search 값에서 읽어올 수 있다. 
 
-![Link](https://user-images.githubusercontent.com/31315644/70965495-2a6a0180-20d3-11ea-8d0e-d718a37720ca.jpeg)
+location 객체는 현재 앱이 갖고있는 주소에 대한 정보를 지니고있다.
 
-`a` 태그로 구성되어 있다. 
+```javascript
+{
+  key: 'ac3df4', // not with HashHistory!
+  pathname: '/somewhere'
+  search: '?some=search-string',
+  hash: '#howdy',
+  state: {
+    [userDefined]: true
+  }
+}
+```
 
-하지만 `Router`의 주소만 바꿔줄 뿐, 새로고침 하지는 않는다.
+<br/>
+
+여기서 중요한 것은 search 값이다. 문제는 search가 `?` 로 시작되는 문자열이라 객체 형태로 변환을 따로 해주어야한다.
+
+따라서 NPM 모듈을 설치하여 작업해주도록 한다.
+
+```bash
+npm i query-string --save
+```
+
+위는 qs라는 라이브러리로 location.search의 문자열을 손쉽게 객체형태로 변환해준다.
+
+<br/>
+
+#### QueryString 받아오기
+
+About이라는 컴포넌트를 만들고 `search` 값에 있는 detail 값을 받아와서, 해당 값이 true 일때 추가정보를 보여주도록 구현해 본다.
+
+```jsx
+import React from 'react';
+import qs from 'query-string';
+
+function About ({ location }) {
+  const query = qs.parse(location && location.search);
+
+  const detail = query.detail === 'true'; // 쿼리의 파싱결과값은 문자열입니다.
+
+  return (
+    <div>
+      <h1>소개</h1>
+      <p>이 프로젝트는 리액트 라우터 기초를 실습해보는 예제 프로젝트다.</p>
+      {detail && <p>detail 값이 true 입니다.!</p>}
+    </div>
+  );
+}
+
+export default About
+```
+
+`/about?detail=true` 경로로 들어가보자.
+
+<br/>
+
