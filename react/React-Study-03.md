@@ -2,67 +2,66 @@
 
 --------------
 
-# React Re-Study : 2
+# React Re-Study : 3
 
-- Component Lifecycle
+React Component Styling
 
-- 변경 전 (< v16.3)
+> React의 가장 큰 문제. CSS의 스타일이 컴포넌트간 침범이된다.
 
-  - [Component 생성 및 마운트](#a1)
-  - [Component props, state 변경](#a2)
-    - [componentWillReceiveProps](#a3)
-    - [shouldComponentUpdate (✸)](#a4)
-    - [componentWillUpdate](#a5)
-    - [componentDidUpdate](#a6)
-  - [Component 언마운트](#a7)
+- [컴포넌트 스타일링 방법들](#a1)
 
-- 변경 후  (> v16.3)
+- [Style Loaders](#a2)
 
-  - Component 라이프사이클 변경
-  - [목록](#b1)
-  - [Component 생성 및 마운트 v16.3](#b2)
-  - [Component props, state 변경 v16.3](#b3)
-  - [Component 언마운트 (v16.3)](#b4)
-  - [Component 에러 캐치](#b5)
-    - [react-error-boundary ](#b6)
+- [PostCSS](#a3)
 
+- [CSS, SASS](#a4)
+  
+  - [CSS](#a5)
+  - [SASS](#a6)
+  - [SASS 와 SCSS 의 차이](#a7)
+  
+- [CSS Module, Sass Module](#a8)
+  
+  - [CSS Module](#a9)
+  - [SASS Module](#a10)
+  - [classnames 사용하기](#a11)
+    - [classnames 적용하기](#a12)
+    - [classnames/bind 적용하기](#a13)
+  
+- [Styled Component](#b1)
 
-<br/>
+  - [styled.태그](#b2)
+  - [${props => props.프롭스명 && css`스타일`}](#b3)
+  - [styled(컴포넌트)](#b4)
+    - [styled(컴포넌트) - 컴포넌트를 반환 할 때](#b5)
+  - [as="태그"](#b6)
+  - [styled('태그') = styled.태그](#b7)
+  - [${props => props.color || ''}](#b8)
+  - [:hover {스타일}](#b9)
+  - [::before {스타일} | ::after {스타일}](#b10)
+  - [&:hover {스타일}](#b11)
+  - [& ~ & {스타일}, & + & {스타일}
+  - [&.클래스 {스타일}](#b12)
+  - [.클래스 {스타일}](#b13)
+  - [createGlobalStyle '스타일'](#b14)
+  - [styled.태그.attrs(props => ({속성들})) - 중요](#b15)
+  - [keyframes'키프레임'](#b16)
 
-- React의 라우팅 이해하기
-- SPA 라우팅 과정
-- Router 실습해보기
+- [Ant Design](#c1)
 
-  - 특정 경로에서 보여줄 컴포넌트를 준비한다.
-  - App.js 설정하기
-  - exact
-- 동적 라우팅
-  - 동적 라우팅 - Params (의무)
-  - 동적 라우팅 - 쿼리스트링 (옵셔널 - 있어도 되고, 없어도된다.)
-    1. URLSearchParams
-    2. query-string (라이브러리)
-- Switch
-  - Link 태그
-  - NavLink
-- JS로 라우팅 이동하기
-- HOC(High Order Component) - withRouter()
-- Redirect
+  - [사용법](#c2)
 
-<br/>
+  - [또 다른 사용법](#c3)
 
-- Route Hooks
+  - [Ant Design 레이아웃 -그리드-](#c4)
 
-  - useHistory
+    - [Row gutter](#c5)
 
-  - useLocation
+    - [Col offset](#c6)
 
-  - useParams
+    - [레이아웃 flex를 이용한 수직 정렬](#c7)
 
-  - useRouteMatch
-
-  - BrouserRouter의 내려주기.
-
-- React developer tools
+  - [Ant Design 레이아웃 -양식-](#c8)
 
 <br/>
 
@@ -70,482 +69,556 @@
 
 ## React Study with Mark - React Router -
 
+### 컴포넌트 스타일링 방법들 <a id="a1"></a>
+
+> 리액트는 style을 전역으로 관리하여 서로 간에 오염되므로 사람이 혹은 자동으로 맞춰줘야한다.
+>
+> 순서상 : 전부 관리 - 덜 관리 - 거의 자동으로 관리 순으로 배워보자.
+
+1. CSS, Sass(SASS, SCSS)
+2. CSS, Sass Module
+3. Styled-components
+4. Ant Design 
+
 <br/>
 
-### Component Lifecycle
+### Style Loaders  <a id="a2"></a>
 
-> 리액트 컴포넌트는 탄생 (Mount) 부터 죽음 (Unmount) 까지 여러 지점에서 개발자가 작업을 할 수 있도록 Class Component 의 라이프사이클 메서드를 **"오버라이딩"** 할 수 있게 해준다.
+<img src="https://user-images.githubusercontent.com/31315644/72662816-0e89b080-3a2f-11ea-84e9-2cd7b8553c37.jpeg" alt="style01" style="zoom:50%;" />
 
-`render`함수는 반드시 덮어씌워야 한다. (안할 시, 에러 유발 -> 다른 함수는 상관없다.)
+리액트에서는 공식적으로 4가지의 css를 지원한다.
 
-Declarative 디클레러티브, 선언적인 프로그래밍을 한다. 필요한 부분만 오버라이딩을 하여 사용한다.
+`npx creat-app`을 통해 만든 프로젝트는 자동으로 `webpack`과 `babel`을 포함하고 있다.
 
---------------------------
+`webpack`에는 `babel`이 트랜스 파일 할수 있게 `style-loader` 와 `css-loader`가 설정되어 있는데 해당 `loader`들은 각각 아래의 확장자 파일들을 `index.css`로 합쳐주는 역할을 한다. (오염의 원인)
 
-### 변경 전 (< v16.3)
+- CSS
+- CSS Module
+- Sass(.scss, .sass) - Sass에는 sass, scss가 있음 → PostCSS : `npm i node-sass 필요`
+- Sass Module `npm i node-sass 필요`
 
-#### Component 생성 및 마운트 <a id="a1"></a>
+<br/>
 
-> 컴포넌트를 사용하면 언제 마운트 되는지 알 수 있다.
+### PostCSS   <a id="a3"></a>
 
-1. constructor
-2. componentWillMount
-3. **render (최초 랜더)**
-4. componentDidMount
+> 자바스크립트 플러그인을 사용해서 SASS/SCSS 를 css로 변환시켜주는 도구를  PostCSS라 한다.
 
-```jsx
-class App extends React.Component {
-  _interval;
+- *PostCSS는 자바스크립트 기반의 플러그인을 사용하여 CSS 기능을 자동화하는* **소프트웨어 개발 도구**
+- *PostCSS는 JS 플러그인을 사용하여 CSS를 변환시키는 툴* (위키피디아)
+- 즉, PostCSS는 언어가 아닌 도구이다. 
+- **PostCSS는 Babel을 통해 트랜스파일링되는 도구( loader )를 일컫는 말이다.**
 
-  constructor(props) {
-    console.log('App constructor'); //1번
-    super(props);
-    this.state = {
-      age: 37,
-    };
+<br/>
+
+### CSS, SASS  <a id="a4"></a>
+
+> 컴포넌트의 독립적인 스타일을 최대한 유지하기 위해서, CSS 구조를 개선시키기 위한 **CSS 개발 방법론**을 이용한다.
+
+- [BEM](http://getbem.com/naming/) : Block Element Modifire 
+- SMACSS
+- OOCSS
+
+여기서는 BEM에 대해서 다루도록 한다. ( Block, Element, Modifier )
+
+**BEM** 
+
+- 화면에 보여질 블록(block)을 기준으로 첫번째 순서의 네이밍을 작성한다.
+- 그 다음에 블록 안의 요소(elements)들을 "__"으로 연결해서 네이밍을 작성한다.
+- 그 다음에 수식어(모양이나 상태)를 "–"으로 연결한 뒤 네이밍을 작성한다.
+- 수식어는 boolean이나 key-value 형태로 넣을 수 있다. (-disable, -color-red)
+- 예를 들면 .header _ _ logo 또는 .form _ _ button–disabled과 같은 식이다.
+- 클래스명이 용도와 형태를 의미하므로 직관적인 것이 장점, 길고 복잡해지는 것이 단점이다.
+
+<br/>
+
+#### CSS  <a id="a5"></a>
+
+기존의 css는 아래처럼 작성한다.
+
+``` css
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #09d3ac;
+}
+```
+
+그런데, css를 블록별로 구별(BEM처럼)하여 분리할 수 있다. 즉, 클래스네임을 더 짧게 줄이는 장점이있다.
+
+```css
+.App {
+  text-align: center;
+}
+
+.App .logo {
+  height: 40vmin;
+}
+
+.App .header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App .link {
+  color: #09d3ac;
+}
+```
+
+<br/>
+
+#### SCSS   <a id="a6"></a>
+
+scss를 이용할 경우 위에 작성된 css를 훨씬 더 직관적이게 블록화를 할 수 있고, 코드도 더 짧아진다.
+
+```scss
+.App {
+  text-align: center;
+
+  .logo { /* .App .logo */
+    height: 40vmin;
   }
 
-  componentWillMount() {
-    console.log('App componentWillMount'); //2번
+  .header { /* .App .header */
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
   }
 
-  componentDidMount() {
-    console.log('App componentDidMount'); // 3번
-    this._interval = window.setInterval(() => {
-      this.setState({
-        age: this.state.age + 1,
-      });
-    }, 1000);
-  }
-
-  componentWillUnmount() {
-    console.log('App componentWillUnmount'); // 4번
-    clearInterval(this._interval);
-  }
-
-  render() {
-    console.log('App render'); //3번
-    return (
-      <div>
-        <h2>
-          Hello {this.props.name} - {this.state.age}
-        </h2>
-      </div>
-    );
+  .link { /* .App .link */
+    color: #09d3ac;
   }
 }
 ```
 
 <br/>
 
-#### Component props, state 변경 <a id="a2"></a>
+#### SASS 와 SCSS 의 차이  <a id="a7"></a>
 
-1. componentWillReceiveProps - **props**, **부모의 컴포넌트**가 바뀌거나  **forceUpdate(강제)** 시 여기부터 시작.
-2. shouldComponentUpdate - state가 바뀌면 여기부터 시작.
-3. componentWillUpdate
-4. render
-5. componentDidUpdate 
-   - **여기서 setState X - 렌더 후 재실행 되므로 무한 업데이트에 빠질 수 있다. (if로 방어코드를 쓰지말고 하지말자!)**
-   - 리액트 애플리케이션이 호출할 때 인자를 넣어줌
+> `{}`(중괄호)와 `;`(세미콜론)의 유무 
+
+![sassscss](https://user-images.githubusercontent.com/31315644/72663119-0a12c700-3a32-11ea-8340-dc537617a409.png)
+
+- `sass/scss`를 사용하기 위해서 `npm i node-sass` 필수. (`PostCSS` 이용)
 
 <br/>
 
-##### - componentWillReceiveProps <a id="a3"></a>
+### CSS Module, Sass Module  <a id="a8"></a>
 
-- props 를 새로 지정했을 때 바로 호출된다.
-- 여기는 state 의 변경에 반응하지 않는다.
-  - 여기서 props 의 값에 따라 state 를 변경해야 한다면,
-    - setState 를 이용해 state 를 변경한다.
-    - **그러면 다음 이벤트로 각각 가는것이 아니라 한번에 변경된다.**
+- `CSS Module`과` Sass Module`은 `React` 내장되어 있다. 
+- Module을 사용할 경우 렌더링 되어서 화면에 표시될 때 클래스네임 끝에 hash값이 붙어서 나온다.
+- `[filename]_[className]__[hash]`
 
 <br/>
 
-##### - shouldComponentUpdate (✸)  <a id="a4"></a>
+#### CSS Module  <a id="a9"></a>
 
-> 이 메서드는 오직 **성능 최적화**만을 위한 것. 렌더링을 방지하는 목적으로 사용할 경우 버그로 이어질 수 있다. 
+![css-module](https://user-images.githubusercontent.com/31315644/72663442-26186780-3a36-11ea-934b-41f3718be8a1.jpeg)
 
-- props 만 변경되어도
-- state 만 변경되어도
-- props & state 둘다 변경되어도 (componentWillReceiveProps)
-- newProps 와 new State 를 인자로 해서 호출
-- return type 이 boolean 이다.
-  - true 면 render
-  - false 면 render 가 호출되지 않는다.
-  - 이 함수를 구현하지 않으면, 디폴트는 true
+```js
+import styles from './App.module.css';
 
-<br/>
+console.log(styles);
+```
 
-##### - componentWillUpdate <a id="a5"></a>
+```css
+/* ./App.module.css */
+.App {
+  text-align: center;
+}
 
-- 컴포넌트가 재 랜더링 되기 직전에 불립니다.
-- 여기선 setState 같은 것을 쓰면 아니됩니다.
+.App-logo {
+  height: 40vmin;
+}
 
-<br/>
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
 
-##### - componentDidUpdate <a id="a6"></a>
-
-- 컴포넌트가 재 랜더링을 마치면 불립니다.
-
-<br/>
-
-#### Component 언마운트  <a id="a7"></a>
-
-- componentWillUnmount ( 타임을 걸어놓고 해제를 할 경우 많이 씀. )
-
-<br/>
-
-------------
-
-### 변경 후  (> v16.3)
-
-#### Component 라이프사이클 변경
-
-#### 목록 <a id="b1"></a>
-
-- constructor
-- ~~componentWillMount~~ → **getDerivedStateFromProps**
-  - static Method
-- render
-- componentDidMount
+.App-link {
+  color: #09d3ac;
+}
+```
 
 <br/>
 
-- ~~componentWillReceiveProps~~ → **getDerivedStateFromProps** 
-  - Props로부터 state를 만들어냄. (리턴이 생김)
-- shouldComponentUpdate
-- render
-- ~~componentWillUpdate~~ → **getSnapshotBeforeUpdate** 
-- v16.3 이전에는 render보다 먼저 실행되었지만, v16.3부터는 렌더 이후 실행됨.
-  - 실제로 렌더링 되기 전과 후에 비교해서 처리해야 될 상황에 사용. ( componentDidUpdate가 필요 )
-  - **리턴의 형태는 state와 같아야 한다.**
-  - Ex) 리스트가 10개에서 15개가 되었는데 기존 10개 위치에 머물러 있어야 한다면 필요가 없지만 15개의 위치로 내려가야하는 **스크롤탑 위치가 조정되어야 할 경우에 필요함**
+#### SASS Module  <a id="a10"></a>
 
-(dom 에 적용)
+![scss-module](https://user-images.githubusercontent.com/31315644/72663498-aa6aea80-3a36-11ea-94ac-7be497fd672b.jpeg)
 
-- componentDidUpdate
+```js
+import styles from './App.module.scss';
 
-<br/>
+console.log(styles);
+```
 
-- componentWillUnmount
+```scss
+/* ./App.module.scss */
+.App {
+  text-align: center;
 
-<br/>
+  .logo {
+    animation: App-logo-spin infinite 20s linear;
+    height: 40vmin;
+    pointer-events: none;
+  }
 
-#### Component 생성 및 마운트 v16.3  <a id="b2"></a>
+  .header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
 
-- constructor
-- static getDerivedStateFromProps
-- render (최초 랜더)
-- componentDidMount
-
-<br/>
-
-#### Component props, state 변경 v16.3  <a id="b3"></a>
-
-- static getDerivedStateFromProps (props 변경)
-- shouldComponentUpdate (state 변경)
-- render
-- getSnapshotBeforeUpdate (componentDidUpdate 와 함께 사용)
-
-(dom 에 적용)
-
-- componentDidUpdate
-
-<br/>
-
-#### Component 언마운트 (v16.3)  <a id="b4"></a>
-
-- componentWillUnmount
-
-<br/>
-
-#### Component 에러 캐치  <a id="b5"></a>
-
-> React는 하나의 앱형태로 되어 있기 때문에, 한 곳의 에러가 발생할 경우 모든 곳에 영향을 주기 때문에 어플리케이션이 망가질수 있다.
-
-- componentDidCatch : 가장 상위에 `componentDidCatch`를 두어야한다.(여기선 App) 
-  - 문제가 발생할 것 같은 컴포넌트의 상위 컴포넌트에 작성해주어야 한다.
-- 라이브러리도 존재한다. `react-error-boundary`
-
-```jsx
-import React from 'react';
-
-class Button extends React.Component {
-  render() {
-    test(); // 말도 안되는 코드. test함수가 존재하지않는다.
-    return <div>hello</div>;
+  .link {
+    color: #61dafb;
   }
 }
 
-class App extends React.Component {
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+```
+
+<br/>
+
+#### classnames 사용하기  <a id="a11"></a>
+
+- CSS/SASS Module을 사용하기 시작하면서, `className='스타일명'`라고 사용하는게 아니라, `className={스타일 모듈명.스타일명}` 으로 사용하기 시작햇다.
+
+- 문제는 연속적인 스타일을 적용하기 시작할 때 문제가 생긴다.(예 - className='abc def' )
+
+  ```jsx
+  className='${styles.abc} ${styles.def}'
+  ```
+
+- 이러한 문제를 `classnames`라는 라이브러리를 이용해 해결한다.
+
+`npm i classnames` 설치.
+
+```jsx
+import classNames from 'classnames';
+
+console.log(classNames('foo', 'bar')); // "foo bar"
+console.log(classNames('foo', 'bar', 'baz')); // "foo bar baz"
+
+console.log(classNames({ foo: true }, { bar: true })); // "foo bar"
+console.log(classNames({ foo: true }, { bar: false })); // "foo"
+console.log(classNames(null, false, 'bar', undefined, 0, 1, { baz: null }, '')); // "bar 1"
+console.log(classNames(styles.button, styles.loading)); 
+// Button_button__2Ce79 Button_loading__XEngF
+```
+
+- Button.module.css
+
+```css
+.button {
+  background: transparent;
+  border-radius: 3px;
+  border: 2px solid palevioletred;
+  color: palevioletred;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+  font-size: 20px;
+}
+```
+
+- Button.jsx
+
+  ` <button> {props.children} </button>;` 
+
+  `<button {...props} />;` 
+
+  `<button children={props.children}/>;` 은 같은 문법이다.
+
+  * 참고로 모든 태그에는 `children` 이라는 속성이 존재한다. 
+
+```jsx
+import React from 'react';
+import styles from './Button.module.css';
+
+const Button = props => <button className={styles.button} {...props} />;
+
+export default Button;
+```
+
+<br/>
+
+##### classnames 적용하기  <a id="a12"></a>
+
+- Button.jsx :` import classNames from 'classnames'` 추가;
+
+```jsx
+import React from 'react';
+import styles from './Button.module.css';
+import classNames from 'classnames';
+
+export default class Button extends React.Component {
   state = {
-    hasError: false,
+    loading: false,
   };
 
-  componentDidCatch(error, info) {
-    // Display fallback UI
-    this.setState({ hasError: true });
-    // You can also log the error to an error reporting service
-    // logErrorToMyService(error, info);
-  }
+  startLoading = () => {
+    console.log('start');
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 1000);
+  };
 
   render() {
-    if (this.state.hasError) {
-      return <div>에러 화면</div>;
-    }
+    const { loading } = this.state;
     return (
-      <div>
-        <Button />
-      </div>
+      <button
+        className={
+          loading ? classNames(styles.button, styles.loading) : styles.button
+        }
+        {...this.props}
+        onClick={this.startLoading}
+      />
     );
   }
 }
-
-export default App;
 ```
 
 <br/>
 
-##### - react-error-boundary ([라이브러리](https://github.com/bvaughn/react-error-boundary))  <a id="b6"></a>
+##### classnames/bind 적용하기  <a id="a13"></a>
+
+- `classnames` 사용시 `{ 스타일 모듈명.스타일명.해시: true }`라는 조건을 이용해야 해서 단어가 길고 복잡했다. 
+- 따라서, `classnames.bind()`를 통해 함수로 리턴하여 더 짧게 줄여서 이용한다.
+
+````js
+const 변수명 = classnames.bind(스타일 모듈명)
+````
 
 ```jsx
-<ErrorBoundary FallbackComponent={MyFallbackComponent}>
-  <ComponentThatMayError />
-</ErrorBoundary>
+import React from 'react';
+import styles from './Button.module.css';
+import classNames from 'classnames/bind'; // 수정 classnames -> classnames/bind
+
+const cx = classNames.bind(styles);
+
+export default class Button extends React.Component {
+  state = {
+    loading: false,
+  };
+
+  startLoading = () => {
+    console.log('start');
+    this.setState({ loading: true });
+    setTimeout(() => {
+      this.setState({ loading: false });
+    }, 1000);
+  };
+
+  render() {
+    const { loading } = this.state;
+    return (
+//<button className={loading ? classNames(styles.button, styles.loading) : styles.button} {...props}>버튼</button>
+//<button className={loading ? cx('button', 'loading') : cx('button')} {...props}>버튼</button>
+//<button className={cx('button', {loading: loading})} {...props}>버튼</button>
+      <button
+        className={cx('button', { loading })}
+        {...this.props}
+        onClick={this.startLoading}
+      />
+    );
+  }
+}
 ```
 
-에러가 발생할 경우, `FallbackComponent={MyFallbackComponent}` 으로 연결해준 컴포넌트를 보여준다. (즉 에러처리 화면)
+`cx('button', { loading })`에서 'button'은 항상 truthy값이므로 붙고, `loading`은 현재 값 여부에 따라 붙거나 붙지 않음.
 
----------------------------
-
-### React의 라우팅 이해하기
-
-> SPA : Single Page Application
-
-- react-router-dom
-- 처음 진입점 : React App
-
-<img src="https://user-images.githubusercontent.com/31315644/72519464-bd48b800-389a-11ea-9aec-cad4b1e48b2a.jpeg" alt="router01img" style="zoom:50%;" />
+- 만약 `loading`과 `css`의 `.loading`이름이 다르다면` { test: loading }`이 될것 ( `loading`값이 `true`면 `test class`추가)
+- 여기서는 이름이 같으므로 간단하게 표기 가능하다.
 
 <br/>
 
-### SPA 라우팅 과정
+### Styled Component <a id="b1"></a>
 
-1. 브라우저에서 최초에 '/' 경로로 요청을 하면,
-
-2. React Web App 을 내려준다.
-
-3. 내려받은 React App 에서 '/' 경로에 맞는 컴포넌트를 보여준다.
-
-4. React App 에서 다른 페이지로 이동하는 동작을 수행하면,
-
-5. 새로운 경로에 맞는 컴포넌트를 보여준다.
-
-6. 매치 옵션이 존재한다.
-
-   매치 알고리즘 : 브라우저의 주소창에 적혀진 주소와 `route path`,` <Link to>`에 적혀있는 것을 비교하는 것. 
-
-   ( 여러가지 매치방법이 있는데 ( sensitive, strict 등등) )
-
-   ![MatchOption](https://user-images.githubusercontent.com/31315644/72577250-67652600-3915-11ea-838f-3b894936e21a.jpeg)
-
-<br/>
-
-### Router 실습해보기
+> 이 컴포넌트가 이 스타일이라고 스타일을 지정해주면 자동으로 클래스로 변환
 
 ```bash
-npm i react-router-dom
+npm i styled-components
 ```
 
-- cra 에 기본 내장된 패키지가 아니다. ( 아마, 지원안해줄 확률이 매우 높다. 리액트는 단순히 View만 신경쓰기 때문 )
-- react-router-dom 은 Facebook 의 공식 패키지는 아니다.
-- 가장 대표적인 라우팅 패키지.
-
 <br/>
 
-#### 특정 경로에서 보여줄 컴포넌트를 준비한다.
-
-- *'**/**' → **Home** 컴포넌트*
-- *'**/profile**' → **Profile** 컴포넌트*
-- *'**/about**' → **About** 컴포넌트*
-
-<br/>
-
-#### App.js 설정하기
+#### styled.태그 <a id="b2"></a>
 
 ```jsx
-// src/App.js
+import styled from 'styled-components';
+
+const StyledButton = styled.button`
+  background: transparent;
+  border-radius: 3px;
+  border: 2px solid palevioletred;
+  color: palevioletred;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+`;
+
+export default StyledButton;
+```
+
+- 브라우저에 버튼을 띄운 뒤 인스펙터로 찍어보면 알아서 클래스를 만들어준 것을 확인 할 수 있음.
+  - `<button class="sc-AykKC fmcvyS">버튼</button>`
+  - App.js 에서는 `<StyledButton>버튼</StyledButton>` 으로 사용.
+
+<br/>
+
+#### ${props => props.프롭스명 && css`스타일`} <a id="b3"></a>
+
+```jsx
+const StyledButton = styled.button`
+	~스타일~
+
+  ${props =>
+    props.primary &&
+    css`
+      background: palevioletred;
+      color: white;
+    `};
+`;
+```
+
+- App.js에 `<StyledButton primary>Primary 버튼</StyledButton>`가 있다고 가정함.
+- `props`에` primary`가 있다면 `css`적용.
+- 스타일 객체를 반환.
+
+<br/>
+
+#### styled(컴포넌트) <a id="b4"></a>
+
+- 상속같은 개념? 
+- StyleComponent에 정의된 CSS들은 위에서 아래로 읽기 때문에 나중에 나온게 전에 나온걸 덮어씌운다.
+  - `PrimaryStyledButton`은 이전에 있던 `StyleButton`의 `''` 제일 아래 내부에 기록을 한 것.
+  - 컴포넌트 끼리 export를 했기 때문에 적용은 따로된다.
+
+```jsx
+const StyledButton = styled.button`
+  background: transparent;
+  border-radius: 3px;
+  border: 2px solid palevioletred;
+  color: palevioletred;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+`;
+
+const PrimaryStyledButton = styled(StyledButton)`
+  background: palevioletred;
+  color: white;
+`;
+```
+
+<br/>
+
+##### styled(컴포넌트) - 컴포넌트를 반환 할 때  <a id="b5"></a>
+
+- 컴포넌트를 미리 만들고 그걸 styled(컴포넌트)로 불러드렸을 경우.
+- 상위 태그에 반드시 className을 붙여줘야 `styled(컴포넌트)`가 렌더링할때 class를 붙여준다.
+- 부모 컴포넌트에 className을 주고 그 안에는 따로 네이밍해서 관리.
+
+```jsx
+// StyledButton.jsx
+import styled, { css } from 'styled-components';
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Profile from './pages/Profile';
-import About from './pages/About';
 
-function App() {
+function MyButton({ className, children }) {
   return (
-    <BrowserRouter>
-      <Route path="/" component={Home} />
-      <Route path="/profile" component={Profile} />
-      <Route path="/about" component={About} />
-    </BrowserRouter>
-  );
-}
-
-export default App;
-```
-
-- Route 컴포넌트에 경로(path) 와 컴포넌트(component) 를 설정하여 나열해준다.
-
-- BrowserRouter 로 Route 들을 감싸준다. (브라우저 라우팅을 위한 react-router-dom에서 지원해주는 jsx 태그)
-
-- 브라우저에서 요청한 경로에 Route 의 path 가 들어있으면(매치가 되면) 해당 component 를 보여준다.
-
-  ![router-img02](https://user-images.githubusercontent.com/31315644/72520534-fc780880-389c-11ea-8cc8-caa781556305.jpeg)
-
-<br/>
-
-#### exact
-
-<img src="https://user-images.githubusercontent.com/31315644/72520534-fc780880-389c-11ea-8cc8-caa781556305.jpeg" alt="router-img02" />
-
->  exact는 100%일치해야되기 때문에 값이 변하는 변수를 사용할 수 없다.
-
-위 상황을 해결하기 위해서 `exact`키워드를 사용한다.
-
-```jsx
-<Route path="/" exact component={Home} />
-```
-
-<br/>
-
-### 동적 라우팅
-
->  `<BrouserRouter>` 의 하위 `<Route>` 컴포넌트들에게 `history`,  `location`,` match`로 이루어진 props 객체를 내려준다.
-
-- `history` 는 url을 변경시켜 다른 컴포넌트로 이동하는 역할
-- `match`는  Params 데이터를 가지고있다.
-- `loacation`은 query-string(?로 시작하는 키=값) 을 가지고 있다.
-
-<br/>
-
-#### 동적 라우팅 - Params (의무)
-
-```jsx
-<Route path="/profile/:id" component={Profile} />
-```
-
-- `/profile/1` 이 주소에서 1은 Params 라고 부른다.
-- Params는 [String] Type이다.
-- Params를 가지고 오는 방법. 
-- `match`는 위에서 언급한 매치 알고리즘을 의미한다.
-
-```jsx
-import React from "react";
-
-export default function Profile(props) {
-  console.log(props.match.params);
-  return (
-    <div>
-      <h2>Profile</h2>
+    <div className={className} /*꼭 필요하다.*/> 
+      <button>{children}</button>
     </div>
   );
 }
+
+const StyledButton = styled(MyButton)`
+  button {
+    background: transparent;
+    border-radius: 3px;
+    border: 2px solid palevioletred;
+    color: palevioletred;
+    margin: 0 1em;
+    padding: 0.25em 1em;
+
+    ${props =>
+      props.primary &&
+      css`
+        background: palevioletred;
+        color: white;
+      `};
+  }
+`;
+
+const PrimaryStyledButton = styled(StyledButton)`
+  button {
+    background: palevioletred;
+    color: black;
+  }
+`;
+
+export default StyledButton;
+export { PrimaryStyledButton };
+
 ```
 
-![router-img03](https://user-images.githubusercontent.com/31315644/72521214-5f1dd400-389e-11ea-9642-8784eadd3c07.jpeg)
-
-<br/>
-
-#### 동적 라우팅 - 쿼리스트링 (옵셔널 - 있어도 되고, 없어도된다.)
-
 ```jsx
-<Route path="/about" component={About} />
-```
-
-위 처럼 설정을 해두고, 검색창에 `/about?name=mark`라고 검색해서 props를 찍어보면 `location.search`에 들어있다.
-
-`Params` 처럼 별도의 설정이 `path="/about/:id"`같이 적어줄 필요가 없다.
-
-<br/>
-
-##### 1. URLSearchParams
-
-- IE 사용불가능... (IE 🤬)
-
-```jsx
+// App.js
 import React from 'react';
-
-const About = props => {
-  const searchParams = new URLSearchParams(props.location.search);
-
-  const name = searchParams.get('name');
-  console.log(searchParams);
-  return (
-    <div>
-      <h1>About</h1>
-      {name && <p>name 는 {name} 입니다.</p>}
-    </div>
-  );
-};
-
-export default About;
-```
-
-<br/>
-
-##### 2. query-string ([라이브러리](https://github.com/sindresorhus/query-string/blob/master/readme.md))
-
-- `URLSearchParams`의 단점을 상쇄하고자 사용함.
-
-```jsx
-import React from 'react';
-import queryString from 'query-string';
-
-const About = props => {
-  console.log(props);
-  const query = queryString.parse(props.location.search);
-
-  console.log(query);
-  const { name } = query;
-  return (
-    <div>
-      <h1>About</h1>
-      {name && <p>name 는 {name} 입니다.</p>}
-    </div>
-  );
-};
-
-export default About;
-```
-
-<br/>
-
-#### Switch
-
-> 여러 Route 중 순서대로 먼저 맞는 하나만 보여준다.
-
-- `exact` 를 뺄 수 있는 로직을 만들 수 있다.
-- 가장 작은 단위의 컴포넌트를 상단으로 작성한다.
-- 가장 마지막에 어디 path 에도 맞지 않으면 보여지는 컴포넌트를 설정해서, `Not Found` 페이지를 만들 수 있다.
-
-```jsx
-import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Home from "./pages/Home";
-import Profile from "./pages/Profile";
-import About from "./pages/About";
-import NotFound from "./pages/NotFound";
+import StyledButton, { PrimaryStyledButton } from './components/StyledButton';
+import './App.scss';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/profile/:id" component={Profile} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/about" component={About} />
-        <Route path="/" component={Home} />
-        <Route component={NotFound} />
-      </Switch>
-    </BrowserRouter>
+    <div className="App">
+      <StyledButton>버튼</StyledButton>
+      <StyledButton primary>Primary 버튼</StyledButton>
+      <PrimaryStyledButton>Primary Styled Button 버튼</PrimaryStyledButton>
+    </div>
   );
 }
 
@@ -554,208 +627,425 @@ export default App;
 
 <br/>
 
-#### Link 태그
+#### as="태그" <a id="b6"></a>
 
-- `<a>` 태그를 쓰면 Reload(서버와의 통신)가 발생하므로 `<Link>`태그를 이용해서 단순히 컴포넌트만을 변경하는 방식을 이용함.
-  - 내부적으로는 `<a>`태그이므로 css에서 `<a>`태그에 속성을 추가하면 `<Link>`태그에도 추가된다.
+- 잘 쓰지 않는다.
+- 링크를 거는 용도로 사용됨.
 
 ```jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
+<StyledButton as="a" href="/">버튼</StyledButton>
+```
 
-function Links() {
+<br/>
+
+#### styled('태그') = styled.태그 <a id="b7"></a>
+
+```jsx
+const StyledButton = styled('button')`
+~css~
+`;
+```
+
+<br/>
+
+#### ${props => props.color || ''} <a id="b8"></a>
+
+- 리턴 값이 문자열, 아까의 경우에는 css가 리턴
+
+```jsx
+const StyledButton = styled.button`
+  background: transparent;
+  border-radius: 3px;
+  border: 2px solid ${props => props.color || 'palevioletred'};
+  color: ${props => props.color || 'palevioletred'};
+  margin: 0 1em;
+  padding: 0.25em 1em;
+  font-size: 1em;
+`;
+```
+
+<br/>
+
+#### :hover {스타일}  <a id="b9"></a>
+
+```jsx
+const StyledButton = styled.button`
+  background: transparent;
+  border-radius: 3px;
+  border: 2px solid palevioletred;
+  color: palevioletred;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+
+  :hover {
+    border: 2px solid red;
+  }
+`;
+```
+
+<br/>
+
+#### ::before {스타일} | ::after {스타일} <a id="b10"></a>
+
+- 가상요소선택자
+
+```
+const StyledButton = styled.button`
+  background: transparent;
+  border-radius: 3px;
+  border: 2px solid palevioletred;
+  color: palevioletred;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+
+  ::before {
+    content: '@';
+  }
+`;
+```
+
+<br/>
+
+#### &:hover {스타일} <a id="b11"></a>
+
+- 앞의 &는 부모 선택자
+
+#### & ~ & {스타일}, & + & {스타일}
+
+- 인접요소선택자
+
+<br/>
+
+#### &.클래스 {스타일} <a id="b12"></a>
+
+- 자신에게 orange클래스를 적용.
+
+```jsx
+// App.js
+import React from 'react';
+import StyledButton from './components/StyledButton';
+
+function App() {
   return (
-    <ul>
-      <li>
-        <Link to="/">Home</Link>
-      </li>
-      <li>
-        <Link to="/profile">Profile</Link>
-      </li>
-      <li>
-        <Link to="/profile/1">Profile/1</Link>
-      </li>
-      <li>
-        <Link to="/about">About</Link>
-      </li>
-      <li>
-        <Link to="/about?name=mark">About?name=mark</Link>
-      </li>
-    </ul>
+    <div className="App">
+      <p>
+        <StyledButton className="orange">버튼</StyledButton>
+      </p>
+    </div>
   );
 }
 
-export default Links;
+export default App;
 ```
-
-<br/>
-
-#### NavLink
-
-- `<NavLink>`를 이용해서 스타일을 사용할 수 있음.
-- 기본값으로 `className="active"`가 설정되어 있다. ( defaultprops )
-- activeClassName, activeStyle 처럼 active 상태에 대한 스타일 지정이 가능하다.
-- Route 의 path 처럼 동작하기 때문에 exact 가 있다.
-
-![NavLink](https://user-images.githubusercontent.com/31315644/72578646-04c25900-391a-11ea-89b3-9b66cc54411c.jpeg)
 
 ```jsx
-<li>
-	<NavLink
-		to="/"
-		exact
-		activeStyle={{
-		color: "green"
-	}}>Home</NavLink>
-</li>
+// StyledButton.jsx
+export default const StyledButton = styled.button`
+~css~
+
+  &.orange {
+    border: 2px solid orange;
+  }
+`;
 ```
 
 <br/>
 
-위 소스대로 설정할 경우, QueryString으로 보내는 주소는 같은 Active 스타일이 적용 된다. (/about , /about?name=mark)
+#### .클래스 {스타일} <a id="b13"></a>
 
-이를 방지하기 위해 아래처럼 작성한다.
-
-- `isActive`할 때 pathname이 맞아야 match객체가 들어온다.
-- `location.search`가 비워있는지 안비웠는지 판단한다.
+- 아래 예제 기준으로는 `StyledButton` 하위 태그중 `className="orange"`를 가지고 있는 태그에게 적용한다.
 
 ```jsx
-<li>
-  <NavLink to="/about" isActive={(match, location) => {
-      console.log(match, location); // 다른데 누를 때 마다 계속 찍히는데 라우팅이 바뀔때마다 체크한다는 뜻
-      if (match === null) {
-        return false;
-      }
-      console.log(location.search);
-      return location.search === '' ? true : false;
-    }}>
-    About
-  </NavLink>
-</li>
-<li>
-  <NavLink to="/about?name=mark" isActive={(match, location) => {
-    if (match === null) {
-      return false;
-    }
-    return location.search === '?name=mark';
-    }}>
-      About?name=mark
-  </NavLink>
-</li>
+const StyledButton = styled.button`
+~css~
+
+  .orange {
+    color: orange;
+  }
+`;
 ```
-
-<br/>
-
-### JS로 라우팅 이동하기
-
-`props.history.push("/");`
-
-- `history`는 url을 바꿀때, 읽어올 때 사용.
-- `props`에 `history`가 포함되어 있다.
-
-<br/>
-
-### HOC(High Order Component) - withRouter()
-
-시나리오 : 만약, `<Route>` 에 있는 `path` 속성에 적혀진 `component`가 아니라면 
-
-> 훅 때문에 잘 사용하지 않음
-
-```
-import { withRouter } from 'react-router-dom';
-...
-export default withRouter(LoginButton);
-```
-
-- Login에서 history를 props로 보내주지 않아도 LoginButton에서 알아서 받아다 씀!
-- 그냥 함수인데 input을 컴포넌트로 받고 output을 새로운 컴포넌트로
-- 강제된 라이브러리가 아니라 룰이 있음 - 만들 때 룰에 주의하며 만들어야 함 - 다다음 시간에 배울 것
-- withRouter라고 이름을 붙여서 넣어준 것
-- connect도 HOC - 리덕스 연결에 사용 - 컴포넌트를 받아 컴포넌트를 리턴
-- relay 라이브러리에 createFragmentContainer도 HOC
-
-<br/>
-
-### Redirect
-
-- path가 로그인인데, 이미 로그인 되었을 경우 redirect를 렌더하게 끔 할 때 사용.
-- 특정 페이지에 접속했을 때 조건에 따라 다른 페이지로 바로 넘어가는 것.
-
------------
-
-### Route Hooks
-
-- useHistory
-- useLocation
-- useParams
-- useRouteMatch
-
-<br/>
-
-#### useHistory
-
-- withRouter없이 사용 가능하다.
 
 ```jsx
-const history = useHistory();
+<StyledButton>
+  <p className="orange">hh</p>버튼
+</StyledButton>
 ```
-
-![history](https://user-images.githubusercontent.com/31315644/72660933-e80c4b00-3a17-11ea-9be3-9cd0c282b002.jpeg)
 
 <br/>
 
-#### useLocation
+#### createGlobalStyle '스타일' <a id="b14"></a>
 
 ```jsx
-const location = useLocation();
-const { name } = queryString.parse(location.search);
+const GlobalStyle = createGlobalStyle`
+  button${StyledButton} {
+    color: palevioletred;
+  }
+`;
+
+function App() {
+  return (
+    <div className="App">
+      <p>
+        <GlobalStyle />
+        <StyledButton>버튼</StyledButton>
+        <button>버튼</button>
+      </p>
+    </div>
+  );
+}
 ```
 
-![location](https://user-images.githubusercontent.com/31315644/72662845-455fc680-3a2f-11ea-9422-87c14c1c639e.jpeg)
 <br/>
 
-#### useParams
+#### styled.태그.attrs(props => ({속성들})) - 중요 <a id="b15"></a>
+
+- 인자를 props로 받고 object로 리턴.
+- 속성들을 정의할 때 이용한다.
+- 예를들어, a태그의 경우 `href` 등을 미리 정의해두거나 받아와서 사용할 수 있다.
 
 ```jsx
-const { id } = useParams();
+const StyledA = styled.a.attrs(props => ({
+  href: props.href || 'https://www.fastcampus.co.kr',
+  color: props.color || 'palevioletred',
+  target: '_BLANK', // 프롭스가 들어오던 말던 _BLANK
+}))`
+  color: ${props => props.color};
+`;
 ```
 
-![params](https://user-images.githubusercontent.com/31315644/72662847-455fc680-3a2f-11ea-9415-480887bfabfd.jpeg)
+- 어트리뷰트는 props와 같은 역할
+- default로 항상 넣어줘야 하는 값들이 있을 때 attrs를 쓰면 편하다.
 
 <br/>
 
-#### useRouteMatch
+#### keyframes'키프레임' <a id="b16"></a>
 
-- 현재 url과 기준이 되는 url을 비교해야만 한다.
-  - 방법1) `string`으로 던지기
-  - 방법2) `object`로 던지기
+- 애니메이션 키프레임을 사용할 때 이용한다.
 
 ```jsx
-  const match = useRouteMatch({
-    path: '/book/:id',
-    strict: true, // 매치 옵션
-    sensitive: true // 매치 옵션
-  });
+const slide = keyframes`
+  from {
+    margin-top: 0em;
+  }
+
+  to {
+    margin-top: 1em;
+  }
+`;
+
+const StyledButton = styled.button`
+  display: inline-block;
+  color: palevioletred;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid palevioletred;
+  border-radius: 3px;
+  animation: ${slide} 0.3s ease-in;
+`;
 ```
 
 <br/>
 
-#### BrouserRouter의 내려주기.
+### Ant Design <a id="c1"></a>
+
+- 가장 많이 쓰이는 component 라이브러리
+- 디자인된 컴포넌트를 나눠서 줘야한다면 어떻게 줘야할지 알 수 있다.
+- `npm i antd`
+- API는 props에 대한 설명
+
+<br/>
+
+#### 사용법 <a id="c2"></a>
+
+- 전역에 스타일 추가하고 리액트 컴포넌트를 추가하여 사용
+- 리액트 컴포넌트는 [Ant Design - Components](https://ant.design/components/cascader/)에 제시된게 많으니 가져다 사용한다.
 
 ```jsx
-<BrowserRouter>
-...
-</BrowserRouter>
+import 'antd/dist/antd.css';       // <= index.js에 전역 스타일 추가
+import { DatePicker } from 'antd'; // <= 날짜를 보여주는 리액트 컴포넌트
 ```
 
-- `<BrowserRouter>`로 감싸면 위의 hooks들을 전역에 들고 있는 것과 같음 - 가져다 쓸 수 있도록 하는 것.
+<br/>
+
+#### 또 다른 사용법 <a id="c3"></a>
+
+**modularized1**
+
+- `import 'antd/dist/antd.css';`는 다른 컴포넌트에도 영향이 가는 단점이 있다.
+- 이를 해결하기 위해서 좀 더 세세하게 불러와 `import`할 수 있다. 
+
+```jsx
+// index에다 설정하는게 아니라 사용할 컴포넌트 파일에 설정해서 쓸 수 있다.
+import DatePicker from 'antd/es/date-picker';
+import 'antd/es/date-picker/style/css';
+```
 
 <br/>
 
-### React developer tools
+**modularized2** 
 
-- Google Chrome 에 설치하는 익스텐션
-- F12 개발자도구 - Profiler 에서 렌더링 되는 시간들을 알아볼 수 있다. - 퍼포먼스 최적화에 유용
-- F12 개발자도구 - Component 에서 트리를 볼 수 있다.
+- modularized1 에서 설정 내용이 너무 길어서 짧게 줄이고자 할 때 쓰는 방법.
+- 번거로워서 잘 사용하지는 않는다.
+- `npm run eject` 
+- `npm install babel-plugin-import --save-dev`
+- babel 플러그인 설정
+
+```json
+{
+  ...
+  "babel": {
+    "presets": [
+      "react-app"
+    ],
+    "plugins": [
+      [
+        "import",
+        {
+          "libraryName": "antd",
+          "libraryDirectory": "es",
+          "style": "css"
+        }
+      ]
+    ]
+  },
+  ...
+}
+```
+
+```jsx
+// 사용할 컴포넌트 파일
+import React from 'react';
+import { DatePicker } from 'antd';
+
+function App() {
+  return (
+    <div className="App">
+      <DatePicker />
+    </div>
+  );
+}
+
+export default App;
+```
 
 <br/>
+
+#### Ant Design 레이아웃 -그리드- <a id="c4"></a>
+
+- [그리드](https://ant.design/components/grid/)
+- row는 height값을 꼭 주어야만 한다.
+
+```jsx
+import React from 'react';
+import { Row, Col } from 'antd';
+
+const colStyle = () => ({
+  height: 50,
+  backgroundColor: 'red',
+  opacity: Math.round(Math.random() * 10) / 10,
+});
+
+function App() {
+  return (
+    <div className="App">
+      <Row>
+        <Col span={12} style={colStyle()} />
+        <Col span={12} style={colStyle()} />
+      </Row>
+      <Row>
+        <Col span={8} style={colStyle()} />
+        <Col span={8} style={colStyle()} />
+        <Col span={8} style={colStyle()} />
+      </Row>
+      <Row>
+        <Col span={6} style={colStyle()} />
+        <Col span={6} style={colStyle()} />
+        <Col span={6} style={colStyle()} />
+        <Col span={6} style={colStyle()} />
+      </Row>
+    </div>
+  );
+}
+
+export default App;
+```
+
+- `<Col span={24 중에 어느정도 차지할 지 정수} />`
+- 12개 12개 나누니까 반반 나눔
+- 8, 8, 8이므로 세칸으로 나눔
+- 6으로 나누면 네칸
+
+<br/>
+
+##### Row gutter <a id="c5"></a>
+
+- gutter는 16 + 8n의 정수로 사용해야 함(전체 길이를 24등분으로 나누어야 하므로)
+- Column에 left값을 일정하게 주는 느낌
+
+```jsx
+<Row gutter={16}>
+  <MyCol span={12} />
+  <MyCol span={12} />
+</Row>
+```
+
+<br/>
+
+##### Col offset <a id="c6"></a>
+
+- Col offset={24 중 건너띄고 싶은 정수}
+
+```jsx
+<Row gutter={16}>
+  <MyCol span={12} offset={12} />
+</Row>
+```
+
+<br/>
+
+##### 레이아웃 flex를 이용한 수직 정렬 <a id="c7"></a>
+
+- **`<Row type="flex" justify="좌우정렬" align="위아래정렬" />`**
+- justify ➤ "start" | "center" | "end" | "space-between" | "space-around"
+- align ➤ "top" | "middle" | "bottom"
+
+```jsx
+function MyCol({ span, offset }) {
+  const opacity = Math.round(Math.random() * 10) / 10;
+  return (
+    <Col span={span} offset={offset}>
+      <div style={{ height: 50, backgroundColor: 'red', opacity }} />
+    </Col>
+  );
+}
+
+export default function App() {
+  return (
+    <div className="App">
+      <Row
+        style={{
+          height: 300,
+        }}
+        type="flex"
+        justify="start"
+        align="top"
+      >
+        <MyCol span={4} />
+        <MyCol span={4} />
+        <MyCol span={4} />
+        <MyCol span={4} />
+      </Row>
+    </div>
+  );
+```
+
+<br/>
+
+#### Ant Design 레이아웃 -양식-  <a id="c8"></a>
+
+`import { Layout } from 'antd';`
+
+- 이미 짜여진 레이아웃 도안을 설정함.
+- 정해진 레이아웃 대로 네이밍 설정시 클래스 네임이 알아서 붙지만 사용을 권장하지 않음.
+- [레이아웃](https://ant.design/components/layout/)
