@@ -2,1050 +2,522 @@
 
 --------------
 
-# React Re-Study : 3
+# React Re-Study : 4
 
-React Component Styling
-
-> React의 가장 큰 문제. CSS의 스타일이 컴포넌트간 침범이된다.
-
-- [컴포넌트 스타일링 방법들](#a1)
-
-- [Style Loaders](#a2)
-
-- [PostCSS](#a3)
-
-- [CSS, SASS](#a4)
-  
-  - [CSS](#a5)
-  - [SASS](#a6)
-  - [SASS 와 SCSS 의 차이](#a7)
-  
-- [CSS Module, Sass Module](#a8)
-  
-  - [CSS Module](#a9)
-  - [SASS Module](#a10)
-  - [classnames 사용하기](#a11)
-    - [classnames 적용하기](#a12)
-    - [classnames/bind 적용하기](#a13)
-  
-- [Styled Component](#b1)
-
-  - [styled.태그](#b2)
-  - [${props => props.프롭스명 && css`스타일`}](#b3)
-  - [styled(컴포넌트)](#b4)
-    - [styled(컴포넌트) - 컴포넌트를 반환 할 때](#b5)
-  - [as="태그"](#b6)
-  - [styled('태그') = styled.태그](#b7)
-  - [${props => props.color || ''}](#b8)
-  - [:hover {스타일}](#b9)
-  - [::before {스타일} | ::after {스타일}](#b10)
-  - [&:hover {스타일}](#b11)
-  - [& ~ & {스타일}, & + & {스타일}
-  - [&.클래스 {스타일}](#b12)
-  - [.클래스 {스타일}](#b13)
-  - [createGlobalStyle '스타일'](#b14)
-  - [styled.태그.attrs(props => ({속성들})) - 중요](#b15)
-  - [keyframes'키프레임'](#b16)
-
-- [Ant Design](#c1)
-
-  - [사용법](#c2)
-
-  - [또 다른 사용법](#c3)
-
-  - [Ant Design 레이아웃 -그리드-](#c4)
-
-    - [Row gutter](#c5)
-
-    - [Col offset](#c6)
-
-    - [레이아웃 flex를 이용한 수직 정렬](#c7)
-
-  - [Ant Design 레이아웃 -양식-](#c8)
+- [Controlled Component 와 Uncontrolled Component](#a1)
+  - 상태를 가지고 있는 엘리먼트
+  - [Controlled Component 와 Uncontrolled Component 구분하기](#a2)
+  - [Q. 만약 `input`엘리먼트를 hover 시  포커스를 먹일 수 있는 방법은?](#a3)
+- [High Order Component](#a4)
+  - [사용법](#a5)
+  - [주의할 점](#a6)
+- [[Project] Login 요청하기](#b1)
+  - [로그인 토큰 획득하기](#b2)
+  - [로컬 스토리지(Local Storage)](#b3)
+  - [토큰 유무로 라우팅 하기](#b4)
+    - HOC를 직접 만들기
+    - [HOC 사용하기](#b5)
+  - [서적 목록 불러오기](#b6)
+    - [Home.jsx 최종 코드](#b7)
+  - [[Homework] : 책 추가하기, 로그아웃 추가하기](#b8)
 
 <br/>
 
 -----
 
-## React Study with Mark - React Router -
-
-### 컴포넌트 스타일링 방법들 <a id="a1"></a>
-
-> 리액트는 style을 전역으로 관리하여 서로 간에 오염되므로 사람이 혹은 자동으로 맞춰줘야한다.
->
-> 순서상 : 전부 관리 - 덜 관리 - 거의 자동으로 관리 순으로 배워보자.
-
-1. CSS, Sass(SASS, SCSS)
-2. CSS, Sass Module
-3. Styled-components
-4. Ant Design 
+## React Study with Mark - 리액트 실전 활용법 -
 
 <br/>
 
-### Style Loaders  <a id="a2"></a>
+### Controlled Component 와 Uncontrolled Component <a id="a1"></a>
 
-<img src="https://user-images.githubusercontent.com/31315644/72662816-0e89b080-3a2f-11ea-84e9-2cd7b8553c37.jpeg" alt="style01" style="zoom:50%;" />
+#### 상태를 가지고 있는 엘리먼트
 
-리액트에서는 공식적으로 4가지의 css를 지원한다.
+- input
+- select
+- textarea
+- 등등...
 
-`npx creat-app`을 통해 만든 프로젝트는 자동으로 `webpack`과 `babel`을 포함하고 있다.
-
-`webpack`에는 `babel`이 트랜스 파일 할수 있게 `style-loader` 와 `css-loader`가 설정되어 있는데 해당 `loader`들은 각각 아래의 확장자 파일들을 `index.css`로 합쳐주는 역할을 한다. (오염의 원인)
-
-- CSS
-- CSS Module
-- Sass(.scss, .sass) - Sass에는 sass, scss가 있음 → PostCSS : `npm i node-sass 필요`
-- Sass Module `npm i node-sass 필요`
+이러한 엘리먼트들은 `onClick` 과 같은 이벤트 핸들러를 가지고있다.
 
 <br/>
 
-### PostCSS   <a id="a3"></a>
+#### Controlled Component 와 Uncontrolled Component 구분하기 <a id="a2"></a>
 
-> 자바스크립트 플러그인을 사용해서 SASS/SCSS 를 css로 변환시켜주는 도구를  PostCSS라 한다.
+> 엘리먼트의 '상태' 를 누가 관리하느냐 로 결정한다.
 
-- *PostCSS는 자바스크립트 기반의 플러그인을 사용하여 CSS 기능을 자동화하는* **소프트웨어 개발 도구**
-- *PostCSS는 JS 플러그인을 사용하여 CSS를 변환시키는 툴* (위키피디아)
-- 즉, PostCSS는 언어가 아닌 도구이다. 
-- **PostCSS는 Babel을 통해 트랜스파일링되는 도구( loader )를 일컫는 말이다.**
+- 엘리먼트를 가지고 있는 컴포넌트가 관리 ➤ ***Controlled***
 
-<br/>
-
-### CSS, SASS  <a id="a4"></a>
-
-> 컴포넌트의 독립적인 스타일을 최대한 유지하기 위해서, CSS 구조를 개선시키기 위한 **CSS 개발 방법론**을 이용한다.
-
-- [BEM](http://getbem.com/naming/) : Block Element Modifire 
-- SMACSS
-- OOCSS
-
-여기서는 BEM에 대해서 다루도록 한다. ( Block, Element, Modifier )
-
-**BEM** 
-
-- 화면에 보여질 블록(block)을 기준으로 첫번째 순서의 네이밍을 작성한다.
-- 그 다음에 블록 안의 요소(elements)들을 "__"으로 연결해서 네이밍을 작성한다.
-- 그 다음에 수식어(모양이나 상태)를 "–"으로 연결한 뒤 네이밍을 작성한다.
-- 수식어는 boolean이나 key-value 형태로 넣을 수 있다. (-disable, -color-red)
-- 예를 들면 .header _ _ logo 또는 .form _ _ button–disabled과 같은 식이다.
-- 클래스명이 용도와 형태를 의미하므로 직관적인 것이 장점, 길고 복잡해지는 것이 단점이다.
-
-<br/>
-
-#### CSS  <a id="a5"></a>
-
-기존의 css는 아래처럼 작성한다.
-
-``` css
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #09d3ac;
-}
-```
-
-그런데, css를 블록별로 구별(BEM처럼)하여 분리할 수 있다. 즉, 클래스네임을 더 짧게 줄이는 장점이있다.
-
-```css
-.App {
-  text-align: center;
-}
-
-.App .logo {
-  height: 40vmin;
-}
-
-.App .header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App .link {
-  color: #09d3ac;
-}
-```
-
-<br/>
-
-#### SCSS   <a id="a6"></a>
-
-scss를 이용할 경우 위에 작성된 css를 훨씬 더 직관적이게 블록화를 할 수 있고, 코드도 더 짧아진다.
-
-```scss
-.App {
-  text-align: center;
-
-  .logo { /* .App .logo */
-    height: 40vmin;
-  }
-
-  .header { /* .App .header */
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
-
-  .link { /* .App .link */
-    color: #09d3ac;
-  }
-}
-```
-
-<br/>
-
-#### SASS 와 SCSS 의 차이  <a id="a7"></a>
-
-> `{}`(중괄호)와 `;`(세미콜론)의 유무 
-
-![sassscss](https://user-images.githubusercontent.com/31315644/72663119-0a12c700-3a32-11ea-8340-dc537617a409.png)
-
-- `sass/scss`를 사용하기 위해서 `npm i node-sass` 필수. (`PostCSS` 이용)
-
-<br/>
-
-### CSS Module, Sass Module  <a id="a8"></a>
-
-- `CSS Module`과` Sass Module`은 `React` 내장되어 있다. 
-- Module을 사용할 경우 렌더링 되어서 화면에 표시될 때 클래스네임 끝에 hash값이 붙어서 나온다.
-- `[filename]_[className]__[hash]`
-
-<br/>
-
-#### CSS Module  <a id="a9"></a>
-
-![css-module](https://user-images.githubusercontent.com/31315644/72663442-26186780-3a36-11ea-934b-41f3718be8a1.jpeg)
-
-```js
-import styles from './App.module.css';
-
-console.log(styles);
-```
-
-```css
-/* ./App.module.css */
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #09d3ac;
-}
-```
-
-<br/>
-
-#### SASS Module  <a id="a10"></a>
-
-![scss-module](https://user-images.githubusercontent.com/31315644/72663498-aa6aea80-3a36-11ea-94ac-7be497fd672b.jpeg)
-
-```js
-import styles from './App.module.scss';
-
-console.log(styles);
-```
-
-```scss
-/* ./App.module.scss */
-.App {
-  text-align: center;
-
-  .logo {
-    animation: App-logo-spin infinite 20s linear;
-    height: 40vmin;
-    pointer-events: none;
-  }
-
-  .header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
-
-  .link {
-    color: #61dafb;
-  }
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-```
-
-<br/>
-
-#### classnames 사용하기  <a id="a11"></a>
-
-- CSS/SASS Module을 사용하기 시작하면서, `className='스타일명'`라고 사용하는게 아니라, `className={스타일 모듈명.스타일명}` 으로 사용하기 시작햇다.
-
-- 문제는 연속적인 스타일을 적용하기 시작할 때 문제가 생긴다.(예 - className='abc def' )
+  상태를 관리하고 있고, 이벤트 핸들러를 통해 상태를 변경시키고 있다면 `Controlled Component`다.
 
   ```jsx
-  className='${styles.abc} ${styles.def}'
+  import React from 'react';
+  
+  export default class Controlled extends React.Component {
+    state = { value: '' };
+  
+    render() {
+      const { value } = this.state;
+      return (
+        <div>
+          <input value={value} onChange={this._change} />
+          <button onClick={this._click}>전송</button>
+        </div>
+      );
+    }
+  
+    _change = e => {
+      // console.log(e.target.value);
+      this.setState({ value: e.target.value });
+    };
+  
+    _click = () => {
+      console.log('최종 결과', this.state.value);
+    };
+  }
   ```
 
-- 이러한 문제를 `classnames`라는 라이브러리를 이용해 해결한다.
+  <br/>
 
-`npm i classnames` 설치.
+- 엘리먼트의 상태를 관리하지 않고, 엘리먼트의 참조만 컴포넌트가 소유 ➤ ***Uncontrolled***
 
-```jsx
-import classNames from 'classnames';
+  상태가 아닌 DOM요소를 직접적으로 사용한다면 `Uncontrolled Component`다.
 
-console.log(classNames('foo', 'bar')); // "foo bar"
-console.log(classNames('foo', 'bar', 'baz')); // "foo bar baz"
+  `inputRef = React.createRef();` 만들어지면 객체이다. `{current : null}`
 
-console.log(classNames({ foo: true }, { bar: true })); // "foo bar"
-console.log(classNames({ foo: true }, { bar: false })); // "foo"
-console.log(classNames(null, false, 'bar', undefined, 0, 1, { baz: null }, '')); // "bar 1"
-console.log(classNames(styles.button, styles.loading)); 
-// Button_button__2Ce79 Button_loading__XEngF
-```
-
-- Button.module.css
-
-```css
-.button {
-  background: transparent;
-  border-radius: 3px;
-  border: 2px solid palevioletred;
-  color: palevioletred;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-  font-size: 20px;
-}
-```
-
-- Button.jsx
-
-  ` <button> {props.children} </button>;` 
-
-  `<button {...props} />;` 
-
-  `<button children={props.children}/>;` 은 같은 문법이다.
-
-  * 참고로 모든 태그에는 `children` 이라는 속성이 존재한다. 
-
-```jsx
-import React from 'react';
-import styles from './Button.module.css';
-
-const Button = props => <button className={styles.button} {...props} />;
-
-export default Button;
-```
+  ```jsx
+  import React from 'react';
+  
+  const Uncontrolled = () => {
+    const inputRef = React.createRef();
+  
+    function click() {
+      console.log('최종 결과', inputRef.current.value);
+    }
+    
+    return (
+      <div>
+        <input ref={inputRef} />
+        <button onClick={click}>전송</button>
+      </div>
+    );
+  };
+  
+  export default Uncontrolled;
+  ```
 
 <br/>
 
-##### classnames 적용하기  <a id="a12"></a>
+#### Q. 만약 `input`엘리먼트를 hover 시  포커스를 먹일 수 있는 방법은? <a id="a3"></a>
 
-- Button.jsx :` import classNames from 'classnames'` 추가;
+여러가지 방법이 있지만, 해당 엘리먼트를 참조해서 Focus를 주는 방법이 제일 편하다. (Uncontrolled Component)
 
 ```jsx
+// 클래스 버전
 import React from 'react';
-import styles from './Button.module.css';
-import classNames from 'classnames';
 
-export default class Button extends React.Component {
-  state = {
-    loading: false,
-  };
-
-  startLoading = () => {
-    console.log('start');
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false });
-    }, 1000);
-  };
+class Uncontrolled extends React.Component {
+  inputRef = React.createRef();
 
   render() {
-    const { loading } = this.state;
+    console.log(this.inputRef);
     return (
-      <button
-        className={
-          loading ? classNames(styles.button, styles.loading) : styles.button
-        }
-        {...this.props}
-        onClick={this.startLoading}
-      />
+      <div>
+        <input type="text" ref={this.inputRef} onMouseOver={this.mouseOver} />
+        <button onClick={this.click}>전송</button>
+      </div>
     );
   }
+
+  click = () => {
+    console.log(this.inputRef);
+    console.log(this.inputRef.current.value);
+  };
+
+  mouseOver = () => {
+    this.inputRef.current.focus();
+  };
 }
+
+export default Uncontrolled;
 ```
 
 <br/>
 
-##### classnames/bind 적용하기  <a id="a13"></a>
+````jsx
+// functional 버전
+import React from 'react';
 
-- `classnames` 사용시 `{ 스타일 모듈명.스타일명.해시: true }`라는 조건을 이용해야 해서 단어가 길고 복잡했다. 
-- 따라서, `classnames.bind()`를 통해 함수로 리턴하여 더 짧게 줄여서 이용한다.
+const Uncontrolled = () => {
+  const inputRef = React.createRef();
 
-````js
-const 변수명 = classnames.bind(스타일 모듈명)
+  const click = () => {
+    console.log(inputRef);
+    console.log(inputRef.current.value);
+  };
+
+  const mouseOver = () => {
+    inputRef.current.focus();
+  };
+
+  console.log(inputRef);
+  return (
+    <div>
+      <input type="text" ref={inputRef} onMouseOver={mouseOver} />
+      <button onClick={click}>전송</button>
+    </div>
+  );
+};
+
+export default Uncontrolled;
+
 ````
 
+<br/>
+
+### High Order Component <a id="a4"></a>
+
+> <컴포넌트>를 인자로 받아 <새로운 컴포넌트>를 리턴하는 함수
+>
+> 작업이 항상 반복된다고 생각 될 때 만들면 좋다.
+>
+> 리액트 API가 아니다.
+>
+> 컴포넌트의 로직을 재사용하기 위한 Advanced Tech
+
 ```jsx
-import React from 'react';
-import styles from './Button.module.css';
-import classNames from 'classnames/bind'; // 수정 classnames -> classnames/bind
+HOC = function(컴포넌트) { return 새로운 컴포넌트; }
+```
 
-const cx = classNames.bind(styles);
+HOC의 대표적인 예 - `with`이라는 단어가 붙으면 HOC를 의심하자.
 
-export default class Button extends React.Component {
-  state = {
-    loading: false,
-  };
+- react-router-dom - withRouter
+- Redux - connect
+- GraphQL Relay - createFragmentContainer
 
-  startLoading = () => {
-    console.log('start');
-    this.setState({ loading: true });
+```jsx
+// withRouter
+import React from "react";
+import { withRouter } from "react-router-dom";
+
+const LoginButton = props => {
+  console.log(props);
+  function login() {
     setTimeout(() => {
-      this.setState({ loading: false });
+      props.history.push("/");
     }, 1000);
-  };
-
-  render() {
-    const { loading } = this.state;
-    return (
-//<button className={loading ? classNames(styles.button, styles.loading) : styles.button} {...props}>버튼</button>
-//<button className={loading ? cx('button', 'loading') : cx('button')} {...props}>버튼</button>
-//<button className={cx('button', {loading: loading})} {...props}>버튼</button>
-      <button
-        className={cx('button', { loading })}
-        {...this.props}
-        onClick={this.startLoading}
-      />
-    );
   }
-}
-```
+  return <button onClick={login}>로그인하기</button>;
+};
 
-`cx('button', { loading })`에서 'button'은 항상 truthy값이므로 붙고, `loading`은 현재 값 여부에 따라 붙거나 붙지 않음.
-
-- 만약 `loading`과 `css`의 `.loading`이름이 다르다면` { test: loading }`이 될것 ( `loading`값이 `true`면 `test class`추가)
-- 여기서는 이름이 같으므로 간단하게 표기 가능하다.
-
-<br/>
-
-### Styled Component <a id="b1"></a>
-
-> 이 컴포넌트가 이 스타일이라고 스타일을 지정해주면 자동으로 클래스로 변환
-
-```bash
-npm i styled-components
+export default withRouter(LoginButton); // HOC 사용 대표적 사례
 ```
 
 <br/>
 
-#### styled.태그 <a id="b2"></a>
+#### *사용법* <a id="a5"></a>
+
+*1. Use HOCs For [**(Cross-Cutting Concerns 횡단_관심사)**](https://ko.wikipedia.org/wiki/횡단_관심사)*  <a id="u1"></a>
+
+- 컴포넌트를 만들때 중복되는 부분이 많이 나올 경우 사용을 고려 헤보아라.
+
+*2. Don’t Mutate the Original Component. Use Composition.* <a id="u2"></a>
+
+- `Mutate`는 원형을 변경하는 것. (커피를 선물 받았는데, 우유를 섞어서 라뗴로 주는 것)
+
+- `HOC`는 기존을 유지해야 한다. (커피를 선물 받았는데, 커피는 그대로 주고, 쿠키를 같이 주는 것)
+
+*3. Pass Unrelated Props Through to the Wrapped Component* <a id="u3"></a>
+
+- 기존의 Props를 유지해주어라.
+
+*4. Maximizing Composability* <a id="u4"></a>
+
+- 기존 내용을 돌려줄떄, 무언가를 조합으로 추가해서 주어라. (2번 내용과 동일)
+
+*5.Wrap the Display Name for Easy Debugging* <a id="u5"></a>
+
+- 디버깅을 하기 위해서 Display Name을 붙여서 사용하도록 한다.
+
+<br/>
+
+#### *주의할 점* <a id="a6"></a>
+
+*1. Don’t Use HOCs Inside the render Method* <a id="un1"></a>
+
+- `Render` 메소드 사이에 사용하지 말 것. (그래서, 보통 export부분에서 많이 사용함)
+
+*2. Static Methods Must Be Copied Over* <a id="un2"></a>
+
+- 정적 메소드는 반드시 복사해서 전달하라. (컴포지션으로 전달되지 않으므로)
+
+*3. Refs Aren’t Passed Through (feat. React.forwardRef)* <a id="un3"></a>
+
+- Refs는 HOC로 전달하지 말 것. (레퍼런스는 그 페이지 안에서만 레퍼런스 가능)
+
+<br/>
+
+### [Project] Login 요청하기  <a id="b1"></a>
+
+E-mail: 제출한 이메일 , PW: fcschool 
+
+- `antd` 엘리먼트의 경우에는 `passwordRef.current.value`(`antd`는 `Undefined`) 가 아니라 `passwordRef.current.state.value` 라고 써야 제대로 값을 받아올 수 있다.
+- `npm i axios` ( CRUD - GET, POST, DELETE, PUT, PETCH )
+- `axios` 결과물은 Promise이므로 `.then`을 사용할 수 있다.
 
 ```jsx
-import styled from 'styled-components';
-
-const StyledButton = styled.button`
-  background: transparent;
-  border-radius: 3px;
-  border: 2px solid palevioletred;
-  color: palevioletred;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-`;
-
-export default StyledButton;
-```
-
-- 브라우저에 버튼을 띄운 뒤 인스펙터로 찍어보면 알아서 클래스를 만들어준 것을 확인 할 수 있음.
-  - `<button class="sc-AykKC fmcvyS">버튼</button>`
-  - App.js 에서는 `<StyledButton>버튼</StyledButton>` 으로 사용.
-
-<br/>
-
-#### ${props => props.프롭스명 && css`스타일`} <a id="b3"></a>
-
-```jsx
-const StyledButton = styled.button`
-	~스타일~
-
-  ${props =>
-    props.primary &&
-    css`
-      background: palevioletred;
-      color: white;
-    `};
-`;
-```
-
-- App.js에 `<StyledButton primary>Primary 버튼</StyledButton>`가 있다고 가정함.
-- `props`에` primary`가 있다면 `css`적용.
-- 스타일 객체를 반환.
-
-<br/>
-
-#### styled(컴포넌트) <a id="b4"></a>
-
-- 상속같은 개념? 
-- StyleComponent에 정의된 CSS들은 위에서 아래로 읽기 때문에 나중에 나온게 전에 나온걸 덮어씌운다.
-  - `PrimaryStyledButton`은 이전에 있던 `StyleButton`의 `''` 제일 아래 내부에 기록을 한 것.
-  - 컴포넌트 끼리 export를 했기 때문에 적용은 따로된다.
-
-```jsx
-const StyledButton = styled.button`
-  background: transparent;
-  border-radius: 3px;
-  border: 2px solid palevioletred;
-  color: palevioletred;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-`;
-
-const PrimaryStyledButton = styled(StyledButton)`
-  background: palevioletred;
-  color: white;
-`;
-```
-
-<br/>
-
-##### styled(컴포넌트) - 컴포넌트를 반환 할 때  <a id="b5"></a>
-
-- 컴포넌트를 미리 만들고 그걸 styled(컴포넌트)로 불러드렸을 경우.
-- 상위 태그에 반드시 className을 붙여줘야 `styled(컴포넌트)`가 렌더링할때 class를 붙여준다.
-- 부모 컴포넌트에 className을 주고 그 안에는 따로 네이밍해서 관리.
-
-```jsx
-// StyledButton.jsx
-import styled, { css } from 'styled-components';
-import React from 'react';
-
-function MyButton({ className, children }) {
-  return (
-    <div className={className} /*꼭 필요하다.*/> 
-      <button>{children}</button>
-    </div>
-  );
-}
-
-const StyledButton = styled(MyButton)`
-  button {
-    background: transparent;
-    border-radius: 3px;
-    border: 2px solid palevioletred;
-    color: palevioletred;
-    margin: 0 1em;
-    padding: 0.25em 1em;
-
-    ${props =>
-      props.primary &&
-      css`
-        background: palevioletred;
-        color: white;
-      `};
-  }
-`;
-
-const PrimaryStyledButton = styled(StyledButton)`
-  button {
-    background: palevioletred;
-    color: black;
-  }
-`;
-
-export default StyledButton;
-export { PrimaryStyledButton };
-
-```
-
-```jsx
-// App.js
-import React from 'react';
-import StyledButton, { PrimaryStyledButton } from './components/StyledButton';
-import './App.scss';
-
-function App() {
-  return (
-    <div className="App">
-      <StyledButton>버튼</StyledButton>
-      <StyledButton primary>Primary 버튼</StyledButton>
-      <PrimaryStyledButton>Primary Styled Button 버튼</PrimaryStyledButton>
-    </div>
-  );
-}
-
-export default App;
-```
-
-<br/>
-
-#### as="태그" <a id="b6"></a>
-
-- 잘 쓰지 않는다.
-- 링크를 거는 용도로 사용됨.
-
-```jsx
-<StyledButton as="a" href="/">버튼</StyledButton>
-```
-
-<br/>
-
-#### styled('태그') = styled.태그 <a id="b7"></a>
-
-```jsx
-const StyledButton = styled('button')`
-~css~
-`;
-```
-
-<br/>
-
-#### ${props => props.color || ''} <a id="b8"></a>
-
-- 리턴 값이 문자열, 아까의 경우에는 css가 리턴
-
-```jsx
-const StyledButton = styled.button`
-  background: transparent;
-  border-radius: 3px;
-  border: 2px solid ${props => props.color || 'palevioletred'};
-  color: ${props => props.color || 'palevioletred'};
-  margin: 0 1em;
-  padding: 0.25em 1em;
-  font-size: 1em;
-`;
-```
-
-<br/>
-
-#### :hover {스타일}  <a id="b9"></a>
-
-```jsx
-const StyledButton = styled.button`
-  background: transparent;
-  border-radius: 3px;
-  border: 2px solid palevioletred;
-  color: palevioletred;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-
-  :hover {
-    border: 2px solid red;
-  }
-`;
-```
-
-<br/>
-
-#### ::before {스타일} | ::after {스타일} <a id="b10"></a>
-
-- 가상요소선택자
-
-```
-const StyledButton = styled.button`
-  background: transparent;
-  border-radius: 3px;
-  border: 2px solid palevioletred;
-  color: palevioletred;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-
-  ::before {
-    content: '@';
-  }
-`;
-```
-
-<br/>
-
-#### &:hover {스타일} <a id="b11"></a>
-
-- 앞의 &는 부모 선택자
-
-#### & ~ & {스타일}, & + & {스타일}
-
-- 인접요소선택자
-
-<br/>
-
-#### &.클래스 {스타일} <a id="b12"></a>
-
-- 자신에게 orange클래스를 적용.
-
-```jsx
-// App.js
-import React from 'react';
-import StyledButton from './components/StyledButton';
-
-function App() {
-  return (
-    <div className="App">
-      <p>
-        <StyledButton className="orange">버튼</StyledButton>
-      </p>
-    </div>
-  );
-}
-
-export default App;
-```
-
-```jsx
-// StyledButton.jsx
-export default const StyledButton = styled.button`
-~css~
-
-  &.orange {
-    border: 2px solid orange;
-  }
-`;
-```
-
-<br/>
-
-#### .클래스 {스타일} <a id="b13"></a>
-
-- 아래 예제 기준으로는 `StyledButton` 하위 태그중 `className="orange"`를 가지고 있는 태그에게 적용한다.
-
-```jsx
-const StyledButton = styled.button`
-~css~
-
-  .orange {
-    color: orange;
-  }
-`;
-```
-
-```jsx
-<StyledButton>
-  <p className="orange">hh</p>버튼
-</StyledButton>
-```
-
-<br/>
-
-#### createGlobalStyle '스타일' <a id="b14"></a>
-
-```jsx
-const GlobalStyle = createGlobalStyle`
-  button${StyledButton} {
-    color: palevioletred;
-  }
-`;
-
-function App() {
-  return (
-    <div className="App">
-      <p>
-        <GlobalStyle />
-        <StyledButton>버튼</StyledButton>
-        <button>버튼</button>
-      </p>
-    </div>
-  );
-}
-```
-
-<br/>
-
-#### styled.태그.attrs(props => ({속성들})) - 중요 <a id="b15"></a>
-
-- 인자를 props로 받고 object로 리턴.
-- 속성들을 정의할 때 이용한다.
-- 예를들어, a태그의 경우 `href` 등을 미리 정의해두거나 받아와서 사용할 수 있다.
-
-```jsx
-const StyledA = styled.a.attrs(props => ({
-  href: props.href || 'https://www.fastcampus.co.kr',
-  color: props.color || 'palevioletred',
-  target: '_BLANK', // 프롭스가 들어오던 말던 _BLANK
-}))`
-  color: ${props => props.color};
-`;
-```
-
-- 어트리뷰트는 props와 같은 역할
-- default로 항상 넣어줘야 하는 값들이 있을 때 attrs를 쓰면 편하다.
-
-<br/>
-
-#### keyframes'키프레임' <a id="b16"></a>
-
-- 애니메이션 키프레임을 사용할 때 이용한다.
-
-```jsx
-const slide = keyframes`
-  from {
-    margin-top: 0em;
-  }
-
-  to {
-    margin-top: 1em;
-  }
-`;
-
-const StyledButton = styled.button`
-  display: inline-block;
-  color: palevioletred;
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border: 2px solid palevioletred;
-  border-radius: 3px;
-  animation: ${slide} 0.3s ease-in;
-`;
-```
-
-<br/>
-
-### Ant Design <a id="c1"></a>
-
-- 가장 많이 쓰이는 component 라이브러리
-- 디자인된 컴포넌트를 나눠서 줘야한다면 어떻게 줘야할지 알 수 있다.
-- `npm i antd`
-- API는 props에 대한 설명
-
-<br/>
-
-#### 사용법 <a id="c2"></a>
-
-- 전역에 스타일 추가하고 리액트 컴포넌트를 추가하여 사용
-- 리액트 컴포넌트는 [Ant Design - Components](https://ant.design/components/cascader/)에 제시된게 많으니 가져다 사용한다.
-
-```jsx
-import 'antd/dist/antd.css';       // <= index.js에 전역 스타일 추가
-import { DatePicker } from 'antd'; // <= 날짜를 보여주는 리액트 컴포넌트
-```
-
-<br/>
-
-#### 또 다른 사용법 <a id="c3"></a>
-
-**modularized1**
-
-- `import 'antd/dist/antd.css';`는 다른 컴포넌트에도 영향이 가는 단점이 있다.
-- 이를 해결하기 위해서 좀 더 세세하게 불러와 `import`할 수 있다. 
-
-```jsx
-// index에다 설정하는게 아니라 사용할 컴포넌트 파일에 설정해서 쓸 수 있다.
-import DatePicker from 'antd/es/date-picker';
-import 'antd/es/date-picker/style/css';
-```
-
-<br/>
-
-**modularized2** 
-
-- modularized1 에서 설정 내용이 너무 길어서 짧게 줄이고자 할 때 쓰는 방법.
-- 번거로워서 잘 사용하지는 않는다.
-- `npm run eject` 
-- `npm install babel-plugin-import --save-dev`
-- babel 플러그인 설정
-
-```json
-{
-  ...
-  "babel": {
-    "presets": [
-      "react-app"
-    ],
-    "plugins": [
-      [
-        "import",
-        {
-          "libraryName": "antd",
-          "libraryDirectory": "es",
-          "style": "css"
-        }
-      ]
-    ]
-  },
-  ...
-}
-```
-
-```jsx
-// 사용할 컴포넌트 파일
-import React from 'react';
-import { DatePicker } from 'antd';
-
-function App() {
-  return (
-    <div className="App">
-      <DatePicker />
-    </div>
-  );
-}
-
-export default App;
-```
-
-<br/>
-
-#### Ant Design 레이아웃 -그리드- <a id="c4"></a>
-
-- [그리드](https://ant.design/components/grid/)
-- row는 height값을 꼭 주어야만 한다.
-
-```jsx
-import React from 'react';
-import { Row, Col } from 'antd';
-
-const colStyle = () => ({
-  height: 50,
-  backgroundColor: 'red',
-  opacity: Math.round(Math.random() * 10) / 10,
+// axios.http메소드(경로, 바디, 헤더(옵션))
+axios.post('경로', {
+  email,
+  password,
+}).then(response => {
+  console.log(response.data);
+}).catch(error => {
+  console.log(error);
 });
+```
 
-function App() {
-  return (
-    <div className="App">
-      <Row>
-        <Col span={12} style={colStyle()} />
-        <Col span={12} style={colStyle()} />
-      </Row>
-      <Row>
-        <Col span={8} style={colStyle()} />
-        <Col span={8} style={colStyle()} />
-        <Col span={8} style={colStyle()} />
-      </Row>
-      <Row>
-        <Col span={6} style={colStyle()} />
-        <Col span={6} style={colStyle()} />
-        <Col span={6} style={colStyle()} />
-        <Col span={6} style={colStyle()} />
-      </Row>
-    </div>
+```jsx
+// async/await 이용시
+try {
+ const response = await axios.post(
+    '경로',
+    {
+      email, // email: email
+      password, // password: password
+    },
   );
+  console.log(response.data);
+} catch (error) {
+  console.log(error);
+}
+```
+
+<br/>
+
+#### 로그인 토큰 획득하기  <a id="b2"></a>
+
+로그인을 `POST`로 요청시  Token을 획득 할 수 있다.
+
+- 이전에 로그인은 쿠키/세션을 많이 사용했다. (트렌드의 변화로 Token을 이용하는 방식이 많이 채택됨.) 
+- 토큰은 DB에 저장되어 있다.
+- 만약 책 목록을 요청시(토큰을 함께 보내고), 토큰이 유효하면 로그인 유무를 확인하여 책 목록을 서버에서 준다.
+
+```jsx
+try {
+  // 리퀘스트 보내기 전 로딩 시작
+  setLoading(true);
+  const response = await axios.post('경로', {
+    email,
+    password,
+  })
+  console.log(response.data);
+  const { token } = response.data;
+  // 성공 후 로딩 끝
+  setLoading(false);
+  history.push('/');
+} catch (error) {
+  console.log(error);
+  // 에러 후 로딩 끝
+  setLoading(false);
+  // antd의 message는 메소드(첫글자가 대문자면 컴포넌트)
+  message.error(`This is not valid info.`);
+}
+```
+
+<br/>
+
+#### 로컬 스토리지(Local Storage)  <a id="b3"></a>
+
+ `localStorage`는 브라우저 종료해도 데이터가 보존되고. `sessionStorage` 는 브라우저 종료시 데이터가 없어진다.
+
+- 로그인 시 로컬 스토리지에 토큰 저장하는 코드를 추가한다.
+- 로그인 중 잘못된 입력을 하여 에러가 날 경우, `antd`의 `message` 콤퍼넌트를 이용하여 화면에 표시해준다.
+
+```jsx
+const SigninForm = () => {
+  const history = useHistory();
+  const emailRef = React.createRef();
+  const passwordRef = React.createRef();
+  const [loading, setLoading] = useState(false);
+
+  async function click() {
+    const email = emailRef.current.state.value;
+    const password = passwordRef.current.state.value;
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        '경로',
+        {
+          email, // email: email
+          password, // password: password
+        },
+      );
+      const { token } = response.data;
+      
+      setLoading(false);
+      localStorage.setItem('token', token);
+      history.push('/');
+    } catch (error) {
+      setLoading(false);
+      if (error.response.data.error === 'USER_NOT_EXIST') {
+        message.error('유저가 없다.');
+      } else if (error.response.data.error === 'PASSWORD_NOT_MATCH') {
+        message.error('비밀번호가 틀림');
+      } else {
+        message.error('로그인에 문제가 있다.');
+      }
+    }
+ }
+```
+
+- Home에서 토큰 값을 확인하기 위해 다음과 같이 쓸 수 있다.
+
+  **특정 함수(여기선, getItem)에 커맨드 누르고 가리키면 반환 타입 알 수 있다 - 타입을 확인하는 습관을 가지자**
+
+```jsx
+// Home.jsx
+const token = localStorage.getItem('token');
+console.log(token);
+```
+
+<br/>
+
+#### 토큰 유무로 라우팅 하기  <a id="b4"></a>
+
+##### HOC를 직접 만들기
+
+> 토큰에 따라 로그인 상태인지를 확인하기 위해서 HOC를 작성한다.
+
+- 반복적인 컴포넌트 작업을 줄이기 위해서 HOC를 작성한다.
+
+- `token`이 `null`이면 로그인 화면으로 `Redirect`
+
+- `props` 와 `token`을 받아서 `<Component />`에 전부 전달한다. (`props`를 전달하는 이유: [HOC 사용법 3번](#u3) ) 
+
+- 차후 디버깅을 위해 `Display Name`을 붙여준다.  ( [HOC 사용법 5번](#u4) )
+
+  `WrappedComponent.displayName = withAuth(${Component.name})`
+
+```jsx
+// src/hocs/withAuth.js
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+
+function withAuth(Component) {
+  function WrappedComponent(props) {
+    const token = localStorage.getItem('token');
+
+    if (token === null) {
+      return <Redirect to="/signin" />;
+    }
+    return <Component {...props} token={token} />;
+  }
+
+  WrappedComponent.displayName = `withAuth(${Component.name})`;
+
+  return WrappedComponent;
 }
 
-export default App;
-```
+export default withAuth;
 
-- `<Col span={24 중에 어느정도 차지할 지 정수} />`
-- 12개 12개 나누니까 반반 나눔
-- 8, 8, 8이므로 세칸으로 나눔
-- 6으로 나누면 네칸
-
-<br/>
-
-##### Row gutter <a id="c5"></a>
-
-- gutter는 16 + 8n의 정수로 사용해야 함(전체 길이를 24등분으로 나누어야 하므로)
-- Column에 left값을 일정하게 주는 느낌
-
-```jsx
-<Row gutter={16}>
-  <MyCol span={12} />
-  <MyCol span={12} />
-</Row>
+// 관련없는 props는 패스해주어라.
+// display 이름 설정을 해주어라. (디버깅시 이름을 유지시켜주기위함.)
 ```
 
 <br/>
 
-##### Col offset <a id="c6"></a>
+##### HOC 사용하기  <a id="b5"></a>
 
-- Col offset={24 중 건너띄고 싶은 정수}
-
-```jsx
-<Row gutter={16}>
-  <MyCol span={12} offset={12} />
-</Row>
-```
-
-<br/>
-
-##### 레이아웃 flex를 이용한 수직 정렬 <a id="c7"></a>
-
-- **`<Row type="flex" justify="좌우정렬" align="위아래정렬" />`**
-- justify ➤ "start" | "center" | "end" | "space-between" | "space-around"
-- align ➤ "top" | "middle" | "bottom"
+`Home` 컴포넌트에서 HOC의 콜백함수로 컴포넌트를 넣어준다.
 
 ```jsx
-function MyCol({ span, offset }) {
-  const opacity = Math.round(Math.random() * 10) / 10;
+// Home.jsx
+import React from 'react';
+import withAuth from '../hocs/withAuth';
+
+const Home = ({ token }) => {
   return (
-    <Col span={span} offset={offset}>
-      <div style={{ height: 50, backgroundColor: 'red', opacity }} />
-    </Col>
-  );
-}
+  <div>
+    <h1>Home</h1>
+  </div>
+  )
+};
 
-export default function App() {
+export default withAuth(Home); // HOC
+```
+
+-  `token`을 물려 받은 적이 없으나 `withAuth`에 의해 `token`이 들어가게 되고 불필요한 반복 작업을 줄인다.
+- 다른 페이지에서도 `withAuth`로 감싸게 되면 인증된 사용자만 들어갈 수 있게 된다.
+
+<br/>
+
+#### 서적 목록 불러오기  <a id="b6"></a>
+
+- 서적 목록을 불러올때, 토큰을 이용하여 불러온다. 
+- `headers`에 `token`을 대입하여 요청한다.
+- `Bearer`은 조회 요청할 때 붙이는 규칙 같은 것.
+
+```jsx
+// Home.jsx
+useEffect(() => {
+  axios.get('경로', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }).then(res => {
+    console.log(res.data);
+  })
+}, []); // 의존성 배열이 빈배열일 경우, 최초 한 번만 실행
+```
+
+<br/>
+
+##### Home.jsx 최종 코드  <a id="b7"></a>
+
+```jsx
+// Home.jsx
+import React, { useState, useEffect } from 'react';
+import withAuth from '../hocs/withAuth';
+import axios from 'axios';
+
+const [books, setBooks] = useState([]);
+
+useEffect(() => {
+  axios.get('경로', {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  }).then(res => {
+    console.log(res.data);
+    setBooks(res.data);
+  });
+}, [token]);
+
   return (
-    <div className="App">
-      <Row
-        style={{
-          height: 300,
-        }}
-        type="flex"
-        justify="start"
-        align="top"
-      >
-        <MyCol span={4} />
-        <MyCol span={4} />
-        <MyCol span={4} />
-        <MyCol span={4} />
-      </Row>
+    <div>
+      <h1>Home</h1>
+      <ul>
+        {books.map(book => (
+          <li key={book.bookId}>{book.title}</li>
+        ))}
+      </ul>
     </div>
   );
+};
+
+export default withAuth(Home);
 ```
 
 <br/>
 
-#### Ant Design 레이아웃 -양식-  <a id="c8"></a>
+### [Homework]: 책 추가하기, 로그아웃 추가하기  <a id="b8"></a>
 
-`import { Layout } from 'antd';`
-
-- 이미 짜여진 레이아웃 도안을 설정함.
-- 정해진 레이아웃 대로 네이밍 설정시 클래스 네임이 알아서 붙지만 사용을 권장하지 않음.
-- [레이아웃](https://ant.design/components/layout/)
+- app.js에 라우터 추가 /addbook
+- src/pages/AddBook.jsx를 만들고, 인증된 사용자만 이용하도록 HOC - withAuth 사용한다.
+- 폼 만들어서 입력받고 입력 마치면 홈으로 돌아가게 설정한다.
+- 멋있게 만들고 싶으면: 라우터 추가하지말고 홈에서 모달창 띄워서 바로 책 등록하게끔 만들기.
+- 로그아웃은 서버와 로컬스토리지 모두 `token`을 없애야 한다. ( DELETE로 요청하면 된다. )
+  - 로그인 할 때와 마찬가지로 `Authorization`도 함께 보내야 한다. ( 어떤 토큰을 사라지게 해야하는지 알려야 함 )
+  - 어떤 페이지에서도 로그아웃이 가능하도록 해야한다.
