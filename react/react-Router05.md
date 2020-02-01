@@ -1,264 +1,63 @@
-![React-Router04](https://user-images.githubusercontent.com/31315644/71559790-b43ba680-2aa5-11ea-97e2-606184036149.png)
+![React-Router05](https://user-images.githubusercontent.com/31315644/71559791-b4d43d00-2aa5-11ea-9b89-d5a3f93c015f.png)
 
 ----------------
 
-## React Router with Velopert - 04 -
+## React Router with Velopert - 05 -
 
-- [history 객체](#a1)
-  - src/HistorySample.js 
-  - src/App.js
-- [withRouter HoC](#a2)
-  - src/WithRouterSample.js
-  - src/Profiles.jsx
-- [Switch](#a3)
-  - src/App.js
-- [NavLink](#a4)
-  - src/Profiles.js
-- 기타
+- useReactRouter Hook
+  - RouterHookSample.js
+  - Profiles.js
 
 <br/>
 
 ------
 
-# Chap 4. 리액트 라우터 부가기능
+# Chap 4. useReactRouter Hook
 
 <br/>
 
-### history 객체 <a id="a1"></a>
+### useReactRouter Hook 
 
-> history 객체는 라우트로 사용된 컴포넌트에게 match, location 과 함께 전달되는 props 중 하나.
+`withRouter`로 라우트를 사용하지 않은 컴포넌트에서도 `match, location, history`등을 조회할 수 있었다.
 
-이 객체는, URL에 쿼리나 파라미터를 넘겨줌으로써(push) , 뒤로가기, 특정 경로로 이동, 이탈 방지 등 을 수행할 수 있다.
+`withRouter`대신 Hook을 이용해 구현할 수도 있다. 
 
-즉, 이 객체를 통해 컴포넌트 내에 구현하는 메소드에서 라우터에 직접 접근할 수 있다.
+아직 공식적인 Hook지원은 아니다. 그래서 아직까지는 다른 라이브러리를 통해 사용해야한다.
 
-#### src/HistorySample.js
+사용 할 라이브러리의 이름은 [use-react-router](https://github.com/CharlesStover/use-react-router) 이다.
 
-`useEffect` 는 리액트 컴포넌트가 렌더링 될 때마다 특정 작업을 수행하도록 설정 할 수 있는 Hook 이다. 
+```bash
+npm install use-react-router --save
+```
 
-클래스형 컴포넌트의 componentDidMount 와 componentDidUpdate 를 합친 형태로 보아도 무방함.
+<br/>
 
-```jsx
-import React, { useEffect } from 'react';
+#### RouterHookSample.js
 
-function HistorySample({ history }) {
-  const goBack = () => {
-    history.goBack();
-  };
+```javascript
+import useReactRouter from 'use-react-router';
 
-  const goHome = () => {
-    history.push('/');
-  };
-
-  useEffect(() => {
-    console.log(history);
-    const unblock = history.block('정말 떠나실건가요?');
-    return () => {
-      unblock();
-    };
-  }, [history]);
-
-  return (
-    <div>
-      <button onClick={goBack}>뒤로가기</button>
-      <button onClick={goHome}>홈으로</button>
-    </div>
-  );
+function RouterHookSample() {
+  const { history, location, match } = useReactRouter();
+  console.log({ history, location, match });
+  return null;
 }
 
-export default HistorySample;
+export default RouterHookSample;
 ```
 
-위 컴포넌트 예제를 App.js에 넣고 실행해보면 이탈방지 팝업창을 띄우게 된다.
+이제 이 컴포넌트를 Profiles 컴포넌트에서 WithRouterSample 하단에 렌더링해보자.
 
 <br/>
 
-#### src/App.js
-
-```jsx
-import React from 'react';
-import { Route, Link } from 'react-router-dom';
-import About from './About';
-import Home from './Home';
-import Profiles from './Profiles';
-import HistorySample from './HistorySample';
-
-const App = () => {
-  return (
-    <div>
-      <ul>
-        <li>
-          <Link to="/">홈</Link>
-        </li>
-        <li>
-          <Link to="/about">소개</Link>
-        </li>
-        <li>
-          <Link to="/profiles">프로필 목록</Link>
-        </li>
-        <li>
-          <Link to="/history">예제</Link> //여기
-        </li>
-      </ul>
-      <hr />
-      <Route path="/" exact={true} component={Home} />
-      <Route path="/about" component={About} />
-      <Route path="/profiles" component={Profiles} />
-      <Route path="/history" component={HistorySample} />
-    </div>
-  );
-};
-```
-
-<br/>
-
-### withRouter HoC <a id="a2"></a>
-
-> withRouter HoC는 라우터 컴포넌트가 아닌 곳에서 match / location / history를 사용해야할 떄 사용된다.
-
-#### src/WithRouterSample.js
-
-```jsx
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-const WithRouterSample = ({ location, match, history }) => {
-  return (
-    <div>
-      <h4>location</h4>
-      <textarea value={JSON.stringify(location, null, 2)} readOnly />
-      <h4>match</h4>
-      <textarea value={JSON.stringify(match, null, 2)} readOnly />
-      <button onClick={() => history.push('/')}>홈으로</button>
-    </div>
-  );
-};
-
-export default withRouter(WithRouterSample);
-```
-
-위와 같이 작성이 완료되면, 타 컴포넌트에서 `<Route>`태그를 이용하지 않더라도 match 와 location을 전달할 수 있다.
-
-<br/>
-
-#### src/Profiles.jsx
-
-```jsx
-import React from 'react'
-import Profile from './Profile'
-import { Link, Route } from 'react-router-dom'
-import WithRouterSample from './WithRouterSample';
-
-
-const Profiles = (props) => {
-  return (
-    <div>
-      <h3>사용자 목록</h3>
-      <ul>
-        <li><Link to='/profiles/hyeok999'>혁999</Link></li>
-        <li><Link to='/profiles/homer'>homer</Link></li>
-      </ul>
-
-    <Route path='/profiles' exact render={() => <div>사용자를 선택해주세요.</div>}></Route>
-    <Route path='/profiles/:username' component={Profile} />
-    <WithRouterSample></WithRouterSample>
-    </div>
-  );
-}
-
-export default Profiles;
-```
-
-단, `match`는 문제가 한가지 있다.
-
-우선 App.js에서 `Profiles` 컴포넌트를 라우팅할 때 다음과 같은 path로 불러낸다.
-
-`        <Route path='/profiles' component={Profiles} />`
-
-`match`는 라우터를 해주는 컴포넌트에서 path에 있는 파라미터를 보여주는데 App.js → Profiles.jsx 를 라우팅할때 파라미터가 설정되어있지 않으니 match의 결과는 빈배열이 나타나게 된다. 
-
-쉽게 이해하면 withRouter에서 match는 부모 라우터의 파라미터값을 의미한다는 것이다.
-
-따라서 이 상황에서는 `Profiles.jsx`에서 `<WithRouterSample>`태그를 사용하는 것보다는 
-
-`Profiles.jsx`에 `<Route path='/profiles/:username' component={Profile} />`가 정의가 되어있기 때문에, `Profile.jsx` 컴포넌트에 정의하면 match값을 확인할 수 있다.
-
-<br/>
-
-### Switch <a id="a3"></a>
-
-> Switch는 여러 Route들을 감싸는 규칙중 하나이다.
->
->  Switch 를 사용하면, 아무것도 일치하지 않았을때 보여줄 Not Found 페이지를 구현 할 수도 있다.
-
-#### src/App.js
-
-```jsx
-import React from 'react';
-import { Switch, Route, Link } from 'react-router-dom';
-import About from './About';
-import Home from './Home';
-import Profiles from './Profiles';
-import HistorySample from './HistorySample';
-
-const App = () => {
-  return (
-    <div>
-      <ul>
-        <li>
-          <Link to="/">홈</Link>
-        </li>
-        <li>
-          <Link to="/about">소개</Link>
-        </li>
-        <li>
-          <Link to="/profiles">프로필 목록</Link>
-        </li>
-        <li>
-          <Link to="/history">예제</Link>
-        </li>
-      </ul>
-      <hr />
-      <Switch>
-        <Route path="/" exact={true} component={Home} />
-        <Route path="/about" component={About} />
-        <Route path="/profiles" component={Profiles} />
-        <Route path="/history" component={HistorySample} />
-        <Route
-          // path 를 따로 정의하지 않으면 모든 상황에 렌더링됨
-          render={({ location }) => (
-            <div>
-              <h2>이 페이지는 존재하지 않습니다:</h2>
-              <p>{location.pathname}</p>
-            </div>
-          )}
-        />
-      </Switch>
-    </div>
-  );
-};
-
-export default App;
-```
-
-<br/>
-
-### NavLink <a id="a4"></a>
-
-NavLink 는 Link 랑 비슷한데, 만약 현재 경로와 Link 에서 사용하는 경로가 일치하는 경우 특정 스타일 혹은 클래스를 적용 할 수 있는 컴포넌트이다. 
-
-쉽게 말해서 Link에 스타일 혹은 클래스를 줄 수 있는 것.
-
-만약에 인라인 스타일이 아니라 CSS 클래스를 적용하시고 싶으면 `activeStyle` 대신 `activeClassName` 을 사용하면 된다.
-
-`Profiles.jsx` 애서 사용하는 컴포넌트에서 Link 대신 NavLink 를 사용해보자.
-
-#### src/Profiles.js
+#### Profiles.js
 
 ```jsx
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import Profile from './Profile';
 import WithRouterSample from './WithRouterSample';
+import RouterHookSample from './RouterHookSample';
 
 const Profiles = () => {
   return (
@@ -267,20 +66,18 @@ const Profiles = () => {
       <ul>
         <li>
           <NavLink
-            to="/profiles/velopert"
-            // 인라인 스타일 적용
+            to="/profiles/hyeok999"
             activeStyle={{ background: 'black', color: 'white' }}
           >
-            velopert
+            hyeok999
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/profiles/gildong"
-            // 인라인 스타일 적용
+            to="/profiles/homer"
             activeStyle={{ background: 'black', color: 'white' }}
           >
-            gildong
+            homer
           </NavLink>
         </li>
       </ul>
@@ -292,6 +89,7 @@ const Profiles = () => {
       />
       <Route path="/profiles/:username" component={Profile} />
       <WithRouterSample />
+      <RouterHookSample />
     </div>
   );
 };
@@ -299,15 +97,12 @@ const Profiles = () => {
 export default Profiles;
 ```
 
+![USEREACTROUTER](https://user-images.githubusercontent.com/31315644/70968874-c567d900-20dd-11ea-85b6-e3f0607d79bb.jpeg)
+
+콘솔을 확인해보면. 위와 같이 프로필 목록 페이지를 열었을 때 `location`, `match`, `history` 객체들을 조회 할 수 있다.
+
+이 Hook 이 정식 릴리즈는 아니기 때문에 만약에 `withRouter` 가 너무 불편하다고 느낄 경우에만 사용하시는 것을 권장한다.
+
+사용 한다고 해서 나쁠 것은 없지만, 나중에 정식 릴리즈가 나오게 되면 해당 라이브러리를 제거하고 코드를 수정해야 하는 일이 발생 할 수도 있다. 적어도, `withRouter` 를 사용하셨다면, 레거시 코드로 유지해도 큰 문제는 없다. 물론 추후 `useReactRouter` 를 사용하는 코드도 방치해도 될 지도 모르지만, 불필요한 라이브러리의 코드가 프로젝트에 포함된다는점, 그리고 정식 릴리즈가 되는 순간부터 `useReactRouter` 의 유지보수가 더 이상 이루어지지 않을 것 이라는 점을 생각하면, 중요한 프로젝트라면 사용을 하지 않는 편이 좋을 수도 있다.
+
 <br/>
-
-### 기타
-
-이 외에도 다른 기능들
-
-- **[Redirect](https://reacttraining.com/react-router/web/example/auth-workflow)**: 페이지를 리디렉트 하는 컴포넌트
-- **[Prompt](https://reacttraining.com/react-router/web/example/preventing-transitions)**: 이전에 사용했던 history.block 의 컴포넌트 버전
-- **[Route Config](https://reacttraining.com/react-router/web/example/route-config)**: JSX 형태로 라우트를 선언하는 것이 아닌 Angular 나 Vue 처럼 배열/객체를 사용하여 라우트 정의하기
-- **[Memory Router](https://reacttraining.com/react-router/web/api/MemoryRouter)** 실제로 주소는 존재하지는 않는 라우터. 리액트 네이티브나, 임베디드 웹앱에서 사용하면 유용하다.
-
-그 외의 것들은 [공식 매뉴얼](https://reacttraining.com/react-router/web/guides/philosophy) 을 참고.
