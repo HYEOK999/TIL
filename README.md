@@ -339,6 +339,8 @@ Today I Leaned...
 >[useReducer 를 사용하여 상태 업데이트 로직 분리하기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-18.md)
 >
 >[커스텀 Hooks 만들기](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-19.md)
+>
+>[Context API를 사용한 전역 값 관리](https://github.com/HYEOK999/TIL/blob/master/react/react-velo-20.md)
 
 <br/>
 
