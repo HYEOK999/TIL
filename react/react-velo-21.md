@@ -2,481 +2,364 @@
 
 ------
 
-## React with Velopert - 20 -
+## React with Velopert - 21 -
 
-- [Context API를 사용한 전역 값 관리](#a1)
-  - [Context API 만들어보기](#a2)
-  - [App.js](#a3)
-  - [UserList.js 수정하기](#a4)
-  - [CreateUser.js 수정하기](#a5)
+- Immer
+  - [불변성의 예](#a2)
+  - [Immer 미사용의 경우,](#a3)
+  - [Immer 사용의 경우,](#a4)
+    - Immer 기본 사용법
+    - [리듀서에서 Immer 사용하기](#a5)
+    - [Immer 와 함수형 업데이트](#a6)
 
 <br/>
 
 ------
 
-# Chap 20. Context API를 사용한 전역 값 관리
+# Chap 21. Immer를 사용한 더 쉬운 불변성 관리
 
-### Context API를 사용한 전역 값 관리 <a id="a1"></a>
+### Immer 
 
-현재 프로젝트들은 App 컴포넌트에서 `onToggle`, `onRemove` 가 구현이 되어있고 이 함수들은 UserList 컴포넌트를 거쳐서 각 User 컴포넌트들에게 전달 되는 방식으로 구현되어 있다.
-
-여기서 UserList 컴포넌트의 경우에는 `onToggle` 과 `onRemove` 를 전달하기 위하여 중간 다리역할만 한다.
-
-UserList.js
-
-````jsx
-function UserList({ users, onRemove, onToggle }) {
-  return (
-    <div>
-      {users.map(user => (
-        <User
-          user={user}
-          key={user.id}
-          onRemove={onRemove}
-          onToggle={onToggle}
-        />
-      ))}
-    </div>
-  );
-}
-````
-
-UserList 에서는 해당 함수들을 직접 사용하는 일도 없다.
-
-특정 함수를 특정 컴포넌트를 거쳐서 원하는 컴포넌트에게 전달하는 작업은 리액트로 개발을 하다보면 자주 발생 할 수 있는 작업이다. 컴포넌트 한개정도를 거쳐서 전달하는건 사실 그렇게 큰 불편함도 없지만, 만약 3~4개 이상의 컴포넌트를 거쳐서 전달을 해야 하는 일이 발생하게 된다면 이는 매우 번거로울 것이다.
-
-그럴 땐, 리액트의 Context API 와 이전 섹션에서 배웠던 dispatch 를 함께 사용하면 이러한 복잡한 구조를 해결 할 수 있다. 리액트의 Context API 를 사용하면, 프로젝트 안에서 전역적으로 사용 할 수 있는 값을 관리 할 수 있다.
-
-여기서 "상태" 가 아닌 "값" 이라고 언급을 했는데, 이 값은 꼭 상태를 가르키지 않아도 된다. 이 값은 함수일수도 있고, 어떤 외부 라이브러리 인스턴스일수도 있고 심지어 DOM 일 수도 있다.
-
-물론, Context API 를 사용해서 프로젝트의 상태를 전역적으로 관리 할 수도 있긴한데, 이에 대해서는 나중에 더 자세히 알아보도록 한다.
-
-우선, Context API 를 사용해여 새로운 Context 를 만드는 방법을 알아보자.
+> 리액트에서는 배열이나 객체를 업데이트 해야 할 때에는 직접 수정하면 안되고 불변성을 지켜주면서 업데이트를 해야 한다.
 
 <br/>
 
-#### Context API 만들어보기 <a id="a2"></a>
+#### 불변성의 예  <a id="a2"></a>
 
-Context 를 만들 땐 다음과 같이 `React.createContext()` 라는 함수를 사용한다.
+잘못된 경우,
 
 ```jsx
-const UserDispatch = React.createContext(null);
+const object = {
+  a: 1,
+  b: 2
+};
+
+object.b = 3;
 ```
-
-**`createContext` 의 파라미터에는 Context 의 기본값을 설정할 수 있다.** 
-
-여기서 설정하는 값은 Context 를 쓸 때 값을 따로 지정하지 않을 경우 사용되는 기본 값이다.
-
-**Context 를 만들면, Context 안에 Provider 라는 컴포넌트가 들어있는데 이 컴포넌트를 통하여 Context 의 값을 정할 수 있다.** 이 컴포넌트를 사용할 때, **`value` 라는 값을 설정**해주면 된다.
-
-```javascript
-<UserDispatch.Provider value={dispatch}>...</UserDispatch.Provider>
-```
-
-설정 후 Provider 에 의하여 감싸진 컴포넌트 중 어디서든지 Context 의 값을 다른 곳에서 바로 조회해서 사용 할 수 있다. 
-
-App 컴포넌트 에서 Context 를 만들고, 사용하고, 내보내는 작업을 해보자.
 
 <br/>
 
-#### App.js <a id="a3"></a>
+올바른 경우,
 
-1. UserDispatch 라는 Context만들기. (어디서든지 `dispatch`를 꺼내 쓸 수 있도록 준비)
+```jsx
+const object = {
+  a: 1,
+  b: 2
+};
 
-   ```jsx
-   // UserDispatch 라는 이름으로 내보낸다.
-   export const UserDispatch = React.createContext(null);
-   
-   // 나중에 사용하고 싶을 때 다음과 같이 불러와서 사용 할 수 있다.
-   import { UserDispatch } from './App';
-   ```
-   <br/>
-   
-2. Context 를 다 만들었으면, App 에서 `onToggle` 과 `onRemove` 를 지우고, UserList 에게 props를 전달하는것도 지운다.
+const nextObject = {
+  ...object, // 객체를 스프레드문법을 이용해 분해하고 있다. 
+  b: 3
+};
+```
 
-   ```jsx
-   import React, { useRef, useReducer, useMemo, useCallback } from 'react';
-   import UserList from './UserList';
-   import CreateUser from './CreateUser';
-   import useInputs from './hooks/useInputs';
-   
-   function countActiveUsers(users) {
-     console.log('활성 사용자 수를 세는중...');
-     return users.filter(user => user.active).length;
-   }
-   
-   const initialState = {
-     users: [
-       {
-         id: 1,
-         username: 'velopert',
-         email: 'public.velopert@gmail.com',
-         active: true
-       },
-       {
-         id: 2,
-         username: 'tester',
-         email: 'tester@example.com',
-         active: false
-       },
-       {
-         id: 3,
-         username: 'liz',
-         email: 'liz@example.com',
-         active: false
-       }
-     ]
-   };
-   
-   function reducer(state, action) {
-     switch (action.type) {
-       case 'CREATE_USER' :
-         return {
-           inputs: initialState.inputs,
-           users: state.users.concat(action.user)
-         };
-       case 'TOGGLE_USER' :
-         return {
-           ...state,
-           users: state.users.map(user =>
-             user.id === action.id ? {...user, active: !user.active} : user
-           )
-         };
-       case 'REMOVE_USER' :
-         return {
-           ...state,
-           users : state.users.filter(user => user.id !== action.id)
-         };
-       default:
-         return state;
-     }
-   }
-   
-   
-   // UserDispatch 라는 이름으로 내보내보낸다.
-   export const UserDispatch = React.createContext(null);
-   
-   function App() {
-     const [state, dispatch] = useReducer(reducer, initialState);
-     const nextId = useRef(4);
-   
-     const { users } = state;
-   
-     const [{ username, email }, onChange, reset] = useInputs({
-       username : '',
-       email : ''
-     });
-   
-     const onCreate = useCallback(() => {
-       dispatch({
-         type: 'CREATE_USER',
-         user: {
-           id: nextId.current,
-           username,
-           email
-         }
-       });
-       reset();
-       nextId.current += 1;
-     }, [username, email, reset]);
-   
-     // const onToggle = useCallback(id => {
-     //   dispatch({
-     //     type: 'TOGGLE_USER',
-     //     id
-     //   });
-     // }, []);
-   
-     // const onRemove = useCallback(id => {
-     //   dispatch({
-     //     type: 'REMOVE_USER',
-     //     id
-     //   });
-     // }, []);
-   
-     const count = useMemo(() => countActiveUsers(users), [users]);
-     return (
-       <UserDispatch.Provider value={dispatch}> 
-         <CreateUser username={username} email={email} onChange={onChange} onCreate={onCreate} />
-         {/* <UserList users={users} onToggle={onToggle} onRemove={onRemove} /> */}
-         <UserList users={users} />
-         <div>활성사용자 수 : {count}</div>
-       </UserDispatch.Provider>
-     );
-   }
-   
-   export default App;
-   ```
+<br/>
 
-   <br/>
+배열도 마찬가지로, `push`, `pop`, `shift`, `unshift`, `splice` 등의 함수를 사용하거나 n 번째 항목을 직접 수정하면 안되고 다음과 같이 `concat`, `filter`, `map` 등의 함수를 사용해야 한다. (원본을 해손하지않고 새로운 배열을 반환하는 함수들)
 
-#### UserList.js 수정하기 <a id="a4"></a>
+```jsx
+const todos = [
+  {
+    id: 1,
+    text: '할 일 #1',
+    done: true
+  },
+  {
+    id: 2
+    text: '할 일 #2',
+    done: false
+  }
+];
 
-1. UserList 컴포넌트에서 에서 `onToggle` 과 `onRemove` 와 관련된 코드들을 지운다.
+const inserted = todos.concat({
+  id: 3,
+  text: '할 일 #3',
+  done: false
+});
 
-   ```jsx
-   import React from 'react';
-   
-   const User = React.memo(function User({ user }) {
-     return (
-       <div>
-         <b
-           style={{
-             cursor: 'pointer',
-             color: user.active ? 'green' : 'black'
-           }}
-           onClick={() => {}}
-         >
-           {user.username}
-         </b>
-         &nbsp;
-         <span>({user.email})</span>
-         <button onClick={() => {}}>삭제</button>
-       </div>
-     );
-   });
-   
-   function UserList({ users }) {
-     return (
-       <div>
-         {users.map(user => (
-           <User user={user} key={user.id} />
-         ))}
-       </div>
-     );
-   }
-   
-   export default React.memo(UserList);
-   ```
+const filtered = todos.filter(todo => todo.id !== 2);
 
-   <br/>
+const toggled = todos.map(
+  todo => todo.id === 2
+    ? {
+      ...todo,
+      done: !todo.done,
+    }
+    : todo
+);
+```
 
-2. User 컴포넌트에서 `dispatch` 를 사용 하도록 한다.
-`dispatch`를 사용하기 위해서는 `useContext` 라는 Hook 을 사용해서 전에 만든 UserDispatch Context 를 조회해야한다.
+대부분의 경우 `... 연산자` 또는 배열 내장함수를 사용하는건 그렇게 어렵지는 않지만 데이터의 구조가 조금 까다로워지면 불변성을 지켜가면서 새로운 데이터를 생성해내는 코드가 조금 복잡해진다.
 
-   ```jsx
-   import React, { useContext } from 'react';
-   import { UserDispatch } from './App';
-   
-   const User = React.memo(function User({ user }) {
-     const dispatch = useContext(UserDispatch);
-   
-     return (
-       <div>
-         <b
-           style={{
-             cursor: 'pointer',
-             color: user.active ? 'green' : 'black'
-           }}
-           onClick={() => {
-             dispatch({ type: 'TOGGLE_USER', id: user.id });
-           }}
-         >
-           {user.username}
-         </b>
-         &nbsp;
-         <span>({user.email})</span>
-         <button
-           onClick={() => {
-             dispatch({ type: 'REMOVE_USER', id: user.id });
-           }}
-         >
-           삭제
-         </button>
-       </div>
-     );
-   });
-   
-   function UserList({ users }) {
-     return (
-       <div>
-         {users.map(user => (
-           <User user={user} key={user.id} />
-         ))}
-       </div>
-     );
-   }
-   
-   export default React.memo(UserList);
-   ```
+<br/>
 
-    결과적으로 Context API 를 사용해서 `dispatch` 를 어디서든지 조회해서 사용할 수 있게 되었다. 
+#### Immer 미사용의 경우,  <a id="a3"></a>
 
-   <br/>
+다음과 같은 객체가 있다고 가정하자.
 
-#### CreateUser.js 수정하기 <a id="a5"></a>
+```jsx
+const state = {
+  posts: [
+    {
+      id: 1,
+      title: '제목입니다.',
+      body: '내용입니다.',
+      comments: [
+        {
+          id: 1,
+          text: '와 정말 잘 읽었습니다.'
+        }
+      ]
+    },
+    {
+      id: 2,
+      title: '제목입니다.',
+      body: '내용입니다.',
+      comments: [
+        {
+          id: 2,
+          text: '또 다른 댓글 어쩌고 저쩌고'
+        }
+      ]
+    }
+  ],
+  selectedId: 1
+};
+```
 
-`CreateUser.js`에도 Context API를 적용해본다.
+`posts`배열 내에 있는 `id`가 1인 `post`객체를 찾아서, `comments`에 새로운 댓글 객체를 추가해줘야 한다고 가정해보자.
 
-**조건**
+```jsx
+const nextState = {
+  ...state, // 불변성을 유지하기 위해 기존의 값을 스프레드로 뿌려주었다.
+  posts: state.posts.map(post =>
+    post.id === 1
+      ? {
+          ...post,
+          comments: post.comments.concat({
+            id: 3,
+            text: '새로운 댓글'
+          })
+        }
+      : post
+  )
+};
+```
 
-- CreateUser 에게는 어떤 props 도 전달하지 않을 것.
-- CreateUser 컴포넌트 내부에서 useInputs 를 사용.
-- useRef 를 사용한 `nextId` 값을 CreateUser 에서 관리할 것.
+만약 immer 라이브러리를 이용할 경우, 다음처럼 더 쉽게 작업이 가능하다.
 
-1. App.js 에서 CreateUser 컴포넌트와 연관된 props , action들을 지운다. ref관리도 CreateUser에서 한다.
+```jsx
+const nextState = produce(state, draft => {
+  const post = draft.posts.find(post => post.id === 1);
+  post.comments.push({
+    id: 3,
+    text: '와 정말 쉽다!'
+  });
+});
+```
 
-   App.js
+ Immer 를 사용하면 우리가 상태를 업데이트 할 때, 불변성을 신경쓰지 않으면서 업데이트를 해주면 Immer 가 불변성 관리를 대신 해준다.
 
-   ```jsx
-   import React, { useRef, useReducer, useMemo, useCallback } from 'react';
-   import UserList from './UserList';
-   import CreateUser from './CreateUser';
-   
-   function countActiveUsers(users) {
-     console.log('활성 사용자 수를 세는중...');
-     return users.filter(user => user.active).length;
-   }
-   
-   const initialState = {
-     users: [
-       {
-         id: 1,
-         username: 'velopert',
-         email: 'public.velopert@gmail.com',
-         active: true
-       },
-       {
-         id: 2,
-         username: 'tester',
-         email: 'tester@example.com',
-         active: false
-       },
-       {
-         id: 3,
-         username: 'liz',
-         email: 'liz@example.com',
-         active: false
-       }
-     ]
-   };
-   
-   function reducer(state, action) {
-     switch (action.type) {
-       case 'CREATE_USER' :
-         return {
-           inputs: initialState.inputs,
-           users: state.users.concat(action.user)
-         };
-       case 'TOGGLE_USER' :
-         return {
-           ...state,
-           users: state.users.map(user =>
-             user.id === action.id ? {...user, active: !user.active} : user
-           )
-         };
-       case 'REMOVE_USER' :
-         return {
-           ...state,
-           users : state.users.filter(user => user.id !== action.id)
-         };
-       default:
-         return state;
-     }
-   }
-   
-   
-   // UserDispatch 라는 이름으로 내보내줍니다.
-   export const UserDispatch = React.createContext(null);
-   
-   function App() {
-     const [state, dispatch] = useReducer(reducer, initialState);
-     const { users } = state;
-   
-     // const onCreate = useCallback(() => {
-     //   dispatch({
-     //     type: 'CREATE_USER',
-     //     user: {
-     //       id: nextId.current,
-     //       username,
-     //       email
-     //     }
-     //   });
-     //   reset();
-     //   nextId.current += 1;
-     // }, [username, email, reset]);
-   
-     // const onToggle = useCallback(id => {
-     //   dispatch({
-     //     type: 'TOGGLE_USER',
-     //     id
-     //   });
-     // }, []);
-   
-     // const onRemove = useCallback(id => {
-     //   dispatch({
-     //     type: 'REMOVE_USER',
-     //     id
-     //   });
-     // }, []);
-   
-     const count = useMemo(() => countActiveUsers(users), [users]);
-     return (
-       <UserDispatch.Provider value={dispatch}>
-         {/* <CreateUser username={username} email={email} onChange={onChange} onCreate={onCreate} /> */}
-         <CreateUser/>
-         {/* <UserList users={users} onToggle={onToggle} onRemove={onRemove} /> */}
-         <UserList users={users} />
-         <div>활성사용자 수 : {count}</div>
-       </UserDispatch.Provider>
-     );
-   }
-   
-   export default App;
-   ```
+<br/>
 
-   <br/>
+#### Immer 사용의 경우,  <a id="a4"></a>
 
-2. CreateUser에서 UserDispatch를 통해 받은 값들을 이용하여 dispatch를 구성한다.
+##### Immer 기본 사용법
 
-   또한 useRef를 여기서 사용하여 다음 Id값을 관리하기 시작한다.
+기존에 만들었던 사용자 관리 프로젝트에 Immer 를 적용해보면서 Immer 의 사용법을 알아보자.
 
-   CreateUser.js
+`immer` 설치하기
 
-   ```jsx
-   import React, { useRef, useContext } from 'react';
-   import { UserDispatch } from './App';
-   import useInputs from '../20/hooks/useInputs';
-   
-   function CreateUser() {
-     const dispatch = useContext(UserDispatch);
-     const nextId = useRef(4);
-     const [{ username, email }, onChange, reset] = useInputs({
-       username : '',
-       email : ''
-     });
-   
-     return (
-       <div>
-         <input
-           name="username"
-           placeholder="계정명"
-           onChange={onChange}
-           value={username}
-         />
-         <input
-           name="email"
-           placeholder="이메일"
-           onChange={onChange}
-           value={email}
-         />
-         <button onClick={() => {
-           dispatch({ type: 'CREATE_USER',
-             user: {
-               id: nextId.current,
-               username,
-               email
-             }
-           });
-           reset();
-           nextId.current += 1;}
-         }
-         >등록</button>
-       </div>
-     );
-   }
-   
-   export default React.memo(CreateUser);
-   ```
+```bash
+npm install immer --save
+```
 
-   <br/>
+`immer` 불러오기
+
+```jsx
+import produce from 'immer';
+```
+
+`produce` 함수를 사용 시 
+
+- 첫번째 파라미터 : 수정하고 싶은 상태
+- 두번째 파라미터 : 어떻게 업데이트하고 싶을지 정의하는 함수
+
+두번째 파라미터에 넣는 함수에서는 불변성에 대해서 신경쓰지 않고 그냥 업데이트 해주면 다 알아서 해준다. (완전 편리하다. ++)
+
+```jsx
+const state = {
+  number: 1,
+  dontChangeMe: 2
+};
+
+const nextState = produce(state, draft => {
+  draft.number += 1;
+});
+
+console.log(nextState);
+// { number: 2, dontChangeMe: 2 }
+```
+
+<br/>
+
+##### 리듀서에서 Immer 사용하기  <a id="a5"></a>
+
+참고로, Immer를 사용한다 해서 무조건 코드가 짧아지고 좋아지는 것은 아니다.  Immer 를 사용해서 간단해지는 업데이트가 있고, 오히려 코드가 길어지는 업데이트 들이 있다.
+
+예를들어서 전에 만들었던 프로젝트의 상태의 경우 `users` 배열이 객체의 깊은곳에 위치하지 않기 때문에 새 항목을 추가하거나 제거 할 때는 Immer 를 사용하는 것 보다 `concat` 과 `filter` 를 사용하는것이 더 코드가 짧고 편하다.
+
+우선, 학습을 위해 이번 업데이트는  Immer 를 사용하여 처리를 해보자.
+
+**App.js** 
+
+```jsx
+import React, { useReducer, useMemo } from 'react';
+import UserList from './UserList';
+import CreateUser from './CreateUser';
+import produce from 'immer';
+
+function countActiveUsers(users) {
+  console.log('활성 사용자 수를 세는중...');
+  return users.filter(user => user.active).length;
+}
+
+const initialState = {
+  users: [
+    {
+      id: 1,
+      username: 'velopert',
+      email: 'public.velopert@gmail.com',
+      active: true
+    },
+    {
+      id: 2,
+      username: 'tester',
+      email: 'tester@example.com',
+      active: false
+    },
+    {
+      id: 3,
+      username: 'liz',
+      email: 'liz@example.com',
+      active: false
+    }
+  ]
+};
+
+function reducer(state, action) { 
+  // immer 적용하기
+  switch (action.type) {
+    case 'CREATE_USER':
+      return produce(state, draft => {
+        draft.users.push(action.user);
+      });
+    case 'TOGGLE_USER':
+      return produce(state, draft => {
+        const user = draft.users.find(user => user.id === action.id);
+        user.active = !user.active;
+      });
+    case 'REMOVE_USER':
+      return produce(state, draft => {
+        const index = draft.users.findIndex(user => user.id === action.id);
+        draft.users.splice(index, 1);
+      });
+    default:
+      return state;
+  }
+}
+
+export const UserDispatch = React.createContext(null);
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const { users } = state;
+
+  const count = useMemo(() => countActiveUsers(users), [users]);
+  return (
+    <UserDispatch.Provider value={dispatch}>
+      <CreateUser />
+      <UserList users={users} />
+      <div>활성사용자 수 : {count}</div>
+    </UserDispatch.Provider>
+  );
+}
+
+export default App;
+```
+
+`TOGGLE_USER` 액션의 경우엔 확실히 Immer 를 사용하니 코드가 깔끔해졌지만 나머지의 경우에는 오히려 코드가 좀 복잡해졌다. 상황에 따라 잘 선택하여 사용해야 한다. Immer 를 사용한다고 해서 모든 업데이트 로직에서 사용을 하실 필요는 없다.
+
+<br/>
+
+##### Immer 와 함수형 업데이트  <a id="a6"></a>
+
+이전에 `useState` 를 사용 할 때 함수형 업데이트란걸 할 수 있다고 배웠다. 
+
+```jsx
+const [todo, setTodo] = useState({
+  text: 'Hello',
+  done: false
+});
+
+const onClick = useCallback(() => {
+  setTodo(todo => ({
+    ...todo,
+    done: !todo.done
+  }));
+}, []);
+```
+
+함수에 업데이트를 해주는 함수를 넣음으로써, 만약 `useCallback` 을 사용하는 경우 두번째 파라미터인 `deps` 배열에 `todo` 를 넣지 않아도 된다.
+
+위 처럼, 함수형 업데이트를 하는 경우에, Immer 를 사용하면 상황에 따라 더 편하게 코드를 작성 할 수 있다.
+
+만약에 `produce` 함수에 두개의 파라미터를 넣게 된다면, 첫번째 파라미터에 넣은 상태를 불변성을 유지하면서 새로운 상태를 만들어주지만, 만약에 첫번째 파라미터를 생략하고 바로 업데이트 함수를 넣어주게 된다면, 반환 값은 새로운 상태가 아닌 상태를 업데이트 해주는 함수가 된다. 
+
+```javascript
+const todo = {
+  text: 'Hello',
+  done: false
+};
+
+const updater = produce(draft => {
+  draft.done = !draft.done;
+});
+
+const nextTodo = updater(todo);
+
+console.log(nextTodo);
+// { text: 'Hello', done: true }
+```
+
+**결국 `produce` 가 반환하는것이 업데이트 함수가 되기 때문에 `useState` 의 업데이트 함수를 사용 할 떄 다음과 같이 구현 할 수 있게 된다. (즉 `produce`가 반환하는 것은 함수이므로 화살표 함수를 반환한것과 같다는 것 - Immer는 함수형 업데이트 )**
+
+```javascript
+const [todo, setTodo] = useState({
+  text: 'Hello',
+  done: false
+});
+
+const onClick = useCallback(() => {
+  setTodo(
+    produce(draft => {
+      draft.done = !draft.done;
+    })
+  );
+}, []);
+```
+
+이러한 속성을 잘 알아두시고, 나중에 필요할때 잘 사용하시면 되겠습니다.
+
+Immer 은 분명히 정말 편한 라이브러리이다. 
+
+하지만, 확실히 알아둘 점은, 성능적으로는 Immer 를 사용하지 않은 코드가 조금 더 빠르다는 점 이다.
+
+조사 결과, 50,000개의 원소중에서 5,000 개의 원소를 업데이트 하는 코드를 비교 했을때의 결과로, Immer 의 경우 31ms 걸리는 작업이 (map 을 사용하는) Native Reducer 에서는 6ms 걸린 것을 확인 할 수 있다. (생각보다 차이가 있다.)
+
+추가로, Immer 는 JavaScript 엔진의 [Proxy](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Proxy) 라는 기능을 사용하는데, 구형 브라우저 및 react-native 같은 환경에서는 지원되지 않으므로 (Proxy 처럼 작동하지만 Proxy는 아닌) ES5 fallback 을 사용하게 된다. ES5 fallback 을 사용하게 되는경우는 191ms 정도로, 꽤나 느려지게 되는데, 여전히 데이터가 별로 없다면 크게 걱정 할 필요는 없다.
+
+Immer 라이브러리는 확실히 편하기 때문에, 데이터의 구조가 복잡해져서 불변성을 유지하면서 업데이트하려면 코드가 복잡해지는 상황이 온다면, 이를 사용하는 것을 권장한다.
+
+다만, 무조건 사용을 하진 마시고, 가능하면 데이터의 구조가 복잡해지게 되는 것을 방지하자. 어쩔 수 없을 때에만 Immer 를 사용하는것이 좋다. Immer 를 사용한다고 해도, 필요한곳에만 쓰고, 간단히 처리 될 수 있는 곳에서는 그냥 일반 JavaScript 로 구현하는 것을 권한다.
