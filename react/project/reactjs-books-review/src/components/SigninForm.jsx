@@ -118,10 +118,8 @@ const SigninForm = ({ loading, login, error, setError, clearError }) => {
     const email = emailRef.current.state.value;
     const password = passwordRef.current.state.value;
 
-    try {
-      await login(email, password);
-      // history.push('/');
-    } catch {}
+    login(email, password);
+    // history.push('/');
   }
 
   useEffect(() => {
