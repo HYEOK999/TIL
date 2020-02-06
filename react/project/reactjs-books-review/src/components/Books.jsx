@@ -1,10 +1,14 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 
-const Books = ({ token, books, setBooks, error, loading }) => {
+// const Books = ({ token, books, getBooks, error, loading }) => {
+//   useEffect(() => {
+//     getBooks(token);
+//   }, [token, getBooks]);
+const Books = ({ books, getBooks, error, loading }) => {
   useEffect(() => {
-    setBooks(token);
-  }, [token, setBooks]);
+    getBooks();
+  }, [getBooks]);
 
   if (error !== null) {
     return <div>에러다</div>;
