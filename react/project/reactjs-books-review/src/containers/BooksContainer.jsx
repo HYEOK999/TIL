@@ -1,26 +1,53 @@
-import { connect } from 'react-redux';
+import React, { useCallback } from 'react';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import Books from '../components/Books';
-import { setBooksThunk } from '../actions';
+import {
+  getBooks as getBooksAction,
+  startBooksSaga,
+} from '../redux/modules/books';
 
-const mapStateToProps = state => ({
-  books: state.books,
-  token: state.token,
-  loading: state.loading,
-  error: state.error,
-});
+// const mapStateToProps = state => ({
+//   books: state.books.books,
+//   token: state.auth.token,
+//   loading: state.books.loading,
+//   error: state.books.error,
+// });
 
-const mapDispatchToProps = dispatch => ({
-  setBooks: async token => {
-    dispatch(setBooksThunk(token));
-    // try {
-    //   const res = await axios.get('https://api.marktube.tv/v1/book', {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-    //   dispatch(setBooks(res.data));
-    // } catch (error) {}
-  },
-});
+// const mapDispatchToProps = dispatch => ({
+//   getBooks: async token => {
+//     dispatch(getBooks(token));
+//   },
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Books);
+// export default connect(mapStateToProps, mapDispatchToProps)(Books);
+const BookContainer = props => {
+  // const token = useSelector(state => state.auth.token);
+  const books = useSelector(state => state.books.books);
+  const loading = useSelector(state => state.books.loading);
+  const error = useSelector(state => state.books.error);
+  const dispatch = useDispatch();
+
+  const getBooks = useCallback(() => {
+    // dispatch(getBooksAction());
+    // setInterval(() => {
+    //   dispatch(startBooksSaga());
+    //   dispatch(startBooksSaga());
+    //   dispatch(startBooksSaga());
+    //   dispatch(startBooksSaga());
+    //   dispatch(startBooksSaga());
+    // }, 100)
+    dispatch(startBooksSaga());
+  }, [dispatch]);
+
+  return (
+    <Books
+      {...props}
+      books={books}
+      loading={loading}
+      error={error}
+      getBooks={getBooks}
+    />
+  );
+};
+
+export default BookContainer;

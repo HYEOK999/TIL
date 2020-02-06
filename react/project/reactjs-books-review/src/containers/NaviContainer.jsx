@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import Navi from '../components/Navi';
-import { logoutThunk } from '../actions';
+import { logout } from '../redux/modules/auth';
 
 export default connect(
-  state => ({ token: state.token }),
+  state => ({ token: state.auth.token }),
   dispatch => ({
-    logoutThunk: token => {
-      dispatch(logoutThunk(token));
+    logout: token => {
+      dispatch(logout(token));
     },
   }),
 )(Navi);
