@@ -118,7 +118,7 @@ const SigninForm = ({ loading, login, error, setError, clearError }) => {
     const email = emailRef.current.state.value;
     const password = passwordRef.current.state.value;
 
-    login(email, password);
+    login({ email, password });
     // history.push('/');
   }
 
