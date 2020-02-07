@@ -36,9 +36,9 @@ const { success, pending, fail } = createActions(
   'FAIL',
   options,
 );
-console.log(pending());
-console.log(success(['hello']));
-console.log(fail(new Error()));
+// console.log(pending());
+// console.log(success(['hello']));
+// console.log(fail(new Error()));
 
 // export const getBooks = token => async (dispatch, getState) => {
 //   const state = getState();
