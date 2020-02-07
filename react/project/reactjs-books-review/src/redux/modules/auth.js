@@ -22,7 +22,6 @@ export const signOutSaga = createAction('SIGN_OUT_SAGA');
 function* loginSaga(auth) {
   try {
     yield put(pending());
-    console.log('5', auth, auth.email, auth.password);
     const res = yield call(
       UserService.login,
       auth.payload.email,
