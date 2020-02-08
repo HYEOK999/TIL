@@ -406,6 +406,12 @@ Today I Leaned...
 
 <br/>
 
+### Type Script
+
+> [TypeScript 01](https://github.com/HYEOK999/TIL/blob/master/javaScript/TypeScript-01.md)
+
+<br/>
+
 <br/>
 
 ### Algorithm & Quiz
