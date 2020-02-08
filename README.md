@@ -409,6 +409,8 @@ Today I Leaned...
 ### Type Script
 
 > [TypeScript 01](https://github.com/HYEOK999/TIL/blob/master/javaScript/TypeScript-01.md)
+>
+> [TypeScript 02](https://github.com/HYEOK999/TIL/blob/master/javaScript/TypeScript-02.md)
 
 <br/>
 
