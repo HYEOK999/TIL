@@ -22,32 +22,39 @@ import {
 // export default connect(mapStateToProps, mapDispatchToProps)(Books);
 const BookContainer = props => {
   // const token = useSelector(state => state.auth.token);
-  const books = useSelector(state => state.books.books);
-  const loading = useSelector(state => state.books.loading);
-  const error = useSelector(state => state.books.error);
-  const dispatch = useDispatch();
+//   const books = useSelector(state => state.books.books);
+//   const loading = useSelector(state => state.books.loading);
+//   const error = useSelector(state => state.books.error);
+//   const dispatch = useDispatch();
 
-  const getBooks = useCallback(() => {
-    // dispatch(getBooksAction());
-    // setInterval(() => {
-    //   dispatch(startBooksSaga());
-    //   dispatch(startBooksSaga());
-    //   dispatch(startBooksSaga());
-    //   dispatch(startBooksSaga());
-    //   dispatch(startBooksSaga());
-    // }, 100)
-    dispatch(startBooksSaga());
-  }, [dispatch]);
+//   const getBooks = useCallback(() => {
+//     // dispatch(getBooksAction());
+//     // setInterval(() => {
+//     //   dispatch(startBooksSaga());
+//     //   dispatch(startBooksSaga());
+//     //   dispatch(startBooksSaga());
+//     //   dispatch(startBooksSaga());
+//     //   dispatch(startBooksSaga());
+//     // }, 100)
+//     dispatch(startBooksSaga());
+//   }, [dispatch]);
 
-  return (
-    <Books
-      {...props}
-      books={books}
-      loading={loading}
-      error={error}
-      getBooks={getBooks}
-    />
+//   return (
+//     <Books
+//       {...props}
+//       books={books}
+//       loading={loading}
+//       error={error}
+//       getBooks={getBooks}
+//     />
+//   );
+// };
+
+  export default connect(state =>
+    ({
+      books: state.books.books,
+      loading: state.books.loading,
+      error: state.books.error,
+    }(Books)),
   );
-};
-
-export default BookContainer;
+}

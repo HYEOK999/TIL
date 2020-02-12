@@ -36,6 +36,8 @@ const { success, pending, fail } = createActions(
   'FAIL',
   options,
 );
+
+export { success };
 // console.log(pending());
 // console.log(success(['hello']));
 // console.log(fail(new Error()));
