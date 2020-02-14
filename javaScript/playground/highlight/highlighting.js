@@ -1,189 +1,49 @@
 /* eslint-disable */
 
-const airbnb = [
+const airbnbs = [
   {
-    PlaceId: 'JP',
-    PlaceName: '일본',
+    PlaceId: 'ICN',
+    PlaceName: '인천국제공항',
     LocalizedPlaceName: '',
-    CountryId: 'JP',
-    CityId: '',
+    CountryId: 'KR',
+    CityId: 'SELA',
     IataCode: '',
-    CountryName: '일본',
+    CountryName: '대한민국',
     PlaceNameEn: '',
     RegionId: '',
-    CityName: '',
+    CityName: '서울',
     CityNameEn: '',
-    GeoId: '29475330',
-    GeoContainerId: '29475330',
-    Location: '37.3132725967,137.6721240928',
-    ResultingPhrase: '일본',
+    GeoId: '95673659',
+    GeoContainerId: '27538638',
+    Location: '37.469167,126.450556',
+    ResultingPhrase: '인천국제공항 (ICN), 서울|서울특별시|대한민국',
     Highlighting: [[0, 2]],
   },
   {
-    PlaceId: 'TYOA',
-    PlaceName: '도쿄',
+    PlaceId: 'INC',
+    PlaceName: '인촨',
     LocalizedPlaceName: '',
-    CountryId: 'JP',
-    CityId: 'TYOA',
-    IataCode: 'TYO',
-    CountryName: '일본',
-    PlaceNameEn: '',
-    RegionId: '',
-    CityName: '도쿄',
-    CityNameEn: '',
-    GeoId: '27542089',
-    GeoContainerId: '27542089',
-    Location: '35.6889504799,139.7389466317',
-    ResultingPhrase: '도쿄|도쿄 도|일본',
-    Highlighting: [[8, 10]],
-  },
-  {
-    PlaceId: 'NRT',
-    PlaceName: '도쿄 나리타',
-    LocalizedPlaceName: '',
-    CountryId: 'JP',
-    CityId: 'TYOA',
+    CountryId: 'CN',
+    CityId: 'CINC',
     IataCode: '',
-    CountryName: '일본',
+    CountryName: '중국',
     PlaceNameEn: '',
     RegionId: '',
-    CityName: '도쿄',
+    CityName: '인촨',
     CityNameEn: '',
-    GeoId: '128668889',
-    GeoContainerId: '27542089',
-    Location: '35.763889,140.391111',
-    ResultingPhrase: '도쿄 나리타 (NRT), 도쿄|도쿄 도|일본',
-    Highlighting: [[22, 24]],
-  },
-  {
-    PlaceId: 'HND',
-    PlaceName: '도쿄 하네다',
-    LocalizedPlaceName: '',
-    CountryId: 'JP',
-    CityId: 'TYOA',
-    IataCode: '',
-    CountryName: '일본',
-    PlaceNameEn: '',
-    RegionId: '',
-    CityName: '도쿄',
-    CityNameEn: '',
-    GeoId: '128667143',
-    GeoContainerId: '27542089',
-    Location: '35.553611,139.765833',
-    ResultingPhrase: '도쿄 하네다 (HND), 도쿄|도쿄 도|일본',
-    Highlighting: [[22, 24]],
-  },
-  {
-    PlaceId: 'OSAA',
-    PlaceName: '오사카',
-    LocalizedPlaceName: '',
-    CountryId: 'JP',
-    CityId: 'OSAA',
-    IataCode: 'OSA',
-    CountryName: '일본',
-    PlaceNameEn: '',
-    RegionId: '',
-    CityName: '오사카',
-    CityNameEn: '',
-    GeoId: '27542908',
-    GeoContainerId: '27542908',
-    Location: '34.6937458271,135.5021816223',
-    ResultingPhrase: '오사카|오사카 부|일본',
-    Highlighting: [[10, 12]],
-  },
-  {
-    PlaceId: 'KIX',
-    PlaceName: '오사카칸사이인터내셔널',
-    LocalizedPlaceName: '',
-    CountryId: 'JP',
-    CityId: 'OSAA',
-    IataCode: '',
-    CountryName: '일본',
-    PlaceNameEn: '',
-    RegionId: '',
-    CityName: '오사카',
-    CityNameEn: '',
-    GeoId: '128667802',
-    GeoContainerId: '27542908',
-    Location: '34.423889,135.246944',
-    ResultingPhrase: '오사카칸사이인터내셔널 (KIX), 오사카|오사카 부|일본',
-    Highlighting: [[29, 31]],
-  },
-  {
-    PlaceId: 'ITM',
-    PlaceName: '오사카이타미',
-    LocalizedPlaceName: '',
-    CountryId: 'JP',
-    CityId: 'OSAA',
-    IataCode: '',
-    CountryName: '일본',
-    PlaceNameEn: '',
-    RegionId: '',
-    CityName: '오사카',
-    CityNameEn: '',
-    GeoId: '104120225',
-    GeoContainerId: '27542908',
-    Location: '34.781667,135.441667',
-    ResultingPhrase: '오사카이타미 (ITM), 오사카|오사카 부|일본',
-    Highlighting: [[24, 26]],
-  },
-  {
-    PlaceId: 'FUK',
-    PlaceName: '후쿠오카',
-    LocalizedPlaceName: '',
-    CountryId: 'JP',
-    CityId: 'JFUK',
-    IataCode: '',
-    CountryName: '일본',
-    PlaceNameEn: '',
-    RegionId: '',
-    CityName: '후쿠오카',
-    CityNameEn: '',
-    GeoId: '128667957',
-    GeoContainerId: '27541740',
-    Location: '33.582222,130.453333',
-    ResultingPhrase: '후쿠오카 (FUK), 후쿠오카|Fukuoka-shi|후쿠오카 현|일본',
-    Highlighting: [[36, 38]],
-  },
-  {
-    PlaceId: 'OKA',
-    PlaceName: '오키나와나하',
-    LocalizedPlaceName: '',
-    CountryId: 'JP',
-    CityId: 'JOKA',
-    IataCode: '',
-    CountryName: '일본',
-    PlaceNameEn: '',
-    RegionId: '',
-    CityName: '오키나와',
-    CityNameEn: '',
-    GeoId: '128668904',
-    GeoContainerId: '27540768',
-    Location: '26.2,127.65',
-    ResultingPhrase: '오키나와나하 (OKA), 오키나와|Okinawa-shi|오키나와 현|일본',
-    Highlighting: [[38, 40]],
-  },
-  {
-    PlaceId: 'JNGO',
-    PlaceName: '나고야',
-    LocalizedPlaceName: '',
-    CountryId: 'JP',
-    CityId: 'JNGO',
-    IataCode: 'NGO',
-    CountryName: '일본',
-    PlaceNameEn: '',
-    RegionId: '',
-    CityName: '나고야',
-    CityNameEn: '',
-    GeoId: '27545106',
-    GeoContainerId: '27545106',
-    Location: '35.1814771633,136.906408681',
-    ResultingPhrase: '나고야|아이치 현|일본',
-    Highlighting: [[10, 12]],
+    GeoId: '128668566',
+    GeoContainerId: '27542856',
+    Location: '38.35,106.35',
+    ResultingPhrase: '인촨 (INC), 인촨|Yinchuan|닝샤 후이족 자치구|중국',
+    Highlighting: [
+      [0, 2],
+      [10, 12],
+    ],
   },
 ];
 
-const a = {
+// 일본
+const country = {
   PlaceId: 'JP',
   PlaceName: '일본',
   LocalizedPlaceName: '',
@@ -202,15 +62,131 @@ const a = {
   Highlighting: [[0, 2]],
 };
 
-const d = [];
+// 검색어 '미니'
+const Acity = {
+  PlaceId: 'STP',
+  PlaceName: '미니애폴리스다운타운',
+  LocalizedPlaceName: '',
+  CountryId: 'US',
+  CityId: 'MSPA',
+  IataCode: '',
+  CountryName: '미국',
+  PlaceNameEn: '',
+  RegionId: 'MN',
+  CityName: '미니애폴리스',
+  CityNameEn: '',
+  GeoId: '129052038',
+  GeoContainerId: '27540996',
+  Location: '44.933333,-93.066667',
+  ResultingPhrase: '미니애폴리스다운타운 (STP), 미니애폴리스|Hennepin|미네소타 주|미국',
+  Highlighting: [
+    [0, 2],
+    [18, 20],
+  ],
+};
 
-console.log(a.ResultingPhrase.replace(/(.{0})/, '<b>'));
-
-for (let i = 0; i < a.ResultingPhrase.length; i++) {
-  if (i === a.Highlighting[0][0]) {
-    d.push(a.ResultingPhrase.replace(/(.{0})/, '<b>'));
-  } else if (i === a.Highlighting[0][1] - 1) {
-    d.push(a.ResultingPhrase.replace(/(.{2})/, '</b>'));
+console.log(country.ResultingPhrase);
+const fake = country.ResultingPhrase.split('');
+console.log(fake);
+for (let i = 0; i < fake.length; i++) {
+  for (let j = 0; j < country.Highlighting.length; j++) {
+    if (i === country.Highlighting[j][0]) {
+      fake[i] = '<b>' + fake[i];
+    }
+    if (i === country.Highlighting[j][1] - 1) {
+      fake[i] = fake[i] + '</b>';
+    }
   }
 }
-console.log(d);
+const result = fake.join('');
+console.log(result);
+
+const test2 = {
+  PlaceId: 'JP',
+  PlaceName: '일본',
+  LocalizedPlaceName: '',
+  CountryId: 'JP',
+  CityId: '',
+  IataCode: '',
+  CountryName: '일본',
+  PlaceNameEn: '',
+  RegionId: '',
+  CityName: '',
+  CityNameEn: '',
+  GeoId: '29475330',
+  GeoContainerId: '29475330',
+  Location: '37.3132725967,137.6721240928',
+  ResultingPhrase: '일본',
+  Highlighting: [[0, 1]],
+};
+
+const tfake = country.ResultingPhrase.split('');
+console.log(tfake);
+for (let i = 0; i < tfake.length; i++) {
+  for (let j = 0; j < test2.Highlighting.length; j++) {
+    if (i === test2.Highlighting[j][0]) {
+      tfake[i] = '<b>' + fake[i];
+    }
+    if (i === test2.Highlighting[j][1] - 1) {
+      tfake[i] = fake[i] + '</b>';
+    }
+  }
+}
+const ssub = tfake.join('');
+console.log(ssub);
+
+const answer = [];
+airbnbs.forEach(airbnb => {
+  const array = airbnb.ResultingPhrase.split('');
+  for (let i = 0; i < array.length; i++) {
+    for (let j = 0; j < airbnb.Highlighting.length; j++) {
+      if (i === airbnb.Highlighting[j][0]) {
+        array[i] = '<b>' + array[i];
+      }
+      if (i === airbnb.Highlighting[j][1] - 1) {
+        array[i] = array[i] + '</b>';
+      }
+    }
+  }
+  console.log(array);
+  answer.push(array.join(''));
+});
+console.log(answer);
+
+for (let i = 0; i < answer.length; i++) {}
+
+const a = '미니애폴리스다운타운 (STP), 미니애폴리스|Hennepin|미네소타 주|미국'.split(',');
+console.log(a);
+const b = a[0].split(' ');
+console.log(b);
+const c = a[1].split('|');
+console.log(c);
+console.log(c[c.length - 1]);
+
+var ss = '#미$국 입니다.'.split('');
+
+function specialCharRemove(obj) {
+  var val = obj;
+  var pattern = /[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi; // 특수문자 제거
+
+  if (pattern.test(val)) {
+    obj = val.replace(pattern, '');
+  }
+  return obj;
+}
+
+console.log(specialCharRemove('$미%'));
+
+const a1 = ['#인', '도#$', '네', '시', '아'];
+console.log(a1.join('').split('$'));
+
+console.log(
+  a1.map(c => {
+    return c[0] === '#' && c[c.length - 1] === '$'
+      ? c.replace(/[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi, '')
+      : c;
+  }),
+);
+
+const aaaa = '미국';
+console.log([aaaa]);
