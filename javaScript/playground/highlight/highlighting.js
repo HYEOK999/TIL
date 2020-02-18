@@ -78,115 +78,141 @@ const Acity = {
   GeoId: '129052038',
   GeoContainerId: '27540996',
   Location: '44.933333,-93.066667',
-  ResultingPhrase: '미니애폴리스다운타운 (STP), 미니애폴리스|Hennepin|미네소타 주|미국',
+  ResultingPhrase: '밀라노|밀라노 현|롬바르디아 주|이탈리아',
   Highlighting: [
-    [0, 2],
-    [18, 20],
+    [0, 1],
+    [4, 5],
   ],
 };
 
-console.log(country.ResultingPhrase);
-const fake = country.ResultingPhrase.split('');
-console.log(fake);
-for (let i = 0; i < fake.length; i++) {
-  for (let j = 0; j < country.Highlighting.length; j++) {
-    if (i === country.Highlighting[j][0]) {
-      fake[i] = '<b>' + fake[i];
-    }
-    if (i === country.Highlighting[j][1] - 1) {
-      fake[i] = fake[i] + '</b>';
-    }
-  }
-}
-const result = fake.join('');
-console.log(result);
+// console.log(country.ResultingPhrase);
+// const fake = country.ResultingPhrase.split('');
+// console.log(fake);
+// for (let i = 0; i < fake.length; i++) {
+//   for (let j = 0; j < country.Highlighting.length; j++) {
+//     if (i === country.Highlighting[j][0]) {
+//       fake[i] = '<b>' + fake[i];
+//     }
+//     if (i === country.Highlighting[j][1] - 1) {
+//       fake[i] = fake[i] + '</b>';
+//     }
+//   }
+// }
+// const result = fake.join('');
+// console.log(result);
 
-const test2 = {
-  PlaceId: 'JP',
-  PlaceName: '일본',
+const suggestion = {
+  PlaceId: 'IN',
+  PlaceName: '인도',
   LocalizedPlaceName: '',
-  CountryId: 'JP',
+  CountryId: 'IN',
   CityId: '',
   IataCode: '',
-  CountryName: '일본',
+  CountryName: '인도',
   PlaceNameEn: '',
   RegionId: '',
   CityName: '',
   CityNameEn: '',
-  GeoId: '29475330',
-  GeoContainerId: '29475330',
-  Location: '37.3132725967,137.6721240928',
-  ResultingPhrase: '일본',
-  Highlighting: [[0, 1]],
+  GeoId: '29475284',
+  GeoContainerId: '29475284',
+  Location: '22.8576456589,79.6206722808',
+  ResultingPhrase: '밀라노|밀라노 현|롬바르디아 주|이탈리아',
+  Highlighting: [
+    [0, 1],
+    [4, 5],
+  ],
 };
 
-const tfake = country.ResultingPhrase.split('');
-console.log(tfake);
-for (let i = 0; i < tfake.length; i++) {
-  for (let j = 0; j < test2.Highlighting.length; j++) {
-    if (i === test2.Highlighting[j][0]) {
-      tfake[i] = '<b>' + fake[i];
-    }
-    if (i === test2.Highlighting[j][1] - 1) {
-      tfake[i] = fake[i] + '</b>';
-    }
-  }
-}
-const ssub = tfake.join('');
-console.log(ssub);
+// console.log('1', array);
 
-const answer = [];
-airbnbs.forEach(airbnb => {
-  const array = airbnb.ResultingPhrase.split('');
-  for (let i = 0; i < array.length; i++) {
-    for (let j = 0; j < airbnb.Highlighting.length; j++) {
-      if (i === airbnb.Highlighting[j][0]) {
-        array[i] = '<b>' + array[i];
-      }
-      if (i === airbnb.Highlighting[j][1] - 1) {
-        array[i] = array[i] + '</b>';
-      }
-    }
-  }
-  console.log(array);
-  answer.push(array.join(''));
-});
-console.log(answer);
+// for(let i = 0; i< suggestion.Highlighting.length; i++) {
+//   result = array.replace(/(.{0})/,"<strong>")
+//   // result = array.replace(/(.{suggestion.Highlighting[i][1]})/,"</strong>")
+// }
 
-for (let i = 0; i < answer.length; i++) {}
+function insertTag(highlightings, str) {
+  const starts = [],
+    ends = [];
 
-const a = '미니애폴리스다운타운 (STP), 미니애폴리스|Hennepin|미네소타 주|미국'.split(',');
-console.log(a);
-const b = a[0].split(' ');
-console.log(b);
-const c = a[1].split('|');
-console.log(c);
-console.log(c[c.length - 1]);
+  highlightings.forEach(highlighting => {
+    starts.push(highlighting[0]);
+    ends.push(highlighting[1]);
+  });
 
-var ss = '#미$국 입니다.'.split('');
-
-function specialCharRemove(obj) {
-  var val = obj;
-  var pattern = /[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi; // 특수문자 제거
-
-  if (pattern.test(val)) {
-    obj = val.replace(pattern, '');
-  }
-  return obj;
+  return str
+    .split('')
+    .map((chr, pos) => {
+      if (starts.indexOf(pos) != -1) chr = '<strong>' + chr;
+      if (ends.indexOf(pos) != -1) chr = '</strong>' + chr;
+      return chr;
+    })
+    .join('');
 }
 
-console.log(specialCharRemove('$미%'));
+const Result = {};
+const WordArray = insertTag(suggestion.Highlighting, suggestion.ResultingPhrase);
 
-const a1 = ['#인', '도#$', '네', '시', '아'];
-console.log(a1.join('').split('$'));
+console.log(WordArray);
 
-console.log(
-  a1.map(c => {
-    return c[0] === '#' && c[c.length - 1] === '$'
-      ? c.replace(/[^(가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z0-9)]/gi, '')
-      : c;
-  }),
-);
+const place = 'Country2';
+if (place === 'Country') {
+  Result.CountryName = WordArray.split('|');
+  console.log(Result.CountryName);
+} else {
+  const ResultingArray = WordArray.split('|');
+  console.log(ResultingArray);
+  Result.PlaceName = ResultingArray[0].includes(',')
+    ? ResultingArray[0].split(',')[0].split('(')[0]
+    : ResultingArray[0];
+  Result.CountryName = ResultingArray[ResultingArray.length - 1];
+}
 
-const aaaa = '미국';
-console.log([aaaa]);
+console.log(Result);
+// const HighlightingLength = suggestion.Highlighting.length;
+// console.log(HighlightingLength);
+
+// // for (let i = 0; i < array.length; i++) {
+// //   for (let j = 0; j < suggestion.Highlighting.length; j++) {
+// //     if (i === suggestion.Highlighting[j][0]) {
+// //       array[i] = '#' + array[i];
+// //     }
+// //     if (i === suggestion.Highlighting[j][1] - 1) {
+// //       array[i] = array[i] + '#$';
+// //     }
+// //   }
+// // }
+
+// for (let i = 0; i < array.length; i++) {
+//   let j = 0;
+//   if (i === suggestion.Highlighting[j][0]) {
+//     array[i] = '#' + array[i];
+//   }
+//   if (i === suggestion.Highlighting[j][1] - 1) {
+//     array[i] = array[i] + '#$';
+//     j = j + 1;
+//   }
+//   if (j === HighlightingLength) {
+//     break;
+//   }
+// }
+
+// console.log(array);
+
+// const place = suggestion.CityId ? 'asdasd' : 'Country';
+
+// if (place === 'Country') {
+//   result.CountryName = array.join('').split('$');
+// } else {
+//   const ResultingArray = array.join('').split('|');
+//   result.PlaceName = ResultingArray[0].includes(',')
+//     ? ResultingArray[0]
+//         .split(',')[0]
+//         .split('(')[0]
+//         .split('$')
+//     : ResultingArray[0].split('$');
+//   result.CountryName = ResultingArray[ResultingArray.length - 1].includes('$')
+//     ? ResultingArray[ResultingArray.length - 1].split('$')
+//     : [ResultingArray[ResultingArray.length - 1]];
+// }
+
+// console.log(result);
