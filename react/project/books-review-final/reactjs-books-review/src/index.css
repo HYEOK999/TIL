@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

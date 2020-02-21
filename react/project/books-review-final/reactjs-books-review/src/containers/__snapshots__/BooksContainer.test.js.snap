@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BooksContainer renders properly 1`] = `
+<Connect(Books)
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+>
+  <Books
+    books={
+      Array [
+        Object {
+          "bookId": 1,
+          "message": "모던하군요",
+          "ownerId": "7d26db27-168c-4c6a-bd9a-9e20677b60b8",
+          "title": "모던 자바스크립트 입문",
+        },
+        Object {
+          "bookId": 2,
+          "message": "메세지 Mock",
+          "ownerId": "7d26db27-168c-4c6a-bd9a-9e20677b60b8",
+          "title": "책 Mock",
+        },
+        Object {
+          "bookId": 3,
+          "message": "메세지 Mock 222",
+          "ownerId": "7d26db27-168c-4c6a-bd9a-9e20677b60b8",
+          "title": "책 Mock 222",
+        },
+      ]
+    }
+    error={null}
+    getBooks={[Function]}
+    loading={true}
+    store={
+      Object {
+        "clearActions": [Function],
+        "dispatch": [Function],
+        "getActions": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      }
+    }
+  >
+    <p>
+      로딩 중...
+    </p>
+    <ul>
+      <li
+        key="1"
+      >
+        모던 자바스크립트 입문
+      </li>
+      <li
+        key="2"
+      >
+        책 Mock
+      </li>
+      <li
+        key="3"
+      >
+        책 Mock 222
+      </li>
+    </ul>
+  </Books>
+</Connect(Books)>
+`;
