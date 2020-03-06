@@ -540,7 +540,7 @@ Today I Leaned...
 
 > ### html & CSS
 >
-> [limrim 쇼핑몰 사이트 클론](https://github.com/HYEOK999/pinkjelly-project)
+> [TEAM : limrim 쇼핑몰 사이트 클론](https://github.com/HYEOK999/pinkjelly-project)
 >
 > [Tada 사이트 클론 - 모바일](https://github.com/HYEOK999/TIL/tree/master/HTML-CSS/Tada)
 >
@@ -560,7 +560,7 @@ Today I Leaned...
 >
 > [TodoList Async/Await](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_42_todo.md)
 >
-> [Carrot And Stick - GitHub Commit 독려 애플리케이션](https://github.com/HYEOK999/CarrotAndStick)
+> [TEAM : Carrot And Stick - GitHub Commit 독려 애플리케이션](https://github.com/HYEOK999/CarrotAndStick)
 >
 > <br/>
 >
@@ -574,7 +574,7 @@ Today I Leaned...
 >
 > [React - Grid Mini Project : useReducer, CustomHook, useCallback](https://github.com/HYEOK999/TIL/tree/master/react/project/react-grid-project)
 >
-> [SkyPrinter - SkyScanner Live Search Clone](https://github.com/HYEOK999/skyprinter)
+> [TEAM : SkyPrinter - SkyScanner Live Search Clone](https://github.com/HYEOK999/skyprinter)
 >
 > - [RapidAPISkyscanner-API-Documentation](https://github.com/HYEOK999/skyprinter/blob/master/RapidAPISkyscanner-API-Documentation.md)
 > - [Mainpage-Documentation & Use cases](https://github.com/HYEOK999/skyprinter/blob/master/Mainpage-Use-cases-Documentation.md)
