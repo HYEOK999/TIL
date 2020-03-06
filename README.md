@@ -167,20 +167,6 @@ Today I Leaned...
 >[Symbol](https://github.com/HYEOK999/TIL/blob/master/javaScript/symbol.md)
 >
 >[iteration](https://github.com/HYEOK999/TIL/blob/master/javaScript/iteration.md)
->
->[TodoList XHR 분리](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_38_todo1.md)
->
->[TodoList XHR 결합](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_38_todo2.md)
->
->[TodoList XHR Promise](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_39_todo.md)
->
->[TodoList Fetch](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_40_todo.md)
->
->[TodoList Axios](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_41_todo.md)
->
->[TodoList Async/Await](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_42_todo.md)
-
-<br/>
 
 <br/>
 
@@ -262,8 +248,6 @@ Today I Leaned...
 >
 >[20191211-react](https://github.com/HYEOK999/TIL/blob/master/react/20191211-study-react.md)
 >
->[React - Youtube Mini Clone no Route](https://github.com/HYEOK999/TIL/blob/master/react/YoutubeMiniClone.md)
->
 >[20191213-react](https://github.com/HYEOK999/TIL/blob/master/react/20191213-study-react.md)
 >
 >[20191216-react](https://github.com/HYEOK999/TIL/blob/master/react/20191216-study-react.md)
@@ -282,13 +266,7 @@ Today I Leaned...
 >
 >[20200106-react](https://github.com/HYEOK999/TIL/blob/master/react/20200106-study-react.md)
 >
->[React - Todo List V1 : Class Component](https://github.com/HYEOK999/TIL/tree/master/react/project/Todo-Project/todo-v1)
->
 >[20200108-react](https://github.com/HYEOK999/TIL/blob/master/react/20200108-study-react.md)
->
->[React - Todo List V2 : Hook](https://github.com/HYEOK999/TIL/tree/master/react/project/Todo-Project/todo-v2)
->
->[React - Grid Mini Project : useReducer, CustomHook, useCallback](https://github.com/HYEOK999/TIL/tree/master/react/project/react-grid-project)
 >
 >[20200110-react](https://github.com/HYEOK999/TIL/blob/master/react/20200110-study-react.md)
 >
@@ -560,11 +538,41 @@ Today I Leaned...
 
 ### Project
 
+> ### html & CSS
+>
 > [limrim 쇼핑몰 사이트 클론](https://github.com/HYEOK999/pinkjelly-project)
 >
-> [GitHub Commit 독려 애플리케이션](https://github.com/HYEOK999/CarrotAndStick)
+> [Tada 사이트 클론 - 모바일](https://github.com/HYEOK999/TIL/tree/master/HTML-CSS/Tada)
 >
-> [Tada 사이트 클론 - 반응형 (모바일)](https://github.com/HYEOK999/TIL/tree/master/HTML-CSS/Tada)
+> <br/>
+>
+> ### JavaScript
+>
+> [TodoList XHR 분리](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_38_todo1.md)
+>
+> [TodoList XHR 결합](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_38_todo2.md)
+>
+> [TodoList XHR Promise](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_39_todo.md)
+>
+> [TodoList Fetch](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_40_todo.md)
+>
+> [TodoList Axios](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_41_todo.md)
+>
+> [TodoList Async/Await](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_42_todo.md)
+>
+> [Carrot And Stick - GitHub Commit 독려 애플리케이션](https://github.com/HYEOK999/CarrotAndStick)
+>
+> <br/>
+>
+> ### React
+>
+> [React - Youtube Mini Clone no Route](https://github.com/HYEOK999/TIL/blob/master/react/YoutubeMiniClone.md)
+>
+> [React - Todo List V1 : Class Component](https://github.com/HYEOK999/TIL/tree/master/react/project/Todo-Project/todo-v1)
+>
+> [React - Todo List V2 : Hook](https://github.com/HYEOK999/TIL/tree/master/react/project/Todo-Project/todo-v2)
+>
+> [React - Grid Mini Project : useReducer, CustomHook, useCallback](https://github.com/HYEOK999/TIL/tree/master/react/project/react-grid-project)
 >
 > [SkyPrinter - SkyScanner Live Search Clone](https://github.com/HYEOK999/skyprinter)
 >
