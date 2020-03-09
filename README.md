@@ -540,7 +540,7 @@ Today I Leaned...
 
 > ### html & CSS
 >
-> [TEAM : limrim 쇼핑몰 사이트 클론](https://github.com/HYEOK999/pinkjelly-project)
+> [**TEAM : limrim 쇼핑몰 사이트 클론**](https://github.com/HYEOK999/pinkjelly-project)
 >
 > [Tada 사이트 클론 - 모바일](https://github.com/HYEOK999/TIL/tree/master/HTML-CSS/Tada)
 >
@@ -560,21 +560,23 @@ Today I Leaned...
 >
 > [TodoList Async/Await](https://github.com/HYEOK999/TIL/blob/master/javaScript/algorithm/daily_42_todo.md)
 >
-> [TEAM : Carrot And Stick - GitHub Commit 독려 애플리케이션](https://github.com/HYEOK999/CarrotAndStick)
+> [**TEAM : Carrot And Stick - GitHub Commit 독려 애플리케이션**](https://github.com/HYEOK999/CarrotAndStick)
 >
 > <br/>
 >
 > ### React
 >
-> [React - Youtube Mini Clone no Route](https://github.com/HYEOK999/TIL/blob/master/react/YoutubeMiniClone.md)
+> [Youtube Mini Clone no Route](https://github.com/HYEOK999/TIL/blob/master/react/YoutubeMiniClone.md)
 >
-> [React - Todo List V1 : Class Component](https://github.com/HYEOK999/TIL/tree/master/react/project/Todo-Project/todo-v1)
+> [Todo List V1 : Class Component](https://github.com/HYEOK999/TIL/tree/master/react/project/Todo-Project/todo-v1)
 >
-> [React - Todo List V2 : Hook](https://github.com/HYEOK999/TIL/tree/master/react/project/Todo-Project/todo-v2)
+> [Todo List V2 : Hook](https://github.com/HYEOK999/TIL/tree/master/react/project/Todo-Project/todo-v2)
 >
-> [React - Grid Mini Project : useReducer, CustomHook, useCallback](https://github.com/HYEOK999/TIL/tree/master/react/project/react-grid-project)
+> [**Grid Mini Project : useReducer, CustomHook, useCallback**](https://github.com/HYEOK999/TIL/tree/master/react/project/react-grid-project)
 >
-> [TEAM : SkyPrinter - SkyScanner Live Search Clone](https://github.com/HYEOK999/skyprinter)
+> [**TEAM : Carrot And Stick - GitHub Commit 독려 애플리케이션 Ver. React**](https://github.com/HYEOK999/carrot-and-stick-react)
+>
+> [**TEAM : SkyPrinter - SkyScanner Live Search Clone**](https://github.com/HYEOK999/skyprinter)
 >
 > - [RapidAPISkyscanner-API-Documentation](https://github.com/HYEOK999/skyprinter/blob/master/RapidAPISkyscanner-API-Documentation.md)
 > - [Mainpage-Documentation & Use cases](https://github.com/HYEOK999/skyprinter/blob/master/Mainpage-Use-cases-Documentation.md)
