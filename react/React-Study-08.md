@@ -2,400 +2,673 @@
 
 --------------
 
-# React Re-Study : 7
+# React Re-Study : 8
 
-- [시작하기 앞서 정리하기](#a1)
-- [프리젠테이셜 컴포넌트 와 컨테이너 컴포넌트](#a2)
-  - [프리젠테이셔널 컴포넌트](#a3)
-  - [컨테이너 컴포넌트](#a4)
-  - [이 구조의 장점](#a5)
-  - [어떤걸 컨테이너로 만들어야할까?](#a6)
-- [Async Action with Redux](#a7)
-  - [비동기 처리를 위한 액션 추가 및 dispatch (예시)](#a8)
-- [리덕스 미들웨어](#a9)
-  - [미들웨어 만들어보기](#a10)
-- [Redux Dev Tools](#a11)
-- [redux-thunk](#a12)
-  - [실습](#a13)
-- [서비스 분리](#a14)
-- [HOC에 옵션을 주는 방법](#a15)
+- [Ducks Pattern](#a1)
+  - 규칙
+- [connect with hooks](#a2)
+  - 기존방식 -> src/containers/BooksContainer.jsx
+  - Hooks방식 -> src/containers/BooksContainer.jsx
+- [react-router와 redux함께 쓰기](#a3)
+- [redux-saga](#a4)
+  - 제너레이터
+- [redux-actions](#a5)
 
 <br/>
 
 -----
 
-## React Study with Mark - Redux Advanced (1) -
-
-### 시작하기 앞서 정리하기 <a id="a1"></a>
-
-컴포넌트의 모습을 결정하는 요인 2가지
-
-- `props`
-- `state`
-- 만약 다른것에 의해 컴포넌트가 다른 모습을 띈다면 컴포넌트를 신뢰할 수 없음(ex. error)
-
-side effect
-
-- side effect란 ? 
-- 함수가 일관된 결과를 보장하지 못하거나, 함수 외부 어디든지 조금이라도 영향을 주는 경우 모두 사이드 이펙트를 갖는 것
-- `history.push` 역시 side effect → React Re-Study : 8에서 디스패치로 해겨한다.
+## React Study with Mark - Redux Advanced (2) -
 
 <br/>
 
-### 프리젠테이셜 컴포넌트 와 컨테이너 컴포넌트 <a id="a2"></a>
+### [Ducks Pattern](https://github.com/JisuPark/ducks-modular-redux) <a id="a1"></a>
 
-> 리덕스를 사용하는 프로젝트에서 자주 사용되는 구조
->
-> Dumb 컴포넌트와 Smart 컴포넌트로도 알려져있다.
+전에는 `action` 폴더에  `ActionType, Action`을 모아놓고 `reducer`폴더에 `Reducer`를 모아놓았다. 이렇게 될 경우 단점은, 하나의 기능을 수정하더라도로 2개의 파일을 전부다 왔다 갔다 해야만 한다. 
 
-#### 프리젠테이셔널 컴포넌트 <a id="a3"></a>
+( Redux 공식 문서에서는 `ActionType`,` Action`, `Reducer` 전부 따로 관리하기에 3개의 파일을 수정해야함 )
 
-- 프리젠테이셔널 컴포넌트는 오직 뷰만을 담당하는 컴포넌트이다. 
-- DOM 엘리먼트, 스타일을 갖고 있으며, 프리젠테이셔널 컴포넌트나 컨테이너 컴포넌트를 가지고 있을 수도 있다. 
-- 하지만, 리덕스의 스토어에는 직접적인 접근 권한이 없으며 오직 props 로만 데이터를 가져올수 있다. 
-- 또한, 대부분의 경우 state 를 갖고있지 않으며, 갖고 있을 경우엔 데이터에 관련된 것이 아니라 UI 에 관련된 것이어야 한다.
+이러한 단점을 상쇄하고자 기능별로 `ActionType, Action, Reducer` 를 묶어 놓는 방식인 Ducks Pattern 을 사용하도록 한다.
 
-주로 함수형 컴포넌트로 작성되며, state 를 갖고있어야하거나, 최적화를 위해 LifeCycle 이 필요해질때 클래스형 컴포넌트로 작성된다.
+- 하나의 파일에 액션, 액션 생성자, 리듀서가 있음.
 
 <br/>
 
-#### 컨테이너 컴포넌트 <a id="a4"></a>
+#### 규칙
 
-- 프리젠테이셔널 컴포넌트들과 컨테이너 컴포넌트들을 관리하는것을 담당한다. 
-- 주로 내부에 DOM 엘리먼트가 직접적으로 사용되는 경우는 적으며 사용되는 경우는 감싸는 용도일때만 사용 된다. 
-- 스타일을 가지고있지 않아야 한다. 
-- 스타일들은 모두 프리젠테이셔널 컴포넌트에서 정의되어야 한다. 
-- 상태를 가지고 있을 때가 많으며, 리덕스에 직접적으로 접근 할 수 있다.
+> use case에 따라 `{actionTypes, actions, reducer}` 한 벌(한 조각)을 하나의 독립된 모듈로 묶어서 관리하도록한다.
 
-<br/>
+하나의 모듈은...
 
-#### 이 구조의 장점 <a id="a5"></a>
+1. **항상** `reducer()`란 이름의 함수를 `export default` 해야한다.
 
-UI 쪽과 Data 쪽이 분리되어 프로젝트를 이해하기가 쉬워지며, 컴포넌트의 재사용률을 높여준다.
+2. **항상** 모듈의 action 생성자들을 함수형태로 `export` 해야한다.
 
-<br/>
+3. **항상** `npm-module-or-app/reducer/ACTION_TYPE` 형태의 action 타입을 가져야 한다.
 
-#### 어떤걸 컨테이너로 만들어야할까? <a id="a6"></a>
+4. **어쩌면** action 타입들을 `UPPER_SNAKE_CASE`로 `export` 할 수 있다. 
 
-- 페이지
-- 리스트
-- 헤더
-- 사이드바
-- 내부의 컴포넌트 때문에 props가 여러 컴포넌트를 거쳐야 하는 경우
+   만약, 외부 `reducer`가 해당 action들이 발생하는지 계속 기다리거나, 재사용할 수 있는 라이브러리로 퍼블리싱할 경우.
+
+재사용가능한 Redux 라이브러리 형태로 공유하는 `{actionType, action, reducer}` 묶음에도 위 규칙을 추천한다.
+
+![ducksForderStructuer](https://user-images.githubusercontent.com/31315644/74012597-f8d42f00-49cd-11ea-8086-7111a814b74f.jpeg)
 
 <br/>
 
-### Async Action with Redux <a id="a7"></a>
-
-Q : 비동기 작업을 어디서 하느냐 ? 
-
-A : **dispatch 를 할 때** 해준다.
-
-- 당연히 리듀서는 동기적인 것 → Pure
-- dispatch 도 동기적인 것
-
-<br/>
-
-#### 비동기 처리를 위한 액션 추가 및 dispatch (예시) <a id="a8"></a>
+**src/redux/modules/books.js**
 
 ```jsx
-// 액션 정의
-export const START_RECEIVE_BOOKS = 'START_RECEIVE_BOOKS';
-export const END_RECEIVE_BOOKS = 'END_RECEIVE_BOOKS';
-export const ERROR_RECEIVE_BOOKS = 'ERROR_RECEIVE_BOOKS';
+// src/redux/modules/books.js
+
+import BookService from '../../services/BookService';
+
+// 액션 타입 정의 ("app 이름"/"reducer 이름"/"로컬 ACTION_TYPE") => 겹치지 않게 하기 위함 (덕스 규칙)
+const PENDING = 'reactjs-books-review/books/PENDING';
+const SUCCESS = 'reactjs-books-review/books/SUCCESS';
+const FAIL = 'reactjs-books-review/books/FAIL';
+
+// 리듀서 초기값
+const initialState = {
+  books: [],
+  loading: false,
+  error: null,
+};
 
 // 액션 생성자 함수
-export function startReceiveBooks() {
-  return {
-    type: START_RECEIVE_BOOKS,
-  };
-}
+const start = () => ({ type: PENDING });
+const success = books => ({ type: SUCCESS, books });
+const fail = error => ({ type: FAIL, error });
 
-export function endReceiveBooks(books) {
-  return {
-    type: END_RECEIVE_BOOKS,
-    books,
-  };
-}
-
-export function errorReceiveBooks() {
-  return {
-    type: ERROR_RECEIVE_BOOKS,
-  };
-}
-```
-
-```jsx
-// mapDispatchToProps => dispatch
-// 위치 : 컨테이너 혹은 해당 페이지
-const mapDispatchToProps = dispatch => ({
-  requestBooks: async token => {
-    dispatch(startLoading());
-    dispatch(clearError());
-    try {
-      const res = await axios.get("https://api.marktube.tv/v1/book", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      dispatch(setBooks(res.data));
-      dispatch(endLoading());
-    } catch (error) {
-      console.log(error);
-      dispatch(setError(error));
-      dispatch(endLoading());
-    }
+// thunk 함수
+export const getBooks = token => async dispatch => {
+  dispatch(start());
+  try {
+    await sleep(2000);
+    const res = await BookService.getBooks(token);
+    dispatch(success(res.data));
+  } catch (error) {
+    dispatch(fail(error));
   }
-});
+};
+
+// 리듀서
+const books = (state = initialState, action) => {
+  switch (action.type) {
+    case PENDING:
+      return {
+        books: [],
+        loading: true,
+        error: null,
+      };
+    case SUCCESS:
+      return {
+        books: [...action.books],
+        loading: false,
+        error: null,
+      };
+    case FAIL:
+      return {
+        books: [],
+        loading: false,
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};
+
+export default books;
+
+function sleep(ms) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+}
 ```
 
+<br/>
+
+**src/redux/modules/reducer.js**
+
+해당 파일은 모든 reducer들을 하나로 묶는 `combinReducers` 역할을 한다.
+
 ```jsx
-// Book.jsx 컴포넌트
-import React, { useEffect } from "react";
+import { combineReducers } from 'redux';
+import auth from './auth';
+import books from './books';
 
-const Book = props => <div>title : {props.title}</div>;
+const reducer = combineReducers({
+  auth,
+  books,
+});
 
-const Books = ({ token, loading, error, books, requestBooks }) => {
-  useEffect(() => {
-    requestBooks(token); // 컨테이너로 로직을 옮겼음.
-  }, [token, requestBooks]);
+export default reducer;
+```
+
+<br/>
+
+**src/redux/create.js**
+
+`store.js` 에 있던 내용을 `create.js` 에 옮겨준다.
+
+```jsx
+import { createStore, applyMiddleware } from 'redux';
+import reducer from './modules/reducer';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+
+export default function create(token) {
+  const initialState = {
+    books: undefined,
+    auth: {
+      token,
+      loading: false,
+      error: null,
+    },
+  };
+
+  const store = createStore(
+    reducer,
+    initialState,
+    composeWithDevTools(applyMiddleware(thunk)),
+  );
+
+  return store;
+}
+```
+
+<br/>
+
+### connect with hooks <a id="a2"></a>
+
+`connect`함수 대신에  `hooks`을 이용하여 
+
+#### 기존방식 -> src/containers/BooksContainer.jsx
+
+```jsx
+import { connect } from 'react-redux';
+import Books from '../components/Books';
+import { getBooks } from '../redux/modules/books';
+
+const mapStateToProps = state => ({
+  token: state.auth.token,
+  books: state.books.books,
+  loading: state.books.loading,
+  error: state.books.error,
+});
+
+const mapDispatchToProps = dispatch => ({
+  getBooks: token => {
+    dispatch(getBooks(token));
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Books);
+```
+
+<br/>
+
+#### Hooks방식 -> src/containers/BooksContainer.jsx
+
+- 주의 할 점: `useCallback`을 쓰지 않으면 계속 `getBooks`라는 함수를 만들기 때문에 계속 실행됨
+
+````jsx
+import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Books from '../components/Books';
+import { getBooks as getBooksAction } from '../redux/modules/books';
+
+const BooksContainer = props => {
+  const token = useSelector(state => state.auth.token);
+  const { books, loading, error } = useSelector(state => state.books);
+
+  const dispatch = useDispatch();
+  /*
+  const getBooks = useCallback(() => {
+    dispatch(getBooksAction(token));
+  }, [token, dispatch]); // token 을 보낼 필요 없다.
+  */
+  const getBooks = useCallback(() => {
+    dispatch(getBooksAction()); // token 을 thunk 안에서 처리
+  }, [dispatch]);
+  
   return (
-    <div>
-      {loading && <p>loading...</p>}
-      {error !== null && <p>{error.message}</p>}
-      {books.map(book => (
-        <Book title={book.title} key={book.bookId} />
-      ))}
-    </div>
+    <Books
+      {...props}
+      books={books}
+      loading={loading}
+      error={error}
+      getBooks={getBooks}
+    />
   );
 };
 
-export default Books;
-```
+export default BooksContainer;
+````
 
 <br/>
 
-### 리덕스 미들웨어 <a id="a9"></a>
+### react-router와 redux함께 쓰기 <a id="a3"></a>
 
-- `dispatch`가 일어나는 순간 `dispatch`의 앞과 뒤에 코드를 추가할 수 있게 해주는 것.
+`npm install connected-react-router`
 
-- 미들웨어는 보통 행동이 일어나는 앞 뒤에 해야할 일을 붙여준다.
+단방향 흐름 (예 : 히스토리-> 저장소-> 라우터-> 구성 요소)을 통해 라우터 상태를 redux 저장소와 동기화한다.
 
-- 미들웨어가 여러개면 **순차적으로 실행**
+즉, 이제부터는 router를 redux로 관리한다.
 
-- 만드는 방법 2가지
+![react-router-redux](https://user-images.githubusercontent.com/31315644/74021074-38a31280-49de-11ea-9eca-3a99f3864661.jpeg)
 
-  1. 스토어를 만들 때 미들웨어를 설정한다.
+적용 순서는 다음과 같다.
 
-     (`{createStore, applyMiddleware} from redux`)
+1. [reducer.js에 router 라는 state를 combine](#c1)
 
-  2. `dispatch`가 호출될 때 실제로 미들웨어를 통과하는 부분(직접 미들웨어를 만들 때 사용)
+2. [creat.js에 store에 routerMiddleware를 추가](#c2)
+
+3. [App.js에 ConnectedRouter를 추가](#c3)
+
+4. [auth.js에 history.push() 대신 dispatch(push())를 추가](#c4)
+
+5. **reducer.js에 router 라는 state를 combine** <a id="c1"></a>
+
+   ```jsx
+   // src/redux/modules/reducer.js
+   
+   import { combineReducers } from 'redux';
+   import auth from './auth';
+   import books from './books';
+   import { connectRouter } from 'connected-react-router';
+   
+   const reducer = history =>
+     combineReducers({
+       auth,
+       books,
+       router: connectRouter(history),
+     });
+   
+   export default reducer;
+   ```
+
+   <br/>
+
+6. **creat.js에 store에 routerMiddleware를 추가** <a id="c2"></a>
+
+   ```jsx
+   // src/redux/create.js
+   
+   import { createStore, applyMiddleware } from 'redux';
+   import reducer from './modules/reducer';
+   import { composeWithDevTools } from 'redux-devtools-extension';
+   import thunk from 'redux-thunk';
+   import { createBrowserHistory } from 'history';
+   import { routerMiddleware } from 'connected-react-router';
+   
+   export const history = createBrowserHistory();
+   
+   export default function create(token) {
+     const initialState = {
+       books: undefined,
+       auth: {
+         token,
+         loading: false,
+         error: null,
+       },
+     };
+   
+     const store = createStore(
+       reducer(history),
+       initialState,
+       composeWithDevTools(applyMiddleware(thunk, routerMiddleware(history))),
+     );
+   
+     return store;
+   }
+   ```
+
+   <br/>
+
+7. **App.js에 ConnectedRouter를 추가** <a id="c3"></a>
+
+   ```jsx
+   import React from 'react';
+   import { Switch, Route } from 'react-router-dom';
+   import Home from './pages/Home';
+   import Signin from './pages/Signin';
+   import NotFound from './pages/NotFound';
+   import ErrorBoundary from 'react-error-boundary';
+   import { ConnectedRouter } from 'connected-react-router';
+   import { history } from './redux/create';
+   
+   const ErrorFallbackComponent = ({ error }) => <div>{error.message}</div>;
+   
+   const App = () => (
+     <ErrorBoundary FallbackComponent={ErrorFallbackComponent}>
+       <ConnectedRouter history={history}>
+         <Switch>
+           <Route exact path="/signin" component={Signin} />
+           <Route exact path="/" component={Home} />
+           <Route component={NotFound} />
+         </Switch>
+       </ConnectedRouter>
+     </ErrorBoundary>
+   );
+   
+   export default App;
+   ```
+
+   <br/>
+
+8. **auth.js에 history.push() 대신 dispatch(push())를 추가** <a id="c4"></a>
+
+   ```jsx
+   // src/redux/modules/auth.js
+   
+   export const login = (email, password) => async dispatch => {
+     try {
+       dispatch(start());
+       const res = await UserService.login(email, password);
+       const { token } = res.data;
+       localStorage.setItem('token', token);
+       dispatch(success(token));
+       dispatch(push('/'));
+     } catch (error) {
+       dispatch(fail(error));
+     }
+   };
+   
+   ```
+
+   <br/>
+
+### redux-saga <a id="a4"></a>
+
+`npm install redux-saga`
+
+- `thunk함수`는 함수를 리턴, `saga`는 그냥 보통 일반적인 액션을 디스패치.
+- 미들웨어.
+- 제너레이터 객체를 만들어 내는 제네레이터 생성 함수를 이용한다.
+- 만드는 순서
+  1. [사가 미들웨어를 리덕스 미들웨어로 설정](#z1)
+  2. [사가 함수 만들기](#z2)
+  3. [사가함수를 실행하는 사가 만들기](#z3)
+  4. [여러 사가 모듈을 합친 rootSaga 만들기](#z4)
+  5. [rootSaga 를 사가 미들웨어로 실행](#z5)
+  6. [나의 사가 함수를 시작하게 할 액션을 디스패치](#z6)
 
 <br/>
 
-#### 미들웨어 만들어보기 <a id="a10"></a>
+#### 제너레이터
 
-- `createStore`에는 인자가 3개 들어갈 수 있다. (reducer, initialState, applyMiddleware)
-
-  initialState를 설정안하고 applyMiddleware를 삽입해도 인식한다.
-
-- `dispatch`를 안했는데 뜬다면 → 초기화할 때 실행되는 것.
+`redux-saga/effects`에는 다양한 리덕스-사가 이펙츠가 있는데 이것을 사용하기 위해서는 제너레이터를 사용해야만 한다.
 
 ```jsx
-const middleware1 = store => {
-  console.log(store); // {getState: ƒ, dispatch: ƒ}
-  return (next) => {}; // next는 함수
-}
-
-// 코드를 이렇게 추가해보자
-const middleware1 = store => {
-  console.log(store);
-  return (next) => {
-    return action => {
-      console.log('middleware1', 1, action);
-      const value = next(action); // next는 dispatch
-      console.log('middleware1', 2, action);
-      return value;
-    }
-  };
-}
-
-const middleware2 = store => {
-  console.log(store);
-  return (next) => {
-    return action => {
-      console.log('middleware2', 1, action);
-      const value = next(action); // next는 dispatch
-      console.log('middleware2', 2, action);
-      return value;
-    }
-  };
-}
-
-export default function create(initialState) {
-  return createStore(reducer, initialState, applyMiddleware(middleware1, middleware2));
-}
-
-```
-
-<br/>
-
-### Redux Dev Tools <a id="a11"></a>
-
-`npm install --save redux-devtools-extension`
-
-> 현재 리덕스 관리하고 있는 상태 및 Action들을 크롬 개발자 도구를 통해 확인할 수 있는 툴
-
-<img width="1792" alt="redux-dev-tools" src="https://user-images.githubusercontent.com/31315644/74051879-2e076e00-4a1c-11ea-8dfe-066f8c603fb2.png">
-
-<br/>
-
-### redux-thunk <a id="a12"></a>
-
-- 리덕스 미들웨어
-
-- 리덕스를 만든 사람이 만듬(Dan)
-
-- 리덕스에서 비동기 처리를 위한 라이브러리
-
-- 액션 생성자를 활용하여 비동기를 처리한다. (컨테이너에 있던 비동기 함수를 액션으로 이동)
-
-- 액션 생성자가 액션을 리턴하지 않고, 함수를 리턴함.
-
-- `thunk`는 인자로 1. dispatch 2.현재 스테이트 를 받아올 수 있다.
-
-  export const setBooksThunk = token => async dispatch, getState 
-
-- 즉, 컨테이너에서도 dispatch를 제거한다.
-
-| ----      | 기존                         | redux-thunk                                      |
-| --------- | ---------------------------- | ------------------------------------------------ |
-| container | redux의 state, dispatch 처리 | redux의 state, thunk를 사용                      |
-| Action    | action 타입, 생성자 정의     | action 타입, 생성자 정의, thunk를 정의(dispatch) |
-
-<br/>
-
-#### 실습 <a id="a13"></a>
-
-`npm i redux-thunk`
-
-1. `Books`에서 직접 데이터를 가져온다.
-2. 프리젠테이션 컴포넌트에서 하지 않는다 → 컨테이너로 이동
-3. `thunk`로 `action`을 넘겨서 깔끔하게 처리함.
-4. `action`에 비동기 로직을 모두 포함한다.
-
-<br/>
-
-**redux-thunk 설정**
-
-```jsx
-import { createStore, applyMiddleware } from "redux";
-import reducers from "./reducers";
-import { composeWithDevTools } from "redux-devtools-extension";
-import thunk from "redux-thunk"; // import
-
-const store = createStore(
-  reducers,
-  composeWithDevTools(applyMiddleware(thunk)) // 미들웨어 설정
-);
-
-export default store;
-
-```
-
-**Before Using thunk**
-
-```jsx
-// BooksContainer.jsx , dispatch를 컨테이너에서 설정함.
-const mapDispatchToProps = dispatch => ({
-  requestBooks: async token => {
-    dispatch(startLoading());
-    dispatch(clearError());
-    try { 
-      const res = await axios.get("https://api.marktube.tv/v1/book", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      dispatch(setBooks(res.data));
-      dispatch(endLoading());
-    } catch (error) {
-      console.log(error);
-      dispatch(setError(error));
-      dispatch(endLoading());
-    }
-  }
-});
-```
-
-**Use thunk**
-
-```jsx
- BooksContainer.jsx
-const mapDispatchToProps = dispatch => ({
-  requestBooks: async token => {...},
-  requestBooksThunk: token => {
-    dispatch(setBooksThunk(token)); // thunk만 로드
-  }
-});
-
-// actions/index.js
-export const setBooksThunk = token => async dispatch => {
-  dispatch(startLoading());
-  dispatch(clearError());
+// saga 함수
+function* getBooksSaga() {
+  // 비동기 로직을 수행가능하다.
+  // const token = action.payload.token;
+  const token = yield select(state => state.auth.token);
   try {
-    const res = await axios.get("https://api.marktube.tv/v1/book", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    dispatch(setBooks(res.data));
-    dispatch(endLoading());
+    // dispatch(pending());
+    yield put(pending());
+    // await sleep(2000);
+    yield delay(2000);
+    // const res = await BookRequest.getBooks(token);
+    const res = yield call(BookRequest.getBooks, token);
+    // dispatch(success(res.data));
+    yield put(success(res.data));
   } catch (error) {
-    console.log(error);
-    dispatch(setError(error));
-    dispatch(endLoading());
-  }
-};
-```
-
-<br/>
-
-### 서비스 분리 <a id="a14"></a>
-
-- HTTP Request 통신 코드들만 모아놓는다. (`axios`, `promise` ...) 
-- 특정한 `side effect`의 관심사들을 모아놓은 계층.
-- 타 컨테이너나 컴포넌트에서 사용하던 `axios`의 의존성을 제거해줄 수 있다.
-- Dependency injection
-
-```jsx
-// src/services/UserService.js
-import axios from 'axios';
-
-const USER_API_URL = 'https://api.marktube.tv/v1/me';
-
-export default class UserService {
-  static login(email, password) {
-    return axios.post(USER_API_URL, {
-      email,
-      password,
-    });
-  }
-
-  static logout(token) {
-    return axios.delete(USER_API_URL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    // dispatch(fail(error));
+    yield put(fail(error));
   }
 }
+
+export function* booksSaga() {
+  yield takeEvery(START_BOOKS_SAGA, getBooksSaga) 
+  // 어떤 함수를 실행하면 어떤 액션이 실행된다. (액션타입, 사가이름)
+}
+
 ```
+
+- `thunk`는 비동기 로직을 직접 실행 하고 다뤄야 하지만, `saga`는 비동기 로직을 대신 다뤄준다.
+- 비동기 로직 중간에 행해야 할 일들(비동기 중단, 다시하기, 딜레이 등등)을 정의할 수 있다.
 
 <br/>
 
-### HOC에 옵션을 주는 방법  <a id="a15"></a>
+**만드는 순서**
 
-- withRouter(Component), createFragment(Component, option), connect(option)(Component)
-- 언마운트 직전의 리퀘스트를 날려야 한다. (로그인 되는데 로그아웃하면 안되기 때문)
-- 로그인, 로그아웃을 하나의 서비스로 처리한다.
+1. **사가 미들웨어를 리덕스 미들웨어로 설정**  <a id="z1"></a>
+
+   ```jsx
+   // src/redux/create.js
+   
+   import { createStore, applyMiddleware } from 'redux';
+   import reducer from './modules/reducer';
+   import { composeWithDevTools } from 'redux-devtools-extension';
+   import thunk from 'redux-thunk';
+   import { createBrowserHistory } from 'history';
+   import { routerMiddleware } from 'connected-react-router';
+   import createSagaMiddleware from 'redux-saga'; // 1. import
+   
+   export const history = createBrowserHistory();
+   const sagaMiddleware = createSagaMiddleware(); // 2. saga 미들웨어 생성
+   
+   export default function create(token) {
+     const initialState = {
+       books: undefined,
+       auth: {
+         token,
+         loading: false,
+         error: null,
+       },
+     };
+   
+     const store = createStore(
+       reducer(history),
+       initialState,
+       composeWithDevTools(
+         applyMiddleware(thunk, routerMiddleware(history), sagaMiddleware), 
+         // 3. 리덕스 미들웨어에 saga 미들웨어 추가
+       ),
+     );
+   
+     return store;
+   }
+   
+   ```
+
+2. **사가 함수 만들기 ** <a id="z2"></a>
+
+   ```jsx
+   // src/redux/modules/books.js
+   
+   import { delay, put, call } from 'redux-saga'; // 사가 이펙트 추가
+   
+   // saga 함수
+   function* getBooksSaga(action) {
+     const token = action.payload.token;
+     yield put(start());
+     try {
+       yield delay(2000);
+       const res = yield call(BookService.getBooks, token);
+       yield put(success(res.data));
+     } catch (error) {
+       yield put(fail(error));
+     }
+   }
+   
+   ```
+
+3. **사가함수를 실행하는 사가 만들기** <a id="z3"></a>
+
+   ``` jsx
+   // src/redux/modules/books.js
+   
+   import { delay, put, call, takeEvery } from 'redux-saga/effects'; // 사가 이펙트 추가
+   
+   // saga 함수
+   function* getBooksSaga(action) {
+     const token = action.payload.token;
+     yield put(start());
+     try {
+       yield delay(2000);
+       const res = yield call(BookService.getBooks, token);
+       yield put(success(res.data));
+     } catch (error) {
+       yield put(fail(error));
+     }
+   }
+   
+   // getBooksSaga 를 시작하는 액션 타입 정의
+   const START_SAGA = 'START_SAGA';
+   
+   // getBooksSaga 를 시작하는 액션 생성 함수
+   export const startSaga = token => ({ type: START_SAGA, payload: { token } });
+   
+   // saga 함수를 등록하는 saga
+   export function* booksSaga() {
+     yield takeEvery(START_SAGA, getBooksSaga);
+   }
+   
+   ```
+
+4. **여러 사가 모듈을 합친 rootSaga 만들기** <a id="z4"></a>
+
+   ```jsx
+   // src/redux/modules/saga.js
+   
+   import { all } from 'redux-saga/effects';
+   import { booksSaga } from './books';
+   
+   export default function* rootSaga() {
+     yield all([booksSaga()]);
+   }
+   
+   ```
+
+5. **rootSaga 를 사가 미들웨어로 실행** <a id="z5"></a>
+
+   ```jsx
+   // src/redux/create.js
+   
+   import { createStore, applyMiddleware } from 'redux';
+   import reducer from './modules/reducer';
+   import { composeWithDevTools } from 'redux-devtools-extension';
+   import thunk from 'redux-thunk';
+   import { createBrowserHistory } from 'history';
+   import { routerMiddleware } from 'connected-react-router';
+   import createSagaMiddleware from 'redux-saga';
+   import rootSaga from './modules/saga'; // 나의 사가 가져오기
+   
+   export const history = createBrowserHistory();
+   const sagaMiddleware = createSagaMiddleware();
+   
+   export default function create(token) {
+     const initialState = {
+       books: undefined,
+       auth: {
+         token,
+         loading: false,
+         error: null,
+       },
+     };
+   
+     const store = createStore(
+       reducer(history),
+       initialState,
+       composeWithDevTools(
+         applyMiddleware(thunk, routerMiddleware(history), sagaMiddleware),
+       ),
+     );
+   
+     sagaMiddleware.run(rootSaga); // 나의 사가들을 실행
+   
+     return store;
+   }
+   
+   ```
+
+6. **나의 사가 함수를 시작하게 할 액션을 디스패치**   <a id="z6"></a>
+
+   ```jsx
+   // src/containers/BooksContainer.jsx
+   
+   import React, { useCallback } from 'react';
+   import { useSelector, useDispatch } from 'react-redux';
+   import Books from '../components/Books';
+   import { startSaga } from '../redux/modules/books';
+   
+   const BooksContainer = props => {
+     const token = useSelector(state => state.auth.token);
+     const { books, loading, error } = useSelector(state => state.books);
+   
+     const dispatch = useDispatch();
+   
+     const getBooks = useCallback(() => {
+       dispatch(startSaga(token)); // 이제 token이 필요없다.
+     }, [token, dispatch]); // 이제 token이 필요없다.
+   
+     return (
+       <Books
+         {...props}
+         books={books}
+         loading={loading}
+         error={error}
+         getBooks={getBooks}
+       />
+     );
+   };
+   
+   export default BooksContainer;
+   
+   ```
+
+   <br/>
+
+### redux-actions <a id="a5"></a>
+
+`npm i redux-actions`
+
+- 모듈 만드는 방법을 쉽게 제공한다.
+
+- 모듈 내에서 액션과 액션타입을 동시에 정의가 가능하다. ( `createActions` )
+
+  ```jsx
+  const { success, pending, fail } = createActions({
+    SUCCESS: books => ({ books }),
+  }, 'PENDING', 'FAIL', {
+    prefix: 'reactjs-books-review/books',
+    namespace: '/' // default값이 /, -붙으면 reactjs-books-review/books-PENDING
+  });
+  
+  console.log(pending());
+  console.log(success(['hello']));
+  console.log(fail(new Error));
+  
+  ```
+
+- `createAction`은 이름이 변경 가능하다. (`createActions`는 불가능.)
+
+- `handleActions`은 기존의 `reducer`를 대체한다.
+
+  ```jsx
+  const options = {
+    prefix: 'reactjs-books-review/books',
+    namespace: '/' // default값이 /, -붙으면 reactjs-books-review/books-PENDING
+  };
+  
+  const books = handleActions({
+    PENDING: (state, action) => ({ books: [], loading: true, error: null }),
+    SUCCESS: (state, action) => ({ books: action.payload.books, loading: false, error: null }),
+    FAIL: (state, action) => ({ books: [], loading: true, error: action.payload }), 
+    // 페이로드에 에러객체
+  }, initialState,
+    options
+  );
+  
+  export default books;
+  
+  ```
+
+  
