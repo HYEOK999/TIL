@@ -580,6 +580,16 @@ Today I Leaned...
 >
 > [**TEAM : Carrot And Stick - GitHub Commit 독려 애플리케이션 Ver. React**](https://github.com/HYEOK999/carrot-and-stick-react)
 >
+> [**Books Review - 개발 서적 평가 서비스**](https://github.com/HYEOK999/books-review)
+>
+> - [Develop 1 - 라우팅 설정하기 ](./Book-Review-Dev01.md)
+> - [Develop 2 - 로그인 화면 디자인](./Book-Review-Dev02.md)
+> - [Develop 3 - Redux 적용하기](./Book-Review-Dev03.md)
+> - [Develop 4 - 미들웨어 추가하기 : Redux Thunk](./Book-Review-Dev04.md)
+> - [Develop 5 - 미들웨어 추가하기 : Redux Saga](./Book-Review-Dev05.md)
+> - [Develop 6 - 프로젝트 마무리](./Book-Review-Dev06.md)
+> - [구현사이트 바로가기 - 해당사이트는 API가 Personal로 관리되어 ID/PW가 별도로 필요합니다.](http://hyeok999-books-review.s3-website.ap-northeast-2.amazonaws.com)
+>
 > [**TEAM : SkyPrinter - SkyScanner Live Search Clone**](https://github.com/HYEOK999/skyprinter)
 >
 > - [RapidAPISkyscanner-API-Documentation](https://github.com/HYEOK999/skyprinter/blob/master/RapidAPISkyscanner-API-Documentation.md)
@@ -589,5 +599,6 @@ Today I Leaned...
 > - [CreateSession](https://github.com/HYEOK999/skyprinter/blob/master/CreateSession.md)
 > - [ProgressBar](https://github.com/HYEOK999/skyprinter/blob/master/ProgressBar.md)
 > - [FilterArea](https://github.com/HYEOK999/skyprinter/blob/master/FilterArea.md)
+> - [구현사이트 바로가기](http://hyeok999-skyprinter.s3-website.ap-northeast-2.amazonaws.com/)
 
 <br/>
