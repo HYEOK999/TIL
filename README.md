@@ -589,6 +589,7 @@ Today I Leaned...
 > - [Develop 5 - 미들웨어 추가하기 : Redux Saga](https://github.com/HYEOK999/books-review/blob/master/Book-Review-Dev05.md)
 > - [Develop 6 - 프로젝트 마무리](https://github.com/HYEOK999/books-review/blob/master/Book-Review-Dev06.md)
 > - [구현사이트 바로가기 - 해당사이트는 API가 Personal로 관리되어 ID/PW가 별도로 필요합니다.](http://hyeok999-books-review.s3-website.ap-northeast-2.amazonaws.com)
+>   - 사이트 회원가입이 별도로 안되므로 [iasg2004@naver.com](mailto:iasg2004@naver.com) 로 메일 주시거나 혹은 `issue`로 코멘트를 달아주시면 둘러보실수 있는 ID/PW를 드리겠습니다.
 >
 > [**TEAM : SkyPrinter - SkyScanner Live Search Clone**](https://github.com/HYEOK999/skyprinter)
 >
