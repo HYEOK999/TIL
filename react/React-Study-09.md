@@ -1,674 +1,522 @@
-![React2-Thumbnail](https://user-images.githubusercontent.com/31315644/72333302-e6ccdc80-36fe-11ea-9b80-e00b0d5f5847.png)
+- ![React2-Thumbnail](https://user-images.githubusercontent.com/31315644/72333302-e6ccdc80-36fe-11ea-9b80-e00b0d5f5847.png)
 
---------------
-
-# React Re-Study : 8
-
-- [Ducks Pattern](#a1)
-  - 규칙
-- [connect with hooks](#a2)
-  - 기존방식 -> src/containers/BooksContainer.jsx
-  - Hooks방식 -> src/containers/BooksContainer.jsx
-- [react-router와 redux함께 쓰기](#a3)
-- [redux-saga](#a4)
-  - 제너레이터
-- [redux-actions](#a5)
-
-<br/>
-
+  --------------
+  
+  # React Re-Study : 9
+  
+  - [Unit Test](#a1)
+  - [facebook/jest](#a2)
+    - jest 3가지 문법
+    - it (= test), describe, expect
+    - .not.to
+    - jest는 기본으로 한 테스트가 5초로 설정되어 있다.
+  - [react-component-test](#a3)
+    - [실습 컴포넌트 테스트 짜보기](#a4)
+      - [Button 컴포넌트](#a5)
+  - [enzyme](#a6)
+  - [컨테이너 테스트](#a7)
+  
+  <br/>
+  
 -----
-
-## React Study with Mark - Redux Advanced (2) -
-
-<br/>
-
-### [Ducks Pattern](https://github.com/JisuPark/ducks-modular-redux) <a id="a1"></a>
-
-전에는 `action` 폴더에  `ActionType, Action`을 모아놓고 `reducer`폴더에 `Reducer`를 모아놓았다. 이렇게 될 경우 단점은, 하나의 기능을 수정하더라도로 2개의 파일을 전부다 왔다 갔다 해야만 한다. 
-
-( Redux 공식 문서에서는 `ActionType`,` Action`, `Reducer` 전부 따로 관리하기에 3개의 파일을 수정해야함 )
-
-이러한 단점을 상쇄하고자 기능별로 `ActionType, Action, Reducer` 를 묶어 놓는 방식인 Ducks Pattern 을 사용하도록 한다.
-
-- 하나의 파일에 액션, 액션 생성자, 리듀서가 있음.
-
-<br/>
-
-#### 규칙
-
-> use case에 따라 `{actionTypes, actions, reducer}` 한 벌(한 조각)을 하나의 독립된 모듈로 묶어서 관리하도록한다.
-
-하나의 모듈은...
-
-1. **항상** `reducer()`란 이름의 함수를 `export default` 해야한다.
-
-2. **항상** 모듈의 action 생성자들을 함수형태로 `export` 해야한다.
-
-3. **항상** `npm-module-or-app/reducer/ACTION_TYPE` 형태의 action 타입을 가져야 한다.
-
-4. **어쩌면** action 타입들을 `UPPER_SNAKE_CASE`로 `export` 할 수 있다. 
-
-   만약, 외부 `reducer`가 해당 action들이 발생하는지 계속 기다리거나, 재사용할 수 있는 라이브러리로 퍼블리싱할 경우.
-
-재사용가능한 Redux 라이브러리 형태로 공유하는 `{actionType, action, reducer}` 묶음에도 위 규칙을 추천한다.
-
-![ducksForderStructuer](https://user-images.githubusercontent.com/31315644/74012597-f8d42f00-49cd-11ea-8086-7111a814b74f.jpeg)
-
-<br/>
-
-**src/redux/modules/books.js**
-
-```jsx
-// src/redux/modules/books.js
-
-import BookService from '../../services/BookService';
-
-// 액션 타입 정의 ("app 이름"/"reducer 이름"/"로컬 ACTION_TYPE") => 겹치지 않게 하기 위함 (덕스 규칙)
-const PENDING = 'reactjs-books-review/books/PENDING';
-const SUCCESS = 'reactjs-books-review/books/SUCCESS';
-const FAIL = 'reactjs-books-review/books/FAIL';
-
-// 리듀서 초기값
-const initialState = {
-  books: [],
-  loading: false,
-  error: null,
-};
-
-// 액션 생성자 함수
-const start = () => ({ type: PENDING });
-const success = books => ({ type: SUCCESS, books });
-const fail = error => ({ type: FAIL, error });
-
-// thunk 함수
-export const getBooks = token => async dispatch => {
-  dispatch(start());
-  try {
-    await sleep(2000);
-    const res = await BookService.getBooks(token);
-    dispatch(success(res.data));
-  } catch (error) {
-    dispatch(fail(error));
-  }
-};
-
-// 리듀서
-const books = (state = initialState, action) => {
-  switch (action.type) {
-    case PENDING:
-      return {
-        books: [],
-        loading: true,
-        error: null,
+  
+  ## React Study with Mark - React Testing -
+  
+  - JavaScript Unit Test
+  - Jest 
+  - 리액트 컴포넌트 테스트
+  - react-testing-library 활용하기
+  - 리덕스 / 비동기작업의 테스트
+  
+  <br/>
+  
+  ### Unit Test   <a id="a1"></a>
+  
+  > TDD : Test Driven Development - 테스트 주도 개발
+  > → 코딩이 아니라 테스트코드를 먼저 작성 하는 개발 방식.
+  
+  - 통합테스트에 비해 빠르고 쉽다.
+  - 통합테스트를 진행하기 전에 문제를 찾아낼 수 있다.
+  - 그렇다고, 통합테스트가 성공하리란 보장은 없다.
+  - 테스트 코드가 살아있는(동작을 설명하는) 명세가 된다.
+  - 테스트를 읽고 어떻게 동작하는지도 예측 가능하다.
+  - (선 코딩 후, (몰아서) 단위테스트가 아닌...) 소프트웨어 장인이 되려면 TDD를 해야한다. 
+  
+  <br/>
+  
+  ### facebook/jest  <a id="a2"></a>
+  
+  > Jest : Test Runner (실행)
+  
+  - Mocha에 비해 느리지만, npx로 만든 react프로젝트를 생성할 경우 기본 탑재되어있다.
+  - 리액트의 영향이 크겠지만 가장 핫한 테스트 도구
+  - 👩🏻‍💻 Easy Setup
+  - 🏃🏽 Instant Feedback
+    - 고친 파일만 빠르게 테스트 다시 해주는 기능 등
+  - 📸 Snapshot Testing
+    - 컴포넌트 테스트에 중요한 역할을 하는 스냅샷
+  
+  <br/>
+  
+  #### jest 3가지 문법
+  
+  - assert.equal(a, b); → node.js의 내장 API
+  - expect(a).toBe(b); → jest는 기본적으로 expect 제공
+  - a.should.be(b); → Chai 라이브러리
+  
+  <br/>
+  
+  #### it (= test), describe, expect
+  
+  - 테스트의 단위 설정
+  - describe는 카테고리화를 의미한다.
+  - `expect().toBe()`는 원시값. 
+  - `expect().toEqual()`는 참조값.(객체) 
+  
+  ```jsx
+  describe('expect test', () => {
+    it('37 to equal 37', () => {
+      const received = 37;
+      const expected = 37;
+      expect(received).toBe(expected);
+    });
+  
+    it('{age: 37} to equal {age: 37}', () => {
+      const received = {
+        age: 37,
       };
-    case SUCCESS:
-      return {
-        books: [...action.books],
-        loading: false,
-        error: null,
+      const expected = {
+        age: 37,
       };
-    case FAIL:
-      return {
-        books: [],
-        loading: false,
-        error: action.error,
+      expect(received).toBe(expected);
+    });
+  
+    it('{age: 37} to equal {age: 37}', () => {
+      const received = {
+        age: 37,
       };
-    default:
-      return state;
-  }
-};
-
-export default books;
-
-function sleep(ms) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, ms);
+      const expected = {
+        age: 37,
+      };
+      expect(received).toEqual(expected);
+    });
   });
-}
-```
-
-<br/>
-
-**src/redux/modules/reducer.js**
-
-해당 파일은 모든 reducer들을 하나로 묶는 `combinReducers` 역할을 한다.
-
-```jsx
-import { combineReducers } from 'redux';
-import auth from './auth';
-import books from './books';
-
-const reducer = combineReducers({
-  auth,
-  books,
-});
-
-export default reducer;
-```
-
-<br/>
-
-**src/redux/create.js**
-
-`store.js` 에 있던 내용을 `create.js` 에 옮겨준다.
-
-```jsx
-import { createStore, applyMiddleware } from 'redux';
-import reducer from './modules/reducer';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
-
-export default function create(token) {
-  const initialState = {
-    books: undefined,
-    auth: {
-      token,
+  ```
+  
+  <br/>
+  
+  #### .not.to
+  
+  - 의미상으로 37은 36이 아니어야 한다/37은 36이 아니다가 다름
+  
+  ````js
+  describe('.not.to~ test', () => {
+    it('.not.toBe', () => {
+      expect(37).not.toBe(36);
+    });
+  
+    it('.not.toBeFalsy', () => {
+      expect(true).not.toBeFalsy();
+      expect(1).not.toBeFalsy();
+      expect('hello').not.toBeFalsy();
+      expect({}).not.toBeFalsy();
+    });
+  
+    it('.not.toBeGreaterThan', () => {
+      expect(10).not.toBeGreaterThan(10);
+    });
+  });
+  ````
+  
+  <br/>
+  
+  #### jest는 기본으로 한 테스트가 5초로 설정되어 있다.
+  
+  - 그 이상을 원할 경우 `jest.setTimeout(30000)`과 같이 별도의 값을 설정해야 한다.
+  
+  <br/>
+  
+  ### react-component-test  <a id="a3"></a>
+  
+  - 마틴 파울러, 켄트 백, Kent C. Dodde([테스팅 라이브러리](https://testing-library.com/)) 
+  
+  - 테스트를 통과하는 최소한의 행동만 함.
+  
+    - '버튼이 눌렸다' 같은 행동은 `onClick`같은 이벤트 핸들러를 생각 하면 안된다. (일단은 텍스트만 넣고 다음 단계로 넘어가면서 문제가 생길 때 해결해야 한다.)
+  
+  - 5초 지난 후 워닝 메시지가 뜰 경우,
+  
+    - timer를 null로 초기화.
+    - 처음 클릭할 때 넘어가서 메시지 셋팅되고 셋타임아웃을 한 인티저가 들어가서 언마운트 될 때 인티저(넘버)면 clearTimeout을 해준다.
+  
+    - functinal conponent안에 let을 써서 해결하는 경우는 없다.(let timer XXXX → ref를 이용해서 해결)
+    - 앞의 렌더와 뒤의 렌더는 서로 공유될 수 없다.
+    - 렌더가 다시 되어도 Referrence가 유지되어야 한다 -> useRef
+  
+  - 테스트 종료 후 코드를 수정할 때 앞의 테스트가 깨지지 않으면 된다.(회귀 테스트)
+  
+  <br/>
+  
+  #### 실습 컴포넌트 테스트 짜보기  <a id="a4"></a>
+  
+  >  Given - When - Then 으로 작성한다.
+  >
+  >  bash 명령어 : npm test
+  >
+  >  "scripts": { ... , "test": "react-scripts test", ... }
+  
+  ```jsx
+  // 예시
+    it(`버튼을 클릭하면, p 태그 안에 "버튼이 방금 눌렸다." 라고 쓰여진다.`, () => {
+      // Given
+      const { getByText } = render(<Button />);
+      const button = getByText('button');
+  
+      // When
+      fireEvent.click(button);
+  
+      // Then
+      const p = getByText('버튼이 방금 눌렸다.');
+      expect(p).toBeInstanceOf(HTMLParagraphElement);
+    });
+  ```
+  
+  <br/>
+  
+  ##### Button 컴포넌트 <a id="a5"></a>
+  
+  1. [*컴포넌트가 정상적으로 생성된다.*](#c1)
+  2. [*"button" 이라고 쓰여있는 엘리먼트는 HTMLButtonElement 이다.*](#c2)
+  3. [*버튼을 클릭하면, p 태그 안에 "버튼이 방금 눌렸다." 라고 쓰여진다.*](#c3)
+  4. [*버튼을 클릭하기 전에는, p 태그 안에 "버튼이 눌리지 않았다." 라고 쓰여진다.*](#c4)
+  5. [*버튼을 클릭하고 5초 뒤에는, p 태그 안에 "버튼이 눌리지 않았다." 라고 쓰여진다.*](#c5)
+  6. [*버튼을 클릭하면, 5초 동안 버튼이 비활성화 된다.*](#c6)
+  
+  <br/>
+  
+  1. *컴포넌트가 정상적으로 생성된다.*  <a id="c1"></a>
+  
+  ```jsx
+  // src/components/Button.test.js
+  import React from "react";
+  import Button from "./Button";
+  import { render } from "@testing-library/react";
+  
+  describe("Button 컴포넌트 (@testing-library/react)", () => {
+    it("컴포넌트가 정상적으로 생성된다.", async () => {
+      render(<Button />);
+    });
+  });
+  
+  // src/components/Button.jsx
+  import React from "react";
+  const Button = () => <></>;
+  export default Button;
+  ```
+  
+  <br/>
+  
+  2. *"button" 이라고 쓰여있는 엘리먼트는 HTMLButtonElement 이다.* <a id="c2"></a>
+  
+  ```jsx
+  // src/components/Button.test.js
+  describe("Button 컴포넌트", () => {
+    // ...
+    
+    it(`"button" 이라고 쓰여있는 엘리먼트는 HTMLButtonElement 이다.`, () => {
+      const { getByText } = render(<Button />);
+      const buttonElement = getByText("button");
+      expect(buttonElement).toBeInstanceOf(HTMLButtonElement);
+    });
+  });
+  
+  // src/components/Button.jsx
+  import React from "react";
+  const Button = () => <button>button</button>;
+  export default Button;
+  ```
+  
+  <br/>
+  
+  3. *버튼을 클릭하면, p 태그 안에 "버튼이 방금 눌렸다." 라고 쓰여진다.*  <a id="c3"></a>
+  
+  ```jsx
+  // src/components/Button.test.js
+  describe("Button 컴포넌트 (@testing-library/react)", () => {
+    // ...
+    
+    it(`버튼을 클릭하면, p 태그 안에 "버튼이 방금 눌렸다." 라고 쓰여진다.`, () => {
+      const { getByText } = render(<Button />);
+      const button = getByText("button");
+      fireEvent.click(button);
+      const p = getByText("버튼이 방금 눌렸다.");
+      expect(p).not.toBeNull();
+      expect(p).toBeInstanceOf(HTMLParagraphElement);
+    });
+  });
+  
+  // src/components/Button.jsx
+  import React from "react";
+  const Button = () => (
+    <>
+      <button>button</button>
+      <p>버튼이 방금 눌렸다.</p>
+    </>
+  );
+  export default Button;
+  ```
+  
+  <br/>
+  
+  4. *버튼을 클릭하기 전에는, p 태그 안에 "버튼이 눌리지 않았다." 라고 쓰여진다.*  <a id="c4"></a>
+  
+  ```jsx
+  // src/components/Button.test.js
+  describe("Button 컴포넌트 (@testing-library/react)", () => {
+    // ...
+    
+    it(`버튼을 클릭하기 전에는, p 태그 안에 "버튼이 눌리지 않았다." 라고 쓰여진다.`, () => {
+      const { getByText } = render(<Button />);
+  
+      const p = getByText("버튼이 눌리지 않았다.");
+      expect(p).not.toBeNull();
+      expect(p).toBeInstanceOf(HTMLParagraphElement);
+    });
+  });
+  
+  // src/components/Button.jsx
+  import React, { useState } from "react";
+  
+  const Button = () => {
+    const [message, setMessage] = useState("버튼이 눌리지 않았다.");
+    function click() {
+      setMessage("버튼이 방금 눌렸다.");
+    }
+    return (
+      <>
+        <button onClick={click}>button</button>
+        <p>{message}</p>
+      </>
+    );
+  };
+  
+  export default Button;
+  ```
+  
+  <br/>
+  
+  5. *버튼을 클릭하고 5초 뒤에는, p 태그 안에 "버튼이 눌리지 않았다." 라고 쓰여진다.*  <a id="c5"></a>
+  
+  ```jsx
+  // src/components/Button.test.js
+  jest.useFakeTimers();
+  
+  describe("Button 컴포넌트 (@testing-library/react)", () => {
+    // ...
+    
+    it(`버튼을 클릭하고 5초 뒤에는, p 태그 안에 "버튼이 눌리지 않았다." 라고 쓰여진다.`, async () => {
+      const { getByText } = render(<Button />);
+      const button = getByText("button");
+      fireEvent.click(button);
+      act(() => {
+        jest.advanceTimersByTime(5000);
+      });
+      const p = getByText("버튼이 눌리지 않았다.");
+      expect(p).not.toBeNull();
+      expect(p).toBeInstanceOf(HTMLParagraphElement);
+    });
+  });
+  
+  // src/components/Button.jsx
+  
+  import React, { useState, useEffect, useRef } from "react";
+  const Button = () => {
+    const [message, setMessage] = useState("버튼이 눌리지 않았다.");
+    const timer = useRef(null);
+  
+    function click() {
+      if (timer.current !== null) clearTimeout(timer);
+      setMessage("버튼이 방금 눌렸다.");
+      timer.current = setTimeout(() => {
+        setMessage("버튼이 눌리지 않았다.");
+      }, 5000);
+    }
+  
+    useEffect(() => {
+      return () => {
+        if (timer.current !== null) clearTimeout(timer.current);
+      };
+    }, []);
+  
+    return (
+      <>
+        <button onClick={click}>button</button>
+        <p>{message}</p>
+      </>
+    );
+  };
+  
+  export default Button;
+  ```
+  
+  <br/>
+  
+  6. *버튼을 클릭하면, 5초 동안 버튼이 비활성화 된다.*  <a id="c6"></a>
+  
+  ```jsx
+  // src/components/Button.test.js
+  jest.useFakeTimers();
+  
+  describe("Button 컴포넌트 (@testing-library/react)", () => {
+    // ...
+    
+    it(`버튼을 클릭하면, 5초 동안 버튼이 비활성화 된다.`, () => {
+      const { getByText } = render(<Button />);
+      const button = getByText("button");
+      fireEvent.click(button);
+      // expect(button).toBeDisabled();
+      expect(button.disabled).toBeTruthy(); 
+      act(() => {
+        jest.advanceTimersByTime(5000);
+      });
+      // expect(button).not.toBeDisabled();
+      expect(button.disabled).toBeFalsy(); 
+    });
+  });
+  
+  // src/components/Button.jsx
+  import React, { useState, useEffect, useRef } from "react";
+  
+  const Button = () => {
+    const [message, setMessage] = useState("버튼이 눌리지 않았다.");
+    const timer = useRef(null);
+  
+    function click() {
+      if (timer.current !== null) clearTimeout(timer);
+      setMessage("버튼이 방금 눌렸다.");
+      timer.current = setTimeout(() => {
+        setMessage("버튼이 눌리지 않았다.");
+      }, 5000);
+    }
+  
+    useEffect(() => {
+      return () => {
+        if (timer.current !== null) clearTimeout(timer.current);
+      };
+    }, []);
+  
+    return (
+      <>
+        <button onClick={click} disabled={message === "버튼이 방금 눌렸다."}>
+          button
+        </button>
+        <p>{message}</p>
+      </>
+    );
+  };
+  
+  export default Button;
+  
+  ```
+  
+  <br/>
+  
+  ### enzyme  <a id="a6"></a>
+  
+  - 렌더를 시킨다음에 렌더된 결과물을 래퍼라고 하는 클래스형태로 래퍼해놓은 다른 데이터 객체를 사용
+  
+    - 리액트 버전에 따라 래핑된 데이터 구조가 다를 수 있기 때문에 리액트 버전을 맞춰 주어야 함
+  
+  - jest는 테스트 프레임워크
+  
+  - enzyme는 테스트 라이브러리
+  
+  - **enzyme**에는 adapter를 적용하는 configure를 제외하면 크게 세 가지 메소드가 있다. 
+  
+    - shallow, mount, render ([API](http://airbnb.io/enzyme/docs/api/)) 
+    - shallow: 간단한 컴포넌트를 메모리 상에 렌더링한다. 단일 컴포넌트를 테스트할 때 유용하다.
+  
+    - mount: HOC나 자식 컴포넌트까지 전부 렌더링한다. 다른 컴포넌트와의 관계를 테스트할 때 유용하다.
+    - render: 컴포넌트를 정적인 html로 렌더링한다. 컴포넌트가 브라우저에 붙었을 때 html로 어떻게 되는지 판단할 때 사용한다.
+  
+   <br/>
+  
+  ### 컨테이너 테스트  <a id="a7"></a>
+  
+  ```jsx
+  import React from "react";
+  import Enzyme, { mount } from "enzyme";
+  import BooksContainer from "./BooksContainer";
+  import configureMockStore from "redux-mock-store";
+  import Adapter from "enzyme-adapter-react-16";
+  
+  Enzyme.configure({ adapter: new Adapter() });
+  
+  describe("BookContainer", () => {
+    const mockStore = configureMockStore();
+  
+    // 가짜 스토어 만들기
+    let store = mockStore({
+      books: [],
       loading: false,
       error: null,
-    },
-  };
-
-  const store = createStore(
-    reducer,
-    initialState,
-    composeWithDevTools(applyMiddleware(thunk)),
-  );
-
-  return store;
-}
-```
-
-<br/>
-
-### connect with hooks <a id="a2"></a>
-
-`connect`함수 대신에  `hooks`을 이용하여 
-
-#### 기존방식 -> src/containers/BooksContainer.jsx
-
-```jsx
-import { connect } from 'react-redux';
-import Books from '../components/Books';
-import { getBooks } from '../redux/modules/books';
-
-const mapStateToProps = state => ({
-  token: state.auth.token,
-  books: state.books.books,
-  loading: state.books.loading,
-  error: state.books.error,
-});
-
-const mapDispatchToProps = dispatch => ({
-  getBooks: token => {
-    dispatch(getBooks(token));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Books);
-```
-
-<br/>
-
-#### Hooks방식 -> src/containers/BooksContainer.jsx
-
-- 주의 할 점: `useCallback`을 쓰지 않으면 계속 `getBooks`라는 함수를 만들기 때문에 계속 실행됨
-
-````jsx
-import React, { useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import Books from '../components/Books';
-import { getBooks as getBooksAction } from '../redux/modules/books';
-
-const BooksContainer = props => {
-  const token = useSelector(state => state.auth.token);
-  const { books, loading, error } = useSelector(state => state.books);
-
-  const dispatch = useDispatch();
-  /*
-  const getBooks = useCallback(() => {
-    dispatch(getBooksAction(token));
-  }, [token, dispatch]); // token 을 보낼 필요 없다.
-  */
-  const getBooks = useCallback(() => {
-    dispatch(getBooksAction()); // token 을 thunk 안에서 처리
-  }, [dispatch]);
+      token: "",
+      router: {
+        location: {
+          pathname: "/"
+        }
+      }
+    });
   
-  return (
-    <Books
-      {...props}
-      books={books}
-      loading={loading}
-      error={error}
-      getBooks={getBooks}
-    />
-  );
-};
-
-export default BooksContainer;
-````
-
-<br/>
-
-### react-router와 redux함께 쓰기 <a id="a3"></a>
-
-`npm install connected-react-router`
-
-단방향 흐름 (예 : 히스토리-> 저장소-> 라우터-> 구성 요소)을 통해 라우터 상태를 redux 저장소와 동기화한다.
-
-즉, 이제부터는 router를 redux로 관리한다.
-
-![react-router-redux](https://user-images.githubusercontent.com/31315644/74021074-38a31280-49de-11ea-9eca-3a99f3864661.jpeg)
-
-적용 순서는 다음과 같다.
-
-1. [reducer.js에 router 라는 state를 combine](#c1)
-
-2. [creat.js에 store에 routerMiddleware를 추가](#c2)
-
-3. [App.js에 ConnectedRouter를 추가](#c3)
-
-4. [auth.js에 history.push() 대신 dispatch(push())를 추가](#c4)
-
-5. **reducer.js에 router 라는 state를 combine** <a id="c1"></a>
-
-   ```jsx
-   // src/redux/modules/reducer.js
-   
-   import { combineReducers } from 'redux';
-   import auth from './auth';
-   import books from './books';
-   import { connectRouter } from 'connected-react-router';
-   
-   const reducer = history =>
-     combineReducers({
-       auth,
-       books,
-       router: connectRouter(history),
-     });
-   
-   export default reducer;
-   ```
-
-   <br/>
-
-6. **creat.js에 store에 routerMiddleware를 추가** <a id="c2"></a>
-
-   ```jsx
-   // src/redux/create.js
-   
-   import { createStore, applyMiddleware } from 'redux';
-   import reducer from './modules/reducer';
-   import { composeWithDevTools } from 'redux-devtools-extension';
-   import thunk from 'redux-thunk';
-   import { createBrowserHistory } from 'history';
-   import { routerMiddleware } from 'connected-react-router';
-   
-   export const history = createBrowserHistory();
-   
-   export default function create(token) {
-     const initialState = {
-       books: undefined,
-       auth: {
-         token,
-         loading: false,
-         error: null,
-       },
-     };
-   
-     const store = createStore(
-       reducer(history),
-       initialState,
-       composeWithDevTools(applyMiddleware(thunk, routerMiddleware(history))),
-     );
-   
-     return store;
-   }
-   ```
-
-   <br/>
-
-7. **App.js에 ConnectedRouter를 추가** <a id="c3"></a>
-
-   ```jsx
-   import React from 'react';
-   import { Switch, Route } from 'react-router-dom';
-   import Home from './pages/Home';
-   import Signin from './pages/Signin';
-   import NotFound from './pages/NotFound';
-   import ErrorBoundary from 'react-error-boundary';
-   import { ConnectedRouter } from 'connected-react-router';
-   import { history } from './redux/create';
-   
-   const ErrorFallbackComponent = ({ error }) => <div>{error.message}</div>;
-   
-   const App = () => (
-     <ErrorBoundary FallbackComponent={ErrorFallbackComponent}>
-       <ConnectedRouter history={history}>
-         <Switch>
-           <Route exact path="/signin" component={Signin} />
-           <Route exact path="/" component={Home} />
-           <Route component={NotFound} />
-         </Switch>
-       </ConnectedRouter>
-     </ErrorBoundary>
-   );
-   
-   export default App;
-   ```
-
-   <br/>
-
-8. **auth.js에 history.push() 대신 dispatch(push())를 추가** <a id="c4"></a>
-
-   ```jsx
-   // src/redux/modules/auth.js
-   
-   export const login = (email, password) => async dispatch => {
-     try {
-       dispatch(start());
-       const res = await UserService.login(email, password);
-       const { token } = res.data;
-       localStorage.setItem('token', token);
-       dispatch(success(token));
-       dispatch(push('/'));
-     } catch (error) {
-       dispatch(fail(error));
-     }
-   };
-   
-   ```
-
-   <br/>
-
-### redux-saga <a id="a4"></a>
-
-`npm install redux-saga`
-
-- `thunk함수`는 함수를 리턴, `saga`는 그냥 보통 일반적인 액션을 디스패치.
-- 미들웨어.
-- 제너레이터 객체를 만들어 내는 제네레이터 생성 함수를 이용한다.
-- 만드는 순서
-  1. [사가 미들웨어를 리덕스 미들웨어로 설정](#z1)
-  2. [사가 함수 만들기](#z2)
-  3. [사가함수를 실행하는 사가 만들기](#z3)
-  4. [여러 사가 모듈을 합친 rootSaga 만들기](#z4)
-  5. [rootSaga 를 사가 미들웨어로 실행](#z5)
-  6. [나의 사가 함수를 시작하게 할 액션을 디스패치](#z6)
-
-<br/>
-
-#### 제너레이터
-
-`redux-saga/effects`에는 다양한 리덕스-사가 이펙츠가 있는데 이것을 사용하기 위해서는 제너레이터를 사용해야만 한다.
-
-```jsx
-// saga 함수
-function* getBooksSaga() {
-  // 비동기 로직을 수행가능하다.
-  // const token = action.payload.token;
-  const token = yield select(state => state.auth.token);
-  try {
-    // dispatch(pending());
-    yield put(pending());
-    // await sleep(2000);
-    yield delay(2000);
-    // const res = await BookRequest.getBooks(token);
-    const res = yield call(BookRequest.getBooks, token);
-    // dispatch(success(res.data));
-    yield put(success(res.data));
-  } catch (error) {
-    // dispatch(fail(error));
-    yield put(fail(error));
-  }
-}
-
-export function* booksSaga() {
-  yield takeEvery(START_BOOKS_SAGA, getBooksSaga) 
-  // 어떤 함수를 실행하면 어떤 액션이 실행된다. (액션타입, 사가이름)
-}
-
-```
-
-- `thunk`는 비동기 로직을 직접 실행 하고 다뤄야 하지만, `saga`는 비동기 로직을 대신 다뤄준다.
-- 비동기 로직 중간에 행해야 할 일들(비동기 중단, 다시하기, 딜레이 등등)을 정의할 수 있다.
-
-<br/>
-
-**만드는 순서**
-
-1. **사가 미들웨어를 리덕스 미들웨어로 설정**  <a id="z1"></a>
-
-   ```jsx
-   // src/redux/create.js
-   
-   import { createStore, applyMiddleware } from 'redux';
-   import reducer from './modules/reducer';
-   import { composeWithDevTools } from 'redux-devtools-extension';
-   import thunk from 'redux-thunk';
-   import { createBrowserHistory } from 'history';
-   import { routerMiddleware } from 'connected-react-router';
-   import createSagaMiddleware from 'redux-saga'; // 1. import
-   
-   export const history = createBrowserHistory();
-   const sagaMiddleware = createSagaMiddleware(); // 2. saga 미들웨어 생성
-   
-   export default function create(token) {
-     const initialState = {
-       books: undefined,
-       auth: {
-         token,
-         loading: false,
-         error: null,
-       },
-     };
-   
-     const store = createStore(
-       reducer(history),
-       initialState,
-       composeWithDevTools(
-         applyMiddleware(thunk, routerMiddleware(history), sagaMiddleware), 
-         // 3. 리덕스 미들웨어에 saga 미들웨어 추가
-       ),
-     );
-   
-     return store;
-   }
-   
-   ```
-
-2. **사가 함수 만들기 ** <a id="z2"></a>
-
-   ```jsx
-   // src/redux/modules/books.js
-   
-   import { delay, put, call } from 'redux-saga'; // 사가 이펙트 추가
-   
-   // saga 함수
-   function* getBooksSaga(action) {
-     const token = action.payload.token;
-     yield put(start());
-     try {
-       yield delay(2000);
-       const res = yield call(BookService.getBooks, token);
-       yield put(success(res.data));
-     } catch (error) {
-       yield put(fail(error));
-     }
-   }
-   
-   ```
-
-3. **사가함수를 실행하는 사가 만들기** <a id="z3"></a>
-
-   ``` jsx
-   // src/redux/modules/books.js
-   
-   import { delay, put, call, takeEvery } from 'redux-saga/effects'; // 사가 이펙트 추가
-   
-   // saga 함수
-   function* getBooksSaga(action) {
-     const token = action.payload.token;
-     yield put(start());
-     try {
-       yield delay(2000);
-       const res = yield call(BookService.getBooks, token);
-       yield put(success(res.data));
-     } catch (error) {
-       yield put(fail(error));
-     }
-   }
-   
-   // getBooksSaga 를 시작하는 액션 타입 정의
-   const START_SAGA = 'START_SAGA';
-   
-   // getBooksSaga 를 시작하는 액션 생성 함수
-   export const startSaga = token => ({ type: START_SAGA, payload: { token } });
-   
-   // saga 함수를 등록하는 saga
-   export function* booksSaga() {
-     yield takeEvery(START_SAGA, getBooksSaga);
-   }
-   
-   ```
-
-4. **여러 사가 모듈을 합친 rootSaga 만들기** <a id="z4"></a>
-
-   ```jsx
-   // src/redux/modules/saga.js
-   
-   import { all } from 'redux-saga/effects';
-   import { booksSaga } from './books';
-   
-   export default function* rootSaga() {
-     yield all([booksSaga()]);
-   }
-   
-   ```
-
-5. **rootSaga 를 사가 미들웨어로 실행** <a id="z5"></a>
-
-   ```jsx
-   // src/redux/create.js
-   
-   import { createStore, applyMiddleware } from 'redux';
-   import reducer from './modules/reducer';
-   import { composeWithDevTools } from 'redux-devtools-extension';
-   import thunk from 'redux-thunk';
-   import { createBrowserHistory } from 'history';
-   import { routerMiddleware } from 'connected-react-router';
-   import createSagaMiddleware from 'redux-saga';
-   import rootSaga from './modules/saga'; // 나의 사가 가져오기
-   
-   export const history = createBrowserHistory();
-   const sagaMiddleware = createSagaMiddleware();
-   
-   export default function create(token) {
-     const initialState = {
-       books: undefined,
-       auth: {
-         token,
-         loading: false,
-         error: null,
-       },
-     };
-   
-     const store = createStore(
-       reducer(history),
-       initialState,
-       composeWithDevTools(
-         applyMiddleware(thunk, routerMiddleware(history), sagaMiddleware),
-       ),
-     );
-   
-     sagaMiddleware.run(rootSaga); // 나의 사가들을 실행
-   
-     return store;
-   }
-   
-   ```
-
-6. **나의 사가 함수를 시작하게 할 액션을 디스패치**   <a id="z6"></a>
-
-   ```jsx
-   // src/containers/BooksContainer.jsx
-   
-   import React, { useCallback } from 'react';
-   import { useSelector, useDispatch } from 'react-redux';
-   import Books from '../components/Books';
-   import { startSaga } from '../redux/modules/books';
-   
-   const BooksContainer = props => {
-     const token = useSelector(state => state.auth.token);
-     const { books, loading, error } = useSelector(state => state.books);
-   
-     const dispatch = useDispatch();
-   
-     const getBooks = useCallback(() => {
-       dispatch(startSaga(token)); // 이제 token이 필요없다.
-     }, [token, dispatch]); // 이제 token이 필요없다.
-   
-     return (
-       <Books
-         {...props}
-         books={books}
-         loading={loading}
-         error={error}
-         getBooks={getBooks}
-       />
-     );
-   };
-   
-   export default BooksContainer;
-   
-   ```
-
-   <br/>
-
-### redux-actions <a id="a5"></a>
-
-`npm i redux-actions`
-
-- 모듈 만드는 방법을 쉽게 제공한다.
-
-- 모듈 내에서 액션과 액션타입을 동시에 정의가 가능하다. ( `createActions` )
-
-  ```jsx
-  const { success, pending, fail } = createActions({
-    SUCCESS: books => ({ books }),
-  }, 'PENDING', 'FAIL', {
-    prefix: 'reactjs-books-review/books',
-    namespace: '/' // default값이 /, -붙으면 reactjs-books-review/books-PENDING
+    it("renders properly", () => {
+      const component = mount(<BooksContainer store={store} />);
+      expect(component).toMatchSnapshot();
+    });
   });
   
-  console.log(pending());
-  console.log(success(['hello']));
-  console.log(fail(new Error));
-  
   ```
-
-- `createAction`은 이름이 변경 가능하다. (`createActions`는 불가능.)
-
-- `handleActions`은 기존의 `reducer`를 대체한다.
-
+  
+  <br/>
+  
   ```jsx
-  const options = {
-    prefix: 'reactjs-books-review/books',
-    namespace: '/' // default값이 /, -붙으면 reactjs-books-review/books-PENDING
-  };
+  // Jest Snapshot v1, https://goo.gl/fbAQLP
   
-  const books = handleActions({
-    PENDING: (state, action) => ({ books: [], loading: true, error: null }),
-    SUCCESS: (state, action) => ({ books: action.payload.books, loading: false, error: null }),
-    FAIL: (state, action) => ({ books: [], loading: true, error: action.payload }), 
-    // 페이로드에 에러객체
-  }, initialState,
-    options
-  );
-  
-  export default books;
+  exports[`BookContainer renders properly 1`] = `
+  <Connect(Books)
+    store={
+      Object {
+        "clearActions": [Function],
+        "dispatch": [Function],
+        "getActions": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      }
+    }
+  >
+    <Books
+      books={Array []}
+      error={null}
+      loading={false}
+      requestBooksPromise={[Function]}
+      requestBooksSaga={[Function]}
+      requestBooksThunk={[Function]}
+      store={
+        Object {
+          "clearActions": [Function],
+          "dispatch": [Function],
+          "getActions": [Function],
+          "getState": [Function],
+          "replaceReducer": [Function],
+          "subscribe": [Function],
+        }
+      }
+    >
+      <div />
+    </Books>
+  </Connect(Books)>
+  `;
   
   ```
-
+  
   
