@@ -470,4 +470,4 @@ const people: Person[] = [person, expert];
 ### Reference
 
 - [velopert.log : 타입스크립트 기초 연습](https://velog.io/@velopert/typescript-basics)
-- [GitBook : 기본 타입](https://typescript-kr.github.io/pages/Basic Types.html)
+- [GitBook : 기본 타입](https://typescript-kr.github.io/pages/Basic%20Types.html)
