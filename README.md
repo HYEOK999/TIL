@@ -402,9 +402,9 @@ Today I Leaned...
 >
 > [TypeScript 문법 공부 - 02](https://github.com/HYEOK999/TIL/blob/master/javaScript/TypeScript-02.md)
 >
-> -----------------------------------------------------------------
->
 > [React에서 TypeScript 사용하기](./typescript/TypeScript-01.md)
+>
+> [TypeScript 기초 연습하기](./typescript/TypeScript-02.md)
 
 <br/>
 
