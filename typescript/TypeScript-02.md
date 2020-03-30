@@ -444,7 +444,7 @@ const expert: Developer = {
 ```typescript
 interface Person {
   name: string;
-  age?: number; // 물음표가 들어갔다는 것은, 설정을 해도 되고 안해도 되는 값이라는 것을 의미합니다.
+  age?: number; // 물음표가 들어갔다는 것은, 설정을 해도 되고 안해도 되는 값이라는 것을 의미.
 }
 interface Developer extends Person {
   skills: string[];
@@ -470,4 +470,4 @@ const people: Person[] = [person, expert];
 ### Reference
 
 - [velopert.log : 타입스크립트 기초 연습](https://velog.io/@velopert/typescript-basics)
-- [GitBook : 기본 타입]([https://typescript-kr.github.io/pages/Basic%20Types.html](https://typescript-kr.github.io/pages/Basic Types.html))
+- [GitBook : 기본 타입](https://typescript-kr.github.io/pages/Basic Types.html)
