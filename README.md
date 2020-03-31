@@ -406,7 +406,7 @@ Today I Leaned...
 >
 > [TypeScript 기초 연습하기 (셋팅, 기본 타입, 함수 타입, 인터페이스)](./typescript/TypeScript-02.md)
 >
-> [TypeScript 기초 연습하기 (타입 별명, 제네릭)](./typescript/TypeScript-02.md)
+> [TypeScript 기초 연습하기 (타입 별명, 제네릭)](./typescript/TypeScript-03.md)
 
 <br/>
 
