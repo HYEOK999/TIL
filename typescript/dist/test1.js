@@ -1,28 +1,26 @@
 "use strict";
-var Circle = /** @class */ (function () {
-    function Circle(radius) {
-        this.radius = radius;
-        this.radius = radius;
-    }
-    Circle.prototype.getArea = function () {
-        return this.radius * this.radius * Math.PI;
-    };
-    return Circle;
-}());
-var Retangle = /** @class */ (function () {
-    function Retangle(width, height) {
-        this.width = width;
-        this.height = height;
-        this.width = width;
-        this.height = height;
-    }
-    Retangle.prototype.getArea = function () {
-        return this.width * this.height;
-    };
-    return Retangle;
-}());
-var shape = [new Circle(5), new Retangle(5, 5)];
-var circle = new Circle(5);
-var rectangle = new Retangle(10, 5);
-console.log(circle.radius);
-console.log(rectangle);
+// interface Shape {
+//   getArea(): number;
+// }
+// class Circle implements Shape {
+//   constructor(public radius: number) {
+//     this.radius = radius;
+//   }
+//   getArea() {
+//     return this.radius * this.radius * Math.PI;
+//   }
+// }
+// class Rectangle implements Shape {
+//   constructor(private width: number, private height: number) {
+//     this.width = width;
+//     this.height = height;
+//   }
+//   getArea() {
+//     return this.width * this.height;
+//   }
+// }
+// const shapes: Shape[] = [new Circle(5), new Rectangle(10, 5), new Circle2(5)];
+// const circle = new Circle(5);
+// const rectangle = new Rectangle(10, 5);
+// console.log(circle.radius);
+// console.log(rectangle);
