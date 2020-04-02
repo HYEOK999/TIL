@@ -603,6 +603,8 @@ Today I Leaned...
 >
 > [**TEAM : SkyPrinter - SkyScanner Live Search Clone**](https://github.com/HYEOK999/skyprinter)
 >
+> 구현사이트 바로가기~~ : 2020년 4월부터 SkyScanner 측에서 API 제공을 멈췄습니다. 따라서 배포를 중지합니다.
+>
 > - [RapidAPISkyscanner-API-Documentation](https://github.com/HYEOK999/skyprinter/blob/master/RapidAPISkyscanner-API-Documentation.md)
 > - [Mainpage-Documentation & Use cases](https://github.com/HYEOK999/skyprinter/blob/master/Mainpage-Use-cases-Documentation.md)
 > - [SearchBox](https://github.com/HYEOK999/skyprinter/blob/master/SearchBox.md)
@@ -610,6 +612,5 @@ Today I Leaned...
 > - [CreateSession](https://github.com/HYEOK999/skyprinter/blob/master/CreateSession.md)
 > - [ProgressBar](https://github.com/HYEOK999/skyprinter/blob/master/ProgressBar.md)
 > - [FilterArea](https://github.com/HYEOK999/skyprinter/blob/master/FilterArea.md)
-> - [구현사이트 바로가기](http://hyeok999-skyprinter.s3-website.ap-northeast-2.amazonaws.com/)
 
 <br/>
