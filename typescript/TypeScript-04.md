@@ -2,204 +2,380 @@
 
 ------------
 
-# 타입스크립트 기초 연습하기 (타입 별명, 제네릭)
+# 리액트 컴포넌트 타입스크립트로 작성하기
 
 ## 목차
 
-- [Type Alias 사용하기](#a1)
-- [Generics](#a2)
-  - [함수에서 Generics 사용하기](#a3)
-  - [interface 에서 Generics 사용하기](#a4)
-  - [Type Alias 에서 Generics 사용하기](#a5)
-  - [클래스에서 Generics 사용하기](#a6)
+- [프로젝트 생성](#a1)
+- [Arrow vs Function](#a2)
+- [새로운 컴포넌트 만들기](#a3)
+  - [interface vs type](#a4)
+  - [React.FC 의 장단점](#a5)
+    - [props에 기본적으로 `children` 이 있어 사용하기 편하다](#a6)
+    - [컴포넌트의 defaultProps, propTypes, contextTypes 를 설정 할 때 자동완성이 될 수 있다는 것](#a7)
+  - [React.FC를 생략할 경우](#a8)
+  - [컴포넌트에 생략할 수 있는 props 설정하기](#a9)
+  - [컴포넌트에서 함수 타입의 props 받아오기](#a10)
+- [정리](#a11)
 
 <br/>
 
 ----------
 
-### Type Alias 사용하기 <a id="a1"></a>
+### 프로젝트 생성 <a id="a1"></a>
 
-> `type`은 특정 타입에 별칭을 붙이는 용도로 사용한다. 
->
-> 객체를, 배열, 또는 그 어떤 타입이던 별칭을 지어줄 수 있다.
+```bash
+$ npx create-react-app ts-react-tutorial --typescript
+```
 
-```typescript
-type Person = {
+`npx` 제일 뒤에 `--typescript` 가 있으면 타입스크립트 설정이 적용된 프로젝트가 생성된다.
+
+만약, 이미 진행 중인 프로젝트에 타입스크립트를 추가하려면 다음과 같은 명령어를 사용한다.
+
+``` bash
+$ npm install --save typescript @types/node @types/react @types/react-dom @types/jest
+```
+
+타입스크립트를 이용 시 특정 컴포넌트에 필요한 값이나 자동완성이 필요할 땐 `Ctrl + Space` 를 눌러보면 확인 할 수 있다.
+
+<br/>
+
+### Arrow vs Function <a id="a2"></a>
+
+프로젝트를 생성 후 `App.tsx` 를 확인해보면 다음과 같은 코드들을 확인할 수 있다.
+
+```tsx
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.tsx</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
+}
+
+export default App;
+
+```
+
+여기서 함수의 정의 형태가 일반함수로서 화살표 함수가 아니다.
+
+예전엔 컴포넌트 생성 시, `const App: React.FC = () => { ... }` 와 같이 화살표함수를 사용하여 컴포넌트가 선언되었다. 그런데, 꼭 화살표 함수를 사용하여 선언 할 필요는 없다. 최근 해외의 유명 개발자들([링크1](https://overreacted.io/a-complete-guide-to-useeffect/), [링크2](https://kentcdodds.com/blog/how-to-use-react-context-effectively))은 보통 `function` 키워드를 사용하여 함수형 컴포넌트를 선언하는 것으로 추세다. 리액트 공식 매뉴얼에서도 `function` 키워드를 사용하고 있기도 한다.
+
+반면 예전 프로젝트를 만들 때 자동 생성 된 App.tsx 의 경우 `React.FC` 라는 타입을 사용하여 화살표 함수를 사용하면서 컴포넌트를 선언했는데, 이렇게 타입하는 것이 좋을 수 도 있고 나쁠 수도 있다. 
+
+**결론적으로, 함수형 컴포넌트를 작성 할 때는 화살표 함수(=>)로 작성해도 되고, `function` 키워드를 사용해도 된다. 요즘은 `function` 키워드가 통일시 되고 있다.**
+**단, React.FC 라는 타입은 사용을 자제하는 것이 좋다.** 
+
+<br/>
+
+### 새로운 컴포넌트 만들기 <a id="a3"></a>
+
+파일 위치 : **src/Greetings.tsx**
+
+<br/>
+
+#### interface vs type <a id="a4"></a>
+
+컴포넌트의 props에 대한 타입을 선언 할 때에는 `type` 을 써도 되고, `interface` 를 사용해도 상관없다.
+
+단, 프로젝트에서 일관성만 유지하면 충분하다. (A에서는 `interface` 를 B에서는 `type` 쓰는 걸 자제)
+
+```tsx
+// type
+import React from 'react';
+
+type GreetingsProps = {
   name: string;
-  age?: number; // 물음표가 들어갔다는 것은, 설정을 해도 되고 안해도 되는 값이라는 것을 의미한다.
 };
 
-// & 는 Intersection 으로서 두개 이상의 타입들을 합쳐준다.
-// 참고: https://www.typescriptlang.org/docs/handbook/advanced-types.html#intersection-types
-type Developer = Person & {
-  skills: string[];
-};
+const Greetings: React.FC<GreetingsProps> = ({ name }) => (
+  <div>Hello, {name}</div>
+);
 
-const person: Person = {
-  name: '김사람'
-};
-
-const expert: Developer = {
-  name: '김개발',
-  skills: ['javascript', 'react']
-};
-
-type People = Person[]; // Person[] 를 이제 앞으로 People 이라는 타입으로 사용 할 수 있습니다.
-const people: People = [person, expert];
-
-type Color = 'red' | 'orange' | 'yellow';
-const color: Color = 'red';
-const colors: Color[] = ['red', 'orange'];
+export default Greetings;
 ```
 
-**Q . 위 코드를 보았을 때 interface와 많이 유사하다. 그렇다면 어떤 무엇을 쓰는게 정답일까?**
+```tsx
+// interface
+import React from 'react';
 
-**A . 정답은 어떤 것을 이용하던 상관없다. 단, 일관성 있게 사용하는 것이 중요하다.**
+interface GreetingsProps {
+  name: string;
+};
 
-구버전의 타입스크립트에서는 `type` 과 `interface` 의 차이가 많이 존재했었는데 이제는 큰 차이는 없다. 
+const Greetings: React.FC<GreetingsProps> = ({ name }) => (
+  <div>Hello, {name}</div>
+);
 
-다만 라이브러리를 작성하거나 다른 라이브러리를 위한 타입 지원 파일을 작성하게 될 때는 `interface`를 사용하는것이 권장 되고 있다.
-
-<br/>
-
-### Generics  <a id="a2"></a>
-
->  제네릭(Generics)은 타입스크립트에서 `함수`,` 클래스`, `interface`, `type`을 사용하게 될 때 여러 종류의 타입에 대하여 호환을 맞춰야 하는 상황에서 사용하는 문법이다.
-
-#### 함수에서 Generics 사용하기  <a id="a3"></a>
-
-객체 A 와 객체 B를 합쳐주는 `merge` 라는 함수를 만든다고 가정하자.
-
-이럴 경우, 객체 A와 객체 B가 어떤 타입이 올 지 알 수 없기 때문에 `any` 라는 타입을 사용한다.
-
-```jsx
-function merge(a: any, b: any): any {
-  return {
-    ...a,
-    ...b
-  };
-}
-
-const merged = merge({ foo: 1 }, { bar: 1 });
-```
-
-**문제는 위와 같은 코드를 작성할 경우, 타입추론이 모두 깨진 것이나 다름 없다.**
-
-결과가 `any` 라는 것은 즉 `merged` 안에 무엇이 있는지 알 수 없다는 뜻이기 때문이다.
-
-<br/>
-
-**위와 같은 상황에서 제네릭을 사용한다.**
-
-제네릭을 사용 할 때는 이렇게 `<T>` 처럼 꺽쇠 안에 타입의 이름을 넣어서 사용하며, 이렇게 설정을 해주면 제네릭에 해당하는 타입에는 뭐든지 들어올 수 있게 되면서도, 사용 할 때 타입이 깨지지 않게 된다.
-
-이런식으로 제네릭을 사용하게 된다면 함수의 파라미터로 넣은 실제 값의 타입을 활용하게 된다.
-
-```typescript
-function merge<A, B>(a: A, b: B): A & B {
-  return {
-    ...a,
-    ...b
-  };
-}
-
-const merged = merge({ foo: 1 }, { bar: 1 });
-
-// 다른 예시
-function wrap<T>(param: T) {
-  return {
-    param // param: number;
-  }
-}
-
-const wrapped = wrap(10);
+export default Greetings;
 ```
 
 <br/>
 
-#### interface 에서 Generics 사용하기  <a id="a4"></a>
+#### React.FC 의 장단점 <a id="a5"></a>
 
-만약 `Items` 라는 타입을 사용하게 된다면, `Items` 타입을 지니고 있는 객체의 `list` 배열은 `string[]` 타입을 지니고 있게 된다. 
+`React.FC` 를 사용 할 때는 props 의 타입을 `<Generics>` 로 넣어서 사용한다. `React.FC`를 사용해서 얻을 수 있는 장단점은 두가지가 있다. 이 두가지는 장점이 될 수 도 단점이 될 수 도 있다.
 
-이렇게 함으로써, `list`가 숫자배열인 경우, 문자열배열인경우, 객체배열, 또는 그 어떤 배열인 경우에도 하나의 `interface` 만을 사용하여 타입을 설정 할 수 있다.
+1. props에 기본적으로 `children` 이 있어 사용하기 편하다.
+2. 컴포넌트의 defaultProps, propTypes, contextTypes 를 설정 할 때 자동완성이 될 수 있다는 것.
 
-```typescript
-interface Items<T> {
-  list: T[];
-}
+<br/>
 
-const items: Items<string> = {
-  list: ['a', 'b', 'c']
+##### props에 기본적으로 `children` 이 있어 사용하기 편하다. <a id="a6"></a>
+
+이 부분은 어찌보면 장점이 될 수도 있고, 단점이 될 수도 있다.
+
+이유는 특정 컴포넌트에서는 `children` 필요할수도 하지 않을 수도 있는데, `React.FC` 는 `children` 을  옵셔널 타입으로 지정해놨기에 이는 타입스크립트의 철학과는 모호한 관계를 띄게 된다.
+
+따라서 특정 컴포넌트에서 `children` 을 필요로 한다면 반드시 `children` 타입을 명시해야한다.
+
+```tsx
+type GreetingsProps = {
+  name: string;
+  children: React.ReactNode;
 };
+```
+
+**결과 적으로 차라리, `React.FC` 를 사용하지 않고 GreetingsProps 타입을 통해 `children`이 있다 없다를 명백하게 명시하는게 덜 헷갈린다.**
+
+<br/>
+
+##### 컴포넌트의 defaultProps, propTypes, contextTypes 를 설정 할 때 자동완성이 될 수 있다는 것. <a id="a7"></a>
+
+추후 개선의 여지가 있지만, 아직까진 React.FC를 이용할 때  `defaultProps`가 제대로 동작이 되고 있지 않다.
+
+```tsx
+// src/Greetings.tsx
+import React from 'react';
+
+type GreetingsProps = {
+  name: string;
+  mark: string;
+};
+
+const Greetings: React.FC<GreetingsProps> = ({ name, mark }) => (
+  <div>
+    Hello, {name} {mark}
+  </div>
+);
+
+Greetings.defaultProps = {
+  mark: '!'
+};
+
+export default Greetings;
+```
+
+위와 같은 코드를 작성하고 `App.tsx`에서 해당 코드를 로드할 경우, 아래 부분에서 에러를 유발한다.
+
+```tsx
+// src/App.tsx
+
+import React from 'react';
+import Greetings from './Greetings';
+
+const App: React.FC = () => {
+  return <Greetings name="Hello" />; // 이 부분에서 에러
+};
+
+export default App;
 ```
 
 <br/>
 
-#### Type Alias 에서 Generics 사용하기  <a id="a5"></a>
+결국, `mark` 를 `defaultProps` 로 넣었음에도 불구하고 `mark`값이 없다면서 제대로 작동하지 않는다.
 
-```typescript
-type Items<T> = {
-  list: T[];
+`React.FC`를 쓰면서 `defaultProps` 를 사용하려면 결국 코드를 다음과 같이 작성하는 수 밖에 없다.
+
+따라서, 아래처럼 비구조화 할당을 하는 과정에서 기본값을 설정해야만 한다. 
+
+```tsx
+// src/Greetings.tsx
+
+import React from 'react';
+
+type GreetingsProps = {
+  name: string;
+  mark: string;
 };
 
-const items: Items<string> = {
-  list: ['a', 'b', 'c']
+const Greetings: React.FC<GreetingsProps> = ({ name, mark = '!' }) => (
+  <div>
+    Hello, {name} {mark}
+  </div>
+);
+
+// 결국 무의미해진 defaultProps?
+Greetings.defaultProps = {
+  mark: '!' 
 };
+
+export default Greetings;
+
 ```
 
 <br/>
 
-#### 클래스에서 Generics 사용하기  <a id="a6"></a>
+####  React.FC를 생략할 경우 <a id="a8"></a>
 
-제네릭을 이용하여 Queue 만들어보기.
+위와 같은 `React.FC`의 장점보다는 단점을 회피하고자 `React.FC` 를 생략할 경우, 다음과 같이 작성할 수 있다.
 
-Queue는 선입선출(FIFO) 의 성질을 가지고 있는 자료구조이다.
+**즉, `React.FC` 를 이용하지 않는 것이 좀 더 권장된다.**
 
-등록(`enqueue`) 한 항목을 먼저 출력(`dequeue`) 할 수 있다.
+```tsx
+// src/Greetings.tsx
+import React from 'react';
 
-제네릭을 이용한 Queue 에서는 다양한 원소 타입으로 이루어진 Queue의 타입을 설정할 수 있다.
-
-예를 들어서 `Queue` 이라고 하면 문자열로 이루어진 Queue의 타입이 된다.
-
-```typescript
-class Queue<T> {
-  list: T[] = [];
-  get length() {
-    return this.list.length;
-  }
-  enqueue(item: T) {
-    this.list.push(item);
-  }
-  dequeue() {
-    return this.list.shift();
-  }
-}
-
-const queue = new Queue<number>();
-queue.enqueue(0);
-queue.enqueue(1);
-queue.enqueue(2);
-queue.enqueue(3);
-queue.enqueue(4);
-console.log('큐의 길이: ', queue.length);
-console.log(queue.dequeue());
-console.log(queue.dequeue());
-console.log(queue.dequeue());
-console.log(queue.dequeue());
-console.log(queue.dequeue());
+type GreetingsProps = {
+  name: string;
+  mark: string;
+};
 
 /*
-큐의 길이: 5
-0
-1
-2
-3
-4
+function Greetings({ name, mark }: GreetingsProps) {
+  return (
 */
+const Greetings = ({ name, mark }: GreetingsProps) => (
+  <div>
+    Hello, {name} {mark}
+  </div>
+);
+
+Greetings.defaultProps = {
+  mark: '!'
+};
+
+export default Greetings;
+
 ```
+
+<br/>
+
+#### 컴포넌트에 생략할 수 있는 props 설정하기 <a id="a9"></a>
+
+> 컴포넌트의 props 중에서 생략해도 되는 값이 있다면 `?` 문자를 사용하면 된다.
+
+```jsx
+// src/Greetings.tsx
+
+import React from 'react';
+
+type GreetingsProps = {
+  name: string;
+  mark: string;
+  optional?: string;
+};
+
+function Greetings({ name, mark, optional }: GreetingsProps) {
+  return (
+    <div>
+      Hello, {name} {mark}
+      {optional && <p>{optional}</p>}
+    </div>
+  );
+}
+
+Greetings.defaultProps = {
+  mark: '!'
+};
+
+export default Greetings;
+
+```
+
+<br/>
+
+#### 컴포넌트에서 함수 타입의 props 받아오기 <a id="a10"></a>
+
+> 컴포넌트에서 특정 함수를 props 로 받아와야 한다면 다음과 같이 타입을 지정 할 수 있다.
+
+```typescript
+// src/Greetings.tsx
+
+import React from 'react';
+
+type GreetingsProps = {
+  name: string;
+  mark: string;
+  optional?: string;
+  onClick: (name: string) => void; // 아무것도 리턴하지 않는다는 함수를 의미합니다.
+};
+
+function Greetings({ name, mark, optional, onClick }: GreetingsProps) {
+  const handleClick = () => onClick(name);
+  return (
+    <div>
+      Hello, {name} {mark}
+      {optional && <p>{optional}</p>}
+      <div>
+        <button onClick={handleClick}>Click Me</button>
+      </div>
+    </div>
+  );
+}
+
+Greetings.defaultProps = {
+  mark: '!'
+};
+
+export default Greetings;
+
+```
+
+<br/>
+
+그리고, src/App.tsx 에서 해당 컴포넌트를 사용해야 할 때 다음과 같이 작성한다.
+
+```tsx
+// src/App.js
+
+import React from 'react';
+import Greetings from './Greetings';
+
+const App: React.FC = () => {
+  const onClick = (name: string) => {
+    console.log(`${name} says hello`);
+  };
+  return <Greetings name="Hello" onClick={onClick} />;
+};
+
+export default App;
+
+```
+
+<br/>
+
+<br/>
+
+### 정리 <a id="a11"></a>
+
+이번 섹션에서 배웠던 것.
+
+- `React.FC` 는 별로 좋지 않다.
+- 함수형 컴포넌트를 작성 할 때는 화살표 함수로 작성해도 되고, `function` 키워드를 사용해도 된다.
+- Props 에 대한 타입을 선언 할 땐 `interface` 또는 `type` 을 사용하면 되며, 프로젝트 내부에서 일관성만 지키면 된다.
+
+<br/>
 
 -----------
 
 ### Reference
 
-- [velopert.log : 타입스크립트 기초 연습](https://velog.io/@velopert/typescript-basics)
+- [velopert.log : 타입스크립트 기초 연습](https://velog.io/@velopert/create-typescript-react-component)
