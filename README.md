@@ -409,6 +409,8 @@ Today I Leaned...
 > [TypeScript 기초 연습하기 (타입 별명, 제네릭)](./typescript/TypeScript-03.md)
 >
 > [리액트 컴포넌트 타입스크립트로 작성하기](./typescript/TypeScript-04.md)
+>
+> [타입스크립트로 리액트 Hooks 사용하기 (useState, useReducer, useRef)](./typescript/TypeScript-04.md)
 
 <br/>
 
