@@ -1,4 +1,140 @@
+![mobx](https://user-images.githubusercontent.com/31315644/78734744-041ee900-7984-11ea-90ab-0bffac26b033.png)
 
+---------
+
+# Mobx 개념 정리
+
+## 목차
+
+- [Mobx 란?](#a1)
+  - [Redux VS Mobx](#a2)
+- [개념 정리](#a3)
+  1. [Observable / useObserver (Mobx ver 6.xxx 👆)](#a4)
+  2. [Computed Value (연산된 값)](#a5)
+  3. [Reactions (반응)](#a6)
+  4. [Action (액션; 행동)](#a7)
+  5. [useLocalStore (Mobx ver 6.xxx 👆)](#a8)
+- [리액트 없이 MobX 사용해보기](#a9)
+  - [observable](#a10)
+  - [reaction](#a11)
+  - [computed](#a12)
+  - [autorun](#a13)
+- [클래스 문법을 사용한 Mobx 실습](#a14)
+  - [class Mobx 에 action 적용](#a15)
+  - [class Mobx 에 transaction 적용](#a16)
+  - [decorator 문법으로 더 편하게](#a17)
+- [클래스 Mobx vs 함수(hooks) Mobx](#a18)
+  - [store 부분은 동일](#a19)
+  - [useStore - 커스텀훅 ](#a20)
+  - [클래스의 Mobx - 클래스에만 존재함](#a21)
+  - [함수(hooks) Mobx - 함수형에만 존재함](#a22)
+- [달라진 점](#a23)
+
+-------------
+
+## Mobx 란?
+
+> Redux와 다른 상태 관리 라이브러리.
+>
+> 객체 지향적인 특징을 지고 있으며 Redux와 달리 번잡한 보일러 플레이트가 필요없다.
+>
+> 액션 -(변경)-> 상태 -(파생)-> 반응
+
+![Mobx-Graph](https://user-images.githubusercontent.com/31315644/78764169-208d4680-79c1-11ea-8fc9-4b25b87ff76f.jpeg)
+
+<br/>
+
+### Redux VS Mobx
+
+| Redux                        | Mobx                                 |
+| ---------------------------- | ------------------------------------ |
+| Immutable                    | Mutable                              |
+| State 업데이트 문법이 불편 😞 | State 업데이트 편리함 😃              |
+| Pure Object                  | 대부분 인스턴스 결합                 |
+| Serialize 비용이 낮음 😃      | 데이터 변경 시 Serialize 비용이 큼 😞 |
+| 정규화된 트리 구조를 강제함  | 정규화 강제 X                        |
+| Single Root Tree             | 그래프 구조를 가질 가능성이 높음     |
+| 트리 순회 기능               | 순회가 불가할 수도 있음              |
+| 모델링 / 타이핑 불편 😞       | 모델링 / 타이핑 간편 😃               |
+| Time Traveling 지원          | Time Traveling 미지원                |
+
+<br/>
+
+## 개념 정리
+
+<br/>
+
+### 1. Observable / useObserver (Mobx ver 6.xxx 👆)
+
+ Mobx에서 렌더링 대상이 되는 state(상태, 값)를 관찰 대상(observable value) 라고 칭한다.
+
+`@observable` 데코레이터로 지정한 State는 관찰 대상으로 지정되고 그 State는 값이 변결될 때 마다 렌더링 된다.
+
+`+` 추가
+
+클래스형태의 Mobx는 `@observable` 데코레이터를 이용하지만 최근의 리액트에서 hooks를 사용함에 따라 Mobx도 hooks를 이용한다. 
+
+이전에는 React를 함수형(hooks)으로 사용하고 싶다면 `mobx-react-lite` 를 이용해야만 했었는데, 현재는 mobx 버전 6.xxx 이상으로 올라감에 따라 mobx-react만 이용해도 사용할 수 있게 되었다.
+
+<br/>
+
+### 2. Computed Value (연산된 값)
+
+ 연산된 값(Computed Value)은, 기존의 상태값과 다른 연산된 값에 기반하여 만들어질 수 있는 값.
+
+주로 성능 최적화를 위하여 사용되며, 어떤 값을 연산해야 할 때, 연산에 기반되는 값이 바뀔때마 새로 연산하게 하고, 바뀌지 않았다면 기존의 값을 유지한다. (React.Memo, useMemo느낌)
+
+<br/>
+
+### 3. Reactions (반응)
+
+Reactions 는 Computed Value와 비슷하다. 
+
+Computed Value의 경우는 특정 값을 연산해야 될 때에만 처리가 되는 반면에, Reactions는, 값이 바뀜에 따라 해야할 일으 정하는 것.(useCallback 느낌)
+
+예를 들어서 Observable State 의 내부의 값이 바뀔 때, 우리가 `console.log('ㅇㅇㅇ가 바뀌었어!')` 라고 호출할 수 있다.
+
+<br/>
+
+### 4. Action (액션; 행동)
+
+액션은, 상태에 변화를 일으키는것을 말한다. 만약에 Observable State 에 변화를 일으키는 코드를 호출한다? 이것은 하나의 액션이다. - 리덕스에서의 액션과 달리 따로 객체형태로 만들지는 않는다.
+
+<br/>
+
+### 5. [useLocalStore](https://mobx-react.js.org/state-local) (Mobx ver 6.xxx 👆)
+
+```tsx
+useLocalStore(initializer: () => T, source?: S): T
+```
+
+로컬 observable state는 `useLocalStore` hook을 사용한다. `useLocalStore`는 initializer 함수를 한번 실행시키는데, observable store를 생성하고, 컴포넌트의 lifetime 동안 유지한다. return된 객체의 모든 property는 자동적으로 observable될 수 있다. getter는 computed property로 변할 것이고, method는 store에 bind될 것이며 mobx transaction을 자동적으로 적용할 것이다. 만약 새로운 인스턴스가 initializer에서 반환되면, 그 인스턴스는 그 상태로 유지될 것이다.
+
+<br/>
+
+## 리액트 없이 MobX 사용해보기
+
+### observable
+
+observable 함수는 Observable State를 만들어준다.
+
+```jsx
+import { observable } from 'mobx';
+
+// **** Observable State 만들기
+const calculator = observable({
+  a: 1,
+  b: 2
+});
+```
+
+Observable State 를 만들고나면 MobX 가 이 객체를 "관찰 할 수" 있어서 변화가 일어나면 바로 탐지해낼수있다.
+
+<br/>
+
+### reaction
+
+특정 값이 바뀔 때 어떤 작업을 하고 싶다면 [reaction](https://mobx.js.org/refguide/reaction.html) 함수를 사용한다.
 
 한번 a 나 b 가 바뀔 때 console.log 로 바뀌었다고 알려주도록 코드를 작성해보자.
 
