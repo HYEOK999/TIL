@@ -418,6 +418,8 @@ Today I Leaned...
 
 > [Mobx 개념 잡기](https://github.com/HYEOK999/TIL/blob/master/mobx/mobx개념잡기.md)
 >
+> [Mobx 카운터 실습](https://github.com/HYEOK999/TIL/blob/master/mobx/mobx실습1.md)
+>
 > [React Hooks + Mobx -슈퍼마켓 예제-](https://github.com/HYEOK999/mobx-market-hooks)
 
 <br/>
