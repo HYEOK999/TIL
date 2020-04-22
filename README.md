@@ -422,7 +422,7 @@ Today I Leaned...
 >
 > [React Hooks + Mobx -슈퍼마켓 예제-](https://github.com/HYEOK999/mobx-market-hooks)
 >
-> [React Hooks + Mobx + TS -슈퍼마켓 예제-](https://github.com/HYEOK999/mobx-ts-hooks)
+> [React Hooks + Mobx + TS -슈퍼마켓 예제-](https://github.com/HYEOK999/TIL/blob/master/mobx/mobx-ts-hooks)
 
 <br/>
 
