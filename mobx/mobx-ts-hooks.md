@@ -1,320 +1,81 @@
-![mobx](https://user-images.githubusercontent.com/31315644/78734744-041ee900-7984-11ea-90ab-0bffac26b033.png)
+![mobx-ts](https://user-images.githubusercontent.com/31315644/79110513-9163a280-7db5-11ea-9f69-7781e1884b82.png)
 
 ---------
 
-# 리액트에서 Mobx 예제 - 카운터 - 
+# React Hooks + Mobx + TS - 슈퍼마켓 구현하기 - 
 
 ## 목차
 
-- [카운터 만들기](#a1)
-  - [Class Component's Mobx 1](#a2)
-  - [Class Component's Mobx 2 : @데코레이터를 이용](#a3)
-  - [함수형태(Hooks)를 이용한 Mobx](#a4)
-  - [문제점](#a5)
-- [Mobx 스토어 분리시키기](#a6)
-  - [Class Component](#a7)
-  - [Hooks](#a8)
-    - [공통](#a9)
-    - [Context API를 이용 X 🙅‍♂️](#a10)
-    - [Context API를 이용 O 🙆‍♀️](#a11)
+- [시작](#a2)
+  - [데코레이터 설정 X](#a3)
+  - [프로젝트 초기화 및 폴더 구조](#a4)
+- [App & Store 수정](#a1)
+  - [src/App.tsx](#a5)
+  - [src/useStore.ts](#a6)
+- [Store 추가](#a7)
+  - [src/counter.ts](#a8)  
+  - [src/counter.ts](#a9)
+- [CSS 추가하기](#a10)
+  - [src/components/BasketItem.css](#a11)
+  - [src/components/ShopItem.css](#a12)
+  - [src/components/SuperMarketTemplate.css](#a13)
+- [Components 추가하기](#a14)
+  - [src/components/SuperMarketTemplate.tsx](#a15)
+  - [src/components/SuperMarket.tsx](#a16)
+  - [src/components/ShopItemList.tsx](#a17)
+  - [src/components/ShopItem.tsx](#a18)
+  - [src/components/Counter.tsx](#a19)
+  - [src/components/BasketItemList.tsx](#a20)   
+  - [src/components/BasketItem.tsx](#a21) 
+  - [src/components/TotalPrice.tsx](#a22)
+- [Reference](#a42)
 
--------------
+----------------
 
-## 카운터 만들기 <a id="a1"></a>
+## 시작 <a id="a2"></a>
 
-### Class Component's Mobx 1 <a id="a2"></a>
-
-```jsx
-import React, { Component } from 'react';
-import { decorate, observable, action } from 'mobx';
-import { observer } from 'mobx-react';
-
-class Counter extends Component {
-  number = 0;
-
-  increase = () => {
-    this.number++;
-  }
-
-  decrease = () => {
-    this.number--;
-  }
-
-  render() {
-    return (
-      <div>
-        <h1>{this.number}</h1>
-        <button onClick={this.increase}>+1</button>
-        <button onClick={this.decrease}>-1</button>
-      </div>
-    );
-  }
-}
-
-decorate(Counter, {
-  number: observable,
-  increase: action,
-  decrease: action
-})
-
-export default observer(Counter);
+```bash
+$ npx create-react-app mobx-market-ts --typescipt
+$ npm i mobx mobx-react
 ```
 
 <br/>
 
-### Class Component's Mobx 2 : @데코레이터를 이용 <a id="a3"></a>
+### 데코레이터 설정 X 🙅‍♀️ <a id="a3"></a>
+
+ JS 기준으로 기존 mobx의 데코레이터를 이용하기 위해서는 `npm run eject`를 해주고 설정해야만 했습니다. Hooks를 이용할 때에는 굳이 데코레이터를 이용하지 않겠습니다. 만약에 별도로 이용하고 싶으시면 다음 코드를 추가합니다. **제가 사용할 예제에서는 데코레이터를 이용하지 않습니다.**
 
 ```bash
-$ npm run eject
 $ npm i @babel/plugin-proposal-class-properties @babel/plugin-proposal-decorators
 ```
 
-<br/>
-
-VSC 환경설정 : `CMD + ,` 누르고 `TypeScript Decorators` 검색 (JS이용자도 이렇게 검색해야함)
+VSC 기준 : VSC 환경설정 : `CMD + ,` 누르고 `TypeScript Decorators` 검색
 
 ![VSC환경설정](https://user-images.githubusercontent.com/31315644/78847101-c89a2280-7a48-11ea-8f34-21dd11a80657.jpeg)
 
 <br/>
 
-```jsx
-import React, { Component } from 'react';
-import { observable, action } from 'mobx';
-import { observer } from 'mobx-react';
+### 프로젝트 초기화 및 폴더 구조      <a id="a4"></a>
 
-// **** 최하단에 잇던 observer 가 이렇게 위로 올라온다.
-@observer
-class Counter extends Component {
-  @observable number = 0;
+시작하기에 앞서 프로젝트를 초기화하겠습니다.
 
-  @action
-  increase = () => {
-    this.number++;
-  }
-
-  @action
-  decrease = () => {
-    this.number--;
-  }
-
-  render() {
-    return (
-      <div>
-        <h1>{this.number}</h1>
-        <button onClick={this.increase}>+1</button>
-        <button onClick={this.decrease}>-1</button>
-      </div>
-    );
-  }
-}
-```
-
-<br/>
-
-### 함수형태(Hooks)를 이용한 Mobx <a id="a4"></a>
-
-- useLocalStore 
-- useObserver
+`src` 폴더 내에 `App.js` 와 `index.js`를 제외한 모든 파일을 삭제합니다. 그 후 `index.js` 와 `App.js`의 파일을 다음처럼 수정합니다.
 
 ```tsx
-import React from 'react';
-import { useObserver, useLocalStore } from 'mobx-react';
-
-const Counter2 = (props) => {
-  const state = useLocalStore(() => ({
-    number: 0,
-    increase() {
-      this.number++;
-    },
-    decrease(e) {
-      console.log(e.target);
-      this.number--;
-    },
-  }));
-
-  return useObserver(() => (
-    <div>
-      <h1>{state.number}</h1>
-      <button onClick={state.increase}>+1</button>
-      <button onClick={state.decrease}>-1</button>
-    </div>
-  ));
-};
-
-export default Counter2;
-```
-
-<br/>
-
-### 문제점 <a id="a5"></a>
-
-`Mobx-developer-tools`에서 확인을 해보면 Hooks를 사용할 경우 아래 그림처럼 문제가 생긴다.
-여기서 선택을 해야한다. 
-
-- Class Component를 유지할 것인가?
-- Hooks를 이용하면 `Mobx-developer-tools`에 문제가 있음을 알고도 사용할 것인가?
-
-정답은 없지만, 우선 React Hooks를 게속 이용하도록 하겠다.
-
-React측에서도 Hooks 사용을 권장하고 있기 때문 Mobx는 단지 상태 관리 라이브러리 그 이상 이하도 아니다. 더군다나 데이터를 아예 안보여주는 것이 아니라 그저 보기 어렵게 보여주는 것이기 때문에 이정도는 감수해도 된다고 생각했다.
-
-![Mobx-Developer-tools](https://user-images.githubusercontent.com/31315644/78847332-7279af00-7a49-11ea-9d30-a9993e25291d.png)
-
-<br/>
-
-## Mobx 스토어 분리시키기 <a id="a6"></a>
-
-`src/stores/counter.js` 파일을 만들고 스토어를 분리시킨다.
-
-<br/>
-
-### Class Component <a id="a7"></a>
-
-구조
-
-- stores/counter.js
-- App.js
-- index.js
-
-기존의 counter 코드를 다음과 같이 불리한다. 데코레이터를 사용한다.
-
-```jsx
-// src/stores/counter.js
-
-import { observable, action } from 'mobx';
-
-export default class CounterStore {
-  @observable number = 0;
-
-  @action increase = () => {
-    this.number++;
-  };
-
-  @action decrease = () => {
-    this.number--;
-  };
-}
-```
-
-<br/>
-
-@inject 를 이용하여 `counter`를 주입한다.
-
-```jsx
-// src/App.js
-
-import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
-
-@inject('counter')
-@observer
-class App extends Component {
-  render() {
-    const { counter } = this.props;
-    return (
-      <div>
-        <h1>{counter.number}</h1>
-        <button onClick={counter.increase}>+1</button>
-        <button onClick={counter.decrease}>-1</button>
-      </div>
-    );
-  }
-}
-
-export default observer(App);
-```
-
-<br/>
-
-Provider 를 이용한다.
-
-```jsx
-// index.js
-
+// src/index.ts
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'mobx-react';
 import App from './App';
-import CounterStore from './stores/counter';
 
-const counter = new CounterStore();
-
-ReactDOM.render(
-  <Provider counter={counter}>
-    <App />
-  </Provider>,
-  document.getElementById('root'),
-);
+ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-<br/>
-
-### Hooks  <a id="a8"></a>
-
-Hooks를 이용한 방법은 크게 2가지가 있다.
-
-1. **Context API를 이용하지 않는 방법**
-
-   구조
-
-   - stores/counterStore.jsx
-   - App.jsx
-   - index.jsx
-   - useStore.jsx
-
-   <br/>
-
-2. **Context API를 이용하여 틀을 만들어 사용하는 방법**
-
-   구조
-
-   - store/counterStore.jsx
-   - App.jsx
-   - index.jsx
-   - useStore.jsx
-   - Context.jsx
-
-둘 다 구현해보도록 한다.
-
-<br/>
-
-#### 공통 <a id="a9"></a>
-
-우선 `useLocalStore`로 작성된 부분을 스토어로 분리해야한다.
-
-```jsx
-// src/store/counterStore.jsx
-import { observable } from 'mobx';
-
-const counterStore = observable({
-  number: 0,
-  increase() {
-    counterStore.number++;
-  },
-  decrease() {
-    counterStore.number--;
-  },
-});
-
-export { counterStore };
-```
-
-```jsx
-// src/App.jsx
+```tsx
+// src/App.js
 import React from 'react';
-import { useObserver } from 'mobx-react';
-import useStore from './useStore';
 
 function App() {
-  const { counterStore } = useStore();
-
-  return useObserver(() => (
-    <div>
-      <h1>{counterStore.number}</h1>
-      <button onClick={counterStore.increase}>+1</button>
-      <button onClick={counterStore.decrease}>-1</button>
-    </div>
-  ));
+  return <div className="App"></div>;
 }
 
 export default App;
@@ -322,16 +83,49 @@ export default App;
 
 <br/>
 
-#### Context API를 이용 X 🙅‍♂️ <a id="a10"></a>
+**마지막으로 완성된 폴더구조와 화면은 다음과 같습니다.**
 
-store가 추가될 때 마다 통합적으로 관리해줄 combineStore를 하나 만들어 놓는다. 
+![structure](https://user-images.githubusercontent.com/31315644/79110755-12229e80-7db6-11ea-9517-a7b42adc8a8b.jpg)
 
-```jsx
-// src/useStore.jsx
-import { counterStore } from './store/counterStore';
+![step01](https://user-images.githubusercontent.com/31315644/79084261-b6ccbe00-7d6d-11ea-9344-b2def1290aff.jpg)
+
+<br/>
+
+## App & Store 수정     <a id="a1"></a>
+
+### src/App.tsx     <a id="a5"></a>
+
+- Counter 컴포넌트
+- SuperMarket 컴포넌트 추가
+
+```tsx
+import React from 'react';
+import Counter from './components/Counter';
+import SuperMarket from './components/SuperMarket';
+
+function App() {
+  return (
+    <div className="App">
+      <Counter />
+      <hr />
+      <SuperMarket />
+    </div>
+  );
+}
+
+export default App;
+```
+
+<br/>
+
+### src/useStore.ts     <a id="a6"></a>
+
+```ts
+import { counter } from './stores/counter';
+import { market } from './stores/market';
 
 const useStore = () => {
-  return { counterStore };
+  return { counter, market };
 };
 
 export default useStore;
@@ -339,81 +133,468 @@ export default useStore;
 
 <br/>
 
-#### Context API를 이용 O 🙆‍♀️ <a id="a11"></a>
+## Store 추가     <a id="a7"></a>
 
-Context API를 이용하게 될 경우 과정이 복잡해진다.
-큰 틀은 다음과 같다.
+### src/counter.ts     <a id="a8"></a>
 
-`countStore -> Context -> useStore`
+```ts
+import { observable } from 'mobx';
 
-`countStore` 부분은 동일하다. Context부터 작성한다.
-
-```jsx
-// src/Context.jsx
-import React, { createContext } from 'react';
-import { counterStore } from './store/counterStore';
-import { useLocalStore } from 'mobx-react';
-
-const storeContext = createContext(null);
-
-const StoreProvider = ({ children }) => {
-  const store = useLocalStore(() => counterStore);
-
-  return <storeContext.Provider value={store}>{children}</storeContext.Provider>;
+type Counter = {
+  number: number;
+  increase(): void;
+  decrease(): void;
 };
 
-export { StoreProvider, storeContext };
+const counter = observable<Counter>({
+  number: 1,
+  increase() {
+    this.number++;
+  },
+  decrease() {
+    this.number--;
+  },
+});
+
+export { counter };
 ```
 
 <br/>
 
-`useStore`를 변경한다.
+### src/market.ts     <a id="a9"></a>
 
-useStore를 커스텀 훅 형태로 변경한다. 내부적으로는 `useContext`를 사용함으로써 Consumer를 대신한다.
+````ts
+import { observable, toJS, isObservableObject } from 'mobx';
+import { counter } from './counter';
 
-```jsx
-// src/useStore.jsx
-import React from 'react';
-import { storeContext } from './Context';
-
-const useStore = () => {
-  const store = React.useContext(storeContext);
-  if (!store) {
-// this is especially useful in TypeScript so you don't need to be checking for null all the time
-    throw new Error('useStore must be used within a StoreProvider.');
-  }
-  return { store };
+type Item = {
+  name: string;
+  price: number;
+  count: number;
 };
 
-export default useStore;
+type Market = {
+  selectedItems: Item[];
+  put(name: string, price: number): void;
+  take(name: string): void;
+  total(): number;
+};
+
+const market: Market = observable<Market>({
+  selectedItems: [],
+  put(name, price) {
+    const exists = this.selectedItems.find((item: Item) => item.name === name);
+    if (!exists) {
+      this.selectedItems.push({
+        name,
+        price,
+        count: counter.number,
+      });
+      return;
+    }
+    exists.count += counter.number;
+  },
+  take(name) {
+    const itemToTake: Item | undefined = this.selectedItems.find(
+      (item: Item) => item.name === name,
+    );
+    if (itemToTake) {
+      itemToTake.count--;
+      // console.log('관찰 가능한 객체 확인 법', isObservableObject(toJS(this.selectedItems)));
+      // console.log('콘솔 찍는 법', toJS(itemToTake.name));
+      if (itemToTake.count <= 0) {
+        // this.selectedItems.remove(itemToTake); // 배열에서 제거처리합니다.
+        this.selectedItems = this.selectedItems.filter((i) => i.name !== itemToTake.name); // 배열에서 제거처리합니다.
+      }
+    }
+  },
+  get total() {
+    console.log('총합 계산...');
+    return this.selectedItems.reduce((previous: number, current: Item) => {
+      return previous + current.price * current.count;
+    }, 0);
+  },
+});
+
+export { market };
+````
+
+<br/>
+
+## CSS 추가하기    <a id="a10"></a>
+
+### src/components/BasketItem.css     <a id="a11"></a>
+
+```css
+.BasketItem {
+  display: flex;
+  width: 100%;
+}
+
+.BasketItem .name {
+  flex: 2;
+}
+
+.BasketItem .price {
+  flex: 1;
+}
+
+.BasketItem .count {
+  flex: 1;
+}
+
+.BasketItem .return {
+  margin-left: auto;
+  color: #f06595;
+  cursor: pointer;
+}
+
+.BasketItem .return:hover {
+  text-decoration: underline;
+}
+
+.BasketItem + .BasketItem {
+  margin-top: 1rem;
+}
 ```
 
 <br/>
 
-`index.jsx` 에서 `Components` 들을 `StoreProvider`로 감싸준다.
+### src/components/ShopItem.css     <a id="a12"></a>
 
-```jsx
-// src/index.jsx
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import { StoreProvider } from './Context';
+```css
+.ShopItem {
+  background: white;
+  border: 1px solid #495057;
+  padding: 0.5rem;
+  border-radius: 2px;
+  cursor: pointer;
+}
 
-ReactDOM.render(
-  <StoreProvider>
-    <App />
-  </StoreProvider>,
-  document.getElementById('root'),
-);
+.ShopItem h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.ShopItem:hover {
+  background: #495057;
+  color: white;
+}
+
+.ShopItem + .ShopItem {
+  margin-top: 1rem;
+}
 ```
 
------------
+<br/>
 
-### Reference
+### src/components/SuperMarketTemplate.css     <a id="a13"></a>
+
+```css
+.SuperMarketTemplate {
+  width: 768px;
+  display: flex;
+  border: 1px solid black;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 3rem;
+}
+
+.SuperMarketTemplate h2 {
+  margin-top: 0;
+}
+
+.SuperMarketTemplate > div {
+  padding: 1rem;
+  flex: 1;
+}
+
+.SuperMarketTemplate .items-wrapper {
+  background: #f8f9fa;
+}
+```
+
+<br/>
+
+## Components 추가하기     <a id="a14"></a>
+
+### src/components/SuperMarketTemplate.tsx     <a id="a15"></a>
+
+```tsx
+import React from 'react';
+import './SuperMarketTemplate.css';
+
+type SuperMarketTemplateProps = {
+  items: JSX.Element[] | JSX.Element;
+  basket: JSX.Element[] | JSX.Element;
+  total: JSX.Element[] | JSX.Element;
+};
+
+const SuperMarketTemplate: React.FC<SuperMarketTemplateProps> = ({ items, basket, total }) => {
+  return (
+    <div className="SuperMarketTemplate">
+      <div className="items-wrapper">
+        <h2>상품</h2>
+        {items}
+      </div>
+      <div className="basket-wrapper">
+        <h2>장바구니</h2>
+        {basket}
+        {total}
+      </div>
+    </div>
+  );
+};
+
+export default SuperMarketTemplate;
+```
+
+<br/>
+
+### src/components/SuperMarket.tsx      <a id="a16"></a>
+
+```tsx
+import React from 'react';
+import SuperMarketTemplate from './SuperMarketTemplate';
+import ShopItemList from './ShopItemList';
+import BasketItemList from './BasketItemList';
+import TotalPrice from './TotalPrice';
+
+// type SuperMarketProps = {};
+
+const SuperMarket: React.FC = () => {
+  return (
+    <SuperMarketTemplate
+      items={<ShopItemList />}
+      basket={<BasketItemList />}
+      total={<TotalPrice />}
+    />
+  );
+};
+
+export default SuperMarket;
+```
+
+<br/>
+
+### src/components/ShopItemList.tsx      <a id="a17"></a>
+
+```tsx
+import React, { useEffect } from 'react';
+import ShopItem from './ShopItem';
+import { useObserver } from 'mobx-react';
+import useStore from '../useStore';
+
+type Items = {
+  name: string;
+  price: number;
+};
+
+// type ShopItemListProps = {};
+
+const items: Items[] = [
+  {
+    name: '생수',
+    price: 850,
+  },
+  {
+    name: '신라면',
+    price: 900,
+  },
+  {
+    name: '포카칩',
+    price: 1500,
+  },
+  {
+    name: '새우깡',
+    price: 1000,
+  },
+];
+
+const ShopItemList: React.FC = () => {
+  const { market } = useStore();
+
+  const onPut = (name: string, price: number): void => {
+    market.put(name, price);
+  };
+
+  return useObserver(() => {
+    const itemList = items.map((item) => <ShopItem {...item} key={item.name} onPut={onPut} />);
+    return <div>{itemList}</div>;
+  });
+};
+
+export default ShopItemList;
+```
+
+<br/>
+
+### src/components/ShopItem.tsx      <a id="a18"></a>
+
+```tsx
+import React from 'react';
+import './ShopItem.css';
+import { useObserver } from 'mobx-react';
+
+export type ShopItemProps = {
+  name: string;
+  price: number;
+  onPut(name: string, price: number): void;
+};
+
+const ShopItem: React.FC<ShopItemProps> = React.memo(({ name, price, onPut }) => {
+  return useObserver(() => (
+    <div className="ShopItem" onClick={() => onPut(name, price)}>
+      <h4>{name}</h4>
+      <div>{price}</div>
+    </div>
+  ));
+});
+
+export default ShopItem;
+```
+
+<br/>
+
+### src/components/Counter.tsx      <a id="a19"></a>
+
+````tsx
+import React from 'react';
+import { useObserver } from 'mobx-react';
+import useStore from '../useStore';
+
+const Counter: React.FC = ({ children }) => {
+  const { counter } = useStore();
+
+  const increase = () => {
+    counter.increase();
+  };
+
+  const decrease = () => {
+    counter.decrease();
+  };
+
+  console.log('5151125125', children);
+
+  return useObserver(() => (
+    <div>
+      {console.log('212312')}
+      <h1>{counter.number}</h1>
+      <button onClick={increase}>+1</button>
+      <button onClick={decrease}>-1</button>
+    </div>
+  ));
+};
+
+export default Counter;
+````
+
+<br/>
+
+### src/components/BasketItemList.tsx      <a id="a20"></a>
+
+```tsx
+import React from 'react';
+import BasketItem from './BasketItem';
+import { useObserver } from 'mobx-react';
+import useStore from '../useStore';
+
+// export type BasketItemListProps = {};
+
+const BasketItemList: React.FC = () => {
+  const { market } = useStore();
+
+  const onTake = (name: string): void => {
+    market.take(name);
+  };
+
+  return useObserver(() => {
+    const itemList = market.selectedItems.map((item) => (
+      <BasketItem item={item} key={item.name} onTake={onTake} />
+    ));
+    return <div>{itemList}</div>;
+  });
+};
+
+export default BasketItemList;
+```
+
+<br/>
+
+### src/components/BasketItem.tsx    <a id="a21"></a>
+
+```tsx
+import React from 'react';
+import './BasketItem.css';
+import { useObserver } from 'mobx-react';
+
+export type BasketItemProps = {
+  item: Item;
+  onTake(name: string): void;
+};
+
+type Item = {
+  name: string;
+  price: number;
+  count: number;
+};
+
+const BasketItem: React.FC<BasketItemProps> = ({ item, onTake, children }) => {
+  console.log(item.name);
+  console.log('44', children);
+
+  return useObserver(() => (
+    <div className="BasketItem">
+      <div className="name">{item.name}</div>
+      <div className="price">{item.price}원</div>
+      <div className="count">{item.count}</div>
+      <div className="return" onClick={() => onTake(item.name)}>
+        갖다놓기
+      </div>
+    </div>
+  ));
+};
+
+export default BasketItem;
+```
+
+<br/>
+
+### src/components/TotalPrice.tsx      <a id="a22"></a>
+
+```tsx
+import React from 'react';
+import { useObserver } from 'mobx-react';
+import useStore from '../useStore';
+
+// type TotalPriceProps = {};
+
+const TotalPrice: React.FC = () => {
+  const { market } = useStore();
+  console.log('total');
+  return useObserver(() => (
+    <div>
+      <hr />
+      <p>
+        <b>총합: </b> {market.total}원
+      </p>
+    </div>
+  ));
+};
+
+export default TotalPrice;
+```
+
+<br/>
+
+------------------
+
+## Reference  <a id="a42"></a>
 
 - [velopert.log : MobX (2) 시작하기](https://velog.io/@velopert/MobX-2-리액트-프로젝트에서-MobX-사용하기-oejltas52z)
+- [velopert.log : MobX (3) 심화적인 사용 및 최적화 방법](https://velog.io/@velopert/MobX-3-심화적인-사용-및-최적화-방법-tnjltay61n)
+- [타입 스크립트 기초 연습](https://velog.io/@velopert/typescript-basics)
+- [리액트 컴포넌트 타입스크립트로 작성하기](https://velog.io/@velopert/create-typescript-react-component)
 - [ZeroCho : redux-vs-mobx]([https://www.inflearn.com/course/redux-mobx-%EC%83%81%ED%83%9C%EA%B4%80%EB%A6%AC-%EB%8F%84%EA%B5%AC](https://www.inflearn.com/course/redux-mobx-상태관리-도구))
-- 내 머릿 속 🤩
 
 <br/>
-
