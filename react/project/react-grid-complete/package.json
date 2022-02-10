@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "dependencies": {
     "hoist-non-react-statics": "3.1.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "react": "16.7.0-alpha.0 - next",
     "react-dom": "16.7.0-alpha.0 - next",
     "react-scripts": "2.0.3"
